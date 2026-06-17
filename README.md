@@ -23,7 +23,9 @@ Open `/psychdispo.html#plan` for the disposition planner.
 
 ## Deploy (Vercel)
 
-Build produces a Nitro/Vercel bundle (configured in `vite.config.ts`):
+Connected to GitHub: pushes to `main` auto-deploy to [psychdispo.com](https://psychdispo.com).
+
+Manual deploy (if needed):
 
 ```bash
 npm run build
