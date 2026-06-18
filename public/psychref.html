@@ -5814,7 +5814,11 @@
   }
   function setSub(s,open){s.classList.toggle('open',open);refresh();}
   subgroups.forEach(s=>s.addEventListener('click',()=>setSub(s,!s.classList.contains('open'))));
-  document.querySelectorAll('button.chap').forEach(b=>b.addEventListener('click',()=>b.parentElement.classList.toggle('open')));
+  document.querySelectorAll('button.chap').forEach(b=>b.addEventListener('click',()=>{
+    const g=b.parentElement; g.classList.toggle('open');
+    if(g.classList.contains('open')) g.querySelectorAll('.subgroup').forEach(s=>s.classList.add('open'));
+    refresh();
+  }));
   function nav(id){
     const sec=document.getElementById(id); if(!sec) return;
     const page=sec.closest('.page'); if(!page) return;
@@ -5836,7 +5840,7 @@
   navLinks.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();nav(a.getAttribute('href').slice(1));}));
   window.addEventListener('hashchange',()=>{if(location.hash)nav(location.hash.slice(1));});
   search.addEventListener('input',refresh);
-  subgroups.forEach(s=>s.classList.remove('open'));   // categories start collapsed
+  subgroups.forEach(s=>s.classList.add('open'));   // start expanded so sidebar links are visible
   nav(location.hash?location.hash.slice(1):(pages[0].querySelector('.panels>section')||{}).id);
 </script>
 </body>
