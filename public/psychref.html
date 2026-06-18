@@ -159,6 +159,8 @@
   details.scale .lbl{display:inline-block;min-width:96px;color:var(--accent2);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.4px}
   .alertbox{background:rgba(224,85,107,.07);border-left:3px solid var(--danger);padding:8px 14px;border-radius:6px;margin:8px 0;font-size:13.5px}
   .keytip{background:rgba(61,155,233,.08);border-left:3px solid var(--accent);padding:8px 14px;border-radius:6px;margin:8px 0;font-size:13.5px}
+  .scope{background:#f8f9fc;border:1px solid var(--hair,#e4e6ea);border-left:3px solid var(--blue,#2731c4);padding:10px 16px;margin:0 0 20px;font-size:13px;color:#4a5058;line-height:1.55}
+  .scope b{color:#13161b}
   code{background:var(--panel2);padding:1px 6px;border-radius:5px;font-size:12.5px;color:#9ce4c4}
   .small{font-size:12.5px;color:var(--muted)}
   .toptag{font-size:11px;background:var(--accent);color:#04121f;padding:2px 8px;border-radius:6px;font-weight:700}
@@ -370,15 +372,19 @@
       <div class="chap-group open">
         <button class="chap" type="button"><span>Assessment &amp; Clinical Skills</span></button>
         <div class="chap-body">
+          <div class="subgroup">Interview &amp; Mental Status</div>
           <a href="#mse">Mental Status Exam</a>
+          <div class="subgroup">Differential &amp; Screening</div>
           <a href="#medical-mimics">Medical Mimics of Psych Illness</a>
           <a href="#rating-scales">Rating Scales & Screening</a>
+          <a href="#mini-sips">Psychosis-Risk Screening (SIPS)</a>
           <a href="#mnemonics">Diagnostic Mnemonics</a>
           <a href="#calculators">Clinical Calculators</a>
+          <div class="subgroup">Safety, Capacity &amp; Legal</div>
           <a href="#risk-assessment">Risk Assessment</a>
-          <a href="#mini-sips">Psychosis-Risk Screening (SIPS)</a>
           <a href="#capacity">Capacity to Consent</a>
           <a href="#commitment">Involuntary Admission (Pink Slip)</a>
+          <div class="subgroup">Scholarly Writing</div>
           <a href="#care-checklist">Writing a Case Report (CARE)</a>
         </div>
       </div>
@@ -492,16 +498,18 @@
       <div class="chap-group">
         <button class="chap" type="button"><span>Substance Use &amp; Addiction</span></button>
         <div class="chap-body">
+          <div class="subgroup">Principles &amp; Guidelines</div>
           <a href="#addiction">Addiction Principles</a>
           <a href="#vadod-sud">VA/DoD SUD Guideline</a>
+          <div class="subgroup">Primary Substances</div>
           <a href="#alcohol">Alcohol Use Disorder</a>
           <a href="#sedative-ud">Sedative UD, Taper & Harm Reduction</a>
           <a href="#opioids">Opioid Use Disorder</a>
           <a href="#stimulants-sud">Stimulants (Cocaine/Meth)</a>
           <a href="#cannabis">Cannabis Use Disorder</a>
           <a href="#nicotine">Tobacco / Nicotine Cessation</a>
-          <a href="#club-drugs">Hallucinogens & Club Drugs</a>
-          <a href="#other-drugs">Sedatives, Hallucinogens & Other</a>
+          <div class="subgroup">Miscellaneous &amp; Special Situations</div>
+          <a href="#club-drugs">Miscellaneous Intoxicants & Club Drugs</a>
           <a href="#sa-pregnancy">Substance Use in Pregnancy</a>
           <a href="#idu-complications">Medical Complications of IDU</a>
         </div>
@@ -509,20 +517,24 @@
       <div class="chap-group">
         <button class="chap" type="button"><span>Consult-Liaison Psychiatry</span></button>
         <div class="chap-body">
+          <div class="subgroup">Consult Process</div>
           <a href="#doing-consult">Doing a Consult</a>
+          <div class="subgroup">Acute Neuropsychiatric</div>
           <a href="#delirium">Delirium</a>
           <a href="#catatonia">Catatonia</a>
           <a href="#organ-enceph">Organ & Drug Encephalopathies</a>
+          <div class="subgroup">Mood &amp; Coping on the Medical Service</div>
           <a href="#depression-medical">Depression in the Medically Ill</a>
           <a href="#anxiety-medical">Anxiety in the Medically Ill</a>
           <a href="#demoralization">Demoralization vs Depression</a>
+          <div class="subgroup">Safety, End-of-Life &amp; Procedures</div>
           <a href="#suicide-hospital">Suicide Risk (Hospital)</a>
           <a href="#psycho-oncology">Psycho-Oncology & Palliative</a>
           <a href="#death-dying">Death & Dying</a>
           <a href="#transplant">Transplant Evaluation</a>
           <a href="#bariatric-psychopharm">Bariatric Psychopharmacology</a>
+          <div class="subgroup">Behavioral Management</div>
           <a href="#behavior-plans">Behavioral Plans</a>
-          <a href="#microaggressions">Managing Microaggressions</a>
         </div>
       </div>
       <div class="chap-group">
@@ -548,6 +560,7 @@
           <a href="#lgbtq">LGBTQ+ & Gender-Affirming</a>
           <a href="#soc8">WPATH SOC-8</a>
           <a href="#cultural-psych">Cultural Psychiatry</a>
+          <a href="#microaggressions">Managing Microaggressions</a>
           <a href="#forensic">Forensic Psychiatry</a>
           <a href="#forensic-ohio">Forensic Psychiatry — Ohio</a>
         </div>
@@ -555,18 +568,22 @@
       <div class="chap-group">
         <button class="chap" type="button"><span>USMLE Step 3 Review</span></button>
         <div class="chap-body">
+          <div class="subgroup">Exam Strategy</div>
           <a href="#step3-overview">Exam & CCS Strategy</a>
           <a href="#step3-biostats">Biostatistics</a>
           <a href="#step3-screening">Screening & Prevention</a>
+          <a href="#step3-ccs">CCS Emergency Management</a>
+          <div class="subgroup">Medicine &amp; Psychiatry Crossover</div>
           <a href="#step3-cards">Cardiology</a>
           <a href="#step3-longqt">Long QT, Torsades & Conditions</a>
-          <a href="#step3-ccs">CCS Emergency Management</a>
-          <a href="#step3-rapid">High-Yield Rapid Facts</a>
-          <a href="#step3-alpha2">Alpha-2 Agonists & Sedation Taper</a>
           <a href="#endo-adrenal">Endocrine — Adrenal Insufficiency</a>
-          <a href="#med-psych">Medical Mimics of Psychiatric Illness</a>
+          <a href="#med-psych">Medical Mimics — Step 3 Rapid</a>
+          <a href="#step3-alpha2">Alpha-2 Agonists & Sedation Taper</a>
+          <div class="subgroup">Neurology</div>
           <a href="#neuro-vascular">Neurology I — Stroke, Seizures, Headache</a>
           <a href="#neuro-systems">Neurology II — Movement, Cord, Neuromuscular</a>
+          <div class="subgroup">Rapid Review &amp; Ethics</div>
+          <a href="#step3-rapid">High-Yield Rapid Facts</a>
           <a href="#ethics-legal">Ethics & Legal Essentials</a>
         </div>
       </div>
@@ -578,17 +595,21 @@
     </div>
     <div class="searchnote" id="searchnote"></div>
                     <div class="page" id="page-ch1" data-ch="1">
-      <div class="chapter" id="ch1"><div class="n">1</div><div><div class="t">Assessment &amp; Clinical Skills</div><span class="d">Interview, instruments, risk, capacity, and the diagnostic workup</span></div></div>
+      <div class="chapter" id="ch1"><div class="n">1</div><div><div class="t">Assessment &amp; Clinical Skills</div><span class="d">Interview → differential workup → safety &amp; legal → scholarly writing</span></div></div>
       <div class="tabwrap"><div class="tabs">
+        <div class="tablabel">Interview &amp; Mental Status</div>
         <button class="tab" type="button" data-t="mse">Mental Status Exam</button>
+        <div class="tablabel">Differential &amp; Screening</div>
         <button class="tab" type="button" data-t="medical-mimics">Medical Mimics of Psychiatric Illness</button>
         <button class="tab" type="button" data-t="rating-scales">Rating Scales & Screening Instruments</button>
+        <button class="tab" type="button" data-t="mini-sips">Psychosis-Risk Screening (Mini-SIPS / APS)</button>
         <button class="tab" type="button" data-t="mnemonics">Diagnostic Mnemonics</button>
         <button class="tab" type="button" data-t="calculators">Clinical Calculators</button>
+        <div class="tablabel">Safety, Capacity &amp; Legal</div>
         <button class="tab" type="button" data-t="risk-assessment">Risk Assessment — Suicide & Violence</button>
-        <button class="tab" type="button" data-t="mini-sips">Psychosis-Risk Screening (Mini-SIPS / APS)</button>
         <button class="tab" type="button" data-t="capacity">Capacity to Consent</button>
         <button class="tab" type="button" data-t="commitment">Involuntary Admission ("Pink Slip")</button>
+        <div class="tablabel">Scholarly Writing</div>
         <button class="tab" type="button" data-t="care-checklist">Writing a Case Report — CARE Checklist</button>
       </div></div>
       <div class="panels">
@@ -676,6 +697,7 @@
     </section>
         <section id="medical-mimics">
       <h3>Medical Mimics of Psychiatric Illness <span class="toptag">Differential</span></h3>
+      <div class="scope"><b>Scope:</b> Canonical organic differential for new or atypical psychiatric presentations. <b>Neurologic syndromes with psychiatric features</b> → <a href="#neuropsychiatry">Disorders → Neuropsychiatry</a>. <b>Delirium &amp; hospital encephalopathies</b> → <a href="#delirium">C-L → Delirium</a>. <b>Step 3 rapid triggers</b> → <a href="#med-psych">Step 3 → Medical Mimics Rapid</a>.</div>
       <p class="sub">Many medical conditions present with psychiatric symptoms. <strong>Screen hard for an organic cause</strong> when there are atypical features — and always before calling a presentation "primary psychiatric."</p>
       <div class="card"><h4>Red flags for a medical/organic etiology</h4>
         <ul class="tight">
@@ -905,6 +927,7 @@
     </section>
         <section id="risk-assessment">
       <h3>Risk Assessment — Suicide & Violence <span class="toptag">Clinical Skill</span></h3>
+      <div class="scope"><b>Scope:</b> General framework for stratifying and lowering <b>acute</b> suicide and violence risk (ED, outpatient, inpatient psych). <b>Inpatient medical/C-L setting</b> → <a href="#suicide-hospital">C-L → Suicide Risk (Hospital)</a>. <b>Chronic aggression pharmacotherapy</b> → <a href="#violence">Disorders → Aggression &amp; Violence</a>. <b>Acute agitation PRN dosing</b> → <a href="#prn">Emergencies → PRNs</a>.</div>
       <p class="sub">The goal isn't to predict — it's to <strong>stratify acute risk and lower it</strong>. We can only meaningfully move <strong>acute</strong> risk, and we do it by mitigating <strong>dynamic</strong> (modifiable) risk factors and building <strong>protective</strong> factors. The standard of care is an <em>adequate, documented assessment</em>, not accurate prediction.</p>
       <div class="card"><h4>The framework: chronic vs acute risk</h4>
         <ul class="tight">
@@ -1071,7 +1094,8 @@
       </div>
     </div>
     <div class="page" id="page-ch2" data-ch="2">
-      <div class="chapter" id="ch2"><div class="n">2</div><div><div class="t">Treatment Algorithms</div><span class="d">Evidence-based decision trees (Osser / Psychopharmacology Algorithm Project)</span></div></div>
+      <div class="chapter" id="ch2"><div class="n">2</div><div><div class="t">Treatment Algorithms</div><span class="d">Step-by-step pharmacotherapy decision trees — not diagnostic overviews</span></div></div>
+      <div class="keytip" style="margin-top:0"><b>Chapter 2 vs Chapter 5:</b> This chapter is <b>medication algorithms</b> (what to prescribe next). <b>Chapter 5 — Disorders</b> covers diagnostic criteria, clinical pearls, psychotherapy, and neuromodulation by syndrome.</div>
       <div class="tabwrap"><div class="tabs">
         <button class="tab" type="button" data-t="algo-principles">Using Algorithms — Principles</button>
         <button class="tab" type="button" data-t="schizophrenia">Schizophrenia</button>
@@ -3197,7 +3221,8 @@
       </div>
     </div>
     <div class="page" id="page-ch5" data-ch="5">
-      <div class="chapter" id="ch5"><div class="n">5</div><div><div class="t">Disorders &amp; Clinical Topics</div><span class="d">Organized by diagnostic family, plus neuromodulation &amp; psychotherapy</span></div></div>
+      <div class="chapter" id="ch5"><div class="n">5</div><div><div class="t">Disorders &amp; Clinical Topics</div><span class="d">Diagnostic families, clinical pearls, psychotherapy &amp; neuromodulation</span></div></div>
+      <div class="keytip" style="margin-top:0"><b>Chapter 5 vs Chapter 2:</b> This chapter is <b>clinical knowledge by syndrome</b> (criteria, pearls, non-pharmacologic care). For <b>step-by-step medication algorithms</b>, see <a href="#algo-principles">Chapter 2 — Treatment Algorithms</a>.</div>
       <div class="tabwrap"><div class="tabs">
         <div class="tablabel">Neurodevelopmental &amp; Disruptive</div>
         <button class="tab" type="button" data-t="neurodevelopmental">Neurodevelopmental Disorders</button>
@@ -3687,6 +3712,7 @@
     </section>
         <section id="gender-sexual">
       <h3>Gender Dysphoria & Paraphilic Disorders <span class="toptag">Clinical Topic</span></h3>
+      <div class="scope"><b>Scope:</b> DSM framing and pharmacotherapy for <b>gender dysphoria</b> and <b>paraphilic disorders</b>. <b>Affirming care, minority stress, WPATH SOC-8, and population-level disparities</b> → <a href="#lgbtq">Populations → LGBTQ+ &amp; Gender-Affirming Care</a>.</div>
       <div class="grid two">
         <div class="card"><h4>Gender dysphoria</h4>
           <ul class="tight">
@@ -3706,7 +3732,8 @@
     </section>
         <section id="neuropsychiatry">
       <h3>Neuropsychiatry <span class="toptag">Clinical Topic</span></h3>
-      <p class="sub">Psychiatric syndromes arising from primary neurologic disease. (See also Medical Mimics and the medical-toxidrome/delirium sections.)</p>
+      <div class="scope"><b>Scope:</b> Psychiatric syndromes from <b>primary neurologic disease</b>. Organic differential for new presentations → <a href="#medical-mimics">Assessment → Medical Mimics</a>. Delirium &amp; hospital encephalopathies → <a href="#delirium">C-L → Delirium</a>.</div>
+      <p class="sub">Psychiatric syndromes arising from primary neurologic disease.</p>
       <div class="tablewrap"><table>
         <thead><tr><th>Condition</th><th>Psychiatric features</th><th>Pearls</th></tr></thead>
         <tbody>
@@ -3756,6 +3783,7 @@
     </section>
         <section id="violence">
       <h3>Aggression & Violence — Psychopharmacology <span class="toptag">Clinical Topic</span></h3>
+      <div class="scope"><b>Scope:</b> Acute agitation framework (Project BETA) and <b>chronic</b> aggression pharmacotherapy. General suicide/violence risk stratification → <a href="#risk-assessment">Assessment → Risk Assessment</a>. Inpatient PRN order sets → <a href="#prn">Emergencies → PRNs</a>.</div>
       <p class="sub">Schizophrenia carries ~5–6× the violence risk of the general population, but only ~5% of violent crime is attributable to severe mental illness, and a small recidivist minority causes most incidents. Receiving antipsychotics cut violent crime ~45% in a national cohort (Fazel, <em>Lancet</em> 2014).</p>
       <div class="card"><h4>Medical vs primary-psychiatric agitation</h4>
         <ul class="tight"><li><b>Favors medical cause:</b> age &gt;40, no psych history, abnormal vitals/exam, sudden onset, <b>visual</b> hallucinations, emotional lability, can't sustain attention, ↓consciousness. <b>Favors primary psychiatric:</b> age &lt;40, psych history, normal vitals/exam, gradual onset, <b>auditory</b> hallucinations, flat affect, redirectable, alert</li><li>Always screen for akathisia (iatrogenic) and substance withdrawal</li></ul>
@@ -3882,18 +3910,20 @@
       </div>
     </div>
     <div class="page" id="page-ch6" data-ch="6">
-      <div class="chapter" id="ch6"><div class="n">6</div><div><div class="t">Substance Use &amp; Addiction</div><span class="d">Principles, the major substances, and special situations</span></div></div>
+      <div class="chapter" id="ch6"><div class="n">6</div><div><div class="t">Substance Use &amp; Addiction</div><span class="d">Principles → primary substances → miscellaneous intoxicants &amp; special situations</span></div></div>
       <div class="tabwrap"><div class="tabs">
+        <div class="tablabel">Principles &amp; Guidelines</div>
         <button class="tab" type="button" data-t="addiction">Addiction — Principles</button>
         <button class="tab" type="button" data-t="vadod-sud">VA/DoD SUD Guideline</button>
+        <div class="tablabel">Primary Substances</div>
         <button class="tab" type="button" data-t="alcohol">Alcohol Use Disorder</button>
         <button class="tab" type="button" data-t="sedative-ud">Sedative Use Disorder, Taper & Harm Reduction</button>
         <button class="tab" type="button" data-t="opioids">Opioid Use Disorder</button>
         <button class="tab" type="button" data-t="stimulants-sud">Stimulants — Cocaine & Amphetamines</button>
         <button class="tab" type="button" data-t="cannabis">Cannabis Use Disorder</button>
         <button class="tab" type="button" data-t="nicotine">Tobacco / Nicotine Cessation</button>
-        <button class="tab" type="button" data-t="club-drugs">Hallucinogens, Dissociatives & Club Drugs</button>
-        <button class="tab" type="button" data-t="other-drugs">Sedatives, Hallucinogens & Other Drugs</button>
+        <div class="tablabel">Miscellaneous &amp; Special Situations</div>
+        <button class="tab" type="button" data-t="club-drugs">Miscellaneous Intoxicants & Club Drugs</button>
         <button class="tab" type="button" data-t="sa-pregnancy">Substance Use in Pregnancy & Neonatal Effects</button>
         <button class="tab" type="button" data-t="idu-complications">Medical Complications of Injection Drug Use</button>
       </div></div>
@@ -4160,7 +4190,8 @@
       <div class="keytip"><b>5 A's:</b> Ask, Advise, Assess, Assist, Arrange follow-up. <b>Psychiatric populations</b> smoke ~44% of all cigarettes, are heavier smokers, and may use nicotine to self-medicate. Bupropion effective in schizophrenia & depression; fluoxetine for those with depression history.</div>
     </section>
         <section id="club-drugs">
-      <h3>Hallucinogens, Dissociatives & Club Drugs <span class="toptag">Substance Use</span></h3>
+      <h3>Miscellaneous Intoxicants & Club Drugs <span class="toptag">Substance Use</span></h3>
+      <div class="scope"><b>Scope:</b> Acute intoxication and tox management for agents not covered in their own sections. <b>Benzodiazepine dependence/taper</b> → <a href="#sedative-ud">Sedative Use Disorder</a>. <b>Cannabis use disorder &amp; chronic effects</b> → <a href="#cannabis">Cannabis Use Disorder</a>.</div>
       <div class="tablewrap"><table>
         <thead><tr><th>Agent</th><th>Mechanism / intoxication</th><th>Key risks & management</th></tr></thead>
         <tbody>
@@ -4169,27 +4200,13 @@
           <tr><td><b>MDMA</b> ("ecstasy/molly")</td><td>Serotonin/NE release; empathogenic, ↑energy</td><td><b>Hyperthermia, hyponatremia (water intoxication), serotonin syndrome</b>, bruxism; supportive cooling</td></tr>
           <tr><td><b>GHB</b></td><td>GABA-B; euphoria → sedation</td><td>Respiratory depression/coma (narrow margin, esp. with alcohol); <b>withdrawal resembles alcohol/benzo</b> (can be severe)</td></tr>
           <tr><td><b>Inhalants</b></td><td>Solvents/nitrites; rapid CNS depression</td><td>Youth; <b>"sudden sniffing death"</b> (arrhythmia); neurotoxicity with chronic use</td></tr>
+          <tr><td><b>Benzodiazepines</b> (acute intoxication)</td><td>Potentiate GABA-A; anterograde amnesia, confusion (elderly)</td><td>Supportive; flumazenil (caution — seizures). For dependence/taper → Sedative UD section</td></tr>
+          <tr><td><b>Barbiturates</b></td><td>Potentiate/mimic GABA, block glutamate; <b>narrow therapeutic index</b></td><td>Respiratory depression → airway/supportive care</td></tr>
+          <tr><td><b>Anticholinergics</b></td><td>Atropine, diphenhydramine, TCAs, OTC sleep aids, benztropine</td><td>Delirium + <b>fever, dry skin, mydriasis, tachycardia, ↓peristalsis, urinary retention</b>; physostigmine if severe</td></tr>
           <tr><td><b>Caffeine</b></td><td>Adenosine antagonist</td><td>Intoxication (&gt;~250 mg) and withdrawal (headache, fatigue) are DSM-5-TR conditions</td></tr>
         </tbody>
       </table></div>
       <p class="small"><span class="muted">DSM-5-TR; standard toxicology/addiction references.</span></p>
-    </section>
-        <section id="other-drugs">
-      <h3>Sedatives, Hallucinogens & Other Drugs <span class="toptag">Substance Use</span></h3>
-      <div class="tablewrap"><table>
-        <thead><tr><th>Agent</th><th>Mechanism / features</th><th>Intoxication management</th></tr></thead>
-        <tbody>
-          <tr><td><b>Benzodiazepines</b></td><td>Potentiate GABA-A. Anterograde amnesia, confusion (elderly); rebound insomnia & withdrawal (seizure risk).</td><td>Supportive; flumazenil (caution — seizures)</td></tr>
-          <tr><td><b>Barbiturates</b></td><td>Potentiate/mimic GABA, block glutamate. <b>Narrow therapeutic index</b> → respiratory depression.</td><td>Supportive; airway</td></tr>
-          <tr><td><b>LSD</b></td><td>Primarily <b>5-HT₂</b> agonism. Euphoria, labile mood, visual hallucinations, synesthesias, ego fragmentation. Half-life ~3 h; effects 4–12 h. "Bad trip," HPPD (flashbacks).</td><td><b>Benzodiazepines</b> (diazepam/lorazepam), reassurance/support</td></tr>
-          <tr><td><b>PCP</b></td><td><b>NMDA-glutamate antagonist</b>. Nystagmus (vertical/horizontal/rotary), ataxia, numbness, violent/psychotic (mimics schizophrenia), muscle rigidity, ↑BP/HR, fever.</td><td>Benzos (seizures/agitation), antipsychotics (psychosis), urine acidification, physical restraint (careful); severe OD → gastric suction, intubation</td></tr>
-          <tr><td><b>MDMA (Ecstasy)</b></td><td>↑ serotonin release + reuptake inhibition (also dopaminergic). ↑BP/HR, bruxism, "loving feeling." <b>Hyperthermia, hyponatremia, rhabdo, seizures</b> in rave settings; permanent serotonergic damage.</td><td>Cooling, fluids/electrolytes, supportive</td></tr>
-          <tr><td><b>Ketamine</b></td><td>Dissociative anesthetic, NMDA antagonist (PCP relative). ↑HR, CO, BP.</td><td>Supportive</td></tr>
-          <tr><td><b>GHB</b> ("liquid ecstasy")</td><td>GABA-B activity. Confusion, hallucination, coma (rapid awakening), <b>respiratory depression (esp. + alcohol)</b>. FDA-approved for narcolepsy (Xyrem).</td><td>Supportive; airway</td></tr>
-          <tr><td><b>Inhalants</b></td><td>GABA-A (alcohol-like): toluene, gasoline, nitrous, nitrites ("poppers"). Nystagmus, incoordination; "sudden sniffing death," seizures; chronic neuropathy, demyelination.</td><td>Behavioral; <b>no pharmacotherapy</b></td></tr>
-          <tr><td><b>Anticholinergics</b></td><td>Atropine, diphenhydramine, TCAs, OTC sleep aids, benztropine. Delirium + <b>fever, dry skin, dilated pupils, tachycardia, ↓peristalsis, urinary retention</b>.</td><td>Gastric lavage, <b>physostigmine</b></td></tr>
-          <tr><td><b>Cannabis</b></td><td>Endocannabinoid (CB1) agonism (THC). Drowsiness, tachycardia, dysphoria, occasionally psychosis. Chronic: pulmonary symptoms; early-onset use → ↓verbal IQ, working-memory & brain-volume effects.</td><td>Supportive/reassurance</td></tr>
-        </tbody></table></div>
     </section>
         <section id="sa-pregnancy">
       <h3>Substance Use in Pregnancy & Neonatal Effects <span class="toptag">Substance Use</span></h3>
@@ -4231,22 +4248,26 @@
       </div>
     </div>
     <div class="page" id="page-ch7" data-ch="7">
-      <div class="chapter" id="ch7"><div class="n">7</div><div><div class="t">Consult-Liaison Psychiatry</div><span class="d">Psychiatry in the medical/surgical setting (ACLP guides)</span></div></div>
+      <div class="chapter" id="ch7"><div class="n">7</div><div><div class="t">Consult-Liaison Psychiatry</div><span class="d">Consult process → acute neuropsych → mood/coping → safety &amp; end-of-life → behavioral plans</span></div></div>
       <div class="tabwrap"><div class="tabs">
+        <div class="tablabel">Consult Process</div>
         <button class="tab" type="button" data-t="doing-consult">How to Do a Psychiatric Consult</button>
+        <div class="tablabel">Acute Neuropsychiatric</div>
         <button class="tab" type="button" data-t="delirium">Delirium — Diagnosis, Prevention & Management</button>
         <button class="tab" type="button" data-t="catatonia">Catatonia</button>
         <button class="tab" type="button" data-t="organ-enceph">Organ-System & Drug-Induced Encephalopathies</button>
+        <div class="tablabel">Mood &amp; Coping on the Medical Service</div>
         <button class="tab" type="button" data-t="depression-medical">Depression in the Medically Ill</button>
         <button class="tab" type="button" data-t="anxiety-medical">Anxiety in the Medically Ill</button>
         <button class="tab" type="button" data-t="demoralization">Demoralization vs Depression</button>
+        <div class="tablabel">Safety, End-of-Life &amp; Procedures</div>
         <button class="tab" type="button" data-t="suicide-hospital">Suicide Risk in the General Hospital</button>
         <button class="tab" type="button" data-t="psycho-oncology">Psycho-Oncology & Palliative Care</button>
         <button class="tab" type="button" data-t="death-dying">Death & Dying on the Consult Service</button>
         <button class="tab" type="button" data-t="transplant">Transplant Psychiatric Evaluation</button>
         <button class="tab" type="button" data-t="bariatric-psychopharm">Psychopharmacology after Bariatric Surgery</button>
+        <div class="tablabel">Behavioral Management</div>
         <button class="tab" type="button" data-t="behavior-plans">Behavioral Plans in the Medical Setting</button>
-        <button class="tab" type="button" data-t="microaggressions">Managing Microaggressions</button>
       </div></div>
       <div class="panels">
         <section id="doing-consult">
@@ -4578,7 +4599,15 @@
     </section>
         <section id="suicide-hospital">
       <h3>Suicide Risk in the General Hospital <span class="toptag">Consult-Liaison</span></h3>
-      <p class="sub">A structured assessment weighs risk and protective factors — prioritizing <strong>modifiable</strong> targets — and documents reasoning, not just a "low/high" label. The transition from ideation to attempt is driven by conditions that <strong>increase distress</strong> (panic, PTSD) or <strong>decrease restraint</strong> (substance use, cluster-B impulsivity).</p>
+      <div class="scope"><b>Scope:</b> Structured assessment and disposition on the <b>medical/surgical service</b> (C-L consult). General suicide/violence risk framework → <a href="#risk-assessment">Assessment → Risk Assessment</a>.</div>
+      <p class="sub">A structured assessment weighs risk and protective factors — prioritizing <strong>modifiable</strong> targets — and documents reasoning, not just a "low/high" label. The goal is to <strong>stratify acute risk and lower it</strong>, not to predict suicide accurately. The transition from ideation to attempt is driven by conditions that <strong>increase distress</strong> (panic, PTSD) or <strong>decrease restraint</strong> (substance use, cluster-B impulsivity).</p>
+      <div class="card"><h4>Screening vs full assessment</h4>
+        <ul class="tight">
+          <li><b>Screening</b> (C-SSRS Screener, ASQ, PHQ-9 Item 9): any trained clinician using a validated tool</li>
+          <li><b>Full suicide risk assessment</b>: requires formal training in structured suicide risk evaluation — ideation ladder, intent/plan/means, preparatory behaviors, collateral, acute vs chronic risk</li>
+          <li><b>If you lack formal training:</b> do not independently assign final risk level or disposition after a positive screen, unclear risk, or moderate/high C-SSRS category. Obtain <b>emergency psychiatry evaluation</b> — consult or in-person ED evaluation by a psychiatrist (or equivalently trained clinician per local policy)</li>
+        </ul>
+      </div>
       <div class="grid two">
         <div class="card"><h4>Risk factors</h4>
           <ul class="tight">
@@ -4596,7 +4625,14 @@
           </ul>
         </div>
       </div>
-      <div class="keytip"><b>Management:</b> stabilize the medical condition; treat the psychiatric syndrome; <b>remove dangerous objects</b>, 1:1/sitter, serial reassessment; address modifiable medical/social factors; clear documentation and a safe discharge plan. <b>Anti-suicide treatments:</b> <b>lithium</b> and <b>clozapine</b> reduce suicide; <b>ketamine/esketamine</b> show early promise; treat the underlying mood/psychotic disorder; SSRIs (note the 18–24 yo black-box caution). <span class="muted">Source: ACLP "How-To Guide: Suicide Risk Assessment" (Sotelo, 2022).</span></div>
+      <div class="card"><h4>Disposition (by structured risk level)</h4>
+        <ul class="tight">
+          <li><b>Low</b> → outpatient plan + Stanley-Brown safety plan + lethal-means counseling + crisis resources + follow-up within 7 days</li>
+          <li><b>Moderate</b> → safety plan + means restriction; consider PHP/IOP; follow-up 48–72 h; psychiatric evaluation before discharge unless formally trained assessor documents safe disposition</li>
+          <li><b>High</b> → do not discharge without psychiatric evaluation: inpatient, crisis stabilization, or ED observation; consider 1:1 if imminent risk</li>
+        </ul>
+      </div>
+      <div class="keytip"><b>Management:</b> stabilize the medical condition; treat the psychiatric syndrome; <b>remove dangerous objects</b>, 1:1/sitter, serial reassessment; address modifiable medical/social factors; clear documentation and a safe discharge plan. Content reflects published guidelines — apply with clinical judgment and institutional protocol. <span class="muted">Source: ACLP "How-To Guide: Suicide Risk Assessment" (Sotelo, 2022); VA/DoD Suicide Risk CPG (2024).</span></div>
     </section>
         <section id="psycho-oncology">
       <h3>Psycho-Oncology & Palliative Care <span class="toptag">Consult-Liaison</span></h3>
@@ -4723,28 +4759,6 @@
       </div>
       <div class="keytip"><b>Build &amp; disseminate the plan:</b> interventions should be <b>practical, ethical, and time-limited</b>, with input from the medical team, nursing, and (when able) the patient. A written plan documents the problem behaviors, contributing factors, expectations the patient can meet, staff response options, behavioral goals/outcome measures, and a re-evaluation timeline. Use a <b>verbal</b> plan when a written one would stigmatize. Expect some behaviors to <b>worsen transiently</b> before consistency pays off. <span class="muted">Source: ACLP "How-To Guide: Behavior Plans" (Felde; updated 2024).</span></div>
     </section>
-        <section id="microaggressions">
-      <h3>Managing Microaggressions <span class="toptag">Consult-Liaison</span></h3>
-      <p class="sub">Microaggressions are everyday verbal/nonverbal/environmental slights — intentional or not — that convey hostile or negative messages based on marginalized-group membership. They are common in training (intimidation/harassment/discrimination ~60%) and are linked to burnout, stereotype threat, imposter syndrome, and traumatic-stress symptoms.</p>
-      <div class="grid two">
-        <div class="card"><h4>Three types</h4>
-          <ul class="tight">
-            <li><b>Microassault:</b> deliberate, conscious slur or act</li>
-            <li><b>Microinsult:</b> subtle, insensitive, demeaning comment ("you speak good English")</li>
-            <li><b>Microinvalidation:</b> minimizing/discrediting another's experience or feelings</li>
-          </ul>
-        </div>
-        <div class="card"><h4>Responding in the moment</h4>
-          <ul class="tight">
-            <li><b>Make the invisible visible</b> — challenge the stereotype, broaden the trait, ask for clarification</li>
-            <li><b>Disarm</b> — express disagreement, state values &amp; set limits, cite policy</li>
-            <li><b>Educate</b> — separate <b>intent from impact</b>, promote empathy</li>
-            <li><b>Seek support</b> — alert leadership, report to DEI, debrief with a trusted colleague</li>
-          </ul>
-        </div>
-      </div>
-      <div class="keytip"><b>Prebrief &amp; debrief:</b> before rounds, acknowledge microaggressions may occur and ask potentially-targeted team members how they'd like incidents handled; afterward, check in 1:1 (don't assume everyone wants to debrief every time). <b>If you are the source — the "ASSIST" model:</b> Acknowledge your bias, Seek feedback, Say you're sorry, focus on <b>Impact not intent</b>, and Say "thank you." <span class="muted">Source: ACLP "How-To Guide: Microaggressions" (Chang; Patel &amp; Ruark, 2024).</span></div>
-    </section>
       </div>
     </div>
     <div class="page" id="page-ch8" data-ch="8">
@@ -4770,6 +4784,7 @@
         <button class="tab" type="button" data-t="lgbtq">LGBTQ+ & Gender-Affirming Care</button>
         <button class="tab" type="button" data-t="soc8">WPATH SOC-8</button>
         <button class="tab" type="button" data-t="cultural-psych">Cultural Psychiatry & Underrepresented Populations</button>
+        <button class="tab" type="button" data-t="microaggressions">Managing Microaggressions</button>
         <button class="tab" type="button" data-t="forensic">Forensic Psychiatry</button>
         <button class="tab" type="button" data-t="forensic-ohio">Forensic Psychiatry — Ohio</button>
       </div></div>
@@ -5167,6 +5182,7 @@
     </section>
         <section id="lgbtq">
       <h3>LGBTQ+ & Gender-Affirming Care <span class="toptag">Special Population</span></h3>
+      <div class="scope"><b>Scope:</b> Affirming care, minority stress, and population disparities. DSM criteria for <b>gender dysphoria</b> and <b>paraphilic disorders</b> → <a href="#gender-sexual">Disorders → Gender Dysphoria &amp; Paraphilias</a>.</div>
       <p class="sub">Sexual orientation and gender identity are <strong>not</strong> disorders. Elevated psychiatric risk reflects <strong>minority stress</strong>, not the identity itself.</p>
       <div class="grid two">
         <div class="card"><h4>Minority-stress model & disparities</h4>
@@ -5242,6 +5258,29 @@
         </div>
       </div>
       <p class="small"><span class="muted">DSM-5-TR Cultural Formulation; APA &amp; structural-competency references.</span></p>
+    </section>
+        <section id="microaggressions">
+      <h3>Managing Microaggressions <span class="toptag">Special Population</span></h3>
+      <div class="scope"><b>Scope:</b> Responding to bias in clinical training and healthcare settings. Broader cultural assessment framework → <a href="#cultural-psych">Cultural Psychiatry</a>.</div>
+      <p class="sub">Microaggressions are everyday verbal/nonverbal/environmental slights — intentional or not — that convey hostile or negative messages based on marginalized-group membership. They are common in training (intimidation/harassment/discrimination ~60%) and are linked to burnout, stereotype threat, imposter syndrome, and traumatic-stress symptoms.</p>
+      <div class="grid two">
+        <div class="card"><h4>Three types</h4>
+          <ul class="tight">
+            <li><b>Microassault:</b> deliberate, conscious slur or act</li>
+            <li><b>Microinsult:</b> subtle, insensitive, demeaning comment ("you speak good English")</li>
+            <li><b>Microinvalidation:</b> minimizing/discrediting another's experience or feelings</li>
+          </ul>
+        </div>
+        <div class="card"><h4>Responding in the moment</h4>
+          <ul class="tight">
+            <li><b>Make the invisible visible</b> — challenge the stereotype, broaden the trait, ask for clarification</li>
+            <li><b>Disarm</b> — express disagreement, state values &amp; set limits, cite policy</li>
+            <li><b>Educate</b> — separate <b>intent from impact</b>, promote empathy</li>
+            <li><b>Seek support</b> — alert leadership, report to DEI, debrief with a trusted colleague</li>
+          </ul>
+        </div>
+      </div>
+      <div class="keytip"><b>Prebrief &amp; debrief:</b> before rounds, acknowledge microaggressions may occur and ask potentially-targeted team members how they'd like incidents handled; afterward, check in 1:1 (don't assume everyone wants to debrief every time). <b>If you are the source — the "ASSIST" model:</b> Acknowledge your bias, Seek feedback, Say you're sorry, focus on <b>Impact not intent</b>, and Say "thank you." <span class="muted">Source: ACLP "How-To Guide: Microaggressions" (Chang; Patel &amp; Ruark, 2024).</span></div>
     </section>
         <section id="forensic">
       <h3>Forensic Psychiatry <span class="toptag">Special Population</span></h3>
@@ -5325,20 +5364,24 @@
       </div>
     </div>
     <div class="page" id="page-ch9" data-ch="9">
-      <div class="chapter" id="ch9"><div class="n">9</div><div><div class="t">USMLE Step 3 Review</div><span class="d">Exam strategy, biostatistics, medicine &amp; ethics</span></div></div>
+      <div class="chapter" id="ch9"><div class="n">9</div><div><div class="t">USMLE Step 3 Review</div><span class="d">Exam strategy → medicine/neurology crossover → rapid review &amp; ethics</span></div></div>
       <div class="tabwrap"><div class="tabs">
+        <div class="tablabel">Exam Strategy</div>
         <button class="tab" type="button" data-t="step3-overview">USMLE Step 3 — Exam & CCS Strategy</button>
         <button class="tab" type="button" data-t="step3-biostats">Biostatistics</button>
         <button class="tab" type="button" data-t="step3-screening">Screening & Prevention</button>
+        <button class="tab" type="button" data-t="step3-ccs">CCS Emergency Management</button>
+        <div class="tablabel">Medicine &amp; Psychiatry Crossover</div>
         <button class="tab" type="button" data-t="step3-cards">Cardiology</button>
         <button class="tab" type="button" data-t="step3-longqt">Long QT, Torsades & Conditions Affecting QTc</button>
-        <button class="tab" type="button" data-t="step3-ccs">CCS Emergency Management</button>
-        <button class="tab" type="button" data-t="step3-rapid">High-Yield Rapid Facts</button>
-        <button class="tab" type="button" data-t="step3-alpha2">Alpha-2 Agonists & Sedation Tapering</button>
         <button class="tab" type="button" data-t="endo-adrenal">Endocrine — Adrenal Insufficiency</button>
-        <button class="tab" type="button" data-t="med-psych">Medical Mimics of Psychiatric Illness</button>
+        <button class="tab" type="button" data-t="med-psych">Medical Mimics — Step 3 Rapid</button>
+        <button class="tab" type="button" data-t="step3-alpha2">Alpha-2 Agonists & Sedation Tapering</button>
+        <div class="tablabel">Neurology</div>
         <button class="tab" type="button" data-t="neuro-vascular">Neurology I — Stroke, Seizures, Headache</button>
         <button class="tab" type="button" data-t="neuro-systems">Neurology II — Movement, Cord, Neuromuscular</button>
+        <div class="tablabel">Rapid Review &amp; Ethics</div>
+        <button class="tab" type="button" data-t="step3-rapid">High-Yield Rapid Facts</button>
         <button class="tab" type="button" data-t="ethics-legal">Ethics & Legal Essentials</button>
       </div></div>
       <div class="panels">
@@ -5569,63 +5612,37 @@
       <div class="keytip"><b>Treatment:</b> <b>Glucocorticoid replacement</b> — hydrocortisone (10–12 mg/m²/day divided, mimicking diurnal rhythm) or prednisone. <b>Primary AI also needs a mineralocorticoid: fludrocortisone.</b> DHEA replacement is optional (may help mood/libido in women). <b>Sick-day rules:</b> double or triple the glucocorticoid dose during illness/fever; stress-dose (IV hydrocortisone) for surgery; patients should carry an emergency injectable and a medical-alert card. Source: diagnostic algorithm adapted from the uploaded figure.</div>
     </section>
         <section id="med-psych">
-      <h3>Medical Conditions That Mimic or Cause Psychiatric Symptoms <span class="toptag">Step 3 · Medicine</span></h3>
-      <p class="sub">"Rule out medical causes" isn't a formality. Suspect a medical/organic etiology with: <strong>late/atypical age of onset, acute onset, no psych history, abnormal vitals or exam, fluctuating sensorium, visual hallucinations, or treatment resistance.</strong></p>
-      <div class="card"><h4>Endocrine</h4>
-        <div class="tablewrap"><table>
-          <thead><tr><th>Condition</th><th>Psychiatric picture</th><th>Clues / workup</th></tr></thead>
-          <tbody>
-            <tr><td><b>Hyperthyroidism</b></td><td>Anxiety, panic, irritability, mania, insomnia; <b>"apathetic hyperthyroidism"</b> (depression) in elderly</td><td>Tachycardia, tremor, heat intolerance, weight loss; <b>↓TSH, ↑free T4</b></td></tr>
-            <tr><td><b>Hypothyroidism</b></td><td><b>Depression</b>, cognitive slowing, "myxedema madness" (psychosis), fatigue</td><td>Cold intolerance, weight gain, constipation, ↓reflexes; <b>↑TSH, ↓free T4</b></td></tr>
-            <tr><td><b>Cushing syndrome</b></td><td><b>Depression</b> (most common), mania, psychosis, anxiety; cognitive deficits</td><td>Central obesity, striae, HTN, hyperglycemia; ↑24h urinary free cortisol, dexamethasone-suppression</td></tr>
-            <tr><td><b>Addison disease</b></td><td>Depression, apathy, fatigue, irritability</td><td>Hypotension, hyperpigmentation, <b>↓Na/↑K</b>; ↓AM cortisol, cosyntropin test</td></tr>
-            <tr><td><b>Hyperparathyroidism</b></td><td>"Stones, bones, groans, <b>psychiatric overtones</b>" — depression, anxiety, psychosis</td><td><b>↑Ca</b>, ↑PTH</td></tr>
-            <tr><td><b>Pheochromocytoma</b></td><td><b>Panic-like</b> spells (paroxysmal)</td><td>Episodic HTN, headache, palpitations, sweating; plasma/urine metanephrines</td></tr>
-            <tr><td><b>Hypoglycemia</b></td><td>Anxiety, confusion, bizarre behavior, "drunk" appearance</td><td>Diaphoresis, tremor; fingerstick glucose — <b>check it</b></td></tr>
-          </tbody>
-        </table></div>
-      </div>
+      <h3>Medical Mimics — Step 3 Rapid Review <span class="toptag">Step 3 · Cross-Ref</span></h3>
+      <div class="scope"><b>Scope:</b> Board-exam triggers only. Full differential, workup, and clinical depth → <a href="#medical-mimics">Chapter 1 — Medical Mimics of Psychiatric Illness</a>.</div>
+      <p class="sub">When a vignette presents psychiatric symptoms, scan for these high-yield organic causes before locking in a primary psychiatric diagnosis.</p>
       <div class="grid two">
-        <div class="card"><h4>Nutritional / vitamin deficiencies</h4>
+        <div class="card"><h4>Endocrine & metabolic (classic Step 3)</h4>
           <ul class="tight">
-            <li><b>Thiamine (B1):</b> Wernicke (confusion, ataxia, ophthalmoplegia) → Korsakoff (amnesia, confabulation). <b>Give thiamine before glucose</b> in at-risk patients</li>
-            <li><b>B12 / folate:</b> depression, psychosis ("megaloblastic madness"), dementia, neuropathy; B12 → subacute combined degeneration. Check MMA/homocysteine</li>
-            <li><b>Niacin (B3):</b> pellagra — <b>diarrhea, dermatitis, dementia</b> (± death)</li>
-            <li><b>Pyridoxine (B6):</b> deficiency (e.g., isoniazid) → seizures, neuropathy, depression</li>
-            <li><b>Vitamin D:</b> low levels associated with depression (correlational)</li>
+            <li><b>Hyperthyroidism</b> → anxiety, mania, insomnia; elderly "apathetic" form → depression</li>
+            <li><b>Hypothyroidism</b> → depression, cognitive slowing, "myxedema madness"</li>
+            <li><b>Cushing / Addison</b> → depression, psychosis, apathy; Addison → hypotension, hyperpigmentation</li>
+            <li><b>Hyperparathyroidism / hypercalcemia</b> → depression, psychosis, confusion</li>
+            <li><b>Pheochromocytoma</b> → panic-like spells + episodic HTN</li>
+            <li><b>Hypoglycemia</b> → anxiety, bizarre behavior — always check glucose</li>
           </ul>
         </div>
-        <div class="card"><h4>Electrolyte & organ failure</h4>
+        <div class="card"><h4>Nutritional, infectious & neurologic</h4>
           <ul class="tight">
-            <li><b>Hyponatremia:</b> confusion, lethargy, seizures (and a cause of delirium; also SSRI/SIADH)</li>
-            <li><b>Hypercalcemia:</b> depression, psychosis, confusion; <b>Hypocalcemia:</b> anxiety, tetany, seizures</li>
-            <li><b>Hypo-/hypermagnesemia, uremia</b> (renal failure) → encephalopathy</li>
-            <li><b>Hepatic encephalopathy:</b> confusion, asterixis, ↑ammonia; precipitated by GI bleed, infection, constipation</li>
-            <li><b>Hypoxia / hypercapnia</b> (COPD, OSA) → confusion, irritability, morning headache</li>
-          </ul>
-        </div>
-      </div>
-      <div class="grid two">
-        <div class="card"><h4>Infectious & autoimmune</h4>
-          <ul class="tight">
-            <li><b>Neurosyphilis:</b> personality change, mania ("general paresis"), dementia, Argyll-Robertson pupils; RPR/FTA-ABS</li>
-            <li><b>HIV:</b> mania, depression, HIV-associated neurocognitive disorder; consider PML, toxoplasmosis, CNS lymphoma</li>
-            <li><b>HSV encephalitis:</b> fever, <b>temporal-lobe</b> signs, personality change, seizures — emergent acyclovir</li>
-            <li><b>Anti-NMDA-receptor encephalitis:</b> young women + <b>ovarian teratoma</b>; psychiatric onset (psychosis, agitation) → seizures, dyskinesias, autonomic instability, ↓consciousness</li>
-            <li><b>SLE (lupus cerebritis), Hashimoto encephalopathy, neuro-Lyme, paraneoplastic limbic encephalitis</b></li>
-          </ul>
-        </div>
-        <div class="card"><h4>Metabolic, toxic & medication-induced</h4>
-          <ul class="tight">
-            <li><b>Wilson disease:</b> young patient, psych + movement disorder + liver disease; <b>Kayser-Fleischer rings</b>, ↓ceruloplasmin</li>
-            <li><b>Acute intermittent porphyria:</b> "<b>5 P's</b>" — painful abdomen, psychiatric, polyneuropathy, port-wine urine, precipitated by drugs</li>
-            <li><b>Heavy metals:</b> lead (irritability, cognitive), mercury ("mad hatter"), arsenic, manganese</li>
-            <li><b>Medications:</b> <b>corticosteroids</b> (mania/psychosis/depression), interferon (depression), levodopa/dopamine agonists (psychosis, ICDs), anticholinergics (delirium), stimulants, isotretinoin, varenicline, efavirenz, mefloquine</li>
-            <li><b>Substances:</b> intoxication/withdrawal (alcohol, stimulants, cannabis, hallucinogens, PCP); <b>steroids/anabolics</b></li>
+            <li><b>Thiamine (B1)</b> → Wernicke → Korsakoff; <b>give thiamine before glucose</b></li>
+            <li><b>B12/folate</b> → depression, psychosis, dementia, neuropathy</li>
+            <li><b>Neurosyphilis, HIV, HSV encephalitis</b> (temporal lobe, fever, seizures)</li>
+            <li><b>Anti-NMDA encephalitis</b> → young woman + psychosis → seizures/dyskinesia; check for ovarian teratoma</li>
+            <li><b>Wilson disease</b> (young + psych + movement disorder + liver); <b>porphyria</b> (5 P's); <b>hepatic/uremic encephalopathy</b></li>
           </ul>
         </div>
       </div>
-      <div class="keytip"><b>Baseline organic workup</b> for new psychiatric presentation when indicated: CBC, CMP (Na/Ca/glucose/LFTs/renal), <b>TSH</b>, B12/folate, <b>UDS</b>, urinalysis, <b>RPR &amp; HIV</b>, ± ammonia, ESR/ANA, heavy metals, ceruloplasmin; <b>neuroimaging (CT/MRI)</b> for focal signs, new psychosis &gt;40, or delirium; <b>EEG</b> for suspected seizures/encephalopathy; <b>LP</b> for suspected CNS infection/autoimmune encephalitis. <span class="muted">Standard medicine references (e.g., Kaplan &amp; Sadock; First Aid / MKSAP-level Step 3 content).</span></div>
+      <div class="card"><h4>Medication & substance triggers</h4>
+        <ul class="tight">
+          <li><b>Steroids, interferon, levodopa/dopamine agonists, anticholinergics, stimulants</b> — review the med list</li>
+          <li>Intoxication/withdrawal from alcohol, stimulants, hallucinogens, PCP, sedatives</li>
+        </ul>
+      </div>
+      <div class="keytip"><b>Step 3 workup when organic is on the differential:</b> CBC, CMP (Na/Ca/glucose/LFTs/renal), <b>TSH</b>, B12/folate, <b>UDS</b>, RPR &amp; HIV; ± ammonia, ceruloplasmin; <b>MRI/CT</b> for focal signs, new psychosis &gt;40, or delirium; <b>EEG/LP</b> when encephalitis or seizures suspected. <span class="muted">For full tables and first-episode psychosis protocol → <a href="#medical-mimics">Chapter 1</a>.</span></div>
     </section>
         <section id="neuro-vascular">
       <h3>Neurology I — Stroke, Seizures, Headache & Trauma <span class="toptag">Step 3 · Neurology</span></h3>
