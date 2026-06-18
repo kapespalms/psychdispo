@@ -1494,6 +1494,332 @@ function isCatalogRegionalCrisis(r){
  if(r.auto&&r.county===c&&r.cat==="Crisis & psych urgent care")return true;
  return false;
 }
+function isNjMetro(z){return countyFromZip(z)==="Northern New Jersey";}
+
+/* ---- classify a record into panel/sub/spec/need ---- */
+function specOf(r){var s=((r.name||"")+" "+(r.svc||"")).toLowerCase();
+ if(/psychosis|epicenter|step|first-episode/.test(s))return "fep";
+ if(/perinatal|reproductive|women's|postpartum|maternal/.test(s))return "perinatal";
+ if(/geriatric|older adult/.test(s))return "geriatric";
+ if(/eating/.test(s))return "eating";
+ if(/oncology|cancer|psycho-?onc|psychosocial/.test(s))return "cancer";
+ if(/trauma|star/.test(s))return "trauma";
+ if(/child|adolescent|youth|buckeye ranch|applewood|bellefaire|pediatric/.test(s))return "pediatric";
+ return "other";}
+function metaOf(r){
+ if(r.panel)return r; // national pre-tagged
+ var c=r.cat,m={};
+ if(c==="Outpatient psychiatry"){m.panel="A";m.sub="Psychiatrist / PMHNP (medication management)";}
+ else if(c==="Therapy & counseling"){m.panel="A";m.sub="Therapy / counseling (LCSW, LPC, psychology, peer)";}
+ else if(c==="IOP / PHP"){m.panel="A";m.sub="IOP / PHP programs";}
+ else if(c==="Specialty psychiatry"){m.panel="G";m.spec=specOf(r);}
+ else if(c==="Substance use & recovery"){m.panel="C";}
+ else if(c==="Crisis & psych urgent care"){m.panel="D";}
+ else if(c==="Health & medical"){m.panel="B";}
+ else if(c==="Shelter & housing"){m.panel="F";m.need="housing";}
+ else if(c==="Food"){m.panel="F";m.need="food";}
+ else if(c==="Domestic violence & assault"){m.panel="F";m.need="dv";}
+ else if(c==="Benefits & financial"){m.panel="F";m.need="financial";}
+ else if(c==="Employment & re-entry"){m.panel="F";m.need="employment";}
+ else if(c==="Legal, ID & records"){m.panel="F";m.need="legal";}
+ else if(c==="Veterans"){m.panel="G";m.spec="veteran";}
+ else if(c==="Seniors & aging"){m.panel="G";m.flag="geriatric";}
+ else if(c==="Developmental disabilities"){m.panel="G";m.flag="idd";}
+ else if(c==="Interpreter / language access"){m.panel="I";}
+ else {m.panel="F";m.need="other";}
+ return Object.assign({},r,m);
+}
+var ALL=DATA.map(metaOf).concat(NATIONAL.map(function(r){return Object.assign({national:1},metaOf(r));}));
+function rid(r){return (r.county||"")+"|"+r.name+"|"+r.phone;}
+var WANW=["Bellingham · Whatcom","Sedro-Woolley · Skagit","Friday Harbor · San Juan","Everett · Snohomish (regional)","Seattle · King (regional)"];
+var WASW=["Vancouver · Clark","Longview · Cowlitz","Portland, OR (regional)"];
+function waCluster(c){if(WANW.indexOf(c)>=0)return WANW;if(WASW.indexOf(c)>=0)return WASW;return null;}
+function countyOK(r){var c=patientCounty();
+ if(r.national){ if(r.county&&/Columbus|Cleveland/.test(r.county)){return !c||r.county===c;} return true; }
+ if(r.county==="West Virginia (statewide)")return isWvZip(S.zip);
+ if(r.county==="Washington (statewide)")return isWaZip(S.zip);
+ if(r.county&&r.county.indexOf("(statewide)")>=0){
+  var sn=r.county.replace(" (statewide)","");
+  if(typeof CATALOG_STATE_NAMES!=="undefined"&&CATALOG_STATE_NAMES.indexOf(sn)>=0)return isCatalogStateZip(S.zip,sn);
+  if(sn==="Nevada")return isNvZip(S.zip);
+  return false;
+ }
+ if(!c)return true;
+ var cl=waCluster(c);if(cl)return cl.indexOf(r.county)>=0;
+ var nycl=nyCluster(c);if(nycl)return nycl.indexOf(r.county)>=0;
+ var upcl=upstateCluster(c);if(upcl)return upcl.indexOf(r.county)>=0;
+ var wvcl=wvCluster(c);if(wvcl)return wvcl.indexOf(r.county)>=0;
+ var pacl=paCluster(c);if(pacl)return pacl.indexOf(r.county)>=0;
+ var micl=miCluster(c);if(micl)return micl.indexOf(r.county)>=0;
+ var nvcl=nvCluster(c);if(nvcl)return nvcl.indexOf(r.county)>=0;
+ var catcl=catalogCluster(c);if(catcl)return catcl.indexOf(r.county)>=0;
+ return r.county===c;}
+
+/* ---- generic option/flag wiring ---- */
+function applyOpt(opt){
+ if(opt.dataset.val!==undefined && opt.parentElement && opt.parentElement.dataset.field){
+  var f=opt.parentElement.dataset.field, v=opt.dataset.val;
+  setField(f,v);
+  $$(".opt",opt.parentElement).forEach(function(o){
+   var on=o===opt;
+   o.classList.toggle("sel",on);
+   o.classList.toggle("danger",on&&o.classList.contains("dangerv"));
+   o.classList.toggle("warn",on&&o.classList.contains("warnv"));
+   o.setAttribute("aria-pressed",on?"true":"false");
+  });
+  render();
+ } else if(opt.dataset.flag!==undefined){
+  var fl=opt.dataset.flag;
+  S.flags[fl]=S.flags[fl]?0:1;
+  opt.classList.toggle("sel",!!S.flags[fl]);
+  opt.setAttribute("aria-pressed",!!S.flags[fl]?"true":"false");
+  render();
+ }
+}
+var optViaPointer=null;
+function onOptPointer(e){
+ if(e.pointerType==="mouse"&&e.button!==0)return;
+ var opt=e.target.closest(".opt");if(!opt)return;
+ optViaPointer=opt;
+ setTimeout(function(){if(optViaPointer===opt)optViaPointer=null;},500);
+ applyOpt(opt);
+}
+function onOptClick(e){
+ var opt=e.target.closest(".opt");if(!opt)return;
+ if(opt===optViaPointer)return;
+ applyOpt(opt);
+}
+document.addEventListener("pointerup",onOptPointer,true);
+document.addEventListener("click",onOptClick);
+function setField(f,v){
+ if(f in S){S[f]=v||null;}
+ if(f==="cssrsDone"&&v==="no"){S.suicideRisk=null;}
+ if(f==="sudScreenDone"&&v==="no"){S.sudTool=null;S.sudScore="";S.sudClinical=null;}
+ if(f==="setting"){
+  v=normalizeSetting(v);S.setting=v;
+  if(v==="Outpatient"&&S.dispo==="residential"){S.dispo=null;S.residType=null;S.intensity=null;}
+  if(v==="Outpatient"&&!dispLocValue())applyDispLoc("community|outpatient");
+  S.acuteConcern=null;
+  return;
+ }
+ if(f==="apptScheduled"&&v==="yes"){S.refMethod=null;S.refSheet=null;}
+ if(f==="apptScheduled"&&v==="no"){S.warm=null;}
+ if(f==="refMethod"&&v!=="fax"){S.refSheet=null;}
+ if(f==="acuteConcern"&&v==="no"){S.cssrsDone=null;S.suicideRisk=null;S.sudScreenDone=null;S.sudTool=null;S.sudScore="";S.sudClinical=null;S.violence=null;}
+ if(f==="otherMeansDone"&&v==="no"){S.otherMeans.caustic=0;S.otherMeans.other=0;S.otherMeansOther="";}
+}
+function setPath(p,val){var a=p.split(".");S[a[0]][a[1]]=val?1:0;}
+$("#loc").addEventListener("input",function(e){
+ var v=e.target.value;
+ if(/^\d/.test(v.trim())){v=v.replace(/[^0-9]/g,"").slice(0,5);e.target.value=v;}
+ syncLocInput(v);
+ render();
+});
+["gender","lang"].forEach(function(id){var el=$("#"+id);if(el)el.addEventListener("input",function(){S[id]=el.value;render();});});
+[{id:"selInsurance",f:"insurance"},{id:"selSetting",f:"setting"}].forEach(function(x){
+ var el=$("#"+x.id);if(!el)return;
+ el.addEventListener("change",function(){
+  setField(x.f,el.value);
+  if(x.f==="setting"&&el.value==="Outpatient"&&!dispLocValue())applyDispLoc("community|outpatient");
+  render();
+  if(x.f==="setting"&&el.value&&!dispLocValue()){var d=$("#selDispLoc");if(d)d.focus();}
+ });
+});
+var selDisp=$("#selDispLoc");if(selDisp)selDisp.addEventListener("change",function(e){applyDispLoc(e.target.value);render();});
+$("#sudScore").addEventListener("input",function(e){S.sudScore=e.target.value;render();});
+document.addEventListener("input",function(e){
+ var p2=e.target.dataset.plan2,tx=e.target.dataset.text;
+ if(p2){S.plan2[p2]=e.target.value;render();}
+ if(tx){S[tx]=e.target.value;render();}
+});
+
+/* ---- SUD positivity ---- */
+function sudPositive(){if(S.sudScreenDone!=="yes")return false;
+ if(S.sudTool==="clinical")return S.sudClinical==="positive";
+ var n=parseFloat(S.sudScore);if(isNaN(n))return false;
+ if(S.sudTool==="auditc")return n>=3; if(S.sudTool==="dast10")return n>=3; if(S.sudTool==="taps")return n>=1; return false;}
+
+/* ---- completion ---- */
+function L0ok(){return S.cleared==="yes"&&S.setting&&locOk()&&S.insurance&&L3ok();}
+function L1ok(){return !!S.lifeStage;}
+function L2ok(){if(isOutpatient()){if(S.acuteConcern==="no")return true;if(S.acuteConcern!=="yes")return false;}
+ var a=S.cssrsDone&&(S.cssrsDone==="no"||S.suicideRisk);
+ var b=S.sudScreenDone&&(S.sudScreenDone==="no"||(S.sudTool&&(S.sudTool==="clinical"?!!S.sudClinical:S.sudScore!=="")));
+ return a&&b&&S.violence;}
+function L3ok(){if(!S.dispo)return false;if(S.dispo==="community")return !!S.intensity;if(S.dispo==="residential")return !!S.residType;return false;}
+function planFilled(){return S.planDone!=null;}
+function meansFilled(){return S.firearm!=null&&S.meds!=null&&S.otherMeansDone!=null;}
+function planAndMeansOk(){return planFilled()&&meansFilled();}
+function hiRisk(){return S.suicideRisk==="moderate"||S.suicideRisk==="high";}
+function L4ok(){return planAndMeansOk()&&S.callback!=null&&S.pcp!=null&&S.pharmacy!=null;}
+function resById(id){if(!id)return null;return ALL.filter(function(r){return rid(r)===id;})[0]||null;}
+function followUpEligible(r){return r&&(r.panel==="A"||r.panel==="B"||r.panel==="C");}
+function followUpTargets(){return selectedRes().filter(followUpEligible);}
+function primaryFollowUpTarget(){
+ var t=followUpTargets();
+ var psych=t.filter(function(r){return r.panel==="A"&&/Psychiatrist|PMHNP|psychiatry/i.test((r.sub||"")+" "+(r.cat||""));});
+ if(psych.length)return rid(psych[0]);
+ var a=t.filter(function(r){return r.panel==="A";});
+ if(a.length)return rid(a[0]);
+ return t.length?rid(t[0]):null;
+}
+function syncFuReferral(){
+ var t=followUpTargets();
+ if(!t.length){S.fuReferralId=null;return;}
+ if(!S.fuReferralId||!S.selected[S.fuReferralId])S.fuReferralId=primaryFollowUpTarget();
+ var fu=resById(S.fuReferralId);
+ if(S.refMethod==="fax"&&(!fu||!fu.fax)){S.refMethod=null;S.refSheet=null;}
+ if(S.refMethod==="email"&&(!fu||!fu.email))S.refMethod=null;
+}
+function L5FollowUpOk(){
+ syncFuReferral();
+ var t=followUpTargets();
+ if(!t.length)return false;
+ if(!S.fuReferralId||S.apptScheduled==null)return false;
+ if(S.apptScheduled==="yes")return S.warm!=null;
+ if(S.apptScheduled==="no"){
+  if(!S.refMethod)return false;
+  if(S.refMethod==="fax"){var fu=resById(S.fuReferralId);return fu&&fu.fax?S.refSheet!=null:true;}
+  return true;
+ }
+ return false;
+}
+function selectedCount(){return Object.keys(S.selected).filter(function(k){return S.selected[k];}).length;}
+function L6ok(){return L2ok()&&L4ok()&&L5FollowUpOk()&&selectedCount()>=1;}
+
+/* ---- render visibility + reveals ---- */
+function show(id,on){$(id).classList.toggle("hidden",!on);}
+function rev(id,on){$(id).classList.toggle("hidden",!on);}
+function render(){
+ renderGateSummary();
+ syncGateSelects();
+ syncOptsFromS();
+ rev("#notCleared",S.cleared==="no");
+ $("#zipMeta").textContent=locOk()?(function(){var c=patientCounty();if(!c)return "→ location noted — outside listed metros (national resources shown)";var cl=waCluster(c)||nyCluster(c)||upstateCluster(c)||wvCluster(c)||paCluster(c)||miCluster(c)||nvCluster(c)||catalogCluster(c);return "→ "+c+(cl?" · regional metro":"");}()):"";
+ show("#L1",L0ok());
+ // L2 reveals
+ show("#quickSafety",isOutpatient());
+ rev("#quickSafetyOk",isOutpatient()&&S.acuteConcern==="no");
+ show("#fullScreen",!isOutpatient()||S.acuteConcern==="yes");
+ rev("#cssrsRisk",S.cssrsDone==="yes");
+ rev("#hiRiskMsg",hiRisk());
+ rev("#sudTools",S.sudScreenDone==="yes");
+ rev("#sudScoreWrap",S.sudScreenDone==="yes"&&S.sudTool&&S.sudTool!=="clinical");
+ rev("#sudClinicalWrap",S.sudScreenDone==="yes"&&S.sudTool==="clinical");
+ var hint={auditc:"(positive ≥4 men / ≥3 women)",dast10:"(positive ≥3)",taps:"(positive ≥1)"}[S.sudTool]||"";
+ $("#sudPosHint").textContent=hint;
+ rev("#violenceMsg",S.violence==="yes");
+ show("#L2",L0ok()&&L1ok());
+ var gateDone=L0ok()&&L1ok()&&L2ok();
+ $("#opOnlyNote").style.display=isOutpatient()?"block":"none";
+ // L4
+ show("#L4",gateDone);
+ rev("#firearmPlanWrap",S.firearm==="yes");
+ rev("#medsPlanWrap",S.meds==="yes");
+ rev("#otherMeansWrap",S.otherMeansDone==="yes");
+ // L5
+ show("#L5",gateDone);
+ if(gateDone){renderPanels();renderFollowUp();}
+ // L6
+ show("#L6",gateDone);
+ renderL6status();
+ renderStatus();
+}
+
+/* ---- resource card ---- */
+function resCard(r){
+ var id=rid(r),ck=S.selected[id]?"checked":"";
+ var badge=r.unverified?'<span class="badge un">⚑ unverified</span>':r.national?'<span class="badge nat">national</span>':'<span class="badge v">✓ verified</span>';
+ return '<label class="res'+(S.selected[id]?" sel":"")+'"><input type="checkbox" data-res="'+esc(id)+'" '+ck+'>'+
+  '<div><div class="rn">'+esc(r.name)+badge+'</div>'+
+  (r.svc?'<div class="rs">'+esc(r.svc)+'</div>':'')+
+  (r.access?'<div class="rax">'+esc(r.access)+'</div>':'')+
+  (r.address?'<div class="rad">📍 '+esc(r.address)+'</div>':'')+
+  '<a class="rp" href="tel:'+tel(r.phone)+'">📞 '+esc(r.phone)+'</a> <span class="rad">· '+esc(r.county)+'</span>'+
+  ((r.fax||r.email)?'<div class="rfx">'+(r.fax?'📠 fax '+esc(r.fax):'')+(r.fax&&r.email?' · ':'')+(r.email?'✉️ '+esc(r.email):'')+'</div>':'')+
+  '</div></label>';
+}
+function pedsOK(r){return !r.peds||S.lifeStage==="child";}
+function pick(filterFn){return ALL.filter(function(r){return countyOK(r)&&pedsOK(r)&&filterFn(r);});}
+function subSection(title,list){if(!list.length)return "";return (title?'<div class="subhdr">'+esc(title)+'</div>':'')+'<div class="resgrid">'+list.map(resCard).join("")+'</div>';}
+var PMETA={A:["\u{1F9E0}","Mental health treatment","#2640C8","#eef1fb"],B:["⚕️","Primary care & health","#0F7A7A","#e7f4f3"],C:["\u{1F49A}","Substance use treatment","#1c7a3f","#e9f5ee"],D:["\u{1F198}","Crisis services","#b3261e","#fdeceb"],F:["\u{1F3E0}","Social needs","#8a5d00","#fbf1dd"],G:["⭐","Specialty & population","#6f3bb3","#f1ecfa"],I:["\u{1F4AC}","Interpreter / language access","#0a6f93","#e6f3f8"]};
+
+function activeFlag(f){if(f==="veteran")return !!(S.flags.veteran||S.insurance==="VA");if(f==="pediatric")return S.lifeStage==="child";if(f==="geriatric")return S.lifeStage==="geriatric";return !!S.flags[f];}
+function isFoodBank(r){return r.cat==="Food"&&/food bank|food collective/i.test(r.name);}
+function isRegionalCrisisLine(r){
+ if(r.panel!=="D"||r.national)return false;
+ if(/Regional Crisis Line|24-Hr Crisis Line|Crisis Now Line|281-CARE|Help Hotline Crisis Center|County Crisis Hotline/i.test(r.name))return true;
+ if(/FrontLine Service — 24-Hr Crisis Line|Netcare Access|Zepf Center — Crisis CARE|Montgomery County Crisis Now Line|ADM Crisis \/ Support Hotline|Stark County Crisis Hotline/i.test(r.name))return true;
+ return false;}
+function isNyRegionalCrisis(r){
+ var c=patientCounty();
+ if(!c||!nyCluster(c))return false;
+ if(/Long Island Crisis Center/i.test(r.name))return c.indexOf("Long Island")>=0;
+ if(/NYC Well — 24-Hr Crisis Line/i.test(r.name))return c==="New York City (NYC)";
+ if(/Nassau County Behavioral Health Helpline/i.test(r.name))return c==="Long Island · Nassau";
+ if(/Suffolk County Mental Health Hotline/i.test(r.name))return c==="Long Island · Suffolk";
+ if(/Response Crisis Center of Suffolk/i.test(r.name))return c==="Long Island · Suffolk";
+ if(/Westchester CPRT/i.test(r.name))return c==="Westchester";
+ if(/Rockland BHRT/i.test(r.name))return c==="Rockland";
+ if(/Dutchess County Mobile Mental Health/i.test(r.name))return c==="Hudson Valley";
+ if(/Orange County Mobile Mental Health/i.test(r.name))return c==="Hudson Valley";
+ if(/Sullivan County Mobile Mental Health/i.test(r.name))return c==="Hudson Valley";
+ if(/NJ Mental Health Cares/i.test(r.name))return c==="Northern New Jersey";
+ if(/CarePlus NJ — Mobile Crisis/i.test(r.name))return c==="Northern New Jersey";
+ return false;}
+function isUpstateRegionalCrisis(r){
+ var c=patientCounty();
+ if(!c||!upstateCluster(c))return false;
+ if(/Crisis Services — 24-Hr Crisis/i.test(r.name))return c==="Buffalo · Erie";
+ if(/UR Medicine — Mental Health Crisis Call Line/i.test(r.name))return c==="Rochester · Monroe";
+ if(/Albany County — Mobile Crisis/i.test(r.name))return c==="Albany · Capital Region";
+ if(/Crisis Connect — CNY Mobile Crisis/i.test(r.name))return c==="Syracuse · Onondaga";
+ return false;}
+function isWvRegionalCrisis(r){
+ var c=patientCounty();
+ if(!c||!wvCluster(c))return false;
+ if(/HELP4WV/i.test(r.name))return true;
+ if(/Prestera — 24\/7 Crisis/i.test(r.name))return c==="Charleston · Kanawha"||c==="Huntington · Cabell";
+ if(/Valley HealthCare — 24\/7 Crisis/i.test(r.name))return c==="Morgantown · Monongalia";
+ if(/Northwood — 24\/7 Crisis/i.test(r.name))return c==="Wheeling · Northern Panhandle";
+ if(/Westbrook — 24\/7 Crisis/i.test(r.name))return c==="Parkersburg · Wood";
+ if(/Seneca — 24\/7 Crisis/i.test(r.name))return c==="Beckley · Raleigh";
+ if(/EastRidge — 24\/7 Crisis/i.test(r.name))return c==="Eastern Panhandle · Berkeley";
+ return false;}
+function isEmergencyDept(r){
+ if(r.panel!=="D")return false;
+ return /Emergency Dept|Emergency Department|\bED\b|Psychiatric Emergency Services|\bPES\b|Psychiatric Emergency/i.test(r.name)&&!/Urgent Care|Behavioral Health Urgent|Triage/i.test(r.name);}
+function nearestED(){var list=pick(isEmergencyDept);if(!list.length)return null;var c=patientCounty();var ex=list.filter(function(r){return r.county===c;});return ex.length?ex[0]:list[0];}
+function primaryReferrals(res){
+ return res.filter(function(r){return r.panel!=="D"&&r.panel!=="F"&&r.panel!=="I"&&!/^911|^988|Crisis Text|211 —|Relay|Warm Line|Recovery Help/i.test(r.name);})
+  .sort(function(a,b){var pa=a.panel==="A"?0:1,pb=b.panel==="A"?0:1;return pa-pb;});}
+function autoMatch(r){var nm=r.name,pc=patientCounty();
+ if(r.auto){
+  if(r.county&&NYREGION.indexOf(r.county)>=0&&pc&&NYREGION.indexOf(pc)>=0){
+   if(/Long Island Crisis Center/i.test(r.name))return pc.indexOf("Long Island")>=0;
+   return r.county===pc;
+  }
+  if(r.county&&UPSTATEREGION.indexOf(r.county)>=0&&pc&&UPSTATEREGION.indexOf(pc)>=0)return r.county===pc;
+  if(r.county&&WVREGION.indexOf(r.county)>=0&&pc&&WVREGION.indexOf(pc)>=0)return r.county===pc;
+  if(r.county&&PAREGION.indexOf(r.county)>=0&&pc&&PAREGION.indexOf(pc)>=0)return r.county===pc;
+  if(r.county&&MIREGION.indexOf(r.county)>=0&&pc&&MIREGION.indexOf(pc)>=0)return r.county===pc;
+  if(r.county&&NVREGION.indexOf(r.county)>=0&&pc&&NVREGION.indexOf(pc)>=0)return r.county===pc;
+  if(r.county&&r.county.indexOf("(statewide)")>=0){
+   var sn=r.county.replace(" (statewide)","");
+   if(typeof CATALOG_STATE_NAMES!=="undefined"&&CATALOG_STATE_NAMES.indexOf(sn)>=0)return isCatalogStateZip(S.zip,sn);
+   if(sn==="Nevada")return isNvZip(S.zip);
+  }
+  return true;
+ }
+ if(isRegionalCrisisLine(r)||isNyRegionalCrisis(r)||isUpstateRegionalCrisis(r)||isWvRegionalCrisis(r)||isCatalogRegionalCrisis(r))return true;
+ var ed=nearestED();if(ed&&rid(r)===rid(ed))return true;
+ if(nm.indexOf("Ohio Relay")>=0)return !isWaZip(S.zip)&&!isNyMetro(S.zip)&&!isWvMetro(S.zip);
+ if(nm==="211 — United Way"||/^988 /.test(nm)||nm==="911 — Emergency"||nm==="Crisis Text Line"||nm==="Trans Lifeline"||nm==="Ohio Medicaid Consumer Hotline"||nm==="NY Medicaid Consumer Helpline"||nm==="WV Medicaid Member Services"||nm.indexOf("PA Medicaid")>=0||nm.indexOf("Michigan Medicaid")>=0||nm.indexOf("Nevada Medicaid")>=0||isFoodBank(r))return true;
+ if(S.insurance==="Medicaid"&&(nm==="Ohio Medicaid Consumer Helpline"||nm==="NY Medicaid Consumer Helpline"||/Non-Emergency Transportation/.test(nm)||nm.indexOf("PA Medicaid")>=0||nm.indexOf("Michigan Medicaid")>=0||nm.indexOf("Nevada Medicaid")>=0))return true;
+ if(r.national&&r.flag&&activeFlag(r.flag))return true;
+ if((S.flags.sud||sudPositive())&&r.panel==="C"&&r.national)return true;
+ return false;}
+
 function miniHTML(soc){return '<div class="mini">'+[["housing","Housing concern"],["food","Food concern"],["transport","Transportation concern"],["dv","Safety concern (DV)"],["financial","Financial / benefits concern"],["childcare","Childcare concern"],["legal","Legal concern"],["employment","Employment concern"]].map(function(p){return '<label><input type="checkbox" data-social="'+p[0]+'" '+(soc[p[0]]?"checked":"")+'> '+p[1]+(p[0]==="housing"&&S.flags.unhoused?' <span class="autoflag">auto · unhoused</span>':"")+'</label>';}).join("")+'</div>';}
 function renderFollowUp(){
  var el=$("#followUpBlock");if(!el)return;
