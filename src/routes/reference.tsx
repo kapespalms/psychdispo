@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ToolFrame } from "@/components/tool-frame";
 
 export const Route = createFileRoute("/reference")({
   head: () => ({
     meta: [
-      { title: "Psych References · PsychDispo" },
+      { title: "Psych Ref · PsychDispo" },
       {
         name: "description",
         content:
@@ -15,11 +16,5 @@ export const Route = createFileRoute("/reference")({
 });
 
 function ReferencePage() {
-  return (
-    <iframe
-      src="/psychref.html"
-      title="Psych Reference"
-      style={{ border: 0, width: "100%", height: "100vh", display: "block" }}
-    />
-  );
+  return <ToolFrame src="/psychref.html" title="Psych Reference" />;
 }

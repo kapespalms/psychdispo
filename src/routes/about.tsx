@@ -31,7 +31,7 @@ function About() {
           </h1>
 
           <p className="mt-3 font-mono text-[11px] tracking-[0.28em] text-muted-foreground uppercase">
-            Psychiatric disposition &amp; discharge · 5 Ohio metros
+            Psychiatric disposition &amp; discharge · verified resources in all 50 states
           </p>
 
           <p className="mt-4 font-serif text-[14px] italic text-foreground">
@@ -75,7 +75,7 @@ function About() {
                 </span>
               </h3>
               <p className="mt-8 max-w-md text-[15px] leading-relaxed text-muted-foreground">
-                Structured support for psychiatric disposition, including risk assessment, discharge planning, crisis pathways, outpatient follow-up, IOP/PHP, social resources, Medicaid information, 988, 211, food access, and Cleveland/Columbus resource navigation.
+                Guided disposition workflow: safety gate, level of care, ZIP-matched referrals (1,400+ resources), follow-up coordination, and a printable discharge packet. Deepest local coverage in Ohio, Washington, NY/NJ, and expanding metros nationwide.
               </p>
             </div>
 

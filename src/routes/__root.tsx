@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { SiteHeader } from "@/components/site-header";
+import { AuthProvider } from "@/lib/auth";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -78,10 +79,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "PsychDispo · Clinical Index" },
-      { name: "description", content: "A clinical index for psychiatry resources and references." },
-      { property: "og:title", content: "PsychDispo · Clinical Index" },
-      { property: "og:description", content: "A clinical index for psychiatry resources and references." },
+      { title: "PsychDispo · Psychiatric Disposition" },
+      {
+        name: "description",
+        content:
+          "Evidence-informed psychiatric disposition, discharge planning, verified community resources, and high-yield psychiatry reference.",
+      },
+      { property: "og:title", content: "PsychDispo · Psychiatric Disposition" },
+      {
+        property: "og:description",
+        content:
+          "From safety screen to patient packet — disposition workflow and psychiatry reference for clinicians.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -122,14 +131,14 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
   const path = router.state.location.pathname;
-  const hideShellHeader = path === "/" || path === "/dispo" || path === "/reference";
+  const hideShellHeader = path === "/" || path === "/sign-in" || path === "/sign-up";
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Shell nav only on secondary pages (about, workflow). Tool pages own their header. */}
-      {!hideShellHeader && <SiteHeader />}
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <AuthProvider>
+        {!hideShellHeader && <SiteHeader />}
+        <Outlet />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

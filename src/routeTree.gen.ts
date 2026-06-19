@@ -10,8 +10,14 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkflowRouteImport } from './routes/workflow'
+import { Route as SignUpRouteImport } from './routes/sign-up'
+import { Route as SignInRouteImport } from './routes/sign-in'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ReferenceRouteImport } from './routes/reference'
+import { Route as PlansRouteImport } from './routes/plans'
+import { Route as EmergRouteImport } from './routes/emerg'
 import { Route as DispoRouteImport } from './routes/dispo'
+import { Route as DirectoryRouteImport } from './routes/directory'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -20,14 +26,44 @@ const WorkflowRoute = WorkflowRouteImport.update({
   path: '/workflow',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SignUpRoute = SignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignInRoute = SignInRouteImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReferenceRoute = ReferenceRouteImport.update({
   id: '/reference',
   path: '/reference',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlansRoute = PlansRouteImport.update({
+  id: '/plans',
+  path: '/plans',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmergRoute = EmergRouteImport.update({
+  id: '/emerg',
+  path: '/emerg',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DispoRoute = DispoRouteImport.update({
   id: '/dispo',
   path: '/dispo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DirectoryRoute = DirectoryRouteImport.update({
+  id: '/directory',
+  path: '/directory',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -44,38 +80,96 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/directory': typeof DirectoryRoute
   '/dispo': typeof DispoRoute
+  '/emerg': typeof EmergRoute
+  '/plans': typeof PlansRoute
   '/reference': typeof ReferenceRoute
+  '/settings': typeof SettingsRoute
+  '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
   '/workflow': typeof WorkflowRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/directory': typeof DirectoryRoute
   '/dispo': typeof DispoRoute
+  '/emerg': typeof EmergRoute
+  '/plans': typeof PlansRoute
   '/reference': typeof ReferenceRoute
+  '/settings': typeof SettingsRoute
+  '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
   '/workflow': typeof WorkflowRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/directory': typeof DirectoryRoute
   '/dispo': typeof DispoRoute
+  '/emerg': typeof EmergRoute
+  '/plans': typeof PlansRoute
   '/reference': typeof ReferenceRoute
+  '/settings': typeof SettingsRoute
+  '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
   '/workflow': typeof WorkflowRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/dispo' | '/reference' | '/workflow'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/directory'
+    | '/dispo'
+    | '/emerg'
+    | '/plans'
+    | '/reference'
+    | '/settings'
+    | '/sign-in'
+    | '/sign-up'
+    | '/workflow'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/dispo' | '/reference' | '/workflow'
-  id: '__root__' | '/' | '/about' | '/dispo' | '/reference' | '/workflow'
+  to:
+    | '/'
+    | '/about'
+    | '/directory'
+    | '/dispo'
+    | '/emerg'
+    | '/plans'
+    | '/reference'
+    | '/settings'
+    | '/sign-in'
+    | '/sign-up'
+    | '/workflow'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/directory'
+    | '/dispo'
+    | '/emerg'
+    | '/plans'
+    | '/reference'
+    | '/settings'
+    | '/sign-in'
+    | '/sign-up'
+    | '/workflow'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  DirectoryRoute: typeof DirectoryRoute
   DispoRoute: typeof DispoRoute
+  EmergRoute: typeof EmergRoute
+  PlansRoute: typeof PlansRoute
   ReferenceRoute: typeof ReferenceRoute
+  SettingsRoute: typeof SettingsRoute
+  SignInRoute: typeof SignInRoute
+  SignUpRoute: typeof SignUpRoute
   WorkflowRoute: typeof WorkflowRoute
 }
 
@@ -88,6 +182,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkflowRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sign-up': {
+      id: '/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof SignUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sign-in': {
+      id: '/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof SignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reference': {
       id: '/reference'
       path: '/reference'
@@ -95,11 +210,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReferenceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/plans': {
+      id: '/plans'
+      path: '/plans'
+      fullPath: '/plans'
+      preLoaderRoute: typeof PlansRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/emerg': {
+      id: '/emerg'
+      path: '/emerg'
+      fullPath: '/emerg'
+      preLoaderRoute: typeof EmergRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dispo': {
       id: '/dispo'
       path: '/dispo'
       fullPath: '/dispo'
       preLoaderRoute: typeof DispoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/directory': {
+      id: '/directory'
+      path: '/directory'
+      fullPath: '/directory'
+      preLoaderRoute: typeof DirectoryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -122,8 +258,14 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  DirectoryRoute: DirectoryRoute,
   DispoRoute: DispoRoute,
+  EmergRoute: EmergRoute,
+  PlansRoute: PlansRoute,
   ReferenceRoute: ReferenceRoute,
+  SettingsRoute: SettingsRoute,
+  SignInRoute: SignInRoute,
+  SignUpRoute: SignUpRoute,
   WorkflowRoute: WorkflowRoute,
 }
 export const routeTree = rootRouteImport
