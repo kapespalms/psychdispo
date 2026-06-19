@@ -284,12 +284,26 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 .patient-onepager .follow-hero{background:#eef1fb;border-radius:8px;padding:12px;margin:10px 0}
 .patient-onepager .doc-sec-clinical .doc-sec-h{color:var(--t)}
 .patient-onepager .doc-sec-social .doc-sec-h{color:var(--amber)}
+.patient-onepager .doc-sec-tonight .doc-sec-h{color:var(--red)}
+.patient-onepager .tonight-row{font-size:13px;padding:4px 0;border-bottom:1px solid #f5e0e0;line-height:1.4}
+.sc-banner{border-radius:10px;padding:11px 14px;font-size:13px;margin:12px 0;background:#fbf1dd;border:1px solid #f0dca6;color:#6b4b00;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sc-banner.hidden{display:none}
+.sc-banner .btn{margin-left:auto;min-height:38px;padding:8px 14px;font-size:13px}
+.sc-tonight-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px}@media(max-width:680px){.sc-tonight-grid{grid-template-columns:1fr}}
+.sc-hrsn .mini label{padding:7px 0}
+.doc-handoff{break-before:page;page-break-before:always;margin-top:18px;padding-top:8px;max-width:7.5in}
+.doc-handoff .handoff-needs{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.doc-handoff .need-chip{font-size:11px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);background:#fafbfd}
+.doc-handoff .handoff-res{padding:8px 0;border-bottom:1px solid #eef0f4;font-size:13px}
+.doc-handoff .handoff-foot{font-size:10px;color:var(--mut);margin-top:12px;border-top:1px solid var(--line);padding-top:8px}
+.social-prompt-overlay{z-index:70}
 @media print{
- .mh-top,.hero,.tabbar,.statusbar,.layer,.note,.toolnote,#view-directory{display:none!important}
+ .mh-top,.hero,.tabbar,.statusbar,.layer,.note,.toolnote,#view-directory,#view-social-care{display:none!important}
  body{background:#fff}#packet.show{display:block}.pk{border:none;padding:0;margin:0;max-width:none}
  .wrap{padding:0;max-width:none}
  .patient-onepager{max-height:10in;overflow:hidden;page-break-after:always}
  .doc-referral-cover{break-before:page;page-break-before:always}
+ .doc-handoff{break-before:page;page-break-before:always}
  @page{margin:14mm}
  @page :first{margin:10mm}
 }
@@ -302,7 +316,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 </a>
 <span class="mh-tagline">Inspiring safer disposition</span>
 </header>
-<div class="tabbar"><div class="tabs"><button class="tab on" data-view="tool">PsychDispo · Plan</button><button class="tab" data-view="ref">Psych Emerg · Review</button><button class="tab" data-view="directory">Resource Directory</button></div></div>
+<div class="tabbar"><div class="tabs"><button class="tab on" data-view="tool">PsychDispo · Plan</button><button class="tab" data-view="social-care">Social Care Plan</button><button class="tab" data-view="ref">Psych Emerg · Review</button><button class="tab" data-view="directory">Resource Directory</button></div></div>
 <div class="wrap">
 <div id="view-tool">
 
@@ -477,6 +491,11 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
  <div class="ltag">Referrals</div>
  <div class="l5-fresh note" id="l5Fresh"></div>
  <div class="ldesc" id="l5ctx"></div>
+ <div id="socialCarePrompt" class="sc-banner hidden">
+  <span>Social needs flagged — complete a <b>Social Care Plan</b> for tonight vs ongoing triage and patient handout.</span>
+  <button type="button" class="btn sec" id="openSocialCareBtn">Complete Social Care Plan</button>
+  <button type="button" class="btn sec" id="dismissSocialCareBtn" style="background:transparent;border:none;color:var(--mut);font-weight:600">Dismiss</button>
+ </div>
  <div id="selectedTray"></div>
  <div id="panels"></div>
  <div id="followUpBlock" class="follow-up-block hidden"></div>
@@ -501,6 +520,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
   <div class="mini">
    <label><input type="checkbox" id="includePatientHandout" checked> Include patient handout (1 page)</label>
    <label><input type="checkbox" id="includeReferralCover" checked> Include referral cover sheet (fax-ready)</label>
+   <label><input type="checkbox" id="includeResourceHandoff"> Include resource handoff sheet (CBO · no PHI)</label>
   </div>
  </div>
  <div id="l6status"></div>
@@ -539,6 +559,16 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
   </div>
  </div>
 </div>
+<div id="socialCareOverlay" class="save-overlay social-prompt-overlay hidden" role="dialog" aria-labelledby="socialCarePromptTitle" aria-modal="true">
+ <div class="save-modal">
+  <h3 id="socialCarePromptTitle">Complete Social Care Plan?</h3>
+  <p>Social needs are flagged. Open the Social Care Plan to triage <b>tonight</b> vs <b>ongoing</b> needs and match community resources — no re-entry of ZIP or flags.</p>
+  <div class="row">
+   <button type="button" class="btn sec" id="socialCareLater">Not now</button>
+   <button type="button" class="btn" id="socialCareOpen">Open Social Care Plan</button>
+  </div>
+ </div>
+</div>
 <div id="savePlanOverlay" class="save-overlay hidden" role="dialog" aria-labelledby="savePlanTitle" aria-modal="true">
  <div class="save-modal">
   <h3 id="savePlanTitle">Save this plan</h3>
@@ -553,6 +583,39 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 <div class="toolnote note" style="margin:10px 0 0">Resources verified Jun 2026 · <a href="mailto:KristenPalmerMD@gmail.com?subject=PsychDispo%20outdated%20resource%20report">Report outdated entry</a>. Always call to confirm hours, eligibility &amp; insurance. ✓ = individually verified online (Jun 2026); national lines are well-established hotlines. In a life-threatening emergency call 911.</div>
 </div>
 
+<div id="view-social-care" class="hidden">
+<section class="layer">
+ <div class="ltag">Social Care Plan</div>
+ <div class="ltitle">Community &amp; daily-needs planning</div>
+ <div class="ldesc">HRSN-aligned screener · tonight vs ongoing triage · resource match. Not the clinical Stanley-Brown safety plan. Works standalone or auto-fills from Psych Dispo flags.</div>
+ <div class="sub2" style="border:none;padding-top:0">Shared context</div>
+ <div class="grid2">
+  <div class="q"><label class="qlabel">Patient home — city or ZIP</label>
+   <input type="text" id="scLoc" placeholder="e.g. Columbus or 43215" autocomplete="address-level2">
+   <span class="note" id="scZipMeta"></span></div>
+  <div><label class="qlabel">Insurance</label>
+   <select id="scInsurance"><option value="">— Select —</option><option value="Medicaid">Medicaid</option><option value="Medicare">Medicare</option><option value="Commercial">Commercial</option><option value="VA">VA / Tricare</option><option value="Uninsured">Uninsured</option></select></div>
+ </div>
+ <div class="sub2">HRSN screener <span class="note" style="font-weight:400;text-transform:none;letter-spacing:0">— yes to any domain flags a need</span></div>
+ <div class="sc-hrsn mini" id="scScreener"></div>
+ <div class="sub2">Tonight <span class="note" style="font-weight:400;text-transform:none;letter-spacing:0">— immediate safety &amp; shelter</span></div>
+ <div class="sc-tonight-grid" id="scTonight"></div>
+ <div class="sub2">Ongoing <span class="note" style="font-weight:400;text-transform:none;letter-spacing:0">— process steps after discharge</span></div>
+ <div class="mini" id="scOngoing"></div>
+ <div id="scDvGate" class="l6-gate hidden"></div>
+ <div class="sub2">Match resources</div>
+ <div id="scPanels"></div>
+ <div class="q" style="margin-top:14px">
+  <label class="qlabel">One-line context for handoff (no clinical detail)</label>
+  <input type="text" id="scContextLine" placeholder="Recently seen for a mental health visit, medically cleared." maxlength="120">
+ </div>
+ <div class="l6-actions" style="margin-top:12px">
+  <button type="button" class="btn" id="scCompleteBtn">Mark Social Care Plan complete</button>
+  <button type="button" class="btn sec" id="scPreviewBtn">Preview in packet</button>
+ </div>
+ <div id="scStatus" class="note" style="margin-top:10px"></div>
+</section>
+</div>
 <div id="view-directory" class="hidden">
 <section class="layer">
  <div class="ltag">Resource directory</div>
@@ -1118,8 +1181,9 @@ var S={cleared:null,setting:null,city:"",zip:"",insurance:null,sab:null,gender:"
  plan2:{fuDate:"",fuTime:""},
  apptScheduled:null,warm:null,callback:null,pcp:null,pharmacy:null,
  fuReferralId:null,refMethod:null,refSheet:null,packetVariant:"full",
- includePatientHandout:true,includeReferralCover:true,includeSensitiveOnPatientHandout:false,acknowledgeHighFkgl:false,
- social:{housing:0,food:0,transport:0,dv:0,financial:0,childcare:0,legal:0,employment:0},
+ includePatientHandout:true,includeReferralCover:true,includeResourceHandoff:false,includeSensitiveOnPatientHandout:false,acknowledgeHighFkgl:false,
+ social:{housing:0,food:0,transport:0,dv:0,financial:0,childcare:0,legal:0,employment:0,utilities:0},
+ socialCare:{completed:false,promptDismissed:false,screener:{housing:null,foodWorry:null,foodLast:null,transport:null,utilities:null,safety:null,benefits:null},tonight:{housingSafe:null,dvSafe:null,transportHome:null},dvSafeToPrint:false,contextLine:"Recently seen for a mental health visit, medically cleared.",initials:""},
  selected:{},touched:{}};
 function $(s,c){return (c||document).querySelector(s);}
 function $$(s,c){return [].slice.call((c||document).querySelectorAll(s));}
@@ -1186,6 +1250,7 @@ function updatePacketVariantHint(){
  var ip=$("#includePatientHandout"),ir=$("#includeReferralCover");
  if(ip){ip.checked=!!S.includePatientHandout;ip.disabled=S.packetVariant==="consult";}
  if(ir)ir.checked=!!S.includeReferralCover;
+ var ih=$("#includeResourceHandoff");if(ih)ih.checked=!!S.includeResourceHandout;
 }
 function refAnchorFromHash(){
  var h=(location.hash||"").toLowerCase();
@@ -1932,6 +1997,7 @@ function render(){
  show("#L6",gateDone);
  renderL6status();
  renderStatus();
+ updateSocialCarePrompt();
  scheduleSave();
 }
 
@@ -2029,7 +2095,169 @@ function autoMatch(r){var nm=r.name,pc=patientCounty();
  if((S.flags.sud||sudPositive())&&r.panel==="C"&&r.national)return true;
  return false;}
 
-function miniHTML(soc){return '<div class="mini">'+[["housing","Housing concern"],["food","Food concern"],["transport","Transportation concern"],["dv","Safety concern (DV)"],["financial","Financial / benefits concern"],["childcare","Childcare concern"],["legal","Legal concern"],["employment","Employment concern"]].map(function(p){return '<label><input type="checkbox" data-social="'+p[0]+'" '+(soc[p[0]]?"checked":"")+'> '+p[1]+(p[0]==="housing"&&S.flags.unhoused?' <span class="autoflag">auto · unhoused</span>':"")+'</label>';}).join("")+'</div>';}
+function miniHTML(soc){return '<div class="mini">'+[["housing","Housing concern"],["food","Food concern"],["transport","Transportation concern"],["utilities","Utilities / shut-off concern"],["dv","Safety concern (DV)"],["financial","Financial / benefits concern"],["childcare","Childcare concern"],["legal","Legal concern"],["employment","Employment concern"]].map(function(p){return '<label><input type="checkbox" data-social="'+p[0]+'" '+(soc[p[0]]?"checked":"")+'> '+p[1]+(p[0]==="housing"&&S.flags.unhoused?' <span class="autoflag">auto · unhoused</span>':"")+'</label>';}).join("")+'</div>';}
+function hasSocialNeed(){
+ if(S.flags.unhoused)return true;
+ return Object.keys(S.social).some(function(k){return S.social[k];});
+}
+function socialPanelSelected(){
+ return selectedRes().some(function(r){return r.panel==="F"&&!(r.need==="catchall"&&/211/.test(r.name));});
+}
+function syncScreenerToSocial(){
+ var sc=S.socialCare.screener;
+ if(sc.housing==="yes"||S.flags.unhoused)S.social.housing=1;
+ if(sc.foodWorry==="yes"||sc.foodLast==="yes")S.social.food=1;
+ if(sc.transport==="yes")S.social.transport=1;
+ if(sc.utilities==="yes")S.social.utilities=1;
+ if(sc.safety==="yes")S.social.dv=1;
+ if(sc.benefits==="yes")S.social.financial=1;
+}
+var SC_HRSN=[
+ ["housing","Worried about losing your housing, or currently without a stable place to live?"],
+ ["foodWorry","Within the past 12 months, did you worry food would run out before you could buy more?"],
+ ["foodLast","Within the past 12 months, did food you bought not last and you lacked money for more?"],
+ ["transport","In the past 12 months, has lack of transportation kept you from medical appointments, work, or daily needs?"],
+ ["utilities","In the past 12 months, have utilities been shut off or threatened to be shut off?"],
+ ["safety","Do you feel unsafe at home because of a partner or household member?"],
+ ["benefits","Do you need help with SNAP, Medicaid, ID, or other benefits?"]
+];
+var SC_ONGOING=[["financial","Benefits / ID / insurance"],["food","Food (ongoing)"],["employment","Employment"],["childcare","Childcare"],["legal","Legal"]];
+function prefillScreenerFromSocial(){
+ var sc=S.socialCare.screener,s=S.social;
+ if((s.housing||S.flags.unhoused)&&sc.housing===null)sc.housing="yes";
+ if(s.food&&sc.foodWorry===null)sc.foodWorry="yes";
+ if(s.transport&&sc.transport===null)sc.transport="yes";
+ if(s.utilities&&sc.utilities===null)sc.utilities="yes";
+ if(s.dv&&sc.safety===null)sc.safety="yes";
+ if(s.financial&&sc.benefits===null)sc.benefits="yes";
+}
+function renderSocialCareView(){
+ prefillScreenerFromSocial();
+ var locEl=$("#scLoc"),insEl=$("#scInsurance");
+ if(locEl)locEl.value=locDisplay();
+ if(insEl)insEl.value=S.insurance||"";
+ var zm=$("#scZipMeta");if(zm)zm.textContent=locOk()?(function(){var c=patientCounty();return c?"→ "+c:"→ location noted";})():"";
+ var scr=$("#scScreener");
+ if(scr){
+  scr.innerHTML=SC_HRSN.map(function(p){
+   var v=S.socialCare.screener[p[0]];
+   return '<div class="q" style="margin:8px 0"><label class="qlabel" style="font-size:13px;font-weight:500">'+esc(p[1])+'</label>'+
+    '<div class="opts yesno" data-sc="'+p[0]+'"><button type="button" class="opt'+(v==="yes"?" sel":"")+'" data-val="yes">Yes</button><button type="button" class="opt'+(v==="no"?" sel":"")+'" data-val="no">No</button></div></div>';
+  }).join("");
+ }
+ var ton=$("#scTonight"),socEff=Object.assign({},S.social);if(S.flags.unhoused)socEff.housing=1;
+ if(ton){
+  var items=[];
+  if(socEff.housing)items.push(["housingSafe","Safe place to sleep tonight?"]);
+  if(socEff.dv)items.push(["dvSafe","Safe to go home tonight?"]);
+  if(socEff.transport||socEff.housing)items.push(["transportHome","Ride home or to shelter tonight?"]);
+  ton.innerHTML=items.length?items.map(function(p){
+   var v=S.socialCare.tonight[p[0]];
+   return '<div class="q"><label class="qlabel">'+esc(p[1])+'</label><div class="opts yesno" data-tonight="'+p[0]+'"><button type="button" class="opt'+(v==="yes"?" sel":"")+'" data-val="yes">Yes</button><button type="button" class="opt'+(v==="no"?" sel":"")+'" data-val="no">No</button></div></div>';
+  }).join(""):'<div class="note">Flag housing, DV, or transport in the screener to show tonight triage.</div>';
+ }
+ var og=$("#scOngoing");
+ if(og)og.innerHTML=SC_ONGOING.map(function(p){
+  return '<label><input type="checkbox" data-social="'+p[0]+'" '+(S.social[p[0]]?"checked":"")+'> '+p[1]+'</label>';
+ }).join("");
+ var dvG=$("#scDvGate");
+ if(dvG){
+  if(S.social.dv||S.socialCare.screener.safety==="yes"){
+   dvG.classList.remove("hidden");
+   dvG.innerHTML='<b>Safe-to-print (DV):</b> Default is discreet — DV resources show as a phone line only on printed sheets.'+
+    '<label><input type="checkbox" id="scDvSafePrint" '+(S.socialCare.dvSafeToPrint?"checked":"")+'> Safe to print DV resource names &amp; addresses on patient-carried sheets</label>';
+  }else{dvG.classList.add("hidden");dvG.innerHTML="";}
+ }
+ var ctx=$("#scContextLine");if(ctx&&!ctx._bound){ctx.value=S.socialCare.contextLine||"";ctx._bound=1;}
+ if(locOk())renderSocialPanels();
+ var st=$("#scStatus");
+ if(st)st.innerHTML=S.socialCare.completed?'<span style="color:var(--good);font-weight:600">✓ Social Care Plan complete</span> · synced to discharge packet':'Complete screener, match resources, then mark complete.';
+ updateSocialCarePrompt();
+}
+function renderSocialPanels(){
+ var el=$("#scPanels");if(!el||!locOk())return;
+ renderPanels();
+ el.innerHTML=$("#panels").innerHTML;
+}
+function socialCareClinicianBlock(){
+ if(!hasSocialNeed()&&!S.socialCare.completed)return "";
+ var sc=S.socialCare,lines=[];
+ if(sc.completed)lines.push("Social Care Plan completed");
+ var scr=sc.screener,tMap={housing:"Housing",foodWorry:"Food worry",foodLast:"Food ran out",transport:"Transport",utilities:"Utilities",safety:"Interpersonal safety",benefits:"Benefits"};
+ Object.keys(tMap).forEach(function(k){if(scr[k]==="yes")lines.push(tMap[k]+": yes");});
+ var tLabels={housingSafe:"Sleep tonight",dvSafe:"Safe home tonight",transportHome:"Ride tonight"};
+ Object.keys(tLabels).forEach(function(k){if(sc.tonight[k]!=null)lines.push(tLabels[k]+": "+(sc.tonight[k]==="yes"?"Yes":"No — needs action"));});
+ if(S.social.dv)lines.push("DV safe-to-print: "+(sc.dvSafeToPrint?"Yes (names on sheet)":"No (discreet hotline only)"));
+ return '<div class="pksec"><h3>Social Care Plan</h3><div class="kv one">'+lines.map(function(l){return kvRow("",esc(l));}).join("")+
+  (sc.contextLine?kvRow("Handoff context",esc(sc.contextLine)):"")+'</div></div>';
+}
+function buildTonightPatientBlock(){
+ var sc=S.socialCare,rows=[];
+ if(S.social.housing&&sc.tonight.housingSafe==="no")rows.push("<b>Tonight — housing:</b> You need a safe place to sleep. Call the housing line below tonight.");
+ if(S.social.dv&&sc.tonight.dvSafe==="no")rows.push("<b>Tonight — safety:</b> Home may not be safe. Call the safety line below — do not wait.");
+ if((S.social.transport||S.social.housing)&&sc.tonight.transportHome==="no")rows.push("<b>Tonight — ride:</b> You need a ride home or to shelter. Call the ride line below.");
+ if(!rows.length)return "";
+ return '<div class="doc-sec doc-sec-tonight"><div class="doc-sec-h">Tonight</div>'+rows.map(function(r){return '<div class="tonight-row">'+r+'</div>';}).join("")+'</div>';
+}
+function handoffResourceRows(res,incSens){
+ incSens=incSens!==undefined?incSens:(S.social.dv?!S.socialCare.dvSafeToPrint:patientHandoutIncludeSensitive());
+ return res.slice(0,3).map(function(r,i){
+  if(isSensitiveResource(r)&&!incSens){
+   return '<div class="handoff-res"><b>'+(i+1)+'. '+esc(discreetResourceLabel(r))+'</b> — '+
+    (r.phone?'<a href="tel:'+tel(r.phone)+'">'+esc(r.phone)+'</a>':'')+
+    '<div class="res-blurb" style="font-size:11px;color:var(--mut)">Memorize this number — details not printed.</div></div>';
+  }
+  return '<div class="handoff-res"><b>'+(i+1)+'. '+esc(r.name)+'</b> — '+
+   (r.phone?'<a href="tel:'+tel(r.phone)+'">'+esc(r.phone)+'</a>':'')+
+   '<div class="res-blurb">'+esc(patientBlurbFor(r))+'</div></div>';
+ }).join("");
+}
+function buildResourceHandoffSheet(res){
+ if(!hasSocialNeed()&&!socialPanelSelected())return "";
+ var socialRes=splitResources(res).social.filter(function(r){return !(r.need==="catchall"&&/211/.test(r.name));}).slice(0,3);
+ if(!socialRes.length&&hasSocialNeed())socialRes=selectedRes().filter(function(r){return r.panel==="F";}).slice(0,3);
+ if(!socialRes.length)return "";
+ var needs=[["housing","Housing"],["food","Food"],["transport","Transport"],["utilities","Utilities"],["dv","DV / safety"],["financial","Benefits"],["childcare","Childcare"],["legal","Legal"],["employment","Employment"]].filter(function(p){return S.social[p[0]];}).map(function(p){return p[1];});
+ var fu=resById(S.fuReferralId);
+ var incSens=S.social.dv?!S.socialCare.dvSafeToPrint:patientHandoutIncludeSensitive();
+ return '<div class="doc-handoff patientpage">'+
+  '<div class="pkhead" style="border-color:var(--amber)"><div><div class="wm">Psych<b>Dispo</b></div><div class="doc">Resource Handoff · NOT a medical record</div></div><div class="dt">'+fmtDate(new Date())+'</div></div>'+
+  '<div class="idrow"><div class="idf"><div class="l">Patient initials</div><div class="u">'+(S.socialCare.initials?esc(S.socialCare.initials):'')+'</div></div>'+
+   '<div class="idf"><div class="l">Language</div><div class="u">'+esc(S.lang||"English")+'</div></div>'+
+   '<div class="idf"><div class="l">Interpreter</div><div class="u">'+(S.interpreter==="yes"?"Yes":"No")+'</div></div></div>'+
+  (needs.length?'<div class="note"><b>Needs at a glance:</b></div><div class="handoff-needs">'+needs.map(function(n){return '<span class="need-chip">'+esc(n)+'</span>';}).join("")+'</div>':'')+
+  '<div class="note" style="margin-top:8px">'+esc(S.socialCare.contextLine||"Recently seen for a mental health visit.")+'</div>'+
+  '<div class="pksec"><h3>Priority contacts (max 3)</h3>'+handoffResourceRows(socialRes,incSens)+'</div>'+
+  (fu?'<div class="note"><b>Psych follow-up:</b> '+esc(fu.name)+(S.plan2.fuDate?" · "+esc(S.plan2.fuDate+(S.plan2.fuTime?" "+S.plan2.fuTime:"")):"")+'</div>':'')+
+  ((S.social.transport||S.social.housing)?'<div class="note"><b>Need ride?</b> '+(S.socialCare.tonight.transportHome==="no"?"Yes — see transport contact":"Ask care team")+'</div>':'')+
+  '<div class="handoff-foot">211 · 988 · Helps you get connected — not a prescription or legal document · Verify eligibility by phone</div></div>';
+}
+function maybeShowSocialCarePrompt(){
+ if(S.socialCare.completed||S.socialCare.promptDismissed||!hasSocialNeed())return;
+ var o=$("#socialCareOverlay");if(o)o.classList.remove("hidden");
+}
+function hideSocialCarePrompt(){var o=$("#socialCareOverlay");if(o)o.classList.add("hidden");}
+function openSocialCareView(){
+ prefillScreenerFromSocial();
+ syncScreenerToSocial();
+ activateView("social-care");
+ renderSocialCareView();
+ window.scrollTo(0,0);
+}
+function updateSocialCarePrompt(){
+ var banner=$("#socialCarePrompt");
+ if(banner)banner.classList.toggle("hidden",!hasSocialNeed()||S.socialCare.completed||S.socialCare.promptDismissed);
+ if(hasSocialNeed()&&!S.includeResourceHandoff)S.includeResourceHandoff=true;
+}
+function markSocialCareComplete(){
+ syncScreenerToSocial();
+ S.socialCare.completed=true;
+ if(S.social.dv&&!S.socialCare.dvSafeToPrint)S.includeSensitiveOnPatientHandout=false;
+ renderSocialCareView();
+ renderPanels();
+ renderL6status();
+ scheduleSave();
+}
 function renderFollowUp(){
  var el=$("#followUpBlock");if(!el)return;
  syncFuReferral();
@@ -2109,7 +2337,7 @@ function renderPanels(){
  var alwaysList=pick(function(r){return r.panel==="F"&&(r.need==="catchall"||isFoodBank(r)||(isWaZip(S.zip)&&r.name.indexOf("Apple Health")>=0)||(isNyMetro(S.zip)&&r.name==="NY Medicaid Consumer Helpline")||(isOhioOnlyResource(S.zip)&&r.name==="Ohio Medicaid Consumer Hotline")||(S.insurance==="Medicaid"&&isOhioOnlyResource(S.zip)&&/Non-Emergency Transportation/.test(r.name))||(isNyZip(S.zip)&&r.name.indexOf("NYC 311")>=0)||(countyFromZip(S.zip)==="Long Island · Nassau"&&r.name.indexOf("211 Long Island")>=0)||(countyFromZip(S.zip)==="Long Island · Suffolk"&&r.name.indexOf("211 Long Island")>=0)||(countyFromZip(S.zip)==="Westchester"&&r.name.indexOf("211 Hudson Valley")>=0)||(countyFromZip(S.zip)==="Rockland"&&r.name.indexOf("211 Hudson Valley")>=0)||(countyFromZip(S.zip)==="Hudson Valley"&&r.name.indexOf("211 Hudson Valley")>=0)||(countyFromZip(S.zip)==="Northern New Jersey"&&r.name.indexOf("NJ 211")>=0)||(countyFromZip(S.zip)==="Buffalo · Erie"&&r.name.indexOf("211 WNY")>=0)||(countyFromZip(S.zip)==="Rochester · Monroe"&&r.name.indexOf("211 Finger Lakes")>=0)||(countyFromZip(S.zip)==="Albany · Capital Region"&&r.name.indexOf("211 Capital Region")>=0)||(countyFromZip(S.zip)==="Syracuse · Onondaga"&&r.name.indexOf("211 Central New York")>=0)||(isWvMetro(S.zip)&&r.name==="WV 211")||(isWvMetro(S.zip)&&r.name==="WV Medicaid Member Services")||(S.insurance==="Medicaid"&&isWvMetro(S.zip)&&r.name.indexOf("WV Medicaid")>=0)||(isPaMetro(S.zip)&&r.name==="PA 211")||(isPaMetro(S.zip)&&r.name.indexOf("PA Medicaid")>=0)||(S.insurance==="Medicaid"&&isPaMetro(S.zip)&&r.name.indexOf("PA Medicaid")>=0)||(isMiMetro(S.zip)&&r.name==="Michigan 211")||(isMiMetro(S.zip)&&r.name.indexOf("Michigan Medicaid")>=0)||(S.insurance==="Medicaid"&&isMiMetro(S.zip)&&r.name.indexOf("Michigan Medicaid")>=0)||(isNvMetro(S.zip)&&r.name==="Nevada 211")||(isNvMetro(S.zip)&&r.name.indexOf("Nevada Medicaid")>=0)||(S.insurance==="Medicaid"&&isNvMetro(S.zip)&&r.name.indexOf("Nevada Medicaid")>=0)||(isCatalogState(S.zip)&&r.name.indexOf("211")>=0&&r.county&&r.county.indexOf("(statewide)")>=0)||(isCatalogState(S.zip)&&r.name.indexOf("Medicaid")>=0)||(S.insurance==="Medicaid"&&isCatalogState(S.zip)&&r.name.indexOf("Medicaid")>=0)||(isNjMetro(S.zip)&&S.insurance==="Medicaid"&&r.name.indexOf("PerformCare")>=0));});
  var alwaysIds={};alwaysList.forEach(function(r){alwaysIds[rid(r)]=1;});
  var socEff=Object.assign({},S.social);if(S.flags.unhoused)socEff.housing=1;
- var NEEDLBL={housing:"Housing & shelter",food:"Food",transport:"Transportation",dv:"Domestic violence / safety",financial:"Financial / benefits",childcare:"Childcare",legal:"Legal",employment:"Employment"};
+ var NEEDLBL={housing:"Housing & shelter",food:"Food",transport:"Transportation",utilities:"Utilities",dv:"Domestic violence / safety",financial:"Financial / benefits",childcare:"Childcare",legal:"Legal",employment:"Employment"};
  var fSubs=[];
  Object.keys(socEff).forEach(function(k){if(socEff[k]){fSubs.push({title:NEEDLBL[k]||k,list:pick(function(r){return r.panel==="F"&&r.need===k;}).filter(function(r){return !alwaysIds[rid(r)];})});}});
  fSubs.push({title:"Always included",list:alwaysList});
@@ -2153,9 +2381,10 @@ document.addEventListener("click",function(e){var b=e.target.closest("[data-unse
 document.addEventListener("change",function(e){
  if(e.target.id==="fuReferralSelect"){S.fuReferralId=e.target.value||null;S.refMethod=null;S.refSheet=null;renderFollowUp();renderL6status();renderStatus();return;}
  if(e.target.dataset.res!==undefined){var id=e.target.dataset.res;S.selected[id]=e.target.checked;S.acknowledgeHighFkgl=false;S.touched[id]=1;var lab=e.target.closest(".res");if(lab)lab.classList.toggle("sel",e.target.checked);renderSelected();renderFollowUp();syncOptsFromS();renderL6status();renderStatus();}
- if(e.target.dataset.social!==undefined){S.social[e.target.dataset.social]=e.target.checked?1:0;renderPanels();renderFollowUp();renderL6status();renderStatus();}
+ if(e.target.dataset.social!==undefined){S.social[e.target.dataset.social]=e.target.checked?1:0;renderPanels();renderFollowUp();renderL6status();renderStatus();updateSocialCarePrompt();if(hasSocialNeed())maybeShowSocialCarePrompt();}
  if(e.target.id==="includePatientHandout"){S.includePatientHandout=e.target.checked;renderL6status();return;}
  if(e.target.id==="includeReferralCover"){S.includeReferralCover=e.target.checked;renderL6status();return;}
+ if(e.target.id==="includeResourceHandoff"){S.includeResourceHandoff=e.target.checked;renderL6status();return;}
  if(e.target.dataset.store!==undefined){setPath(e.target.dataset.store,e.target.checked);render();}
 });
 
@@ -2182,8 +2411,10 @@ function renderL6PublishGates(){
  var sens=sensitiveSelected();
  if(sensEl){
   if(sens.length&&S.includePatientHandout){
+   var dvDiscreet=S.social.dv&&!S.socialCare.dvSafeToPrint;
    sensEl.classList.remove("hidden");
    sensEl.innerHTML='<b>Safe-to-print:</b> '+sens.length+' sensitive resource(s) (DV/LGBTQ+) will show as a discreet phone line on the patient handout unless you opt in below.'+
+    (dvDiscreet?'<div class="note" style="margin-top:4px">DV flagged — discreet mode default per Social Care Plan.</div>':'')+
     '<label><input type="checkbox" id="includeSensitiveOnHandout" '+(S.includeSensitiveOnPatientHandout?"checked":"")+'> Include sensitive resources on patient handout (names &amp; addresses)</label>';
   }else{sensEl.classList.add("hidden");sensEl.innerHTML="";}
  }
@@ -2418,8 +2649,11 @@ function buildPatientOnePager(res,opts){
   crisisRow("911","911","Life-threatening emergency")+
   (S.flags.veteran||S.insurance==="VA"?crisisRow("Veterans Crisis Line","988, press 1","For veterans & families"):"")+
   (regional?crisisRow(regional.name,regional.phone,"Your local crisis line",true):"");
- var incSens=patientHandoutIncludeSensitive();var clinicalHtml=clinical.length?clinical.map(function(r){return patientResRow(r,incSens);}).join(""):'<div class="res-blurb">No extra clinical referrals — use your follow-up number above.</div>';
+ var incSens=patientHandoutIncludeSensitive();
+ if(S.social.dv&&!S.socialCare.dvSafeToPrint)incSens=false;
+ var clinicalHtml=clinical.length?clinical.map(function(r){return patientResRow(r,incSens);}).join(""):'<div class="res-blurb">No extra clinical referrals — use your follow-up number above.</div>';
  var socialHtml=social.length?social.map(function(r){return patientResRow(r,incSens);}).join(""):'<div class="res-blurb">Call <a href="tel:211"><b>211</b></a> for free help with food, housing, rides &amp; benefits.</div>';
+ var tonightBlock=buildTonightPatientBlock();
  var overflow="";
  if(allClinical.length>4||allSocial.length>3){
   overflow='<div class="res-blurb" style="margin-top:6px">More resources available — ask your care team or call 211.</div>';
@@ -2430,6 +2664,7 @@ function buildPatientOnePager(res,opts){
    '<table style="width:100%;font-size:13px">'+crisisTable+'</table>'+
    nearestEDPatientBlock(ed,edInRes)+'</div></div>'+
   (hero.heroHtml?'<div class="doc-sec">'+hero.heroHtml+'</div>':'')+
+  tonightBlock+
   '<div class="doc-sec doc-sec-clinical"><div class="doc-sec-h">Your care</div>'+clinicalHtml+'</div>'+
   '<div class="doc-sec doc-sec-social"><div class="doc-sec-h">Daily needs</div>'+socialHtml+overflow+'</div>'+
   '<div class="doc-sec"><div class="doc-sec-h er3">Go to the ER or call 911 if</div><ul style="margin:4px 0 0;padding-left:18px;font-size:13px">'+
@@ -2455,7 +2690,7 @@ function buildSelectedResourcesTable(res,includeNearest){
 function buildReferralCover(res,loc){
  var ed=nearestED();
  var fuRes=resById(S.fuReferralId);
- var socialOn=[["housing","Housing"],["food","Food"],["transport","Transport"],["dv","DV / safety"],["financial","Benefits"],["childcare","Childcare"],["legal","Legal"],["employment","Employment"]].filter(function(p){return S.social[p[0]];}).map(function(p){return p[1];});
+ var socialOn=[["housing","Housing"],["food","Food"],["transport","Transport"],["utilities","Utilities"],["dv","DV / safety"],["financial","Benefits"],["childcare","Childcare"],["legal","Legal"],["employment","Employment"]].filter(function(p){return S.social[p[0]];}).map(function(p){return p[1];});
  var suic=S.cssrsDone==="yes"?("C-SSRS "+(S.suicideRisk?S.suicideRisk.toUpperCase():"—")):"Not completed";
  var rows=res.map(function(r){
   return covTableRow(classifyBucket(r),resourceCategoryLabel(r),r.name,r.phone,r.fax||"",r.address||"","");
@@ -2540,6 +2775,7 @@ function buildPacket(){
   var parts=['<div class="pk">'+head+idrow+p1brief+'</div>'];
   if(S.includeReferralCover)parts.push(buildReferralCover(res,loc));
   if(S.includePatientHandout)parts.push(buildPatientOnePager(res,{variant:variant}));
+  if(S.includeResourceHandoff)parts.push(buildResourceHandoffSheet(res));
   return parts.join("");
  }
  var p1='<div class="pksec"><h3>Disposition</h3><div class="kv">'+
@@ -2556,10 +2792,12 @@ function buildPacket(){
    '</div></div>'+
   '<div class="pksec"><h3>Follow-up &amp; coordination</h3><div class="kv">'+fu+
    kvRow("Post-discharge contact",esc(S.callback||"—"))+kvRow("PCP notified",esc({yes:"Yes",no:"No",nopcp:"No PCP"}[S.pcp]||S.pcp||"—"))+kvRow("Pharmacy confirmed",esc({yes:"Yes",no:"No",na:"No"}[S.pharmacy]||S.pharmacy||"—"))+'</div></div>'+
+  socialCareClinicianBlock()+
   resTable+sigBlock+footBlock;
  var parts=['<div class="pk">'+head+idrow+p1+'</div>'];
  if(S.includeReferralCover)parts.push(buildReferralCover(res,loc));
  if(S.includePatientHandout)parts.push(buildPatientOnePager(res,{variant:variant}));
+ if(S.includeResourceHandoff)parts.push(buildResourceHandoffSheet(res));
  return parts.join("");
 }
 function buildChartText(){
@@ -2568,6 +2806,7 @@ function buildChartText(){
  var docs=[];
  if(variant!=="consult"&&S.includePatientHandout)docs.push("Patient 1-pager");
  if(S.includeReferralCover)docs.push("Referral cover sheet");
+ if(S.includeResourceHandoff)docs.push("Resource handoff sheet");
  docs.unshift("Provider discharge summary");
  var c=patientCounty();
  var loc=S.dispo==="community"?("Community · "+({outpatient:"Outpatient",iop:"IOP",php:"PHP"}[S.intensity]||"")):("Residential · "+({psychres:"Psychiatric residential",sudres:"SUD residential",grouphome:"Group home",snf:"SNF/LTC"}[S.residType]||""));
@@ -2612,6 +2851,7 @@ function buildChartText(){
   "Main follow-up: "+(fu?fu.name:"—")+(fu&&fu.phone?" · "+fu.phone:""),
   "Warm handoff: "+(S.warm||"—"),
   "",
+  (hasSocialNeed()||S.socialCare.completed?"SOCIAL CARE PLAN\n"+(S.socialCare.completed?"Completed":"Flags only")+" · DV print: "+(S.socialCare.dvSafeToPrint?"yes":"discreet")+"\n":"")
   "NEAREST ED/PES: "+(ed?ed.name+" — "+ed.phone+(ed.address?" · "+ed.address:""):"— confirm with team"),
   "",
   "SELECTED REFERRALS ("+res.length+" — Clinical "+split.clinical.length+", Social "+split.social.length+")",
@@ -2797,9 +3037,12 @@ function hasMeaningfulPlan(p){
 function restoreSavedPlan(p){
  if(!p||!p.S)return;
  var saved=p.S;
- for(var k in saved){if(k==="selected"||k==="touched"||k==="flags"||k==="social"||k==="firearmPlan"||k==="medsPlan"||k==="otherMeans"||k==="plan2")continue;S[k]=saved[k];}
+ for(var k in saved){if(k==="selected"||k==="touched"||k==="flags"||k==="social"||k==="socialCare"||k==="firearmPlan"||k==="medsPlan"||k==="otherMeans"||k==="plan2")continue;S[k]=saved[k];}
  if(saved.flags)S.flags=Object.assign({},S.flags,saved.flags);
  if(saved.social)S.social=Object.assign({},S.social,saved.social);
+ if(saved.socialCare)S.socialCare=Object.assign({},S.socialCare,saved.socialCare);
+ if(saved.socialCare&&saved.socialCare.screener)S.socialCare.screener=Object.assign({},S.socialCare.screener,saved.socialCare.screener);
+ if(saved.socialCare&&saved.socialCare.tonight)S.socialCare.tonight=Object.assign({},S.socialCare.tonight,saved.socialCare.tonight);
  if(saved.firearmPlan)S.firearmPlan=Object.assign({},S.firearmPlan,saved.firearmPlan);
  if(saved.medsPlan)S.medsPlan=Object.assign({},S.medsPlan,saved.medsPlan);
  if(saved.otherMeans)S.otherMeans=Object.assign({},S.otherMeans,saved.otherMeans);
@@ -2809,15 +3052,17 @@ function restoreSavedPlan(p){
  if(p.savedAt)lastSaveLabel="Resumed "+new Date(p.savedAt).toLocaleString([],{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});
 }
 function activateView(v,fromHash){
- v=(v==="ref")?"ref":(v==="directory")?"directory":"tool";
+ v=(v==="ref")?"ref":(v==="directory")?"directory":(v==="social-care")?"social-care":"tool";
  $$(".tab").forEach(function(x){x.classList.toggle("on",x.dataset.view===v);});
  $("#view-tool").classList.toggle("hidden",v!=="tool");
  $("#view-directory").classList.toggle("hidden",v!=="directory");
  $("#view-ref").classList.toggle("hidden",v!=="ref");
+ $("#view-social-care").classList.toggle("hidden",v!=="social-care");
  if(v==="directory")renderDirectory();
+ if(v==="social-care")renderSocialCareView();
  var sb=$(".statusbar");if(sb)sb.style.display=v==="tool"?"":"none";
  var anchor=refAnchorFromHash();
- var want="#"+(v==="ref"?"ref":v==="directory"?"directory":"plan");
+ var want="#"+(v==="ref"?"ref":v==="directory"?"directory":v==="social-care"?"social-care":"plan");
  if(anchor&&v==="ref")want="#suicide";
  if(!fromHash&&location.hash.toLowerCase()!==want){try{history.replaceState(null,"",want);}catch(e){}}
  if(v==="ref"&&anchor)scrollRefAnchor(anchor);
@@ -2826,6 +3071,7 @@ function viewFromHash(){var h=(location.hash||"").toLowerCase().replace("#","");
  if(h==="suicide")return "ref";
  if(h==="ref"||h==="review"||h==="psychref"||h==="reference")return "ref";
  if(h==="directory"||h==="resources"||h==="search")return "directory";
+ if(h==="social-care"||h==="social"||h==="socialcare")return "social-care";
  if(h==="plan"||h==="tool"||h==="psychdispo"||h==="dispo")return "tool";return null;}
 $$(".tab").forEach(function(t){t.addEventListener("click",function(){activateView(t.dataset.view);window.scrollTo(0,0);});});
 window.addEventListener("hashchange",function(){var v=viewFromHash();if(v)activateView(v,true);else if(refAnchorFromHash()){activateView("ref",true);}});
@@ -2923,6 +3169,41 @@ $("#publishGateCancel").addEventListener("click",hidePublishGate);
 $("#publishGateConfirm").addEventListener("click",confirmPublishGate);
 $("#publishGateOverlay").addEventListener("click",function(e){if(e.target===e.currentTarget)hidePublishGate();});
 $("#printBtn").addEventListener("click",runPrintWithGates);
+document.addEventListener("click",function(e){
+ var scBtn=e.target.closest("[data-sc]");
+ if(scBtn){
+  var k=scBtn.dataset.sc,v=e.target.closest(".opt");
+  if(v&&v.dataset.val){S.socialCare.screener[k]=v.dataset.val;syncScreenerToSocial();renderSocialCareView();renderPanels();scheduleSave();}
+  return;
+ }
+ var tnBtn=e.target.closest("[data-tonight]");
+ if(tnBtn){
+  var tk=tnBtn.dataset.tonight,v2=e.target.closest(".opt");
+  if(v2&&v2.dataset.val){S.socialCare.tonight[tk]=v2.dataset.val;renderSocialCareView();scheduleSave();}
+  return;
+ }
+});
+document.getElementById("scLoc").addEventListener("input",function(e){syncLocInput(e.target.value);renderSocialCareView();scheduleSave();});
+document.getElementById("scInsurance").addEventListener("change",function(e){S.insurance=e.target.value||null;renderSocialCareView();scheduleSave();});
+document.getElementById("scContextLine").addEventListener("input",function(e){S.socialCare.contextLine=e.target.value;scheduleSave();});
+document.getElementById("scCompleteBtn").addEventListener("click",markSocialCareComplete);
+document.getElementById("scPreviewBtn").addEventListener("click",function(){activateView("tool");$("#L6").scrollIntoView({behavior:"smooth"});});
+document.getElementById("openSocialCareBtn").addEventListener("click",openSocialCareView);
+document.getElementById("dismissSocialCareBtn").addEventListener("click",function(){S.socialCare.promptDismissed=true;hideSocialCarePrompt();updateSocialCarePrompt();scheduleSave();});
+document.getElementById("socialCareOpen").addEventListener("click",function(){hideSocialCarePrompt();openSocialCareView();});
+document.getElementById("socialCareLater").addEventListener("click",function(){S.socialCare.promptDismissed=true;hideSocialCarePrompt();updateSocialCarePrompt();scheduleSave();});
+document.addEventListener("change",function(e){
+ if(e.target.id==="scDvSafePrint"){S.socialCare.dvSafeToPrint=e.target.checked;scheduleSave();}
+});
+document.addEventListener("change",function(e){
+ if(e.target.closest("#scPanels")&&e.target.dataset.res!==undefined){
+  var id=e.target.dataset.res;S.selected[id]=e.target.checked;S.touched[id]=1;
+  renderSocialPanels();renderSelected();scheduleSave();
+ }
+ if(e.target.closest("#scOngoing")&&e.target.dataset.social!==undefined){
+  S.social[e.target.dataset.social]=e.target.checked?1:0;renderSocialCareView();renderPanels();scheduleSave();
+ }
+});
 
 render();
 </script>
