@@ -273,6 +273,10 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 .grade-chip.grade-ok{background:#e9f5ee;color:#1c7a3f}
 .grade-chip.grade-warn{background:#fbf1dd;color:#8a5d00}
 .grade-chip.grade-high{background:#fdeceb;color:#b3261e}
+.l6-gate{margin-top:10px;padding:10px 12px;border-radius:8px;border:1px solid #e8d4a8;background:#fffbf3;font-size:12px;line-height:1.45}
+.l6-gate.hidden{display:none}
+.l6-gate label{display:flex;gap:8px;align-items:flex-start;margin-top:8px;cursor:pointer}
+.l6-gate-warn{border-color:#f0c4c0;background:#fff8f7}
 .l6-preview{margin-top:10px;font-size:12px;line-height:1.4}
 .l6-preview-row{padding:5px 0;border-bottom:1px solid #eef0f4}
 .l6-preview-blurb{color:var(--mut);font-size:11px;margin-top:2px}
@@ -500,7 +504,8 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
   </div>
  </div>
  <div id="l6status"></div>
- <div id="l6ResourcePreview" class="l6-preview hidden"></div>
+ <div id="l6ResourcePreview" class="l6-preview hidden"></div> <div id="l6SafePrintGate" class="l6-gate hidden"></div>
+ <div id="l6FkglGate" class="l6-gate l6-gate-warn hidden"></div>
  <div class="l6-actions">
   <button class="btn sec" id="genBtn">Build packet preview</button>
   <button class="btn sec" id="copyChartBtn">Copy for chart</button>
@@ -519,6 +524,18 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
   <div id="warmHandoffCalls"></div>
   <div class="row">
    <button type="button" class="btn sec" id="warmHandoffClose">Close</button>
+  </div>
+ </div>
+</div>
+<div id="publishGateOverlay" class="save-overlay hidden" role="dialog" aria-labelledby="publishGateTitle" aria-modal="true">
+ <div class="save-modal">
+  <h3 id="publishGateTitle">Before printing patient handout</h3>
+  <p id="publishGateDesc"></p>
+  <label class="mini" id="publishGateFkglRow" style="display:block;margin:10px 0"><input type="checkbox" id="publishGateFkglAck"> I reviewed the reading level — OK to print these blurbs for the patient</label>
+  <label class="mini" id="publishGateSensRow" style="display:block;margin:10px 0"><input type="checkbox" id="publishGateSensAck"> Include sensitive resource names &amp; addresses on the patient sheet</label>
+  <div class="row">
+   <button type="button" class="btn sec" id="publishGateCancel">Cancel</button>
+   <button type="button" class="btn" id="publishGateConfirm">Print</button>
   </div>
  </div>
 </div>
@@ -1101,7 +1118,7 @@ var S={cleared:null,setting:null,city:"",zip:"",insurance:null,sab:null,gender:"
  plan2:{fuDate:"",fuTime:""},
  apptScheduled:null,warm:null,callback:null,pcp:null,pharmacy:null,
  fuReferralId:null,refMethod:null,refSheet:null,packetVariant:"full",
- includePatientHandout:true,includeReferralCover:true,
+ includePatientHandout:true,includeReferralCover:true,includeSensitiveOnPatientHandout:false,acknowledgeHighFkgl:false,
  social:{housing:0,food:0,transport:0,dv:0,financial:0,childcare:0,legal:0,employment:0},
  selected:{},touched:{}};
 function $(s,c){return (c||document).querySelector(s);}
@@ -1715,7 +1732,9 @@ function metaOf(r){
  else if(c==="Developmental disabilities"){m.panel="G";m.flag="idd";}
  else if(c==="Interpreter / language access"){m.panel="I";}
  else {m.panel="F";m.need="other";}
- return Object.assign({},r,m);
+ var out=Object.assign({},r,m);
+ if(out.safePrint!==true&&(out.need==="dv"||out.sub==="dv"||out.flag==="lgbtq"))out.safePrint=false;
+ return out;
 }
 var ALL=DATA.map(metaOf).concat(NATIONAL.map(function(r){return Object.assign({national:1},metaOf(r));}));
 function rid(r){return (r.county||"")+"|"+r.name+"|"+r.phone;}
@@ -2133,7 +2152,7 @@ document.addEventListener("click",function(e){var b=e.target.closest("[data-unse
 /* resource + social checkbox handlers */
 document.addEventListener("change",function(e){
  if(e.target.id==="fuReferralSelect"){S.fuReferralId=e.target.value||null;S.refMethod=null;S.refSheet=null;renderFollowUp();renderL6status();renderStatus();return;}
- if(e.target.dataset.res!==undefined){var id=e.target.dataset.res;S.selected[id]=e.target.checked;S.touched[id]=1;var lab=e.target.closest(".res");if(lab)lab.classList.toggle("sel",e.target.checked);renderSelected();renderFollowUp();syncOptsFromS();renderL6status();renderStatus();}
+ if(e.target.dataset.res!==undefined){var id=e.target.dataset.res;S.selected[id]=e.target.checked;S.acknowledgeHighFkgl=false;S.touched[id]=1;var lab=e.target.closest(".res");if(lab)lab.classList.toggle("sel",e.target.checked);renderSelected();renderFollowUp();syncOptsFromS();renderL6status();renderStatus();}
  if(e.target.dataset.social!==undefined){S.social[e.target.dataset.social]=e.target.checked?1:0;renderPanels();renderFollowUp();renderL6status();renderStatus();}
  if(e.target.id==="includePatientHandout"){S.includePatientHandout=e.target.checked;renderL6status();return;}
  if(e.target.id==="includeReferralCover"){S.includeReferralCover=e.target.checked;renderL6status();return;}
@@ -2156,6 +2175,27 @@ function renderL6status(){
  updatePacketVariantHint();
  updateWarmHandoffBtns();
  renderL6ResourcePreview();
+ renderL6PublishGates();
+}
+function renderL6PublishGates(){
+ var sensEl=$("#l6SafePrintGate"),fkglEl=$("#l6FkglGate");
+ var sens=sensitiveSelected();
+ if(sensEl){
+  if(sens.length&&S.includePatientHandout){
+   sensEl.classList.remove("hidden");
+   sensEl.innerHTML='<b>Safe-to-print:</b> '+sens.length+' sensitive resource(s) (DV/LGBTQ+) will show as a discreet phone line on the patient handout unless you opt in below.'+
+    '<label><input type="checkbox" id="includeSensitiveOnHandout" '+(S.includeSensitiveOnPatientHandout?"checked":"")+'> Include sensitive resources on patient handout (names &amp; addresses)</label>';
+  }else{sensEl.classList.add("hidden");sensEl.innerHTML="";}
+ }
+ var high=highFkglResources();
+ if(fkglEl){
+  if(high.length&&S.includePatientHandout){
+   fkglEl.classList.remove("hidden");
+   fkglEl.innerHTML='<b>Reading level:</b> '+high.length+' blurb(s) grade above 6 — review before printing.'+high.map(function(r){
+    return '<div class="l6-preview-row"><b>'+esc(r.name)+'</b>'+fkglChip(patientBlurbFor(r))+'</div>';
+   }).join("");
+  }else{fkglEl.classList.add("hidden");fkglEl.innerHTML="";}
+ }
 }
 function renderL6ResourcePreview(){
  var el=$("#l6ResourcePreview");if(!el)return;
@@ -2271,7 +2311,36 @@ function patientSocialList(res){
   return !(r.need==="catchall"&&/211/.test(r.name));
  }).slice(0,3);
 }
-function patientResRow(r){
+function isSensitiveResource(r){
+ if(!r)return false;
+ if(r.safePrint===true)return false;
+ if(r.safePrint===false)return true;
+ if(r.flag==="lgbtq"||r.need==="dv"||r.sub==="dv")return true;
+ if(Array.isArray(r.scenario)&&(r.scenario.indexOf("dv")>=0||r.scenario.indexOf("lgbtq")>=0))return true;
+ return false;
+}
+function sensitiveSelected(){return selectedRes().filter(isSensitiveResource);}
+function discreetResourceLabel(r){
+ if(r.need==="dv"||/domestic|violence|shelter/i.test(r.cat||r.name||""))return "Safety support line";
+ if(r.flag==="lgbtq")return "Affirming care line";
+ return "Support line";
+}
+function highFkglResources(){
+ return selectedRes().filter(function(r){
+  var b=patientBlurbFor(r);
+  return gradeOf(b)>6;
+ });
+}
+function patientHandoutIncludeSensitive(){return !!S.includeSensitiveOnPatientHandout;}
+function patientResRow(r,includeSensitive){
+ includeSensitive=includeSensitive!==undefined?includeSensitive:patientHandoutIncludeSensitive();
+ if(isSensitiveResource(r)&&!includeSensitive){
+  var ph=r.phone?('<div class="res-blurb"><b>Memorize this number:</b> <a href="tel:'+tel(r.phone)+'">'+esc(r.phone)+'</a></div>'):"";
+  return '<div class="patient-res-row patient-res-discreet">'+resourceIcon(r)+
+   '<div class="res-body"><b>'+esc(discreetResourceLabel(r))+'</b>'+
+   '<div class="res-blurb" style="font-size:11px;color:var(--mut)">Details withheld on printed handout — ask your care team.</div>'+ph+
+   '</div></div>';
+ }
  return '<div class="patient-res-row">'+resourceIcon(r)+
   '<div class="res-body"><b>'+esc(r.name)+'</b>'+
   '<div class="res-blurb">'+esc(patientBlurbFor(r))+'</div>'+
@@ -2295,20 +2364,23 @@ function buildFollowUpHero(fuRes,primary){
  var heroId=null,heroHtml="";
  if(fuRes&&S.apptScheduled==="yes"){
   var apptExtra=(S.plan2.fuDate||S.plan2.fuTime)?("When: "+esc([S.plan2.fuDate,S.plan2.fuTime].filter(Boolean).join(" "))):"";
+  var fuTitle=isSensitiveResource(fuRes)&&!incSens?discreetResourceLabel(fuRes):fuRes.name;
   heroHtml='<div class="follow-hero"><div class="doc-sec-h" style="border:none;margin:0">Your follow-up</div>'+
-   '<div class="rh-name" style="font-size:15px;font-weight:700">'+esc(fuRes.name)+'</div>'+
+   '<div class="rh-name" style="font-size:15px;font-weight:700">'+esc(fuTitle)+'</div>'+
    (fuRes.phone?'<div class="phone" style="font-size:18px;font-weight:700"><a href="tel:'+tel(fuRes.phone)+'">'+esc(fuRes.phone)+'</a></div>':'')+
-   (fuRes.address?'<div class="rh-addr">'+esc(fuRes.address)+'</div>':'')+
+   ((!isSensitiveResource(fuRes)||incSens)&&fuRes.address?'<div class="rh-addr">'+esc(fuRes.address)+'</div>':'')+
+   (isSensitiveResource(fuRes)&&!incSens?'<div class="rh-appt" style="font-size:12px">Memorize: <a href="tel:'+tel(fuRes.phone)+'">'+esc(fuRes.phone)+'</a></div>':'')+
    (apptExtra?'<div class="rh-appt">'+apptExtra+'</div>':'')+'</div>';
   heroId=rid(fuRes);
  }else if(fuRes&&S.apptScheduled==="no"){
   var pendingExtra=S.refMethod==="fax"&&S.refSheet==="yes"&&fuRes.fax
    ?("Referral faxed to "+esc(fuRes.fax)+" — call if you don't hear back")
    :"Call to schedule your first appointment";
+  var fuTitle2=isSensitiveResource(fuRes)&&!incSens?discreetResourceLabel(fuRes):fuRes.name;
   heroHtml='<div class="follow-hero"><div class="doc-sec-h" style="border:none;margin:0">Your follow-up</div>'+
-   '<div class="rh-name" style="font-size:15px;font-weight:700">'+esc(fuRes.name)+'</div>'+
+   '<div class="rh-name" style="font-size:15px;font-weight:700">'+esc(fuTitle2)+'</div>'+
    (fuRes.phone?'<div class="phone" style="font-size:18px;font-weight:700"><a href="tel:'+tel(fuRes.phone)+'">'+esc(fuRes.phone)+'</a></div>':'')+
-   (fuRes.address?'<div class="rh-addr">'+esc(fuRes.address)+'</div>':'')+
+   ((!isSensitiveResource(fuRes)||incSens)&&fuRes.address?'<div class="rh-addr">'+esc(fuRes.address)+'</div>':'')+
    '<div class="rh-appt">'+esc(pendingExtra)+'</div></div>';
   heroId=rid(fuRes);
  }else if(primary.length){
@@ -2346,8 +2418,8 @@ function buildPatientOnePager(res,opts){
   crisisRow("911","911","Life-threatening emergency")+
   (S.flags.veteran||S.insurance==="VA"?crisisRow("Veterans Crisis Line","988, press 1","For veterans & families"):"")+
   (regional?crisisRow(regional.name,regional.phone,"Your local crisis line",true):"");
- var clinicalHtml=clinical.length?clinical.map(patientResRow).join(""):'<div class="res-blurb">No extra clinical referrals — use your follow-up number above.</div>';
- var socialHtml=social.length?social.map(patientResRow).join(""):'<div class="res-blurb">Call <a href="tel:211"><b>211</b></a> for free help with food, housing, rides &amp; benefits.</div>';
+ var incSens=patientHandoutIncludeSensitive();var clinicalHtml=clinical.length?clinical.map(function(r){return patientResRow(r,incSens);}).join(""):'<div class="res-blurb">No extra clinical referrals — use your follow-up number above.</div>';
+ var socialHtml=social.length?social.map(function(r){return patientResRow(r,incSens);}).join(""):'<div class="res-blurb">Call <a href="tel:211"><b>211</b></a> for free help with food, housing, rides &amp; benefits.</div>';
  var overflow="";
  if(allClinical.length>4||allSocial.length>3){
   overflow='<div class="res-blurb" style="margin-top:6px">More resources available — ask your care team or call 211.</div>';
@@ -2802,7 +2874,55 @@ $("#copyChartBtn").addEventListener("click",function(){
   document.body.removeChild(ta);
  }
 });
-$("#printBtn").addEventListener("click",function(){if($("#printBtn").disabled)return;$("#packet").innerHTML=buildPacket();$("#packet").classList.add("show");onPacketGenerated();setTimeout(function(){window.print();},120);});
+function executePrint(){
+ $("#packet").innerHTML=buildPacket();
+ $("#packet").classList.add("show");
+ onPacketGenerated();
+ setTimeout(function(){window.print();},120);
+}
+function hidePublishGate(){var o=$("#publishGateOverlay");if(o)o.classList.add("hidden");}
+function showPublishGate(opts){
+ opts=opts||{};
+ var o=$("#publishGateOverlay");if(!o){executePrint();return;}
+ var desc=$("#publishGateDesc"),fkglRow=$("#publishGateFkglRow"),sensRow=$("#publishGateSensRow");
+ var fkglAck=$("#publishGateFkglAck"),sensAck=$("#publishGateSensAck");
+ var needFkgl=!!opts.needFkgl,needSens=!!opts.needSens;
+ if(desc)desc.textContent=opts.message||"Confirm before printing the patient handout.";
+ if(fkglRow)fkglRow.style.display=needFkgl?"block":"none";
+ if(sensRow)sensRow.style.display=needSens?"block":"none";
+ if(fkglAck)fkglAck.checked=!!S.acknowledgeHighFkgl;
+ if(sensAck)sensAck.checked=!!S.includeSensitiveOnPatientHandout;
+ o.classList.remove("hidden");
+ o._pending=opts;
+}
+function confirmPublishGate(){
+ var o=$("#publishGateOverlay");if(!o)return;
+ var fkglAck=$("#publishGateFkglAck"),sensAck=$("#publishGateSensAck");
+ var pending=o._pending||{};
+ if(pending.needFkgl&&(!fkglAck||!fkglAck.checked)){alert("Acknowledge the reading-level review to print.");return;}
+ if(pending.needSens&&(!sensAck||!sensAck.checked)){alert("Check the box to include sensitive resources, or uncheck on L6 before printing.");return;}
+ if(fkglAck&&fkglAck.checked)S.acknowledgeHighFkgl=true;
+ if(sensAck&&sensAck.checked)S.includeSensitiveOnPatientHandout=true;
+ hidePublishGate();
+ executePrint();
+}
+function runPrintWithGates(){
+ if($("#printBtn").disabled)return;
+ if(!S.includePatientHandout){executePrint();return;}
+ var high=highFkglResources();
+ var sens=sensitiveSelected();
+ var needFkgl=high.length>0&&!S.acknowledgeHighFkgl;
+ var needSens=sens.length>0&&S.includeSensitiveOnPatientHandout;
+ if(!needFkgl&&!needSens){executePrint();return;}
+ var parts=[];
+ if(needFkgl)parts.push(high.length+" patient blurb(s) are above grade 6.");
+ if(needSens)parts.push("You opted to print "+sens.length+" sensitive resource(s) with names/addresses.");
+ showPublishGate({needFkgl:needFkgl,needSens:needSens,message:parts.join(" ")});
+}
+$("#publishGateCancel").addEventListener("click",hidePublishGate);
+$("#publishGateConfirm").addEventListener("click",confirmPublishGate);
+$("#publishGateOverlay").addEventListener("click",function(e){if(e.target===e.currentTarget)hidePublishGate();});
+$("#printBtn").addEventListener("click",runPrintWithGates);
 
 render();
 </script>
