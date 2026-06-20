@@ -58,8 +58,8 @@ textarea{max-width:100%;min-height:54px;resize:vertical}
 .safety-domain-row.open .safety-domain-pill{display:none}
 .safety-chevron{width:16px;height:16px;flex:none;stroke:var(--mut);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s;margin-left:4px}
 .safety-domain-row.open .safety-chevron{transform:rotate(180deg)}
-.safety-domain-body{display:none;padding:0 10px 10px}
-.safety-domain-row.open .safety-domain-body{display:block}
+.safety-domain-body{max-height:0;overflow:hidden;padding:0 10px;transition:max-height .28s ease}
+.safety-domain-row.open .safety-domain-body{max-height:min(360px,42vh);overflow-y:auto;overscroll-behavior:contain;padding:0 10px 10px;-webkit-overflow-scrolling:touch}
 .safety-gate-opts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
 .safety-gate-opts .opt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11px;padding:6px 4px;min-height:54px;white-space:normal;line-height:1.2;text-align:center}
 .safety-gate-opts .opt .gate-lbl{font-size:10.5px;font-weight:600;line-height:1.15}
@@ -189,8 +189,12 @@ body.embed .progress-sticky{top:44px}
 .ctx-accordion-toggle{width:100%;display:flex;align-items:center;gap:8px;padding:10px 14px;background:none;border:none;cursor:pointer;font:inherit;text-align:left;font-size:13px;font-weight:600;color:var(--mut);touch-action:manipulation}
 .ctx-accordion-chevron{width:14px;height:14px;flex:none;stroke:var(--mut);fill:none;stroke-width:2;transition:transform .2s}
 .ctx-accordion.open .ctx-accordion-chevron{transform:rotate(180deg)}
-.ctx-accordion-body{display:none;padding:12px 14px;border-top:1px solid var(--line);background:var(--card)}
-.ctx-accordion.open .ctx-accordion-body{display:block}
+.ctx-accordion-body{max-height:0;overflow:hidden;padding:0 14px;border-top:none;background:var(--card);transition:max-height .28s ease}
+.ctx-accordion.open .ctx-accordion-body{max-height:min(720px,58vh);overflow-y:auto;overscroll-behavior:contain;padding:12px 14px;border-top:1px solid var(--line);-webkit-overflow-scrolling:touch}
+.expand-block{max-height:0;overflow:hidden;opacity:0;transition:max-height .28s ease,opacity .2s ease;margin:0;padding-top:0;padding-bottom:0}
+.expand-block.is-open{max-height:var(--expand-max,2400px);opacity:1;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+#expressLocExpand.expand-block.is-open{--expand-max:300px;margin-top:2px}
+#deliverAdvancedWrap.expand-block.is-open{--expand-max:min(520px,52vh)}
 .express-safety-gate{margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}
 .plan-top-matches{display:flex;flex-direction:column;gap:10px;margin:0 0 12px}
 .plan-match-card{display:block;border:2px solid var(--line);border-radius:12px;padding:14px 16px;background:#fff;cursor:pointer;position:relative;touch-action:manipulation;text-align:left;width:100%;font:inherit;color:inherit}
@@ -199,12 +203,12 @@ body.embed .progress-sticky{top:44px}
 .plan-match-card .blurb{font-size:13px;color:var(--mut);line-height:1.45}
 .plan-match-card .meta{font-size:12.5px;color:var(--t);font-weight:600;margin-top:6px}
 .plan-expand-link,.deliver-more-link{display:inline-block;margin:8px 0 12px;font-size:13px;font-weight:600;color:var(--t);cursor:pointer;background:none;border:none;font-family:inherit;text-decoration:underline;text-underline-offset:2px;padding:0;touch-action:manipulation}
-.panels-compact-wrap.hidden{display:none}
+.panels-compact-wrap.hidden{display:none!important;max-height:0!important;opacity:0!important;overflow:hidden!important}
 .deliver-primary{display:flex;flex-direction:column;gap:10px;margin:8px 0 4px;padding:0 34px}
 .deliver-primary .btn-big{min-height:52px;font-size:16px;font-weight:700;border-radius:12px;padding:14px 20px;border:none;cursor:pointer;font-family:inherit;width:100%;touch-action:manipulation}
 .deliver-primary .btn-big.primary{background:var(--t);color:#fff}
 .deliver-primary .btn-big.secondary{background:#fff;color:var(--t);border:2px solid var(--t)}
-.deliver-cards-advanced.hidden{display:none}
+.deliver-cards-advanced.hidden{display:none!important;max-height:0!important;opacity:0!important}
 .express-hide-domain{display:none!important}
 .mh-tagline b{font-style:normal;font-weight:600;color:var(--terra);letter-spacing:.13em;font-size:11px;text-transform:uppercase}
 .template-callout{font-size:12.5px;color:var(--mut);background:#f7f8fc;border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:0 0 14px;line-height:1.45}
@@ -474,9 +478,15 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 .ico-sf{display:inline-flex;align-items:center;justify-content:center;flex:none}
 .ico-sf svg{width:1.15em;height:1.15em;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
 .slide-shell{padding:2px 0 0;margin-bottom:0}
-.slide-panel{display:flex;flex-direction:column;min-height:calc(100dvh - 136px);max-height:calc(100dvh - 136px);overflow:hidden}
-.slide-panel .float-card,.slide-panel .layer{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:8px 14px 0;margin:0;min-height:0}
-.slide-panel .card-body{flex:1;min-height:0;overflow:hidden}
+#view-tool .workflow-sheet:has(#slideShell:not(.hidden)){display:flex;flex-direction:column;max-height:calc(100dvh - 108px);overflow:hidden;margin-bottom:8px}
+#view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .workflow-body{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+#view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .slide-shell{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+#view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .slide-track{flex:1;min-height:0;align-items:stretch}
+.slide-panel{display:flex;flex-direction:column;flex:0 0 100%;min-width:100%;height:100%;min-height:0;max-height:100%;overflow:hidden;padding:0 16px;box-sizing:border-box}
+.slide-panel>.float-card,.slide-panel>.layer{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:8px 14px 0;margin:0;min-height:0}
+.slide-panel .step-kicker,.slide-panel .step-head{flex-shrink:0}
+.slide-panel .slide-body,.slide-panel .card-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable}
+.slide-panel .plan-compact-head{flex-shrink:0}
 .step-kicker{margin-bottom:0;padding-top:0}
 .step-head{padding-bottom:0}
 .step-head .ltitle{font-size:22px;margin:0 0 2px;line-height:1.08}
@@ -517,7 +527,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 .pathway-card.op .pcard-ico{background:#e7f0ec;color:var(--sage)}
 .pathway-card .pcard-ico svg{width:18px;height:18px;stroke-width:1.75}
 @media(max-width:680px){
- .slide-panel{min-height:calc(100dvh - 132px);max-height:calc(100dvh - 132px)}
+ #view-tool .workflow-sheet:has(#slideShell:not(.hidden)){max-height:calc(100dvh - 100px)}
  .step-head .ltitle{font-size:21px}
  .gate-auto-note,.intake-divider .sub2,#zipMeta,.pop-col .sub2,.ref-deeplink,.collab-banner{display:none!important}
  .pop-flags-grid{grid-template-columns:1fr 1fr}
@@ -603,6 +613,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 <section class="layer float-card" id="Lgate">
  <div class="step-kicker"><span class="num">01</span><span class="lbl">Gate</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Pathway gate</div></div>
+ <div class="slide-body">
  <div id="gateAutoNote" class="gate-auto-note"></div>
  <div id="expressToggleWrap" class="express-toggle hidden"><label><input type="checkbox" id="expressOpToggle" checked> Express — fewer steps</label></div>
  <div class="q"><div class="field-label" id="lblCleared"><span class="req-mark" aria-hidden="true">■</span>Medically cleared?</div>
@@ -624,7 +635,8 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
    </div>
   </div>
   <div class="express-loc-line" id="expressLocLine"><span>Suggested level:</span><span class="loc-suggest" id="expressLocSuggest">Outpatient</span><button type="button" class="express-change-loc" id="expressChangeLoc">Change level</button></div>
-  <div class="reveal hidden" id="expressLocExpand"><div class="loc-cols"><div class="loc-col community-col"><div class="loc-col-h">Community</div><div class="opts loc-opts" id="expressLocCommunityOpts"></div></div></div></div>
+  <div class="expand-block" id="expressLocExpand"><div class="loc-cols"><div class="loc-col community-col"><div class="loc-col-h">Community</div><div class="opts loc-opts" id="expressLocCommunityOpts"></div></div></div></div>
+ </div>
  </div>
 </section>
 <div class="card-foot"><button type="button" class="card-continue" id="cardContinue0" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
@@ -632,7 +644,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 
 <div class="slide-panel" data-step="1">
 <section class="layer float-card" id="L0">
- <div class="card-body">
+ <div class="card-body slide-body">
  <div class="step-kicker"><span class="num">02</span><span class="lbl">Clinical</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Clinical context</div></div>
  <div class="gate-grid">
@@ -720,6 +732,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 <section class="layer float-card" id="L2">
  <div class="step-kicker"><span class="num">03</span><span class="lbl">Safety</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Safety screening</div></div>
+ <div class="slide-body">
  <div id="safetyCollabBanner" class="alert amber collab-banner hidden"><b>Clinician review required</b> — moderate/high C-SSRS or violence concern. Complete safety plan &amp; means with a trained clinician, then attest before Plan or Deliver.</div>
  <div id="expressSafetyGate" class="express-safety-gate hidden">
   <div class="q"><label class="qlabel">Anything to document for safety?</label>
@@ -867,6 +880,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
   <label class="mini"><input type="checkbox" id="l2ClinicianAttested"> <b>Reviewed with trained clinician</b></label>
  </div>
  </div>
+ </div>
 </section>
 <div class="card-foot"><button type="button" class="card-continue" id="cardContinue2" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </div>
@@ -875,6 +889,11 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 <section class="layer float-card" id="L5">
  <div class="step-kicker"><span class="num">04</span><span class="lbl">Plan</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Resources &amp; follow-up</div></div>
+ <div class="plan-compact-head">
+ <div id="planTopMatches" class="plan-top-matches hidden"></div>
+ <button type="button" class="plan-expand-link hidden" id="planShowAllBtn">Show all</button>
+ </div>
+ <div class="slide-body">
  <div class="l5-fresh note" id="l5Fresh"></div>
  <div class="ldesc" id="l5ctx"></div>
  <div id="socialCarePrompt" class="sc-banner hidden">
@@ -883,11 +902,10 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
   <button type="button" class="btn sec" id="dismissSocialCareBtn" style="background:transparent;border:none;color:var(--mut);font-weight:600">Dismiss</button>
  </div>
  <div id="selectedTray"></div>
- <div id="planTopMatches" class="plan-top-matches hidden"></div>
- <button type="button" class="plan-expand-link hidden" id="planShowAllBtn">Show all</button>
  <div id="panelsCompactWrap" class="panels-compact-wrap"><div id="panels"></div></div>
  <div id="followUpBlock" class="follow-up-block hidden"></div>
  <div id="l5FkglGate" class="l6-gate l6-gate-warn hidden"></div>
+ </div>
 </section>
 <div class="card-foot"><button type="button" class="card-continue" id="cardContinue3" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </div>
@@ -896,10 +914,11 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 <section class="layer float-card" id="L6">
  <div class="step-kicker"><span class="num">05</span><span class="lbl">Deliver</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Hand off the plan</div></div>
+ <div class="slide-body">
  <div id="deliverGate" class="deliver-gate hidden"></div>
  <div id="deliverPrimary" class="deliver-primary hidden"></div>
  <button type="button" class="deliver-more-link hidden" id="deliverMoreBtn">More options</button>
- <div id="deliverAdvancedWrap" class="deliver-cards-advanced hidden"><div id="deliverCards"></div></div>
+ <div id="deliverAdvancedWrap" class="deliver-cards-advanced expand-block"><div id="deliverCards"></div></div>
  <div class="deliver-foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12l4 4L19 7"/></svg>Nothing here is stored. Patient details print and stay with you; the referral leaves blank patient fields for you to fill.</div>
  <div class="deliver-advanced">
   <div class="phi-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Patient details never leave this device — print/export stays local; your library saves templates only.</div>
@@ -945,6 +964,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
    <button class="btn sec" id="saveTemplateBtn">Save as template</button>
   </div>
   <div id="postPacketBanner" class="post-banner hidden" role="status"></div>
+ </div>
  </div>
  <button type="button" class="hidden" id="copyChartBtn"></button>
  <button type="button" class="hidden" id="printBtn" disabled></button>
@@ -2228,7 +2248,7 @@ function renderDeliverScreen(){
   primary.innerHTML='<div class="note">Complete safety, plan, referrals, and follow-up to unlock deliver actions.</div>';
   if(cards)cards.innerHTML="";
   if(moreBtn)moreBtn.classList.add("hidden");
-  if(advWrap)advWrap.classList.add("hidden");
+  if(advWrap){advWrap.classList.remove("is-open");advWrap.classList.add("hidden");}
   return;
  }
  var ok=L6ok(),dis=!ok?' disabled':'';
@@ -2240,7 +2260,10 @@ function renderDeliverScreen(){
   moreBtn.classList.remove("hidden");
   moreBtn.textContent=S.deliverMoreOpen?"Fewer options":"More options";
  }
- if(advWrap)advWrap.classList.toggle("hidden",!S.deliverMoreOpen);
+ if(advWrap){
+  advWrap.classList.remove("hidden");
+  advWrap.classList.toggle("is-open",!!S.deliverMoreOpen);
+ }
  if(!cards)return;
  var html="";
  referralDeliverTargets().forEach(function(r){
@@ -3019,7 +3042,7 @@ function renderExpressEssentials(){
  var le=$("#locExpress");if(le){le.value=locDisplay();}
  var zm=$("#zipMetaExpress");if(zm)zm.textContent=$("#zipMeta").textContent;
  var sug=$("#expressLocSuggest");if(sug)sug.textContent=dispLocShort()||"Outpatient";
- rev("#expressLocExpand",!!S.expressLocExpanded);
+ var xl=$("#expressLocExpand");if(xl)xl.classList.toggle("is-open",!!S.expressLocExpanded);
  if(isExpressOp()&&!dispLocValue())applyDispLoc("community|outpatient");
 }
 function planMatchCard(r){
