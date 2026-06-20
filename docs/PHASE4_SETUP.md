@@ -2,25 +2,63 @@
 
 PsychDispo works fully in **guest mode** without Supabase. Add these steps when you want cloud-synced plan templates and OAuth sign-in.
 
-## 1. Create a Supabase project
+## Wired project (2026-06-20)
 
-1. Sign in at [supabase.com](https://supabase.com) and create a project.
-2. In **Project Settings → API**, copy:
-   - **Project URL** → `VITE_SUPABASE_URL`
-   - **anon public** key → `VITE_SUPABASE_ANON_KEY`
+| Item | Value |
+|------|-------|
+| **Project ref** | `kqvpptcmnaeqvmlxlvba` |
+| **Project URL** | `https://kqvpptcmnaeqvmlxlvba.supabase.co` |
+| **Migration** | `phase4_templates` applied via MCP (`plan_templates`, `favorite_resources`, RLS) |
+| **Local env** | `.env.local` created (gitignored; not committed) |
 
-## 2. Local environment
+## 1. Environment variables
+
+### Local development
+
+`.env.local` is already wired with `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`. Vite loads `.env.local` automatically.
+
+To recreate from scratch:
 
 ```bash
-cp .env.example .env
-# Edit .env with your URL and anon key
+cp .env.example .env.local
+# Edit .env.local with values from Supabase → Project Settings → API
 ```
 
-Never commit `.env` or real keys.
+Never commit `.env`, `.env.local`, or real keys.
 
-## 3. Run the migration
+### Vercel (production)
 
-Apply `supabase/migrations/20260620120000_phase4_templates.sql` to your project:
+Vercel CLI is not installed in this workspace. Set production env vars manually:
+
+1. Open [Vercel Dashboard](https://vercel.com) → your PsychDispo project → **Settings → Environment Variables**
+2. Add for **Production** (and Preview if desired):
+
+| Name | Value |
+|------|-------|
+| `VITE_SUPABASE_URL` | `https://kqvpptcmnaeqvmlxlvba.supabase.co` |
+| `VITE_SUPABASE_ANON_KEY` | anon key from Supabase → Project Settings → API |
+
+3. Redeploy after saving.
+
+Alternatively, with Vercel CLI installed:
+
+```bash
+vercel env add VITE_SUPABASE_URL production
+vercel env add VITE_SUPABASE_ANON_KEY production
+```
+
+## 2. Database migration
+
+Migration `supabase/migrations/20260620120000_phase4_templates.sql` has been applied to project `kqvpptcmnaeqvmlxlvba`.
+
+Tables created:
+
+- `plan_templates` — scaffold JSON only (pathway, flags, resource selections; no patient fields)
+- `favorite_resources` — `resource_key` per user
+
+RLS policies scope all rows to `auth.uid()`.
+
+To re-apply on another project:
 
 **Option A — Supabase Dashboard:** SQL Editor → paste migration → Run.
 
@@ -31,36 +69,40 @@ supabase link --project-ref your-project-ref
 supabase db push
 ```
 
-Tables created:
+## 3. Auth configuration (manual — Supabase Dashboard)
 
-- `plan_templates` — scaffold JSON only (pathway, flags, resource selections; no patient fields)
-- `favorite_resources` — `resource_key` per user
+MCP cannot set auth redirect URLs or OAuth providers. Complete these in the Supabase Dashboard for project `kqvpptcmnaeqvmlxlvba`:
 
-RLS policies scope all rows to `auth.uid()`.
+### URL configuration
 
-## 4. Configure Auth providers
+**Authentication → URL Configuration:**
 
-In **Authentication → URL Configuration**, set:
-
-- **Site URL:** your app origin (e.g. `http://localhost:5173` or production URL)
-- **Redirect URLs:** add `http://localhost:5173/auth/callback` and your production `/auth/callback`
+| Setting | Value |
+|---------|-------|
+| **Site URL** | `https://psychdispo.com` (production) or `http://localhost:5173` (local dev) |
+| **Redirect URLs** | `http://localhost:5173/auth/callback` |
+| | `https://psychdispo.com/auth/callback` |
 
 ### Magic link (email OTP)
 
-Enabled by default. Customize email templates under **Authentication → Email Templates** if needed.
+Enabled by default. Customize email templates under **Authentication → Email Templates** if needed (subject line, confirmation link text).
 
 ### Google OAuth (optional)
 
 1. **Authentication → Providers → Google** → enable.
-2. Add Google OAuth client ID/secret from Google Cloud Console.
-3. Authorized redirect URI: `https://your-project-ref.supabase.co/auth/v1/callback`
+2. Create OAuth credentials in [Google Cloud Console](https://console.cloud.google.com/apis/credentials):
+   - Application type: Web application
+   - Authorized JavaScript origins: `http://localhost:5173`, `https://psychdispo.com`
+   - Authorized redirect URI: `https://kqvpptcmnaeqvmlxlvba.supabase.co/auth/v1/callback`
+3. Paste Client ID and Client Secret into Supabase Google provider settings.
 
-## 5. Verify
+## 4. Verify
 
-1. `npm run dev` with `.env` populated.
-2. Sign in at `/sign-in` via magic link or Google.
-3. Complete a disposition plan → **Save as template** on Deliver.
-4. Open **My plans** — template should appear (loaded from Supabase when signed in).
+1. `npm run build` — should succeed with `.env.local` present.
+2. `npm run dev` with `.env.local` populated.
+3. Sign in at `/sign-in` via magic link or Google.
+4. Complete a disposition plan → **Save as template** on Deliver.
+5. Open **My plans** — template should appear (loaded from Supabase when signed in).
 
 ## Guest vs signed-in
 
