@@ -51,6 +51,12 @@ textarea{max-width:100%;min-height:54px;resize:vertical}
 .safety-col .opt{font-size:12.5px;padding:7px 11px;white-space:normal}
 .safety-col .reveal{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
 @media(max-width:900px){.safety-grid{grid-template-columns:1fr}}
+.pop-flags-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px 16px;margin-top:8px;align-items:start}
+.pop-col{border:1px solid var(--line);border-radius:11px;padding:12px 14px;background:#fafbfd}
+.pop-col .sub2{margin:0 0 8px;border:none;padding:0;font-size:10px}
+.pop-col .opts{flex-wrap:wrap}
+.pop-col .opt{font-size:12.5px;padding:7px 11px;white-space:normal}
+@media(max-width:900px){.pop-flags-grid{grid-template-columns:1fr}}
 .fu-contact{margin:10px 0 12px;padding:10px 12px;background:#f7f8fc;border-radius:9px;border:1px solid var(--line);font-size:13px;line-height:1.45}
 .fu-contact a{color:var(--t2);font-weight:600;text-decoration:none}
 .follow-up-block{margin-top:18px;padding-top:16px;border-top:2px solid var(--line)}
@@ -473,36 +479,38 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
  <div class="sub2" style="border:none;padding-top:0">Who is the patient?</div>
  <div class="sub2">1A · Demographics</div>
  <div class="grid2">
-  <div class="q"><label class="qlabel" id="lblSab">Sex assigned at birth</label>
-   <div class="opts" data-field="sab" role="group" aria-labelledby="lblSab"><button type="button" class="opt" data-val="M" aria-pressed="false">Male</button><button type="button" class="opt" data-val="F" aria-pressed="false">Female</button><button type="button" class="opt" data-val="Intersex" aria-pressed="false">Intersex</button></div></div>
-  <div><label class="qlabel">Gender identity</label>
-   <select id="gender"><option value="">—</option><option>Man</option><option>Woman</option><option>Transgender man</option><option>Transgender woman</option><option>Nonbinary</option><option>Prefer to self-describe</option></select></div>
   <div><label class="qlabel">Preferred language</label>
    <select id="lang"><option value="English">English</option><option value="Spanish">Spanish</option><option value="Somali">Somali</option><option value="Arabic">Arabic</option><option value="Nepali">Nepali</option><option value="French">French</option><option value="ASL">ASL</option><option value="Other">Other</option></select></div>
-  <div class="q"><label class="qlabel">Interpreter needed?</label>
+  <div class="q hidden" id="interpreterWrap"><label class="qlabel">Interpreter needed?</label>
    <div class="opts yesno" data-field="interpreter"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div></div>
  </div>
  <div class="sub2">1B · Population flags</div>
  <div class="q"><label class="qlabel">Life stage <span class="req">select one</span></label>
   <div class="opts" data-field="lifeStage"><button type="button" class="opt" data-val="child">Child / Adolescent (&lt;18)</button><button type="button" class="opt" data-val="adult">Adult (18–64)</button><button type="button" class="opt" data-val="geriatric">Geriatric (≥65)</button></div></div>
- <div class="multi" data-multi="1">
-  <div class="sub2" style="border:none;padding-top:6px">Reproductive · Military · Identity</div>
-  <div class="opts">
-   <button type="button" class="opt" data-flag="perinatal">Perinatal (pregnant or ≤12 mo postpartum)</button>
-   <button type="button" class="opt" data-flag="veteran">Veteran / Active Duty / Military Family</button>
-   <button type="button" class="opt" data-flag="lgbtq">LGBTQ+</button>
+ <div class="pop-flags-grid" data-multi="1">
+  <div class="pop-col">
+   <div class="sub2">Reproductive · Military · Identity</div>
+   <div class="opts">
+    <button type="button" class="opt" data-flag="perinatal">Perinatal (pregnant or ≤12 mo postpartum)</button>
+    <button type="button" class="opt" data-flag="veteran">Veteran / Active Duty / Military Family</button>
+    <button type="button" class="opt" data-flag="lgbtq">LGBTQ+</button>
+   </div>
   </div>
-  <div class="sub2" style="border:none">Medical comorbidity (all that apply)</div>
-  <div class="opts">
-   <button type="button" class="opt" data-flag="sud">Substance Use Disorder</button>
-   <button type="button" class="opt" data-flag="tbi">TBI / Neuropsychiatric</button>
-   <button type="button" class="opt" data-flag="idd">Intellectual / Developmental Disability</button>
-   <button type="button" class="opt" data-flag="seriousMed">Serious Medical Illness</button>
+  <div class="pop-col">
+   <div class="sub2">Social / Legal</div>
+   <div class="opts">
+    <button type="button" class="opt" data-flag="justice">Justice involved</button>
+    <button type="button" class="opt" data-flag="unhoused">Housing unstable</button>
+   </div>
   </div>
-  <div class="sub2" style="border:none">Social / legal</div>
-  <div class="opts">
-   <button type="button" class="opt" data-flag="justice">Justice-Involved</button>
-   <button type="button" class="opt" data-flag="unhoused">Unhoused / Housing Unstable</button>
+  <div class="pop-col">
+   <div class="sub2">Medical comorbidity</div>
+   <div class="opts">
+    <button type="button" class="opt" data-flag="sud">Substance Use Disorder</button>
+    <button type="button" class="opt" data-flag="tbi">TBI / Neuropsychiatric</button>
+    <button type="button" class="opt" data-flag="idd">Intellectual / Developmental Disability</button>
+    <button type="button" class="opt" data-flag="seriousMed">Serious Medical Illness</button>
+   </div>
   </div>
  </div>
  </div>
@@ -1349,7 +1357,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 var NATIONAL=[{"county":"National","cat":"Emergency","name":"911 — Emergency","phone":"911","svc":"Police, fire & medical emergency — or go to the nearest ER","access":"All ages","panel":"D"},{"county":"National","cat":"Crisis line","name":"988 Suicide & Crisis Lifeline","phone":"988","svc":"Call or text 988 — 24/7 crisis & suicide prevention","access":"All ages","panel":"D"},{"county":"National","cat":"Crisis line","name":"Crisis Text Line","phone":"741741","svc":"Text HOME to 741741 — 24/7 text crisis support","access":"All ages","panel":"D"},{"county":"National","cat":"Crisis line","name":"Veterans Crisis Line","phone":"988","svc":"Dial 988 then press 1 — 24/7 veteran crisis support","access":"Veterans","panel":"D","flag":"veteran"},{"county":"National","cat":"Crisis line","name":"Trans Lifeline","phone":"877-565-8860","svc":"Peer crisis support for transgender people","access":"All ages","panel":"D","flag":"lgbtq"},{"county":"National","cat":"Substance use","name":"SAMHSA National Helpline","phone":"1-800-662-4357","svc":"24/7 free, confidential treatment referral (alcohol & drugs)","access":"All · multilingual","panel":"C"},{"county":"National","cat":"Substance use","name":"Narcotics Anonymous (NA)","phone":"1-818-773-9999","svc":"Mutual-aid recovery meetings & info","access":"All","panel":"C"},{"county":"National","cat":"Substance use","name":"SMART Recovery","phone":"1-440-951-5357","svc":"Science-based mutual-aid recovery groups","access":"All","panel":"C"},{"county":"National","cat":"Substance use","name":"Never Use Alone","phone":"1-800-484-3731","svc":"24/7 overdose-prevention hotline for people using alone","access":"All","panel":"C"},{"county":"National","cat":"Referral","name":"211 — United Way","phone":"211","svc":"24/7 referral to housing, food, transport, benefits & more","access":"All","panel":"F","need":"catchall"},{"county":"National","cat":"Benefits","name":"Ohio Medicaid Consumer Hotline","phone":"1-800-324-8680","svc":"Enroll in / manage Medicaid & managed-care plans","access":"Medicaid","panel":"F","need":"financial"},{"county":"National","cat":"Benefits","name":"Ohio Benefits (SNAP / cash / childcare)","phone":"1-844-640-6446","svc":"Apply for SNAP food, cash assistance & Medicaid","access":"Income-based","panel":"F","need":"financial"},{"county":"National","cat":"Benefits","name":"Social Security (SSI / SSDI)","phone":"1-800-772-1213","svc":"Disability & retirement benefits","access":"All","panel":"F","need":"financial"},{"county":"National","cat":"Transportation","name":"Medicaid Non-Emergency Transportation (NEMT)","phone":"1-800-324-8680","svc":"Free rides to covered appointments — call your managed-care plan or the Medicaid hotline","access":"Medicaid","panel":"F","need":"transport"},{"county":"National","cat":"Domestic violence","name":"National Domestic Violence Hotline","phone":"1-800-799-7233","svc":"24/7 confidential DV support & safety planning (text START to 88788)","access":"All","panel":"F","need":"dv"},{"county":"National","cat":"Childcare","name":"Head Start / Early Head Start Locator","phone":"1-866-763-6481","svc":"Free early-childhood education & childcare","access":"Income-based","panel":"F","need":"childcare"},{"county":"National","cat":"Pediatric","name":"Boys Town National Hotline","phone":"1-800-448-3000","svc":"24/7 counseling for kids, teens & families","access":"Youth & families","panel":"G","flag":"pediatric"},{"county":"National","cat":"Pediatric","name":"National Parent & Youth Helpline","phone":"1-855-427-2736","svc":"Support for parents & caregivers in crisis","access":"Families","panel":"G","flag":"pediatric"},{"county":"National","cat":"Perinatal","name":"Postpartum Support International (PSI)","phone":"1-800-944-4773","svc":"Perinatal mood & anxiety support (call or text)","access":"Perinatal","panel":"G","flag":"perinatal"},{"county":"National","cat":"Perinatal","name":"National Maternal Mental Health Hotline","phone":"1-833-852-6262","svc":"24/7 free support for pregnant & postpartum people","access":"Perinatal","panel":"G","flag":"perinatal"},{"county":"National","cat":"Veteran","name":"Vet Center Combat Call Center","phone":"1-877-927-8387","svc":"24/7 readjustment-counseling line staffed by combat veterans","access":"Veterans & families","panel":"G","flag":"veteran"},{"county":"National","cat":"Veteran","name":"VA Caregiver Support Line","phone":"1-855-260-3274","svc":"Support for those caring for veterans","access":"Veteran caregivers","panel":"G","flag":"veteran"},{"county":"National","cat":"LGBTQ+","name":"The Trevor Project","phone":"1-866-488-7386","svc":"24/7 crisis support for LGBTQ+ youth (<25); text START to 678-678","access":"LGBTQ+ youth","panel":"G","flag":"lgbtq"},{"county":"National","cat":"LGBTQ+","name":"PFLAG (find a local chapter)","phone":"1-202-467-8180","svc":"Peer support for LGBTQ+ people & families","access":"All","panel":"G","flag":"lgbtq"},{"county":"National","cat":"TBI / neuro","name":"Brain Injury Association of Ohio","phone":"1-855-444-6443","svc":"Information, resources & support for brain injury","access":"All","panel":"G","flag":"tbi"},{"county":"National","cat":"IDD","name":"Ohio Dept. of Developmental Disabilities","phone":"1-866-313-6733","svc":"Statewide DD services & MUI/abuse reporting","access":"All","panel":"G","flag":"idd"},{"county":"National","cat":"IDD","name":"The Arc of Ohio","phone":"1-800-875-2723","svc":"Advocacy & support for people with IDD & families","access":"All","panel":"G","flag":"idd"},{"county":"National","cat":"Serious illness","name":"CancerCare","phone":"1-800-813-4673","svc":"Free counseling, support groups & financial help","access":"Serious illness","panel":"G","flag":"seriousMed"},{"county":"National","cat":"Caregiver","name":"NAMI HelpLine","phone":"1-800-950-6264","svc":"Information & support for mental illness (M-F); text 62640","access":"All","panel":"G","flag":"seriousMed"},{"county":"Columbus (Franklin)","cat":"Geriatric","name":"Central Ohio Area Agency on Aging","phone":"1-800-589-7277","svc":"In-home care, benefits & caregiver support for older adults","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"Cleveland (Cuyahoga)","cat":"Geriatric","name":"Western Reserve Area Agency on Aging","phone":"1-216-621-0303","svc":"In-home care, benefits & caregiver support for older adults","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"National","cat":"Geriatric","name":"Eldercare Locator","phone":"1-800-677-1116","svc":"National referral to local aging services","access":"Age 60+","panel":"G","flag":"geriatric"},{"county":"National","cat":"Geriatric","name":"Ohio Adult Protective Services (elder abuse)","phone":"1-855-644-6277","svc":"Report suspected abuse/neglect of older adults","access":"Age 60+","panel":"G","flag":"geriatric"},{"county":"Columbus (Franklin)","cat":"IDD","name":"Franklin County Board of Developmental Disabilities","phone":"1-614-475-6440","svc":"Eligibility, service coordination & supports","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Cleveland (Cuyahoga)","cat":"IDD","name":"Cuyahoga County Board of Developmental Disabilities","phone":"1-216-241-8230","svc":"Eligibility, service coordination & supports","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Columbus (Franklin)","cat":"Justice","name":"Reeb Avenue Center — reentry & workforce","phone":"1-614-525-2112","svc":"Job training & social services (reentry-friendly)","access":"All","national":1,"panel":"G","flag":"justice"},{"county":"Cleveland (Cuyahoga)","cat":"Justice","name":"Cuyahoga County Reentry — via 211","phone":"211","svc":"Reentry case management, ID, housing & job linkage","access":"Justice-involved","national":1,"panel":"G","flag":"justice"},{"county":"National","cat":"Justice","name":"Ohio Justice & Policy Center","phone":"1-513-421-1108","svc":"Legal help & reentry advocacy","access":"Justice-involved","panel":"G","flag":"justice"},{"county":"National","cat":"Interpreter","name":"Patient's Medicaid plan member line / Ohio Medicaid Consumer Hotline","phone":"1-800-324-8680","svc":"Free spoken + ASL interpreters — call the number on the patient's insurance card (TTY 711)","access":"Free to Medicaid members","panel":"I","auto":1},{"county":"National","cat":"Interpreter","name":"988 — language & ASL access","phone":"988","svc":"Press 2 for Spanish; ASL via videophone / 'ASL Now'; 240+ languages","access":"Free · 24/7","panel":"I","auto":1},{"county":"National","cat":"Interpreter","name":"211 — phone interpretation","phone":"211","svc":"Built-in telephone interpretation for resource referrals","access":"Free · 24/7","panel":"I","auto":1},{"county":"National","cat":"Interpreter","name":"Ohio Relay (Deaf / HoH telephone access)","phone":"711","svc":"Relay for Deaf, DeafBlind, hard-of-hearing & speech-disabled (English 800-750-0750 · Spanish 888-269-0678)","access":"Free · 24/7","panel":"I","auto":1},{"county":"Columbus (Franklin)","cat":"Interpreter","name":"US Together — Interpreter Services","phone":"1-614-581-4357","svc":"74 languages; phone & in-person for medical, legal & social settings","access":"Requesting agency billed (free to patient)","national":1,"panel":"I"},{"county":"Columbus (Franklin)","cat":"Interpreter","name":"Asian American Community Services","phone":"1-614-220-4023","svc":"30+ Asian languages incl. Nepali; 24/7 phone & in-person","access":"Requesting agency billed","national":1,"panel":"I"},{"county":"Columbus (Franklin)","cat":"Interpreter","name":"CRIS — Community Refugee & Immigration Services","phone":"1-614-235-5747","svc":"Interpretation & case management in dozens of languages","access":"Free / low-cost","national":1,"panel":"I"},{"county":"Columbus (Franklin)","cat":"Interpreter","name":"Ethiopian Tewahedo Social Services (ETSS)","phone":"1-614-252-5362","svc":"Translation & navigators (Kiswahili, Lingala, Kirundi, French, etc.)","access":"Free / low-cost","national":1,"panel":"I"},{"county":"Columbus (Franklin)","cat":"Interpreter","name":"Somali Community Association of Ohio","phone":"1-614-262-4068","svc":"Somali interpretation & translation","access":"Free / low-cost","national":1,"panel":"I"},{"county":"Columbus (Franklin)","cat":"Interpreter","name":"Bhutanese Community of Central Ohio","phone":"1-614-396-8965","svc":"Nepali / Bhutanese interpretation & health navigation","access":"Free","national":1,"panel":"I"},{"county":"Columbus (Franklin)","cat":"Interpreter","name":"Deaf Services Center — ASL interpreting","phone":"1-614-841-1991","svc":"ASL interpreting (in-person & scheduled); videophone 614-515-6065","access":"Agency billed (free to patient)","national":1,"panel":"I"},{"county":"Cleveland (Cuyahoga)","cat":"Interpreter","name":"US Together — Cleveland (Interpreter Services)","phone":"1-216-456-9630","svc":"270+ interpreters, ~74 languages; in-person, phone & virtual","access":"Requesting agency billed (free to patient)","national":1,"panel":"I"},{"county":"Cleveland (Cuyahoga)","cat":"Interpreter","name":"Asian Services in Action (ASIA, Inc.)","phone":"1-216-881-0330","svc":"Face-to-face, phone & virtual interpreting + document translation","access":"Requesting agency billed","national":1,"panel":"I"},{"county":"Cleveland (Cuyahoga)","cat":"Interpreter","name":"Catholic Charities — Migration & Refugee Services","phone":"1-216-939-3737","svc":"Resettlement/immigration services in many languages","access":"Refugee/immigrant services","national":1,"panel":"I"},{"county":"Cleveland (Cuyahoga)","cat":"Interpreter","name":"Building Hope in the City — Hope Center","phone":"1-216-241-9400","svc":"Walk-in refugee/immigrant center with staff language support","access":"Free center services","national":1,"panel":"I"},{"county":"Cleveland (Cuyahoga)","cat":"Interpreter","name":"Cleveland Hearing & Speech Center — ASL interpreting","phone":"1-216-231-0787","svc":"In-person/video ASL + spoken-language interpreting; after-hours 216-258-3520","access":"Agency billed (free to patient)","national":1,"panel":"I"},{"county":"Toledo (Lucas)","cat":"Geriatric","name":"Area Office on Aging of Northwestern Ohio","phone":"1-419-382-0624","svc":"Area Agency on Aging: care management, in-home services, caregiver support","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"Toledo (Lucas)","cat":"IDD","name":"Lucas County Board of Developmental Disabilities","phone":"1-419-380-4000","svc":"Eligibility, service coordination, early intervention & supports","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Toledo (Lucas)","cat":"Interpreter","name":"US Together — Toledo","phone":"1-419-469-2529","svc":"Refugee resettlement, interpretation & case management","access":"Requesting agency billed","national":1,"panel":"I"},{"county":"Toledo (Lucas)","cat":"Interpreter","name":"DSC of NW Ohio (Interlink Deaf Services) — ASL","phone":"1-419-720-3935","svc":"ASL/Spanish interpreting, speech-to-text, advocacy","access":"Agency billed (free to patient)","national":1,"panel":"I"},{"county":"Cincinnati (Hamilton)","cat":"Geriatric","name":"Council on Aging of Southwestern Ohio","phone":"1-513-721-1025","svc":"Area Agency on Aging: in-home care, Elderly Services Program","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"Cincinnati (Hamilton)","cat":"IDD","name":"Hamilton County Developmental Disabilities Services","phone":"1-513-794-3300","svc":"Service coordination, early intervention, waivers, employment support","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Cincinnati (Hamilton)","cat":"Interpreter","name":"Catholic Charities Southwestern Ohio","phone":"1-513-241-7745","svc":"Refugee resettlement, immigration legal & interpretation","access":"Sliding scale","national":1,"panel":"I"},{"county":"Cincinnati (Hamilton)","cat":"Interpreter","name":"Su Casa Hispanic Center (Catholic Charities)","phone":"1-513-761-1588","svc":"Spanish-language navigation, interpretation & immigrant services","access":"Many services free","national":1,"panel":"I"},{"county":"Cincinnati (Hamilton)","cat":"Interpreter","name":"RefugeeConnect","phone":"1-513-304-1994","svc":"Refugee navigation, education & community integration","access":"Free · refugee families","national":1,"panel":"I"},{"county":"Dayton (Montgomery)","cat":"Geriatric","name":"Area Agency on Aging, PSA 2","phone":"1-937-223-4357","svc":"In-home support, caregiver support & case management (9-county)","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"Dayton (Montgomery)","cat":"IDD","name":"Montgomery County Board of Developmental Disabilities Services","phone":"1-937-890-0730","svc":"Service coordination, early intervention, employment/day support","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Dayton (Montgomery)","cat":"Interpreter","name":"Welcome Dayton (City of Dayton)","phone":"1-937-333-3679","svc":"Immigrant integration hub; referrals to legal/health/language access","access":"Free · all immigrants/refugees","national":1,"panel":"I"},{"county":"Dayton (Montgomery)","cat":"Interpreter","name":"Catholic Social Services of the Miami Valley","phone":"1-937-223-7217","svc":"Refugee resettlement w/ interpreter services & counseling","access":"Refugees & low-income","national":1,"panel":"I"},{"county":"Akron (Summit)","cat":"Geriatric","name":"Direction Home Akron Canton (Area Agency on Aging 10B)","phone":"1-330-896-9172","svc":"In-home care coordination, PASSPORT & caregiver support","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"Akron (Summit)","cat":"IDD","name":"Summit County Developmental Disabilities Board (Summit DD)","phone":"1-330-634-8000","svc":"Service coordination, early intervention & supports","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Akron (Summit)","cat":"Interpreter","name":"International Institute of Akron","phone":"1-330-376-5106","svc":"On-site/phone/video interpreting, translation & refugee services","access":"Immigrants/refugees","national":1,"panel":"I"},{"county":"Canton (Stark)","cat":"Geriatric","name":"Direction Home Akron Canton (Area Agency on Aging)","phone":"1-800-421-7277","svc":"Home-care waivers, meals & long-term-care navigation","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"Canton (Stark)","cat":"IDD","name":"Stark County Board of Developmental Disabilities (StarkDD)","phone":"1-330-477-5200","svc":"Service coordination, early intervention & waivers","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Canton (Stark)","cat":"Interpreter","name":"Greenleaf Center — Deaf / Interpreting Services (ASL)","phone":"1-330-376-3665","svc":"ASL, DeafBlind & hard-of-hearing interpreting","access":"Agency billed","national":1,"panel":"I"},{"county":"Youngstown (Mahoning)","cat":"Geriatric","name":"Direction Home of Eastern Ohio (Area Agency on Aging 11)","phone":"1-330-505-2300","svc":"PASSPORT, in-home care & caregiver support","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"Youngstown (Mahoning)","cat":"IDD","name":"Mahoning County Board of Developmental Disabilities (MCBDD)","phone":"1-330-799-2763","svc":"Service & support administration, early intervention","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Youngstown (Mahoning)","cat":"Interpreter","name":"OCCHA — Hispanic Services (Spanish interpretation)","phone":"1-330-781-1808","svc":"Certified medical/legal Spanish interpretation & social services","access":"All","national":1,"panel":"I"}]
 "use strict";
 if(/[?&]embed/.test(location.search))document.body.classList.add("embed");
-var S={pathway:null,cleared:null,setting:null,city:"",zip:"",insurance:null,sab:null,gender:"",lang:"English",interpreter:"no",
+var S={pathway:null,cleared:null,setting:null,city:"",zip:"",insurance:null,lang:"English",interpreter:"no",
  lifeStage:"adult",flags:{perinatal:0,veteran:0,lgbtq:0,sud:0,tbi:0,idd:0,seriousMed:0,justice:0,unhoused:0},
  acuteConcern:null,cssrsInEmr:null,cssrsDone:null,suicideRisk:null,sudScreenDone:null,sudTool:null,sudScore:"",sudClinical:null,violence:null,
  violenceFactors:{weapons:0,priorViolence:0,substance:0,command:0,identifiableTarget:0},
@@ -1534,7 +1542,7 @@ function renderIntakeLegend(){
  var el=$("#intakeLegend");if(!el)return;
  var n=intakeCompleteCount();
  el.innerHTML='<div class="it"><span class="sq need"></span>Required — still needed</div><div class="it"><span class="sq done"></span>Required — done</div><div class="cnt">'+n+' of 6 required complete</div>';
- $("[data-req]").forEach(function(dot){
+ $$("[data-req]").forEach(function(dot){
   var k=dot.dataset.req;
   dot.classList.toggle("need",!intakeFieldDone(k));
   dot.classList.toggle("done",intakeFieldDone(k));
@@ -1560,10 +1568,19 @@ function pathwayLabel(){
  if(S.setting==="Outpatient")return "Outpatient Dispo";
  return "";
 }
+function syncPathwaySetting(){
+ if(S.pathway==="ed"){S.setting="Acute";return;}
+ if(S.pathway==="outpatient"&&S.cleared==="yes"){
+  S.setting="Outpatient";
+  if(!dispLocValue())applyDispLoc("community|outpatient");
+ }
+}
 function choosePathway(p){
  S.pathway=p;
- if(p==="ed"){S.setting="Acute";S.acuteConcern=null;}
- else{S.setting="Outpatient";S.acuteConcern=null;applyDispLoc("community|outpatient");}
+ S.acuteConcern=null;
+ if(p==="ed"){S.setting="Acute";}
+ else{S.setting=null;S.dispo=null;S.intensity=null;S.residType=null;}
+ syncPathwaySetting();
  rebuildDispLocSelect();
  render();
 }
@@ -2234,6 +2251,8 @@ document.addEventListener("pointerup",onOptPointer,true);
 document.addEventListener("click",onOptClick);
 function setField(f,v){
  if(f in S){S[f]=v||null;}
+ if(f==="cleared"&&v==="yes")syncPathwaySetting();
+ if(f==="lang"&&(!v||v==="English"))S.interpreter="no";
  if(f==="cssrsDone"&&v==="no"){S.suicideRisk=null;}
  if(f==="sudScreenDone"&&v==="no"){S.sudTool=null;S.sudScore="";S.sudClinical=null;}
  if(f==="setting"){
@@ -2267,7 +2286,7 @@ $("#loc").addEventListener("input",function(e){
  syncLocInput(v);
  render();
 });
-["gender","lang"].forEach(function(id){var el=$("#"+id);if(el)el.addEventListener("input",function(){S[id]=el.value;render();});});
+var langEl=$("#lang");if(langEl)langEl.addEventListener("change",function(){S.lang=langEl.value;setField("lang",S.lang);render();});
 [{id:"selInsurance",f:"insurance"},{id:"selSetting",f:"setting"}].forEach(function(x){
  var el=$("#"+x.id);if(!el)return;
  el.addEventListener("change",function(){
@@ -2278,7 +2297,7 @@ $("#loc").addEventListener("input",function(e){
  });
 });
 var selDisp=$("#selDispLoc");if(selDisp)selDisp.addEventListener("change",function(e){applyDispLoc(e.target.value);render();});
-$("#sudScore").addEventListener("input",function(e){S.sudScore=e.target.value;render();});
+var sudScoreEl=$("#sudScore");if(sudScoreEl)sudScoreEl.addEventListener("input",function(e){S.sudScore=e.target.value;render();});
 document.addEventListener("input",function(e){
  var p2=e.target.dataset.plan2,tx=e.target.dataset.text;
  if(p2){S.plan2[p2]=e.target.value;render();}
@@ -2363,6 +2382,7 @@ function render(){
  rev("#notCleared",S.cleared==="no");
  $("#zipMeta").textContent=locOk()?(function(){var c=patientCounty();if(!c)return "→ location noted — outside listed metros (national resources shown)";var cl=waCluster(c)||nyCluster(c)||upstateCluster(c)||wvCluster(c)||paCluster(c)||miCluster(c)||nvCluster(c)||catalogCluster(c);return "→ "+c+(cl?" · regional metro":"");}()):"";
  show("#L1",false);
+ show("#interpreterWrap",!!S.lang&&S.lang!=="English");
  // L2 reveals
  show("#quickSafety",isOutpatient());
  rev("#quickSafetyOk",isOutpatient()&&S.acuteConcern==="no");
@@ -3300,7 +3320,7 @@ function buildChartText(){
   "Main follow-up: "+(fu?fu.name:"—")+(fu&&fu.phone?" · "+fu.phone:""),
   "Warm handoff: "+(S.warm||"—"),
   "",
-  (hasSocialNeed()||S.socialCare.completed?"SOCIAL CARE PLAN\n"+(S.socialCare.completed?"Completed":"Flags only")+" · DV print: "+(S.socialCare.dvSafeToPrint?"yes":"discreet")+"\n":"")
+  (hasSocialNeed()||S.socialCare.completed?"SOCIAL CARE PLAN\n"+(S.socialCare.completed?"Completed":"Flags only")+" · DV print: "+(S.socialCare.dvSafeToPrint?"yes":"discreet")+"\n":"")+
   "NEAREST ED/PES: "+(ed?ed.name+" — "+ed.phone+(ed.address?" · "+ed.address:""):"— confirm with team"),
   "",
   "SELECTED REFERRALS ("+res.length+" — Clinical "+split.clinical.length+", Social "+split.social.length+")",
