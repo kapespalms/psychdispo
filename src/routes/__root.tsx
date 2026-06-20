@@ -127,11 +127,29 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+const TOOL_ROUTES = new Set(["/dispo", "/social-care", "/directory", "/emerg", "/reference"]);
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
   const path = router.state.location.pathname;
-  const hideShellHeader = path === "/" || path === "/sign-in" || path === "/sign-up";
+  const hideShellHeader =
+    path === "/" || path === "/sign-in" || path === "/sign-up" || TOOL_ROUTES.has(path);
+
+  useEffect(() => {
+    const onMessage = (event: MessageEvent) => {
+      const data = event.data as { type?: string; path?: string } | null;
+      if (data?.type !== "psychdispo-nav" || typeof data.path !== "string") return;
+      const [pathname, hash] = data.path.split("#");
+      if (!pathname.startsWith("/")) return;
+      router.navigate({
+        to: pathname as "/",
+        ...(hash ? { hash: `#${hash}` } : {}),
+      });
+    };
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
+  }, [router]);
 
   return (
     <QueryClientProvider client={queryClient}>
