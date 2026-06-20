@@ -3,7 +3,7 @@
 <title>PsychDispo — Psychiatric Disposition</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap');
-:root{--paper:#F4EFE5;--t:#2A43C0;--t2:#1b2f9c;--bg:var(--paper);--ink:#22202A;--mut:#6f6a5f;--faint:#9b9587;--line:#E6DECE;--card:#FFFDF8;--red:#B23A2E;--redbg:#fbeae8;--amber:#9A6A1E;--amberbg:#f7efdc;--good:#3C7A66;--goodbg:#e7f0ec;--terra:#BC5B3A;--req:#C05A44;--sage:#3C7A66;--gold:#9A7320;--serif:"Playfair Display",Georgia,"Times New Roman",serif;--sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;--mh-h:44px;--tabbar-h:42px;--statusbar-h:52px;--workflow-chrome:calc(var(--mh-h) + var(--tabbar-h) + var(--statusbar-h));}
+:root{--paper:#F4EFE5;--t:#2A43C0;--t2:#1b2f9c;--bg:var(--paper);--ink:#22202A;--mut:#6f6a5f;--faint:#9b9587;--line:#E6DECE;--card:#FFFDF8;--red:#B23A2E;--redbg:#fbeae8;--amber:#9A6A1E;--amberbg:#f7efdc;--good:#3C7A66;--goodbg:#e7f0ec;--terra:#BC5B3A;--req:#C05A44;--sage:#3C7A66;--gold:#9A7320;--serif:"Playfair Display",Georgia,"Times New Roman",serif;--sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;--mh-h:44px;--tabbar-h:42px;--statusbar-h:52px;--card-foot-h:58px;--workflow-chrome:calc(var(--mh-h) + var(--tabbar-h) + var(--statusbar-h));}
 *{box-sizing:border-box}
 body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased;padding-bottom:calc(var(--statusbar-h) + env(safe-area-inset-bottom,0px))}
 header{background:#fff;border-bottom:1px solid var(--line)}
@@ -291,7 +291,7 @@ body.embed .progress-sticky{top:0}
 .copy-toast{position:fixed;bottom:72px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:9px;font-size:13px;font-weight:600;z-index:50;opacity:0;pointer-events:none;transition:opacity .2s}
 .copy-toast.show{opacity:1}
 .save-overlay{position:fixed;inset:0;background:rgba(22,24,43,.45);z-index:60;display:flex;align-items:center;justify-content:center;padding:16px}
-.save-overlay.hidden{display:none}
+.save-overlay.hidden{display:none;pointer-events:none!important}
 .save-modal{background:#fff;border-radius:14px;border:1px solid var(--line);max-width:420px;width:100%;padding:22px 24px;box-shadow:0 8px 32px rgba(0,0,0,.12)}
 .save-modal h3{font-family:var(--serif);font-size:22px;margin:0 0 6px}
 .save-modal p{font-size:13px;color:var(--mut);margin:0 0 14px;line-height:1.45}
@@ -316,7 +316,7 @@ body.embed .progress-sticky{top:0}
 .ref-deeplink a:hover{text-decoration:underline}
 .warm-overlay{position:fixed;inset:0;background:rgba(22,24,43,.5);z-index:65;display:flex;align-items:flex-end;justify-content:center;padding:12px}
 @media(min-width:520px){.warm-overlay{align-items:center;padding:16px}}
-.warm-overlay.hidden{display:none}
+.warm-overlay.hidden{display:none;pointer-events:none!important}
 .warm-modal{background:#fff;border-radius:16px 16px 0 0;border:1px solid var(--line);max-width:440px;width:100%;padding:20px 18px 24px;box-shadow:0 -4px 28px rgba(0,0,0,.15);max-height:92vh;overflow-y:auto}
 @media(min-width:520px){.warm-modal{border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.12)}}
 .warm-modal h3{font-family:var(--serif);font-size:22px;margin:0 0 4px}
@@ -381,8 +381,9 @@ body.embed .progress-sticky{top:0}
 .pkfoot{margin-top:10px;font-size:10px;color:var(--mut);border-top:1px solid var(--line);padding-top:6px;display:flex;justify-content:space-between}
 .lines div{border-bottom:1px solid #cdd6d5;height:1.7em}
 body.embed .mh-top,body.embed .hero,body.embed .tabbar{display:none!important}
-body.embed{--mh-h:0px;--tabbar-h:0px;--workflow-chrome:var(--statusbar-h);padding-bottom:0}
+body.embed{--mh-h:0px;--tabbar-h:0px;--workflow-chrome:var(--statusbar-h);padding-bottom:calc(var(--statusbar-h) + env(safe-area-inset-bottom,0px))}
 body.embed .wrap{padding-bottom:12px}
+#pathwayFork.hidden,#slideShell.hidden{display:none!important;pointer-events:none!important;visibility:hidden!important}
 .pathway-fork{padding:12px 18px 4px;min-height:0}
 .pathway-head{text-align:center;margin-bottom:10px}
 .pathway-head .ptitle{font-family:var(--serif);font-weight:700;font-size:22px;letter-spacing:-.2px;margin:0 0 4px;line-height:1.1}
@@ -390,7 +391,7 @@ body.embed .wrap{padding-bottom:12px}
 .gate-auto-note{font-size:13px;color:var(--mut);background:#f7f8fc;border:1px solid var(--line);border-radius:9px;padding:10px 14px;margin:0 0 16px;line-height:1.45}
 .pathway-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media(max-width:680px){.pathway-cards{grid-template-columns:1fr}.pathway-fork{padding:12px 14px 4px}}
-.pathway-card{text-align:left;border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:#fff;cursor:pointer;font-family:inherit;color:inherit;transition:border-color .15s,box-shadow .15s}
+.pathway-card{text-align:left;border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:#fff;cursor:pointer;font-family:inherit;color:inherit;transition:border-color .15s,box-shadow .15s;touch-action:manipulation;-webkit-tap-highlight-color:rgba(38,64,200,.18);position:relative;z-index:1}
 .pathway-card:hover{border-color:var(--t);box-shadow:0 2px 8px rgba(42,67,192,.08)}
 .pathway-card.ed{border-left:4px solid var(--t)}
 .pathway-card.op{border-left:4px solid var(--sage)}
@@ -486,14 +487,16 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){display:flex;flex-direction:column;height:calc(100dvh - var(--workflow-chrome) - 12px);min-height:min(360px,calc(100dvh - var(--workflow-chrome) - 12px));max-height:calc(100dvh - var(--workflow-chrome) - 12px);overflow:hidden;margin-bottom:4px}
 #view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .workflow-body,
 #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)) .workflow-body{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
-#view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)) #pathwayFork{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
-#view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .slide-shell{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
-#view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .slide-track{flex:1;min-height:0;align-items:stretch;display:flex}
-.slide-panel{display:flex;flex-direction:column;flex:0 0 100%;min-width:100%;align-self:stretch;height:100%;min-height:min(320px,calc(100dvh - var(--workflow-chrome) - 72px));max-height:calc(100dvh - var(--workflow-chrome) - 72px);overflow:hidden;padding:0 12px;box-sizing:border-box}
-.slide-panel>.float-card,.slide-panel>.layer{flex:1 1 auto;display:flex;flex-direction:column;overflow:hidden;padding:6px 12px 0;margin:0;min-height:0}
+#view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)) #pathwayFork{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--statusbar-h) + 8px);pointer-events:auto}
+#view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .slide-shell{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;position:relative;pointer-events:auto}
+#view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .slide-track{flex:1;min-height:0;align-items:stretch;display:flex;width:100%;touch-action:pan-y}
+.slide-panel{display:flex;flex-direction:column;flex:0 0 100%;width:100%;min-width:100%;align-self:stretch;height:100%;min-height:0;max-height:100%;overflow:hidden;padding:0 12px;box-sizing:border-box;pointer-events:none}
+.slide-panel.is-active{pointer-events:auto}
+.slide-panel>.float-card,.slide-panel>.layer{flex:1 1 auto;display:flex;flex-direction:column;overflow:hidden;padding:6px 12px 0;margin:0;min-height:0;pointer-events:auto}
 .slide-panel>.float-card{border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:0 1px 3px rgba(34,32,42,.06)}
 .slide-panel .step-kicker,.slide-panel .step-head{flex-shrink:0}
-.slide-panel .slide-body,.slide-panel .card-body{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable}
+.slide-panel .slide-body,.slide-panel .card-body{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;touch-action:pan-y;padding-bottom:calc(var(--card-foot-h) + 8px)}
+@media(min-width:681px){.slide-panel .slide-body,.slide-panel .card-body{padding-bottom:calc(var(--statusbar-h) + 16px)}}
 .slide-panel .plan-compact-head{flex-shrink:0}
 .step-kicker{margin-bottom:0;padding-top:2px}
 .step-head{padding-bottom:2px}
@@ -540,9 +543,9 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 @media(max-width:680px){
  #view-tool .workflow-sheet:has(#slideShell:not(.hidden)),
  #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){height:calc(100dvh - var(--workflow-chrome) - 8px);min-height:min(320px,calc(100dvh - var(--workflow-chrome) - 8px));max-height:calc(100dvh - var(--workflow-chrome) - 8px)}
- .slide-panel{min-height:min(280px,calc(100dvh - var(--workflow-chrome) - 64px));max-height:calc(100dvh - var(--workflow-chrome) - 64px)}
+ .slide-panel .slide-body,.slide-panel .card-body{padding-bottom:calc(var(--card-foot-h) + env(safe-area-inset-bottom,0px) + 8px)}
  body:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:calc(var(--mh-h) + var(--tabbar-h));padding-bottom:env(safe-area-inset-bottom,0px)}
- body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px}
+ body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;padding-bottom:env(safe-area-inset-bottom,0px)}
  #view-tool:has(#slideShell:not(.hidden)) .statusbar{display:none!important}
  .step-head .ltitle{font-size:19px}
  .gate-auto-note,.intake-divider .sub2,#zipMeta,.pop-col .sub2,.ref-deeplink,.collab-banner{display:none!important}
@@ -2130,6 +2133,7 @@ function renderSlide(){
   track.style.transform="translateX(-"+step*100+"%)";
   track.classList.toggle("slide-back",!!S._slideBack);
   S._slideBack=false;
+  $$(".slide-panel",track).forEach(function(p,i){p.classList.toggle("is-active",i===step);});
  }
  if(shell)shell.classList.toggle("hidden",!S.pathway);
  if(sticky)sticky.classList.toggle("hidden",!S.pathway);

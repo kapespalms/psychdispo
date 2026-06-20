@@ -63,13 +63,13 @@ export function ToolFrame({ src, title, showPhiBanner }: ToolFrameProps) {
   }, [user, src, supabaseEnabled]);
 
   return (
-    <div className="flex flex-col h-screen min-h-0 bg-[#f6f6f3]">
+    <div className="flex flex-col h-[100dvh] min-h-0 overflow-hidden bg-[#f6f6f3]">
       {showPhiBanner && <PhiBanner />}
       <iframe
         ref={iframeRef}
         src={src}
         title={title}
-        className="flex-1 w-full h-full border-0 min-h-0"
+        className="flex-1 w-full border-0 min-h-[280px]"
       />
     </div>
   );
