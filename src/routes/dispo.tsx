@@ -27,5 +27,11 @@ function DispoPage() {
   if (template) params.set("template", "1");
   if (fresh) params.set("fresh", "1");
   const src = `/psychdispo.html?${params.toString()}#plan`;
-  return <ToolFrame src={src} title="Psych Dispo — disposition workflow" />;
+  return (
+    <ToolFrame
+      src={src}
+      title="Psych Dispo — disposition workflow"
+      showPhiBanner
+    />
+  );
 }

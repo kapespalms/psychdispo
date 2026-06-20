@@ -22,6 +22,7 @@ import { Route as DispoRouteImport } from './routes/dispo'
 import { Route as DirectoryRouteImport } from './routes/directory'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as AppIntakePsychiatryRouteImport } from './routes/app/intake/psychiatry'
 
 const WorkflowRoute = WorkflowRouteImport.update({
@@ -89,6 +90,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppIntakePsychiatryRoute = AppIntakePsychiatryRouteImport.update({
   id: '/app/intake/psychiatry',
   path: '/app/intake/psychiatry',
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/social-care': typeof SocialCareRoute
   '/social-ref': typeof SocialRefRoute
   '/workflow': typeof WorkflowRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/app/intake/psychiatry': typeof AppIntakePsychiatryRoute
 }
 export interface FileRoutesByTo {
@@ -125,6 +132,7 @@ export interface FileRoutesByTo {
   '/social-care': typeof SocialCareRoute
   '/social-ref': typeof SocialRefRoute
   '/workflow': typeof WorkflowRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/app/intake/psychiatry': typeof AppIntakePsychiatryRoute
 }
 export interface FileRoutesById {
@@ -142,6 +150,7 @@ export interface FileRoutesById {
   '/social-care': typeof SocialCareRoute
   '/social-ref': typeof SocialRefRoute
   '/workflow': typeof WorkflowRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/app/intake/psychiatry': typeof AppIntakePsychiatryRoute
 }
 export interface FileRouteTypes {
@@ -160,6 +169,7 @@ export interface FileRouteTypes {
     | '/social-care'
     | '/social-ref'
     | '/workflow'
+    | '/auth/callback'
     | '/app/intake/psychiatry'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
     | '/social-care'
     | '/social-ref'
     | '/workflow'
+    | '/auth/callback'
     | '/app/intake/psychiatry'
   id:
     | '__root__'
@@ -192,6 +203,7 @@ export interface FileRouteTypes {
     | '/social-care'
     | '/social-ref'
     | '/workflow'
+    | '/auth/callback'
     | '/app/intake/psychiatry'
   fileRoutesById: FileRoutesById
 }
@@ -209,6 +221,7 @@ export interface RootRouteChildren {
   SocialCareRoute: typeof SocialCareRoute
   SocialRefRoute: typeof SocialRefRoute
   WorkflowRoute: typeof WorkflowRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
   AppIntakePsychiatryRoute: typeof AppIntakePsychiatryRoute
 }
 
@@ -305,6 +318,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app/intake/psychiatry': {
       id: '/app/intake/psychiatry'
       path: '/app/intake/psychiatry'
@@ -329,6 +349,7 @@ const rootRouteChildren: RootRouteChildren = {
   SocialCareRoute: SocialCareRoute,
   SocialRefRoute: SocialRefRoute,
   WorkflowRoute: WorkflowRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
   AppIntakePsychiatryRoute: AppIntakePsychiatryRoute,
 }
 export const routeTree = rootRouteImport

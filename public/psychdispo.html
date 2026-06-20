@@ -3545,22 +3545,29 @@ function readTemplates(email){
 function writeTemplates(email,list){localStorage.setItem(templatesStorageKey(email),JSON.stringify(list));}
 function scaffoldFromState(s){
  var sc=JSON.parse(JSON.stringify(s));
+ sc.city="";sc.zip="";
  sc.plan2={fuDate:"",fuTime:""};
  sc.apptScheduled=null;sc.warm=null;sc.fuReferralId=null;sc.refMethod=null;sc.refSheet=null;
+ sc.callback=null;sc.pcp=null;sc.pharmacy=null;
  sc.erOverride="";sc.clinicianAttested=false;sc.acknowledgeHighFkgl=false;
- sc.socialCare=Object.assign({},sc.socialCare||{},{initials:"",completed:false,promptDismissed:false});
- if(sc.socialCare)sc.socialCare.initials="";
+ sc.firearmOther="";sc.medsOther="";sc.otherMeansOther="";
+ sc.socialCare=Object.assign({},sc.socialCare||{},{initials:"",completed:false,promptDismissed:false,contextLine:"Recently seen for a mental health visit, medically cleared."});
  return sc;
 }
 function saveTemplate(name){
- var user=readSessionUser();
- var key=user&&user.email?user.email:"guest";
  var trimmed=(name||"").trim()||"Untitled template";
- var list=readTemplates(key);
  var now=new Date().toISOString();
  var id=crypto.randomUUID?crypto.randomUUID():String(Date.now());
- list.push({id,name:trimmed,type:S.dispo==="community"?"clinical":"clinical",scaffold:scaffoldFromState(S),updatedAt:now});
+ var scaffold=scaffoldFromState(S);
+ var record={id,name:trimmed,type:S.dispo==="community"?"clinical":"clinical",scaffold,updatedAt:now};
+ var user=readSessionUser();
+ var key=user&&user.email?user.email:"guest";
+ var list=readTemplates(key);
+ list.push(record);
  writeTemplates(key,list);
+ if(document.body.classList.contains("embed")&&user){
+  try{window.parent.postMessage({type:"psychdispo-save-template",template:record},"*");}catch(e){}
+ }
  return id;
 }
 function showSaveTemplateDialog(){
@@ -3909,5 +3916,16 @@ document.addEventListener("click",function(e){
 });
 
 render();
+window.addEventListener("message",function(e){
+ var d=e.data;
+ if(!d||d.type!=="psychdispo-auth")return;
+ if(d.user){
+  try{localStorage.setItem(SESSION_KEY,JSON.stringify({id:d.user.id,email:d.user.email,name:d.user.name,createdAt:d.user.createdAt||new Date().toISOString()}));}catch(err){}
+  applyUserDefaults();
+ }else{
+  try{localStorage.removeItem(SESSION_KEY);}catch(err2){}
+ }
+ updateSavePlanBtn();
+});
 </script>
 </body></html>

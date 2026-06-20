@@ -11,29 +11,45 @@ export const Route = createFileRoute("/sign-in")({
 });
 
 function SignInPage() {
-  const { signIn } = useAuth();
+  const { signInWithMagicLink, signInWithGoogle, signInDemo, supabaseEnabled } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  function handleMagicLink(e: React.FormEvent) {
+  async function handleMagicLink(e: React.FormEvent) {
     e.preventDefault();
     setError("");
     if (!email.trim()) {
       setError("Enter your work email.");
       return;
     }
-    setSent(true);
-  }
-
-  function handleGoogle() {
-    const result = signIn(email || "guest@psychdispo.local", "demo");
+    setLoading(true);
+    const result = await signInWithMagicLink(email);
+    setLoading(false);
     if (!result.ok) {
       setError(result.error);
       return;
     }
-    navigate({ to: "/dispo" });
+    setSent(true);
+  }
+
+  async function handleGoogle() {
+    setError("");
+    if (!supabaseEnabled) {
+      const result = signInDemo(email || "guest@psychdispo.local");
+      if (!result.ok) {
+        setError(result.error);
+        return;
+      }
+      navigate({ to: "/dispo" });
+      return;
+    }
+    setLoading(true);
+    const result = await signInWithGoogle();
+    setLoading(false);
+    if (!result.ok) setError(result.error);
   }
 
   return (
@@ -88,19 +104,27 @@ function SignInPage() {
               {error}
             </p>
           )}
+          {!supabaseEnabled && (
+            <p className="text-xs text-[#9b9587] leading-relaxed">
+              Cloud sign-in is not configured — magic link requires Supabase env keys. Google uses
+              demo mode on this device.
+            </p>
+          )}
           <button
             type="submit"
-            className="w-full py-3 bg-[#2A43C0] text-white text-sm font-semibold rounded-[11px] hover:bg-[#1b2f9c] transition-colors"
+            disabled={loading || !supabaseEnabled}
+            className="w-full py-3 bg-[#2A43C0] text-white text-sm font-semibold rounded-[11px] hover:bg-[#1b2f9c] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Email me a sign-in link
+            {loading ? "Sending…" : "Email me a sign-in link"}
           </button>
           <div className="text-center text-xs text-[#9b9587]">or</div>
           <button
             type="button"
             onClick={handleGoogle}
-            className="w-full py-3 border border-[#E6DECE] bg-white text-sm font-semibold rounded-[10px] hover:bg-[#fbf7ee] transition-colors"
+            disabled={loading}
+            className="w-full py-3 border border-[#E6DECE] bg-white text-sm font-semibold rounded-[10px] hover:bg-[#fbf7ee] transition-colors disabled:opacity-50"
           >
-            Continue with Google
+            {supabaseEnabled ? "Continue with Google" : "Continue with Google (demo)"}
           </button>
         </form>
       )}

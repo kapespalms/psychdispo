@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 import { SiteHeader } from "@/components/site-header";
+import { useIframeTemplateSync } from "@/components/tool-frame";
 import { AuthProvider } from "@/lib/auth";
 
 import appCss from "../styles.css?url";
@@ -141,7 +142,13 @@ function RootComponent() {
   const router = useRouter();
   const path = router.state.location.pathname;
   const hideShellHeader =
-    path === "/" || path === "/sign-in" || path === "/sign-up" || TOOL_ROUTES.has(path);
+    path === "/" ||
+    path === "/sign-in" ||
+    path === "/sign-up" ||
+    path === "/auth/callback" ||
+    TOOL_ROUTES.has(path);
+
+  useIframeTemplateSync();
 
   useEffect(() => {
     const onMessage = (event: MessageEvent) => {

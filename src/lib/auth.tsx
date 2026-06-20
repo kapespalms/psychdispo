@@ -7,6 +7,16 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import type { Session, User } from "@supabase/supabase-js";
+import {
+  GUEST_TEMPLATES_KEY,
+  listTemplates,
+  templatesStorageKey,
+  writeTemplatesList,
+  type PlanTemplate,
+} from "@/lib/templates";
+import { saveCloudTemplate } from "@/lib/cloud-library";
+import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 
 export type ClinicianUser = {
   id: string;
@@ -20,46 +30,17 @@ const USERS_KEY = "psychdispo-clinician-users";
 
 type AuthContextValue = {
   user: ClinicianUser | null;
+  session: Session | null;
   ready: boolean;
-  signIn: (email: string, password: string) => { ok: true } | { ok: false; error: string };
-  signUp: (
-    name: string,
-    email: string,
-    password: string,
-  ) => { ok: true } | { ok: false; error: string };
-  signOut: () => void;
+  supabaseEnabled: boolean;
+  signInWithMagicLink: (email: string) => Promise<{ ok: true } | { ok: false; error: string }>;
+  signInWithGoogle: () => Promise<{ ok: true } | { ok: false; error: string }>;
+  /** Demo localStorage sign-in when Supabase is not configured */
+  signInDemo: (email: string) => { ok: true } | { ok: false; error: string };
+  signOut: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
-
-function readUsers(): Record<string, { name: string; password: string; createdAt: string }> {
-  if (typeof window === "undefined") return {};
-  try {
-    const raw = localStorage.getItem(USERS_KEY);
-    return raw ? JSON.parse(raw) : {};
-  } catch {
-    return {};
-  }
-}
-
-function writeUsers(users: Record<string, { name: string; password: string; createdAt: string }>) {
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
-}
-
-function readSession(): ClinicianUser | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = localStorage.getItem(SESSION_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
-}
-
-function writeSession(user: ClinicianUser | null) {
-  if (user) localStorage.setItem(SESSION_KEY, JSON.stringify(user));
-  else localStorage.removeItem(SESSION_KEY);
-}
 
 function normalizeEmail(email: string) {
   return email.trim().toLowerCase();
@@ -69,74 +50,192 @@ function isValidEmail(email: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
+function userFromSupabase(user: User): ClinicianUser {
+  const meta = user.user_metadata ?? {};
+  const name =
+    (typeof meta.full_name === "string" && meta.full_name) ||
+    (typeof meta.name === "string" && meta.name) ||
+    user.email?.split("@")[0] ||
+    "Clinician";
+  return {
+    id: user.id,
+    email: user.email ?? "",
+    name,
+    createdAt: user.created_at ?? new Date().toISOString(),
+  };
+}
+
+function writeSession(user: ClinicianUser | null) {
+  if (typeof window === "undefined") return;
+  if (user) localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+  else localStorage.removeItem(SESSION_KEY);
+}
+
+function readDemoUsers(): Record<string, { name: string; password: string; createdAt: string }> {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = localStorage.getItem(USERS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+async function migrateGuestTemplates(email: string, userId: string) {
+  if (typeof window === "undefined") return;
+  const guest = listTemplates();
+  if (guest.length === 0) return;
+
+  if (isSupabaseConfigured() && supabase) {
+    for (const t of guest) {
+      try {
+        await saveCloudTemplate(t.name, t.scaffold);
+      } catch {
+        /* keep local copy if cloud fails */
+      }
+    }
+    localStorage.removeItem(GUEST_TEMPLATES_KEY);
+    return;
+  }
+
+  const key = templatesStorageKey(email);
+  const existing = listTemplates(email);
+  writeTemplatesList(email, [...existing, ...guest]);
+  localStorage.removeItem(GUEST_TEMPLATES_KEY);
+}
+
+async function syncSupabaseSession(session: Session | null) {
+  if (!session?.user) {
+    writeSession(null);
+    return null;
+  }
+  const clinician = userFromSupabase(session.user);
+  writeSession(clinician);
+  await migrateGuestTemplates(clinician.email, clinician.id);
+  return clinician;
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<ClinicianUser | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [ready, setReady] = useState(false);
+  const supabaseEnabled = isSupabaseConfigured();
 
   useEffect(() => {
-    setUser(readSession());
-    setReady(true);
+    if (!supabase) {
+      try {
+        const raw = localStorage.getItem(SESSION_KEY);
+        setUser(raw ? JSON.parse(raw) : null);
+      } catch {
+        setUser(null);
+      }
+      setReady(true);
+      return;
+    }
+
+    let cancelled = false;
+
+    supabase.auth.getSession().then(({ data: { session: initial } }) => {
+      if (cancelled) return;
+      setSession(initial);
+      syncSupabaseSession(initial).then((clinician) => {
+        if (!cancelled) setUser(clinician);
+        if (!cancelled) setReady(true);
+      });
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      setSession(nextSession);
+      syncSupabaseSession(nextSession).then((clinician) => setUser(clinician));
+    });
+
+    return () => {
+      cancelled = true;
+      subscription.unsubscribe();
+    };
   }, []);
 
-  const signIn = useCallback((email: string, password: string) => {
+  const signInWithMagicLink = useCallback(async (email: string) => {
     const normalized = normalizeEmail(email);
     if (!isValidEmail(normalized)) return { ok: false as const, error: "Enter a valid email." };
-    if (!password) return { ok: false as const, error: "Enter your password." };
+    if (!supabase) {
+      return {
+        ok: false as const,
+        error: "Cloud sign-in is not configured. Continue as guest or add Supabase keys.",
+      };
+    }
+    const redirectTo = `${window.location.origin}/auth/callback`;
+    const { error } = await supabase.auth.signInWithOtp({
+      email: normalized,
+      options: { emailRedirectTo: redirectTo },
+    });
+    if (error) return { ok: false as const, error: error.message };
+    return { ok: true as const };
+  }, []);
 
-    const users = readUsers();
+  const signInWithGoogle = useCallback(async () => {
+    if (!supabase) {
+      return {
+        ok: false as const,
+        error: "Google sign-in requires Supabase. Use guest mode or configure env keys.",
+      };
+    }
+    const redirectTo = `${window.location.origin}/auth/callback`;
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo },
+    });
+    if (error) return { ok: false as const, error: error.message };
+    return { ok: true as const };
+  }, []);
+
+  const signInDemo = useCallback((email: string) => {
+    const normalized = normalizeEmail(email || "guest@psychdispo.local");
+    if (!isValidEmail(normalized)) return { ok: false as const, error: "Enter a valid email." };
+    const users = readDemoUsers();
     const record = users[normalized];
-    if (!record || record.password !== password) {
-      return { ok: false as const, error: "Email or password is incorrect." };
-    }
-
     const session: ClinicianUser = {
       id: normalized,
       email: normalized,
-      name: record.name,
-      createdAt: record.createdAt,
+      name: record?.name ?? normalized.split("@")[0],
+      createdAt: record?.createdAt ?? new Date().toISOString(),
     };
     writeSession(session);
     setUser(session);
+    migrateGuestTemplates(session.email, session.id);
     return { ok: true as const };
   }, []);
 
-  const signUp = useCallback((name: string, email: string, password: string) => {
-    const trimmedName = name.trim();
-    const normalized = normalizeEmail(email);
-    if (!trimmedName) return { ok: false as const, error: "Enter your name." };
-    if (!isValidEmail(normalized)) return { ok: false as const, error: "Enter a valid email." };
-    if (password.length < 8) {
-      return { ok: false as const, error: "Password must be at least 8 characters." };
-    }
-
-    const users = readUsers();
-    if (users[normalized]) {
-      return { ok: false as const, error: "An account with this email already exists." };
-    }
-
-    const createdAt = new Date().toISOString();
-    users[normalized] = { name: trimmedName, password, createdAt };
-    writeUsers(users);
-
-    const session: ClinicianUser = {
-      id: normalized,
-      email: normalized,
-      name: trimmedName,
-      createdAt,
-    };
-    writeSession(session);
-    setUser(session);
-    return { ok: true as const };
-  }, []);
-
-  const signOut = useCallback(() => {
+  const signOut = useCallback(async () => {
+    if (supabase) await supabase.auth.signOut();
     writeSession(null);
     setUser(null);
+    setSession(null);
   }, []);
 
   const value = useMemo(
-    () => ({ user, ready, signIn, signUp, signOut }),
-    [user, ready, signIn, signUp, signOut],
+    () => ({
+      user,
+      session,
+      ready,
+      supabaseEnabled,
+      signInWithMagicLink,
+      signInWithGoogle,
+      signInDemo,
+      signOut,
+    }),
+    [
+      user,
+      session,
+      ready,
+      supabaseEnabled,
+      signInWithMagicLink,
+      signInWithGoogle,
+      signInDemo,
+      signOut,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -34,6 +34,32 @@ export function listTemplates(email?: string): PlanTemplate[] {
   );
 }
 
+export function writeTemplatesList(email: string, list: PlanTemplate[]) {
+  localStorage.setItem(templatesStorageKey(email), JSON.stringify(list));
+}
+
+export function saveLocalTemplate(
+  email: string | undefined,
+  name: string,
+  scaffold: Record<string, unknown>,
+  type = "clinical",
+): PlanTemplate {
+  const key = email ? templatesStorageKey(email) : GUEST_TEMPLATES_KEY;
+  const list = readJson<PlanTemplate[]>(key, []);
+  const trimmed = name.trim() || "Untitled template";
+  const now = new Date().toISOString();
+  const record: PlanTemplate = {
+    id: crypto.randomUUID(),
+    name: trimmed,
+    type,
+    scaffold,
+    updatedAt: now,
+  };
+  list.push(record);
+  localStorage.setItem(key, JSON.stringify(list));
+  return record;
+}
+
 export function deleteTemplate(email: string, id: string) {
   const key = templatesStorageKey(email);
   const list = readJson<PlanTemplate[]>(key, []);
