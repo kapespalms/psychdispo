@@ -42,3 +42,16 @@ export function deleteTemplate(email: string, id: string) {
     JSON.stringify(list.filter((t) => t.id !== id)),
   );
 }
+
+export function getTemplate(email: string, id: string): PlanTemplate | null {
+  return listTemplates(email).find((t) => t.id === id) ?? null;
+}
+
+/** Write scaffold-only state for psychdispo.html to load on /dispo?template=1 */
+export function applyTemplateToGuestDraft(scaffold: Record<string, unknown>) {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(
+    "psychdispo-plan-v1",
+    JSON.stringify({ S: scaffold, savedAt: new Date().toISOString() }),
+  );
+}

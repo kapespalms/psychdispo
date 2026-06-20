@@ -2,7 +2,12 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { deletePlan, listPlans, planMeta, resumePlanToGuestDraft, type SavedPlan } from "@/lib/plans";
-import { deleteTemplate, listTemplates, type PlanTemplate } from "@/lib/templates";
+import {
+  applyTemplateToGuestDraft,
+  deleteTemplate,
+  listTemplates,
+  type PlanTemplate,
+} from "@/lib/templates";
 
 export const Route = createFileRoute("/plans")({
   head: () => ({
@@ -52,6 +57,11 @@ function PlansPage() {
     refresh();
   }
 
+  function handleUseTemplate(template: PlanTemplate) {
+    applyTemplateToGuestDraft(template.scaffold);
+    navigate({ to: "/dispo", search: { template: "1" } });
+  }
+
   if (!ready || !user) {
     return (
       <div className="min-h-[50vh] flex items-center justify-center text-sm text-muted-foreground">
@@ -75,6 +85,7 @@ function PlansPage() {
           </div>
           <Link
             to="/dispo"
+            search={{ fresh: "1" }}
             className="shrink-0 text-sm font-medium text-[#2640C8] hover:underline pt-1"
           >
             New plan →
@@ -89,6 +100,7 @@ function PlansPage() {
             </p>
             <Link
               to="/dispo"
+              search={{ fresh: "1" }}
               className="inline-block mt-6 px-5 py-2.5 bg-[#2640C8] text-white text-sm font-semibold hover:bg-[#1b2f9c] transition-colors"
             >
               Start a plan
@@ -175,13 +187,22 @@ function PlansPage() {
                         {t.type} · edited {date}
                       </p>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteTemplate(t.id)}
-                      className="px-3 py-1.5 text-sm text-muted-foreground border border-border hover:text-destructive"
-                    >
-                      Delete
-                    </button>
+                    <div className="flex gap-2 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => handleUseTemplate(t)}
+                        className="px-4 py-2 text-sm font-semibold bg-[#2640C8] text-white hover:bg-[#1b2f9c] transition-colors"
+                      >
+                        Use template
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteTemplate(t.id)}
+                        className="px-3 py-1.5 text-sm text-muted-foreground border border-border hover:text-destructive"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </li>
                 );
               })}
