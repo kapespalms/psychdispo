@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PsychDispo — prototype</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+@page { size: 1100px 6700px; margin: 0; }
+:root{
+  --paper:#F4EFE5; --card:#FFFDF8; --ink:#22202A; --mut:#6f6a5f; --faint:#9b9587; --line:#E6DECE;
+  --blue:#2A43C0; --terra:#BC5B3A; --sage:#3C7A66; --gold:#9A7320; --red:#B23A2E; --amber:#9A6A1E;
+  --serif:"Playfair Display",Georgia,serif; --sans:"Inter",system-ui,Arial,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5}
+a{color:inherit;text-decoration:none;cursor:pointer}
+.cap{font-family:var(--serif);font-style:italic;color:var(--faint);font-size:12.5px;max-width:1000px;margin:22px auto 6px;padding:0 28px}
+[data-screen]{border-top:1px dashed #d8cfbb}
+
+/* masthead + nav */
+.mast{background:var(--card);border-bottom:1px solid var(--line)}
+.mast .row{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:20px;padding:15px 28px}
+.wm{font-family:var(--serif);font-weight:700;font-size:23px}.wm i{font-style:normal;color:var(--blue)}
+.mast .tagline{font-family:var(--serif);font-style:italic;font-size:13.5px;color:var(--mut);margin:0 auto}
+.mast .tagline b{font-style:normal;font-weight:600;color:var(--terra);letter-spacing:.13em;font-size:11px;text-transform:uppercase}
+.mast .signin{font-size:12px;letter-spacing:.13em;text-transform:uppercase;font-weight:600;color:var(--blue)}
+.nav{background:var(--card);border-bottom:1px solid var(--line)}
+.nav .row{max-width:1000px;margin:0 auto;display:flex;gap:30px;padding:0 28px}
+.tab{padding:13px 2px;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--mut);font-weight:600;border-bottom:2px solid transparent}
+.tab.on{color:var(--blue);border-bottom-color:var(--blue)}
+.wrap{max-width:1000px;margin:0 auto;padding:28px}
+
+/* landing */
+.hero{display:flex;min-height:560px}
+.door{flex:1;padding:60px 50px;display:flex;flex-direction:column;justify-content:center}
+.door.plan{background:var(--paper)}
+.door.ref{background:#1b1f3a;color:#efe9dc}
+.door .eye{font-size:11px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;margin-bottom:14px}
+.door.plan .eye{color:var(--terra)} .door.ref .eye{color:#b9a36e}
+.door h2{font-family:var(--serif);font-weight:700;font-size:46px;line-height:1.02;margin:0 0 14px;letter-spacing:-.5px}
+.door.ref h2 i{font-style:italic;color:#cdd9ff}
+.door p{font-size:15px;line-height:1.6;max-width:340px;margin:0 0 28px}
+.door.plan p{color:var(--mut)} .door.ref p{color:#c8c2b2}
+.enter{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:600}
+.door.plan .enter{color:var(--blue)} .door.ref .enter{color:#cdd9ff}
+.divider{width:1px;background:var(--line)}
+.landfoot{text-align:center;font-size:12px;color:var(--faint);padding:18px;background:var(--card);border-top:1px solid var(--line)}
+
+/* sheet + spine + headings */
+.sheet{background:var(--card);border:1px solid var(--line);border-radius:5px;overflow:hidden}
+.spine{display:flex;gap:6px;padding:14px 34px 0}
+.seg{flex:1}.seg .bar{height:4px;border-radius:2px;background:#e8e0d0}
+.seg.done .bar{background:var(--sage)}.seg.now .bar{background:var(--blue)}
+.seg .t{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:600;margin-top:7px}
+.seg.now .t{color:var(--blue)}.seg.done .t{color:var(--sage)}
+.body{padding:24px 34px 30px}
+.kicker{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.kicker .num{font-family:var(--serif);font-size:13px;color:var(--terra);font-weight:600}
+.kicker .lbl{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);font-weight:600}
+.kicker .ln{flex:1;height:1px;background:var(--line)}
+h1{font-family:var(--serif);font-weight:700;font-size:33px;letter-spacing:-.3px;margin:2px 0 5px}
+.lede{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--mut);margin:0 0 20px}
+.next{margin-top:22px;display:flex;justify-content:flex-end}
+.cta{background:var(--blue);color:#fff;border:none;border-radius:11px;padding:12px 26px;font-size:14px;font-weight:600;letter-spacing:.01em}
+.ghostcta{background:#fff;border:1px solid var(--line);color:var(--mut);border-radius:11px;padding:12px 20px;font-size:14px;font-weight:600;margin-right:auto}
+
+/* fields */
+.legend{display:flex;align-items:center;gap:18px;border:1px solid var(--line);background:#fbf7ee;border-radius:8px;padding:9px 16px;margin-bottom:22px;font-size:12.5px}
+.legend .it{display:flex;align-items:center;gap:7px;color:var(--mut)}
+.sq{width:9px;height:9px;border-radius:2px}.sq.need{background:var(--terra)}.sq.done{background:var(--sage)}
+.legend .cnt{margin-left:auto;font-family:var(--serif);font-style:italic;color:var(--mut)}
+.grid{font-size:0}
+.field{display:inline-block;width:46%;vertical-align:top;margin:0 2% 24px;font-size:15px}
+.field.full{width:96%}
+.label{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);font-weight:600;margin-bottom:9px}
+.req{width:9px;height:9px;border-radius:2px}.req.need{background:var(--terra)}.req.done{background:var(--sage)}
+.opt{font-style:italic;text-transform:none;letter-spacing:0;color:var(--faint);font-weight:400;font-size:12px;font-family:var(--serif)}
+.pills{display:flex;gap:10px;flex-wrap:wrap}
+.pill{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:500;min-width:74px;text-align:center}
+.pill.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.pill.warn.on{background:var(--amber);border-color:var(--amber)}
+.pill.danger.on{background:var(--red);border-color:var(--red)}
+select,input[type=text]{width:100%;font-family:inherit;font-size:14px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px 14px}
+.help{font-family:var(--serif);font-style:italic;font-size:12.5px;color:var(--faint);margin-top:8px;line-height:1.5}
+.sub2{font-size:11px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;color:var(--mut);border-top:1px solid var(--line);padding-top:14px;margin:6px 0 12px}
+.alert{border-radius:10px;padding:11px 15px;font-size:13px;margin:6px 0 0}
+.alert.red{background:#fbeae8;border:1px solid #eccac4;border-left:4px solid var(--red);color:#7c241b}
+.alert.amber{background:#f7efdc;border:1px solid #e7d6ab;border-left:4px solid var(--amber);color:#6e4d12}
+
+/* referrals clippings */
+.tray{border:1px solid var(--line);background:#fbf7ee;border-radius:10px;padding:12px 16px;margin-bottom:16px}
+.tray .h{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--mut);font-weight:600;margin-bottom:8px}
+.trow{display:flex;align-items:center;gap:10px;font-size:13.5px;padding:5px 0;border-bottom:1px solid #efe7d8}.trow:last-child{border-bottom:none}
+.tnum{width:20px;height:20px;border-radius:50%;background:var(--blue);color:#fff;font-size:11px;font-weight:600;display:inline-flex;align-items:center;justify-content:center}
+.trow .nm{font-weight:500}.trow .ph{margin-left:auto;color:var(--blue);font-weight:600}
+.subhdr{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--mut);font-weight:600;margin:16px 0 10px}
+.clips{font-size:0}
+.clip{display:inline-block;width:46%;vertical-align:top;margin:0 2% 16px;font-size:14px;background:#fff;border:1px solid var(--line);border-left-width:3px;border-radius:8px;padding:13px 15px}
+.clip.crisis{border-left-color:var(--red)}.clip.clinical{border-left-color:var(--blue)}.clip.sud{border-left-color:var(--sage)}.clip.social{border-left-color:var(--gold)}
+.clip .top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+.clip .nm{font-weight:600;font-size:15px}
+.cat{font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;padding:2px 8px;border-radius:999px}
+.cat.crisis{background:#f6e3e0;color:var(--red)}.cat.clinical{background:#e8eaf8;color:var(--blue)}.cat.sud{background:#e7f0ec;color:var(--sage)}.cat.social{background:#f5edda;color:var(--gold)}
+.clip .blurb{font-size:12.5px;color:var(--mut);line-height:1.5;margin:3px 0 8px}
+.clip .meta{display:flex;align-items:center;gap:10px;font-size:12.5px}.clip .ph{color:var(--blue);font-weight:600}
+.vchip{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--sage);background:#e7f0ec;border-radius:999px;padding:2px 8px;font-weight:500}
+
+/* deliver */
+.act{display:flex;align-items:center;gap:18px;border:1px solid var(--line);border-left-width:3px;border-radius:10px;background:#fff;padding:17px 20px;margin-bottom:13px}
+.act .ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.act .ico svg{width:21px;height:21px;stroke-width:1.7}
+.act.patient{border-left-color:var(--blue)}.act.patient .ico{background:#e8eaf8;color:var(--blue)}
+.act.note{border-left-color:var(--ink)}.act.note .ico{background:#eee9dc;color:var(--ink)}
+.act.ref2{border-left-color:var(--terra)}.act.ref2 .ico{background:#f6e9e2;color:var(--terra)}
+.act .meta{flex:1}.act .ti{font-weight:600;font-size:16px;margin-bottom:1px}.act .ds{font-size:12.5px;color:var(--mut)}
+.act .who{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:600;margin-top:3px}
+.btns{display:flex;gap:8px;flex-shrink:0}
+.btn{font-size:13px;font-weight:600;border-radius:9px;padding:9px 15px;border:1px solid var(--line);background:#fff;color:var(--ink)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}.btn.ghost{color:var(--mut)}
+.gate{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--mut);background:#f6efe0;border:1px solid var(--line);border-radius:8px;padding:9px 14px;margin-bottom:16px}
+.gate svg{width:16px;height:16px;color:var(--terra);flex-shrink:0}
+
+/* reference reader */
+.refgrid{display:flex;gap:0;border:1px solid var(--line);border-radius:5px;overflow:hidden;background:var(--card)}
+.refside{width:240px;flex-shrink:0;background:#1b1f3a;color:#d7d2c4;padding:20px 18px}
+.refside .lib{display:flex;gap:6px;margin-bottom:16px}
+.refside .lib span{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding:5px 10px;border-radius:7px;color:#b9b3a3}
+.refside .lib span.on{background:#2a2f52;color:#fff}
+.refside .ch{font-size:13px;padding:7px 0;border-bottom:1px solid #2a2f52;color:#c8c2b2}
+.refside .ch.on{color:#fff;font-weight:500}
+.refmain{flex:1;padding:26px 30px}
+.refmain .tt{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--terra);font-weight:600}
+.refmain h2{font-family:var(--serif);font-weight:700;font-size:26px;margin:3px 0 12px}
+.refmain h4{font-size:13px;color:var(--blue);margin:16px 0 5px}
+.refmain p{font-size:13.5px;line-height:1.6;margin:5px 0;color:#33313a}
+.pearl{background:#f7efdc;border-left:4px solid var(--amber);border-radius:7px;padding:9px 13px;font-size:13px;margin:10px 0;color:#5e4a1a}
+.reftable{width:100%;border-collapse:collapse;font-size:12.5px;margin:8px 0}
+.reftable th{background:#2a2f52;color:#fff;text-align:left;padding:5px 8px;font-weight:500}
+.reftable td{border:1px solid var(--line);padding:5px 8px}
+
+.footnote{max-width:1000px;margin:0 auto;padding:8px 28px 40px}
+.footnote .rule{height:1px;background:var(--line);margin-bottom:12px}
+.footnote p{font-size:12px;color:var(--faint);margin:0}.footnote a{color:var(--terra);font-weight:600}
+</style>
+</head>
+<body>
+
+<!-- ============ HOME / LANDING ============ -->
+<div class="cap">1 · Landing — the split front door. Keeps the two-door vibe; serif display, warm paper left (Plan), deep ink right (Ref).</div>
+<section data-screen="home">
+  <header class="mast"><div class="row">
+    <div class="wm" onclick="go('home')">Psych<i>Dispo</i></div>
+    <div class="tagline"><b>1,400+ verified resources</b> &nbsp;·&nbsp; all 50 states</div>
+    <a class="signin" onclick="go('signin')">Sign in</a>
+  </div></header>
+  <div class="hero">
+    <div class="door plan">
+      <div class="eye">The planning tool</div>
+      <h2>Psych Dispo</h2>
+      <p>Take a medically-cleared patient from "needs disposition" to a plan in hand — verified local referrals, a clean note, and a one-page take-home.</p>
+      <a class="enter" onclick="go('intake')">Start planning →</a>
+    </div>
+    <div class="divider"></div>
+    <div class="door ref">
+      <div class="eye">The reference</div>
+      <h2>Psych <i>Ref</i></h2>
+      <p>High-yield psychiatry &amp; social-needs reference — assessment, level of care, medications, emergencies. For learning, at the bedside.</p>
+      <a class="enter" onclick="go('ref')">Start reviewing →</a>
+    </div>
+  </div>
+  <div class="landfoot">Reference only — not a substitute for clinical judgment. In a life-threatening emergency call 911.</div>
+</section>
+
+<!-- ============ SIGN IN ============ -->
+<div class="cap">2 · Sign in — optional. Lightweight; saves templates &amp; favorites, never patient data.</div>
+<section data-screen="signin">
+  <header class="mast"><div class="row"><div class="wm" onclick="go('home')">Psych<i>Dispo</i></div><div class="tagline"></div><a class="signin" onclick="go('home')">Back</a></div></header>
+  <div class="wrap" style="max-width:460px">
+    <div class="sheet"><div class="body">
+      <div class="kicker"><span class="num">·</span><span class="lbl">Account</span><span class="ln"></span></div>
+      <h1>Sign in</h1>
+      <p class="lede">Save your templates, favorite resources, and custom blurbs. Patient work always stays on your device.</p>
+      <div class="field full" style="margin-left:0"><div class="label">Work email</div><input type="text" placeholder="you@hospital.org"></div>
+      <button class="cta" style="width:100%;margin-top:6px">Email me a sign-in link</button>
+      <div style="text-align:center;margin:16px 0;color:var(--faint);font-size:12px">or</div>
+      <button class="btn" style="width:100%">Continue with Google</button>
+      <p class="help" style="margin-top:16px">No passwords. We never store patient information — only your account, templates, and preferences.</p>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============ INTAKE ============ -->
+<div class="cap">3 · Plan · Intake — required fields are terracotta until done, sage once answered. The step spine shows the journey.</div>
+<section data-screen="intake">
+  <header class="mast"><div class="row"><div class="wm" onclick="go('home')">Psych<i>Dispo</i></div><div class="tagline"><b>1,400+ verified resources</b> &nbsp;·&nbsp; all 50 states</div><a class="signin" onclick="go('signin')">Sign in</a></div></header>
+  <nav class="nav"><div class="row"><a class="tab on" onclick="go('intake')">PsychDispo · Plan</a><a class="tab" onclick="go('ref')">Psych Emerg · Review</a><a class="tab" onclick="go('ref')">Resource Directory</a><a class="tab" onclick="go('ref')">Psych Ref</a></div></nav>
+  <div class="wrap">
+    <div class="sheet">
+      <div class="spine"><div class="seg now"><div class="bar"></div><div class="t">Intake</div></div><div class="seg"><div class="bar"></div><div class="t">Safety</div></div><div class="seg"><div class="bar"></div><div class="t">Plan</div></div><div class="seg"><div class="bar"></div><div class="t">Deliver</div></div></div>
+      <div class="body">
+        <div class="kicker"><span class="num">01</span><span class="lbl">Intake</span><span class="ln"></span></div>
+        <h1>Clinical context</h1>
+        <p class="lede">A few details set the location, the level of care, and who gets matched.</p>
+        <div class="legend"><div class="it"><span class="sq need"></span>Required — still needed</div><div class="it"><span class="sq done"></span>Required — done</div><div class="cnt">1 of 5 required complete</div></div>
+        <div class="grid">
+          <div class="field"><div class="label"><span class="req done"></span>Medically cleared?</div><div class="pills"><div class="pill on">Yes</div><div class="pill">No</div></div></div>
+          <div class="field"><div class="label"><span class="req need"></span>Insurance</div><select><option>— Select —</option></select><div class="help">Shown on the packet; auto-adds benefits lines. Does not filter local options.</div></div>
+          <div class="field"><div class="label"><span class="req need"></span>Discharging from</div><select><option>— Select setting —</option></select></div>
+          <div class="field"><div class="label"><span class="req need"></span>Disposition / level of care</div><select><option>— Select level of care —</option></select></div>
+          <div class="field full"><div class="label"><span class="req need"></span>Patient home — city or ZIP</div><div style="max-width:320px"><input type="text" placeholder="e.g. Bellingham or 98225"></div></div>
+        </div>
+        <div class="next"><button class="cta" onclick="go('safety')">Continue to safety →</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SAFETY ============ -->
+<div class="cap">4 · Plan · Safety — the one screen where amber/red risk color is functional. Moderate/high risk surfaces a required-action alert.</div>
+<section data-screen="safety">
+  <header class="mast"><div class="row"><div class="wm" onclick="go('home')">Psych<i>Dispo</i></div><div class="tagline"><b>1,400+ verified resources</b> &nbsp;·&nbsp; all 50 states</div><a class="signin" onclick="go('signin')">Sign in</a></div></header>
+  <nav class="nav"><div class="row"><a class="tab on" onclick="go('intake')">PsychDispo · Plan</a><a class="tab" onclick="go('ref')">Psych Emerg · Review</a><a class="tab" onclick="go('ref')">Resource Directory</a><a class="tab" onclick="go('ref')">Psych Ref</a></div></nav>
+  <div class="wrap">
+    <div class="sheet">
+      <div class="spine"><div class="seg done"><div class="bar"></div><div class="t">Intake</div></div><div class="seg now"><div class="bar"></div><div class="t">Safety</div></div><div class="seg"><div class="bar"></div><div class="t">Plan</div></div><div class="seg"><div class="bar"></div><div class="t">Deliver</div></div></div>
+      <div class="body">
+        <div class="kicker"><span class="num">02</span><span class="lbl">Safety screen</span><span class="ln"></span></div>
+        <h1>Safety screening</h1>
+        <p class="lede">Suicide, substance, and violence. Risk level drives what's required next.</p>
+        <div class="sub2">2A · Suicide risk (C-SSRS)</div>
+        <div class="label" style="margin-bottom:9px"><span class="req done"></span>Risk level</div>
+        <div class="pills"><div class="pill">Low</div><div class="pill warn on">Moderate</div><div class="pill danger">High</div></div>
+        <div class="alert amber" style="margin-top:12px">Moderate risk — a safety plan and lethal-means counseling are now <b>required</b> before discharge, and crisis lines are pinned to the patient sheet.</div>
+        <div class="sub2">2B · Substance use</div>
+        <div class="label" style="margin-bottom:9px"><span class="req done"></span>Screen result</div>
+        <div class="pills"><div class="pill on">AUDIT-C positive</div><div class="pill">Negative</div></div>
+        <div class="sub2">2C · Violence / homicide risk</div>
+        <div class="label" style="margin-bottom:9px"><span class="req done"></span>Acute risk?</div>
+        <div class="pills"><div class="pill">Yes</div><div class="pill on">No</div></div>
+        <div class="next"><button class="ghostcta" onclick="go('intake')">← Back</button><button class="cta" onclick="go('referrals')">Continue to plan →</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REFERRALS ============ -->
+<div class="cap">5 · Plan · Referrals — resources as clippings, category color, verified dateline. Pick what you're sending and one main follow-up.</div>
+<section data-screen="referrals">
+  <header class="mast"><div class="row"><div class="wm" onclick="go('home')">Psych<i>Dispo</i></div><div class="tagline"><b>1,400+ verified resources</b> &nbsp;·&nbsp; all 50 states</div><a class="signin" onclick="go('signin')">Sign in</a></div></header>
+  <nav class="nav"><div class="row"><a class="tab on" onclick="go('intake')">PsychDispo · Plan</a><a class="tab" onclick="go('ref')">Psych Emerg · Review</a><a class="tab" onclick="go('ref')">Resource Directory</a><a class="tab" onclick="go('ref')">Psych Ref</a></div></nav>
+  <div class="wrap">
+    <div class="sheet">
+      <div class="spine"><div class="seg done"><div class="bar"></div><div class="t">Intake</div></div><div class="seg done"><div class="bar"></div><div class="t">Safety</div></div><div class="seg now"><div class="bar"></div><div class="t">Plan</div></div><div class="seg"><div class="bar"></div><div class="t">Deliver</div></div></div>
+      <div class="body">
+        <div class="kicker"><span class="num">04</span><span class="lbl">Referrals · Bellingham 98225 · Medicaid</span><span class="ln"></span></div>
+        <h1>Matched resources</h1>
+        <p class="lede">Verified options near the patient. Check what you're sending; pick one main follow-up.</p>
+        <div class="tray"><div class="h">Selected for this patient</div>
+          <div class="trow"><span class="tnum">1</span><span class="nm">Sea Mar — Bellingham (main follow-up)</span><span class="ph">360-671-3225</span></div>
+          <div class="trow"><span class="tnum">2</span><span class="nm">Lummi Behavioral Health</span><span class="ph">360-384-0464</span></div>
+        </div>
+        <div class="subhdr">Crisis &amp; clinical</div>
+        <div class="clips">
+          <div class="clip crisis"><div class="top"><span class="nm">988 Lifeline</span><span class="cat crisis">Crisis</span></div><div class="blurb">Free help any time. Call or text 988.</div><div class="meta"><span class="ph">988</span><span class="vchip">✓ always on</span></div></div>
+          <div class="clip clinical"><div class="top"><span class="nm">Sea Mar — Bellingham</span><span class="cat clinical">Clinical</span></div><div class="blurb">Mental health visits and medicine. Takes Medicaid.</div><div class="meta"><span class="ph">360-671-3225</span><span class="vchip">✓ verified Jun 2026</span></div></div>
+          <div class="clip sud"><div class="top"><span class="nm">Lummi Behavioral Health</span><span class="cat sud">Drug &amp; alcohol</span></div><div class="blurb">Safe detox and longer programs.</div><div class="meta"><span class="ph">360-384-0464</span><span class="vchip">✓ verified Jun 2026</span></div></div>
+          <div class="clip social"><div class="top"><span class="nm">Bellingham Food Bank</span><span class="cat social">Social</span></div><div class="blurb">Free food. No ID needed.</div><div class="meta"><span class="ph">360-676-0392</span><span class="vchip">✓ verified Jun 2026</span></div></div>
+        </div>
+        <div class="next"><button class="ghostcta" onclick="go('safety')">← Back</button><button class="cta" onclick="go('deliver')">Continue to deliver →</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DELIVER ============ -->
+<div class="cap">6 · Plan · Deliver — three separate actions, each labelled by recipient. No documents side by side.</div>
+<section data-screen="deliver">
+  <header class="mast"><div class="row"><div class="wm" onclick="go('home')">Psych<i>Dispo</i></div><div class="tagline">Bellingham · 98225 · Medicaid</div><a class="signin" onclick="go('signin')">Dr. Palmer</a></div></header>
+  <nav class="nav"><div class="row"><a class="tab on" onclick="go('intake')">PsychDispo · Plan</a><a class="tab" onclick="go('ref')">Psych Emerg · Review</a><a class="tab" onclick="go('ref')">Resource Directory</a><a class="tab" onclick="go('ref')">Psych Ref</a></div></nav>
+  <div class="wrap">
+    <div class="sheet">
+      <div class="spine"><div class="seg done"><div class="bar"></div><div class="t">Intake</div></div><div class="seg done"><div class="bar"></div><div class="t">Safety</div></div><div class="seg done"><div class="bar"></div><div class="t">Plan</div></div><div class="seg now"><div class="bar"></div><div class="t">Deliver</div></div></div>
+      <div class="body">
+        <div class="kicker"><span class="num">05</span><span class="lbl">Deliver</span><span class="ln"></span></div>
+        <h1>Hand off the plan</h1>
+        <p class="lede">The plan is complete. Send each document to the right person — that's the only thing left.</p>
+        <div class="gate"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 9v4M12 17h.01M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z"/></svg>One sensitive resource is hidden from the printed patient sheet — confirm it's safe to print, or leave it off.</div>
+        <div class="act patient"><div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/></svg></div><div class="meta"><div class="ti">Patient take-home</div><div class="ds">One page, plain language: crisis numbers, follow-up, resources.</div><div class="who">For the patient</div></div><div class="btns"><button class="btn ghost">Preview</button><button class="btn primary">Print</button></div></div>
+        <div class="act note"><div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="8" y="4" width="12" height="16" rx="2"/><path d="M16 4V2H6a2 2 0 00-2 2v12"/></svg></div><div class="meta"><div class="ti">Note for the chart</div><div class="ds">Full clinical detail — copy into your EHR or print.</div><div class="who">For your record</div></div><div class="btns"><button class="btn primary">Copy text</button><button class="btn">Print</button></div></div>
+        <div class="act ref2"><div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M7 18h10M6 14h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v5a2 2 0 002 2z"/><path d="M8 5V3h8v2M8 18v3h8v-3"/></svg></div><div class="meta"><div class="ti">Referral to Lummi Behavioral Health</div><div class="ds">Cover sheet for the program — attach your face sheet before sending.</div><div class="who">For the receiving program</div></div><div class="btns"><button class="btn">Email</button><button class="btn">Fax</button><button class="btn ghost">Print</button></div></div>
+        <div class="help" style="margin-top:12px">Nothing here is stored. Patient details print and stay with you; the referral leaves blank patient fields for you to fill.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REFERENCE ============ -->
+<div class="cap">7 · Reference — dark reader, two libraries (Psych Ref · Social Ref), chapter nav, tables &amp; pearls. For learning, not building a packet.</div>
+<section data-screen="ref">
+  <header class="mast"><div class="row"><div class="wm" onclick="go('home')">Psych<i>Dispo</i></div><div class="tagline"></div><a class="signin" onclick="go('intake')">Open the planner →</a></div></header>
+  <nav class="nav"><div class="row"><a class="tab" onclick="go('intake')">PsychDispo · Plan</a><a class="tab" onclick="go('ref')">Psych Emerg · Review</a><a class="tab" onclick="go('ref')">Resource Directory</a><a class="tab on" onclick="go('ref')">Psych Ref</a></div></nav>
+  <div class="wrap">
+    <div class="refgrid">
+      <div class="refside">
+        <div class="lib"><span class="on">Psych Ref</span><span>Social Ref</span></div>
+        <div class="ch">Assessment</div><div class="ch on">Level of care</div><div class="ch">Medications</div><div class="ch">Emergencies</div><div class="ch">Disorders</div><div class="ch">Substance use</div><div class="ch">Consult-liaison</div><div class="ch">Populations</div>
+      </div>
+      <div class="refmain">
+        <div class="tt">Level of care</div>
+        <h2>Choosing a disposition</h2>
+        <p>Match acuity to the least-restrictive setting that's still safe. LOCUS (adult) and CALOCUS-CASII (youth) operationalize risk + function into a level; ASAM covers primary substance use.</p>
+        <table class="reftable"><tr><th>Level</th><th>Setting</th><th>Typical trigger</th></tr><tr><td>1</td><td>Outpatient</td><td>Stable, low risk, good support</td></tr><tr><td>2</td><td>IOP / PHP</td><td>Needs structure, no acute danger</td></tr><tr><td>3–4</td><td>Residential / inpatient</td><td>Acute risk or grave disability</td></tr></table>
+        <h4>Disposition pearls</h4>
+        <div class="pearl">Outpatient referral pathway is outpatient · IOP · PHP. A residential bed is not arranged from an outpatient clinic.</div>
+        <p>Arrange disposition fully before discharge — a verified, accepting resource beats a longer list of stale ones.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footnote"><div class="rule"></div><p>Resources verified Jun 2026 · <a>Report an outdated entry</a>. Always call to confirm. In a life-threatening emergency call 911.</p></div>
+</section>
+
+<script>
+function go(id){
+  document.querySelectorAll('[data-screen]').forEach(function(s){ s.hidden = (s.dataset.screen !== id); });
+  document.querySelectorAll('.cap').forEach(function(c){ c.style.display='none'; });
+  window.scrollTo(0,0);
+}
+document.addEventListener('DOMContentLoaded', function(){ go('home'); });
+</script>
+</body>
+</html>

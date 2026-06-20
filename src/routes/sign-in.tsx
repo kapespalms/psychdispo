@@ -14,13 +14,21 @@ function SignInPage() {
   const { signIn } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleMagicLink(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    const result = signIn(email, password);
+    if (!email.trim()) {
+      setError("Enter your work email.");
+      return;
+    }
+    setSent(true);
+  }
+
+  function handleGoogle() {
+    const result = signIn(email || "guest@psychdispo.local", "demo");
     if (!result.ok) {
       setError(result.error);
       return;
@@ -30,64 +38,72 @@ function SignInPage() {
 
   return (
     <AuthShell
-      title="Welcome back"
-      subtitle="Sign in to save disposition plans and pick up where you left off. Your session stays on this device."
+      kicker="Account"
+      title="Sign in"
+      subtitle="Save your templates, favorite resources, and custom blurbs. Patient work always stays on your device."
       footer={
         <>
-          New here?{" "}
-          <Link to="/sign-up" className="text-[#2640C8] font-medium hover:underline">
-            Create a free account
+          No passwords. We never store patient information — only your account, templates, and
+          preferences.{" "}
+          <Link to="/dispo" className="text-[#2A43C0] font-medium hover:underline">
+            Continue as guest
           </Link>
         </>
       }
     >
-      <form onSubmit={handleSubmit} className="space-y-5">
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium mb-1.5">
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2.5 border border-border rounded-sm bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#2640C8]/30 focus:border-[#2640C8]"
-            placeholder="you@hospital.org"
-          />
-        </div>
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium mb-1.5">
-            Password
-          </label>
-          <input
-            id="password"
-            type="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-3 py-2.5 border border-border rounded-sm bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#2640C8]/30 focus:border-[#2640C8]"
-          />
-        </div>
-        {error && (
-          <p className="text-sm text-destructive bg-destructive/5 border border-destructive/20 px-3 py-2 rounded-sm">
-            {error}
+      {sent ? (
+        <div className="space-y-4 text-center">
+          <p className="text-sm text-[#6f6a5f] leading-relaxed">
+            Check <strong>{email}</strong> for your sign-in link. It expires in 15 minutes.
           </p>
-        )}
-        <button
-          type="submit"
-          className="w-full py-3 bg-[#2640C8] text-white text-sm font-semibold tracking-wide hover:bg-[#1b2f9c] transition-colors"
-        >
-          Sign in
-        </button>
-        <p className="text-xs text-muted-foreground text-center leading-relaxed">
-          Or{" "}
-          <Link to="/dispo" className="text-[#2640C8] hover:underline">
-            continue as guest
-          </Link>{" "}
-          — no account required.
-        </p>
-      </form>
+          <button
+            type="button"
+            onClick={() => setSent(false)}
+            className="text-sm text-[#2A43C0] hover:underline"
+          >
+            Use a different email
+          </button>
+        </div>
+      ) : (
+        <form onSubmit={handleMagicLink} className="space-y-5">
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-[11px] tracking-[0.12em] uppercase font-semibold text-[#6f6a5f] mb-2"
+            >
+              Work email
+            </label>
+            <input
+              id="email"
+              type="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-3.5 py-2.5 border border-[#E6DECE] rounded-[10px] bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#2A43C0]/30 focus:border-[#2A43C0]"
+              placeholder="you@hospital.org"
+            />
+          </div>
+          {error && (
+            <p className="text-sm text-destructive bg-destructive/5 border border-destructive/20 px-3 py-2 rounded-sm">
+              {error}
+            </p>
+          )}
+          <button
+            type="submit"
+            className="w-full py-3 bg-[#2A43C0] text-white text-sm font-semibold rounded-[11px] hover:bg-[#1b2f9c] transition-colors"
+          >
+            Email me a sign-in link
+          </button>
+          <div className="text-center text-xs text-[#9b9587]">or</div>
+          <button
+            type="button"
+            onClick={handleGoogle}
+            className="w-full py-3 border border-[#E6DECE] bg-white text-sm font-semibold rounded-[10px] hover:bg-[#fbf7ee] transition-colors"
+          >
+            Continue with Google
+          </button>
+        </form>
+      )}
     </AuthShell>
   );
 }

@@ -5,55 +5,49 @@ export function LandingHeader() {
   const { user, signOut } = useAuth();
 
   return (
-    <header className="border-b border-border/60 bg-white/80 backdrop-blur-sm sticky top-0 z-40">
-      <div className="max-w-[1440px] mx-auto px-6 md:px-14 py-4 flex items-center justify-between gap-4">
-        <Link to="/" className="font-serif text-[26px] md:text-[32px] font-semibold tracking-tight">
-          Psych<span className="italic text-[#2640C8]">Dispo</span>
+    <header className="border-b border-[#E6DECE] bg-[#FFFDF8]">
+      <div className="max-w-[1000px] mx-auto px-7 py-4 flex items-center gap-5">
+        <Link to="/" className="font-serif text-[23px] font-bold tracking-tight shrink-0">
+          Psych<span className="italic text-[#2A43C0]">Dispo</span>
         </Link>
 
-        <nav className="flex items-center gap-2 md:gap-3">
-          <Link
-            to="/about"
-            className="hidden sm:inline-flex text-sm text-muted-foreground hover:text-foreground px-3 py-2"
-          >
-            About
-          </Link>
+        <p className="hidden md:block font-serif italic text-[13.5px] text-[#6f6a5f] mx-auto text-center">
+          <span className="not-italic font-semibold text-[#BC5B3A] text-[11px] tracking-[0.13em] uppercase">
+            1,400+ verified resources
+          </span>
+          <span className="mx-2">·</span>
+          all 50 states
+        </p>
+
+        <div className="ml-auto flex items-center gap-3 shrink-0">
           {user ? (
             <>
-              <span className="hidden md:inline text-sm text-muted-foreground">
-                {user.name}
+              <span className="hidden sm:inline text-xs tracking-[0.13em] uppercase font-semibold text-[#6f6a5f]">
+                {user.name.split(" ")[0]}
               </span>
               <Link
                 to="/dispo"
-                className="inline-flex items-center justify-center px-4 py-2.5 bg-[#2640C8] text-white text-sm font-medium tracking-wide hover:bg-[#1b2f9c] transition-colors"
+                className="text-xs tracking-[0.13em] uppercase font-semibold text-[#2A43C0] hover:underline"
               >
-                Continue planning
+                Continue
               </Link>
               <button
                 type="button"
                 onClick={signOut}
-                className="text-sm text-muted-foreground hover:text-foreground px-2 py-2"
+                className="text-xs text-[#6f6a5f] hover:text-[#22202A]"
               >
                 Sign out
               </button>
             </>
           ) : (
-            <>
-              <Link
-                to="/sign-in"
-                className="inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium text-foreground hover:bg-surface-2 transition-colors"
-              >
-                Sign in
-              </Link>
-              <Link
-                to="/sign-up"
-                className="inline-flex items-center justify-center px-4 py-2.5 bg-[#2640C8] text-white text-sm font-medium tracking-wide hover:bg-[#1b2f9c] transition-colors"
-              >
-                Start free
-              </Link>
-            </>
+            <Link
+              to="/sign-in"
+              className="text-xs tracking-[0.13em] uppercase font-semibold text-[#2A43C0] hover:underline"
+            >
+              Sign in
+            </Link>
           )}
-        </nav>
+        </div>
       </div>
     </header>
   );

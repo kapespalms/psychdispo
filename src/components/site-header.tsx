@@ -7,43 +7,41 @@ export function SiteHeader() {
   const { user, signOut } = useAuth();
 
   const tabClass = (match: boolean) =>
-    `px-4 md:px-5 py-2.5 font-mono text-[10px] md:text-[11px] tracking-[0.18em] md:tracking-[0.22em] text-white transition-colors ${
-      match ? "bg-blue-900" : "hover:bg-blue-700"
+    `px-1 py-3.5 text-[11px] tracking-[0.15em] uppercase font-semibold border-b-2 transition-colors ${
+      match
+        ? "text-[#2A43C0] border-[#2A43C0]"
+        : "text-[#6f6a5f] border-transparent hover:text-[#22202A]"
     }`;
 
   return (
-    <header className="bg-white border-b border-border shrink-0">
-      <div className="max-w-[1440px] mx-auto px-4 md:px-10 py-3 flex items-center justify-between gap-4">
-        <Link to="/" className="font-serif text-2xl md:text-[28px] font-semibold tracking-tight shrink-0">
-          Psych<span className="italic text-[#2640C8]">Dispo</span>
+    <header className="bg-[#FFFDF8] border-b border-[#E6DECE] shrink-0">
+      <div className="max-w-[1000px] mx-auto px-7 py-4 flex items-center justify-between gap-4">
+        <Link to="/" className="font-serif text-[23px] font-bold tracking-tight shrink-0">
+          Psych<span className="italic text-[#2A43C0]">Dispo</span>
         </Link>
-        <div className="hidden lg:flex items-center gap-6 font-mono text-[10px] tracking-[0.22em] text-muted-foreground uppercase">
-          <span>1,400+ verified resources</span>
-          <span className="text-border">·</span>
-          <span>All 50 states</span>
+        <div className="hidden lg:flex items-center gap-2 font-serif italic text-[13.5px] text-[#6f6a5f]">
+          <span className="not-italic font-semibold text-[#BC5B3A] text-[11px] tracking-[0.13em] uppercase">
+            1,400+ verified resources
+          </span>
+          <span>·</span>
+          <span>all 50 states</span>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           {user ? (
             <>
               <Link
                 to="/plans"
-                className="hidden sm:inline text-sm text-[#2640C8] hover:underline px-2 py-1.5"
+                className="hidden sm:inline text-xs text-[#2A43C0] hover:underline px-2"
               >
                 My plans
               </Link>
-              <Link
-                to="/settings"
-                className="hidden sm:inline text-sm text-muted-foreground hover:text-foreground px-2 py-1.5"
-              >
-                Settings
-              </Link>
-              <span className="hidden sm:inline text-sm text-muted-foreground mr-1">
+              <span className="hidden sm:inline text-xs tracking-[0.1em] uppercase font-semibold text-[#6f6a5f]">
                 {user.name.split(" ")[0]}
               </span>
               <button
                 type="button"
                 onClick={signOut}
-                className="text-sm text-muted-foreground hover:text-foreground px-3 py-1.5"
+                className="text-xs text-[#6f6a5f] hover:text-[#22202A] px-2"
               >
                 Sign out
               </button>
@@ -51,7 +49,7 @@ export function SiteHeader() {
           ) : (
             <Link
               to="/sign-in"
-              className="text-sm text-muted-foreground hover:text-foreground px-3 py-1.5"
+              className="text-xs tracking-[0.13em] uppercase font-semibold text-[#2A43C0] hover:underline px-2"
             >
               Sign in
             </Link>
@@ -59,25 +57,25 @@ export function SiteHeader() {
         </div>
       </div>
 
-      <div className="bg-[#1b2f9c]">
-        <div className="max-w-[1440px] mx-auto px-4 md:px-10 flex gap-0.5 overflow-x-auto">
+      <nav className="border-t border-[#E6DECE] bg-[#FFFDF8]">
+        <div className="max-w-[1000px] mx-auto px-7 flex gap-8 overflow-x-auto">
           <Link to="/dispo" className={tabClass(path === "/dispo")}>
-            PSYCHDISPO · PLAN
+            PsychDispo · Plan
           </Link>
           <Link to="/social-care" className={tabClass(path === "/social-care")}>
-            SOCIAL CARE PLAN
+            Social Care Plan
           </Link>
           <Link to="/emerg" className={tabClass(path === "/emerg")}>
-            PSYCH EMERG · REVIEW
+            Psych Emerg · Review
           </Link>
           <Link to="/directory" className={tabClass(path === "/directory")}>
-            RESOURCE DIRECTORY
+            Resource Directory
           </Link>
           <Link to="/reference" className={tabClass(path === "/reference")}>
-            PSYCH REF
+            Psych Ref
           </Link>
         </div>
-      </div>
+      </nav>
     </header>
   );
 }
