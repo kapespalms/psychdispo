@@ -127,7 +127,14 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
-const TOOL_ROUTES = new Set(["/dispo", "/social-care", "/directory", "/emerg", "/reference"]);
+const TOOL_ROUTES = new Set([
+  "/dispo",
+  "/social-care",
+  "/social-ref",
+  "/directory",
+  "/emerg",
+  "/reference",
+]);
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();

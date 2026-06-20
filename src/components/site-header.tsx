@@ -65,6 +65,9 @@ export function SiteHeader() {
           <Link to="/social-care" className={tabClass(path === "/social-care")}>
             Social Care Plan
           </Link>
+          <Link to="/social-ref" className={tabClass(path === "/social-ref")}>
+            Social Ref
+          </Link>
           <Link to="/emerg" className={tabClass(path === "/emerg")}>
             Psych Emerg · Review
           </Link>

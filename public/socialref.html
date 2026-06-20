@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Social Reference · PsychDispo</title>
+<style>
+  :root{
+    --bg:#f6f6f3; --card:#fff; --ink:#22202a; --mut:#6f6a5f; --line:#e6dece;
+    --t:#2a43c0; --serif:"EB Garamond",Georgia,serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Instrument Sans",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;font-size:15px}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 20px 64px}
+  h1{font-family:var(--serif);font-size:28px;font-weight:700;margin:0 0 6px}
+  .sub{color:var(--mut);font-size:14px;margin-bottom:28px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:16px 0}
+  h2{font-family:var(--serif);font-size:20px;margin:0 0 10px}
+  h3{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t);margin:16px 0 8px}
+  p{margin:0 0 10px}
+  ul{margin:0;padding-left:1.2em}
+  li{margin:4px 0}
+  .script{background:#eef1fb;border-radius:8px;padding:12px 14px;font-size:14px;margin-top:8px}
+  .tag{display:inline-block;font-size:11px;font-weight:600;color:var(--t);background:#eef1fb;padding:2px 8px;border-radius:99px;margin-bottom:8px}
+  a{color:var(--t)}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@600;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="wrap">
+  <h1>Social Ref</h1>
+  <p class="sub">Quick scripts for housing, 211, domestic violence, and Medicaid transport — for clinicians and social workers. Patient-facing blurbs live in the resource directory.</p>
+
+  <section id="211">
+    <span class="tag">211 · statewide</span>
+    <h2>Dial 211 — community resource navigation</h2>
+    <p>211 connects callers to local food, housing, utilities, crisis, and benefits help. Available in most U.S. counties; hours vary by region.</p>
+    <h3>Clinician script</h3>
+    <div class="script">"I'm going to give you a number you can call for help with food, housing, or bills — it's free and they know local programs. Dial <strong>211</strong> from any phone. If 211 doesn't work in your area, call the number on your patient sheet."</div>
+    <h3>Patient blurb (≤ grade 5)</h3>
+    <div class="script">Dial <strong>211</strong> to find local help with food, housing, or crisis.</div>
+  </section>
+
+  <section id="housing">
+    <span class="tag">Housing · coordinated entry</span>
+    <h2>Shelter &amp; housing coordinated entry</h2>
+    <p>Most communities use a single intake line for emergency shelter and housing navigation — not individual shelter walk-ins.</p>
+    <ul>
+      <li>Ask: "Is there a bed tonight?" and "Do I need to call every day?"</li>
+      <li>Document the intake number on the patient sheet — avoid shelter addresses unless safe to print.</li>
+      <li>Pair with 211 when local coordinated entry is unknown.</li>
+    </ul>
+    <h3>Clinician script</h3>
+    <div class="script">"Shelter beds are usually found through one phone number for your area — not by going to a shelter door. Call the number on your sheet weekdays to ask about a bed tonight. If you can't get through, dial 211."</div>
+    <h3>Patient blurb</h3>
+    <div class="script">Call weekdays to ask about a shelter bed tonight.</div>
+  </section>
+
+  <section id="dv">
+    <span class="tag">DV · safe print</span>
+    <h2>Domestic violence hotlines</h2>
+    <p>Local DV lines offer confidential safety planning and shelter referral. Default to <strong>discreet print</strong> on patient sheets unless the patient confirms safe to print names and addresses.</p>
+    <ul>
+      <li>National DV hotline: <strong>1-800-799-7233</strong> (24/7)</li>
+      <li>Local lines may be 24/7 or business hours — verify in directory.</li>
+      <li>Never document partner name or address on patient-carried sheets when DV flag is active.</li>
+    </ul>
+    <h3>Clinician script</h3>
+    <div class="script">"If home isn't safe, you can call anytime — it's confidential and they won't tell anyone you called. The number is on your sheet. You don't have to leave today; they can help you plan."</div>
+    <h3>Patient blurb</h3>
+    <div class="script">Call anytime if home is not safe — help is confidential.</div>
+  </section>
+
+  <section id="transport">
+    <span class="tag">NEMT · Medicaid</span>
+    <h2>Medicaid non-emergency medical transport</h2>
+    <p>Medicaid members often need rides to medical appointments through a broker — usually <strong>2–3 business days advance notice</strong>.</p>
+    <ul>
+      <li>Verify Medicaid eligibility before promising a ride.</li>
+      <li>Broker numbers vary by state — use verified directory entries.</li>
+      <li>Commercial insurance may have separate ride benefits.</li>
+    </ul>
+    <h3>Clinician script</h3>
+    <div class="script">"If you have Medicaid, you can call for a ride to your appointment. Call at least two or three days before your visit and say you need a medical ride."</div>
+    <h3>Patient blurb</h3>
+    <div class="script">Call 2–3 days before your visit to ask about a medical ride.</div>
+  </section>
+
+  <section>
+    <h2>Related tools</h2>
+    <p><a href="/social-care">Social Care Plan</a> — HRSN screener with tonight vs ongoing triage.</p>
+    <p><a href="/directory">Resource Directory</a> — verified local programs with patient blurbs.</p>
+    <p><a href="/dispo">Psych Dispo</a> — full disposition workflow and patient packet.</p>
+  </section>
+</div>
+</body>
+</html>
