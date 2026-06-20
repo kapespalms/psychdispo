@@ -9,6 +9,7 @@ import { dirname, join } from "path";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const htmlPath = join(root, "public/psychdispo.html");
 const researchPath = join(root, "scripts/resource-research-least-states.md");
+const batch4Path = join(root, "scripts/batch4-verified-resources.md");
 const LAST_VERIFIED = "2026-06-01";
 const MAX_MERGE = 20;
 
@@ -84,7 +85,7 @@ function isDuplicate(data, entry) {
 }
 
 const html = readFileSync(htmlPath, "utf8");
-const md = readFileSync(researchPath, "utf8");
+const md = readFileSync(researchPath, "utf8") + "\n" + readFileSync(batch4Path, "utf8");
 const research = extractResearchEntries(md);
 const { data, start, end } = extractDataArray(html);
 
