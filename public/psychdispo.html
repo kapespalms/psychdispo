@@ -3,7 +3,7 @@
 <title>PsychDispo — Psychiatric Disposition</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap');
-:root{--paper:#F4EFE5;--t:#2A43C0;--t2:#1b2f9c;--bg:var(--paper);--ink:#22202A;--mut:#6f6a5f;--faint:#9b9587;--line:#E6DECE;--card:#FFFDF8;--red:#B23A2E;--redbg:#fbeae8;--amber:#9A6A1E;--amberbg:#f7efdc;--good:#3C7A66;--goodbg:#e7f0ec;--terra:#BC5B3A;--sage:#3C7A66;--gold:#9A7320;--serif:"Playfair Display",Georgia,"Times New Roman",serif;--sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+:root{--paper:#F4EFE5;--t:#2A43C0;--t2:#1b2f9c;--bg:var(--paper);--ink:#22202A;--mut:#6f6a5f;--faint:#9b9587;--line:#E6DECE;--card:#FFFDF8;--red:#B23A2E;--redbg:#fbeae8;--amber:#9A6A1E;--amberbg:#f7efdc;--good:#3C7A66;--goodbg:#e7f0ec;--terra:#BC5B3A;--req:#C05A44;--sage:#3C7A66;--gold:#9A7320;--serif:"Playfair Display",Georgia,"Times New Roman",serif;--sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
 *{box-sizing:border-box}
 body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased;padding-bottom:72px}
 header{background:#fff;border-bottom:1px solid var(--line)}
@@ -78,32 +78,59 @@ textarea{max-width:100%;min-height:54px;resize:vertical}
 
 .workflow-sheet{background:var(--card);border:1px solid var(--line);border-radius:5px;overflow:hidden;margin:16px 0}
 .workflow-body{padding:0 0 8px}
-.spine{display:flex;gap:6px;padding:14px 34px 0}
-.spine .seg{flex:1}
-.spine .seg .bar{height:4px;border-radius:2px;background:#e8e0d0}
+.progress-sticky{position:sticky;top:0;z-index:15;background:var(--card);border-bottom:1px solid var(--line)}
+body.embed .progress-sticky{top:44px}
+.spine{display:flex;gap:6px;padding:14px 34px 10px}
+.spine .seg{flex:1;cursor:pointer}
+.spine .seg .bar{height:4px;border-radius:2px;background:#e8e0d0;transition:background .2s}
 .spine .seg.done .bar{background:var(--sage)}
 .spine .seg.now .bar{background:var(--t)}
-.spine .seg .t{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:600;margin-top:7px}
+.spine .seg.future .bar{background:#e8e0d0}
+.spine .seg .t{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:600;margin-top:7px;transition:color .2s}
 .spine .seg.now .t{color:var(--t)}
 .spine .seg.done .t{color:var(--sage)}
+.slide-shell{overflow:hidden;margin:0;padding:8px 0 16px}
+.slide-track{display:flex;transition:transform .38s cubic-bezier(.4,0,.2,1);will-change:transform}
+.slide-track.slide-back{transition-timing-function:cubic-bezier(.4,0,.6,1)}
+.slide-panel{flex:0 0 100%;min-width:100%;padding:0 16px;box-sizing:border-box}
+.float-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:0;box-shadow:0 4px 28px rgba(34,32,42,.07)}
+.float-card+.float-card{margin-top:14px;border-top:none}
+.slide-panel .layer{border:none;border-radius:0;margin:0;padding:18px 20px;box-shadow:none;background:transparent}
+.slide-panel .layer+.layer{border-top:1px solid var(--line);padding-top:20px;margin-top:4px}
 .step-kicker{display:flex;align-items:center;gap:10px;margin-bottom:4px;padding:0 34px}
 .step-kicker .num{font-family:var(--serif);font-size:13px;color:var(--terra);font-weight:600}
 .step-kicker .lbl{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);font-weight:600}
 .step-kicker .ln{flex:1;height:1px;background:var(--line)}
 .step-head{padding:0 34px 6px}
 .step-head .ltitle{font-family:var(--serif);font-weight:700;font-size:33px;letter-spacing:-.3px;margin:2px 0 5px;line-height:1.1}
-.step-head .ldesc{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--mut);margin:0 0 14px}
+.step-head .ldesc{display:none}
 .layer{border:none;border-radius:0;margin:0;padding:18px 34px 24px;box-shadow:none}
 .layer+.layer{border-top:1px solid var(--line)}
-.legend{display:flex;align-items:center;gap:18px;border:1px solid var(--line);background:#fbf7ee;border-radius:8px;padding:9px 16px;margin-bottom:22px;font-size:12.5px}
+.legend{display:none}
+.gate-summary{display:none}
+#intakeLegend{display:none}
+#l5ctx{display:none}
+#l5Fresh{display:none}
+.note.in-workflow{display:none}
+.pathway-card .pblurb{display:none}
+.pathway-head .pdesc{display:none}
+.statusbar .nav-btn{min-height:44px;padding:10px 18px;font-size:14px;font-weight:600;border-radius:10px;cursor:pointer;font-family:inherit}
+.statusbar .nav-btn.back{background:#fff;color:var(--t);border:1px solid var(--t);margin-left:0}
+.statusbar .nav-btn.cont{background:var(--t);color:#fff;border:none;margin-left:auto}
+.statusbar .nav-btn:disabled{opacity:.45;cursor:not-allowed}
+.statusbar .nav-btn.cont:disabled{background:#aebdbb}
+.pop-flags-grid.compact .pop-col{border:none;background:transparent;padding:6px 0}
+.pop-flags-grid.compact .pop-col .sub2{display:none}
+#safetyInterventions.hidden{display:none}
 .legend .it{display:flex;align-items:center;gap:7px;color:var(--mut)}
 .sq{width:9px;height:9px;border-radius:2px}
-.sq.need{background:var(--terra)}.sq.done{background:var(--sage)}
-.legend .cnt{margin-left:auto;font-family:var(--serif);font-style:italic;color:var(--mut)}
+.sq.need{background:var(--req)}.sq.done{background:var(--sage)}
+.legend .cnt{margin-left:auto;font-size:12px;color:var(--mut)}
 .field-label{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);font-weight:600;margin-bottom:9px}
+.req-mark{color:var(--req);font-size:10px;line-height:1;flex:none;font-weight:700}
 .req-dot{width:9px;height:9px;border-radius:2px;flex:none}
-.req-dot.need{background:var(--terra)}.req-dot.done{background:var(--sage)}
-.field-help{font-family:var(--serif);font-style:italic;font-size:12.5px;color:var(--faint);margin-top:8px;line-height:1.5}
+.req-dot.need{background:var(--req)}.req-dot.done{background:var(--sage)}
+.field-help{display:none}
 .clips{font-size:0}
 .clip{display:inline-block;width:46%;vertical-align:top;margin:0 2% 16px;font-size:14px;background:#fff;border:1px solid var(--line);border-left-width:3px;border-radius:8px;padding:13px 15px;cursor:pointer;position:relative}
 .clip.sel{box-shadow:0 0 0 1.5px var(--t) inset;background:#f8f9ff}
@@ -180,6 +207,9 @@ textarea{max-width:100%;min-height:54px;resize:vertical}
 /* status bar */
 .statusbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#fff;border-top:1px solid var(--line);box-shadow:0 -2px 8px rgba(0,0,0,.06);padding:10px 16px}
 .statusbar .inner{max-width:980px;margin:0 auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.statusbar .nav-btn.back{background:#fff;color:var(--t);border:1px solid var(--t);margin-left:0;border-radius:10px;padding:11px 18px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+.statusbar .nav-btn.back:disabled{opacity:.45;cursor:not-allowed}
+.statusbar .nav-btn.cont{margin-left:auto}
 .chk{font-size:12px;color:var(--mut);display:flex;align-items:center;gap:4px}
 .chk.ok{color:var(--good)}.chk b{font-size:13px}
 .btn{margin-left:auto;background:var(--t);color:#fff;border:none;border-radius:10px;padding:11px 18px;font-size:14px;font-weight:700;cursor:pointer}
@@ -281,12 +311,11 @@ textarea{max-width:100%;min-height:54px;resize:vertical}
 body.embed .mh-top,body.embed .hero{display:none!important}
 body.embed{padding-bottom:0}
 body.embed .wrap{padding-bottom:24px}
-.spine{position:sticky;top:0;z-index:15;background:var(--card);padding-bottom:12px;border-bottom:1px solid var(--line)}
-body.embed .spine{top:44px}
 .pathway-fork{padding:28px 34px 8px}
 .pathway-head{text-align:center;margin-bottom:22px}
 .pathway-head .ptitle{font-family:var(--serif);font-weight:700;font-size:28px;letter-spacing:-.3px;margin:0 0 6px}
-.pathway-head .pdesc{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--mut);margin:0}
+.pathway-head .pdesc{font-size:14px;color:var(--mut);margin:0;line-height:1.5}
+.gate-auto-note{font-size:13px;color:var(--mut);background:#f7f8fc;border:1px solid var(--line);border-radius:9px;padding:10px 14px;margin:0 0 16px;line-height:1.45}
 .pathway-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media(max-width:680px){.pathway-cards{grid-template-columns:1fr}.pathway-fork{padding:20px 18px 8px}}
 .pathway-card{text-align:left;border:1px solid var(--line);border-radius:10px;padding:20px 22px;background:#fff;cursor:pointer;font-family:inherit;color:inherit;transition:border-color .15s,box-shadow .15s}
@@ -425,7 +454,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 <div class="tabbar"><div class="tabs"><button class="tab on" data-view="tool">PsychDispo · Plan</button><button class="tab" data-view="social-care">Social Care Plan</button><button class="tab" data-view="ref">Psych Emerg · Review</button><button class="tab" data-view="directory">Resource Directory</button><button class="tab" data-view="psych-ref">Psych Ref</button></div></div>
 <div class="wrap">
 <div id="view-tool">
-<div class="workflow-sheet"><div id="pathwayContext" class="pathway-ctx hidden"></div><div id="spine" class="spine hidden"></div><div class="workflow-body">
+<div class="workflow-sheet"><div id="progressSticky" class="progress-sticky hidden"><div id="pathwayContext" class="pathway-ctx hidden"></div><div id="spine" class="spine"></div></div><div class="workflow-body">
 
 <div id="pathwayFork" class="pathway-fork">
  <div class="pathway-head">
@@ -444,37 +473,44 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
  </div>
 </div>
 
-<!-- LAYER 0 -->
-<section class="layer" id="L0">
- <div class="step-kicker"><span class="num">01</span><span class="lbl">Intake</span><span class="ln"></span></div>
- <div class="step-head"><div class="ltitle">Clinical context</div>
- <div class="ldesc">A few details set the location, the level of care, and who gets matched.</div></div>
+<div id="slideShell" class="slide-shell hidden">
+<div id="slideTrack" class="slide-track">
+
+<div class="slide-panel" data-step="0">
+<section class="layer float-card" id="Lgate">
+ <div class="step-kicker"><span class="num">01</span><span class="lbl">Gate</span><span class="ln"></span></div>
+ <div class="step-head"><div class="ltitle">Pathway gate</div></div>
+ <div id="gateAutoNote" class="gate-auto-note"></div>
+ <div class="q"><div class="field-label" id="lblCleared"><span class="req-mark" aria-hidden="true">■</span>Medically cleared?</div>
+  <div class="opts yesno" data-field="cleared" role="group" aria-labelledby="lblCleared"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
+ </div>
+ <div class="reveal hidden alert red" id="notCleared">Not medically cleared — complete medical workup / stabilization before psychiatric disposition. This tool is for medically-cleared patients only.</div>
+</section>
+</div>
+
+<div class="slide-panel" data-step="1">
+<section class="layer float-card" id="L0">
+ <div class="step-kicker"><span class="num">02</span><span class="lbl">Clinical</span><span class="ln"></span></div>
+ <div class="step-head"><div class="ltitle">Clinical context</div></div>
  <div id="intakeLegend" class="legend"></div>
  <div id="gateSummary" class="gate-summary hidden"></div>
  <div class="gate-grid">
-  <div class="q"><div class="field-label" id="lblCleared"><span class="req-dot need" data-req="cleared"></span>Medically cleared?</div>
-   <div class="opts yesno" data-field="cleared" role="group" aria-labelledby="lblCleared"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
-  </div>
-  <div class="q"><div class="field-label"><span class="req-dot need" data-req="insurance"></span>Insurance</div>
+  <div class="q"><div class="field-label"><span class="req-mark" data-req="insurance" aria-hidden="true">■</span>Insurance</div>
    <select id="selInsurance"><option value="">— Select —</option><option value="Medicaid">Medicaid</option><option value="Medicare">Medicare</option><option value="Commercial">Commercial</option><option value="VA">VA / Tricare</option><option value="Uninsured">Uninsured</option></select>
-   <div class="field-help">Shown on the packet; auto-adds benefits lines. Does not filter local options.</div>
   </div>
-  <div class="gate-row-2 gate-wide">
-   <div class="q"><div class="field-label"><span class="req-dot need" data-req="setting"></span>Discharging from</div>
-    <select id="selSetting"><option value="">— Select setting —</option><option value="Acute">Acute / Inpatient (ED, hospital, urgent care)</option><option value="Outpatient">Outpatient clinic / office</option></select>
-    <div class="note" style="margin-top:4px">Acute/inpatient uses full safety screening. Outpatient can skip it when there is no acute concern.</div>
-   </div>
-   <div class="q"><div class="field-label"><span class="req-dot need" data-req="disp"></span>Disposition / level of care</div>
-    <select id="selDispLoc"><option value="">— Select level of care —</option></select>
-    <div class="note" id="opOnlyNote" style="display:none;margin-top:5px">Outpatient — community only (OP, IOP, PHP).</div>
-   </div>
+  <div class="q gate-wide" id="settingWrap"><div class="field-label"><span class="req-mark" data-req="setting" aria-hidden="true">■</span>Discharging from</div>
+   <select id="selSetting"><option value="">— Select setting —</option><option value="Acute">Acute / Inpatient (ED, hospital, urgent care)</option><option value="Outpatient">Outpatient clinic / office</option></select>
+   <div class="note" style="margin-top:4px">Acute/inpatient uses full safety screening. Outpatient can skip it when there is no acute concern.</div>
   </div>
-  <div class="q gate-wide"><div class="field-label"><span class="req-dot need" data-req="zip"></span>Patient home — city or ZIP</div>
+  <div class="q gate-wide"><div class="field-label"><span class="req-mark" aria-hidden="true">■</span>Disposition / level of care</div>
+   <select id="selDispLoc"><option value="">— Select level of care —</option></select>
+   <div class="note" id="opOnlyNote" style="display:none;margin-top:5px">Outpatient — community only (OP, IOP, PHP).</div>
+  </div>
+  <div class="q gate-wide"><div class="field-label"><span class="req-mark" data-req="zip" aria-hidden="true">■</span>Patient home — city or ZIP</div>
    <input type="text" id="loc" placeholder="e.g. Bellingham or 98225" style="max-width:320px" autocomplete="address-level2">
    <span class="note" id="zipMeta"></span>
   </div>
  </div>
- <div class="reveal hidden alert red" id="notCleared">Not medically cleared — complete medical workup / stabilization before psychiatric disposition. This tool is for medically-cleared patients only.</div>
  <div class="intake-divider">
  <div class="sub2" style="border:none;padding-top:0">Who is the patient?</div>
  <div class="sub2">1A · Demographics</div>
@@ -515,134 +551,116 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
  </div>
  </div>
 </section>
+</div>
 
-<!-- LAYER 2 -->
-<section class="layer hidden" id="L2">
- <div class="step-kicker"><span class="num">02</span><span class="lbl">Safety screen</span><span class="ln"></span></div>
- <div class="step-head"><div class="ltitle">Safety screening</div>
- <div class="ldesc">Evidence-based tools only — decision support with a trained clinician, not decision-making.</div></div>
- <div id="safetyCollabBanner" class="alert amber collab-banner hidden"><b>Complete with a trained clinician</b> (psychiatry / crisis). This tool supports the decision; it does not make it.</div>
- <div class="q hidden" id="quickSafety"><label class="qlabel">Any acute safety concern right now — suicidal, homicidal / violent, or substance crisis?</label>
+<div class="slide-panel" data-step="2">
+<section class="layer float-card" id="L2">
+ <div class="step-kicker"><span class="num">03</span><span class="lbl">Safety</span><span class="ln"></span></div>
+ <div class="step-head"><div class="ltitle">Safety screening</div></div>
+ <div id="safetyCollabBanner" class="alert amber collab-banner hidden"><b>Clinician review required</b></div>
+ <div class="q hidden" id="quickSafety"><label class="qlabel">Acute safety concern now?</label>
   <div class="opts yesno" data-field="acuteConcern"><button type="button" class="opt" data-val="no">No</button><button type="button" class="opt dangerv" data-val="yes">Yes</button></div>
-  <div class="reveal hidden alert good" id="quickSafetyOk">No acute concern — full risk work-up skipped. Safety plan &amp; crisis resources are still included in the packet.</div></div>
+  <div class="reveal hidden alert good" id="quickSafetyOk">No acute concern — screening skipped.</div></div>
  <div id="fullScreen">
- <div class="q" id="emrCssrsGate"><label class="qlabel">C-SSRS already completed in the EMR?</label>
-  <div class="opts yesno" data-field="cssrsInEmr"><button type="button" class="opt" data-val="no">No — screen here</button><button type="button" class="opt" data-val="yes">Yes — enter result only</button></div>
-  <div class="reveal hidden" id="emrCssrsOnly"><label class="qlabel">Risk level from EMR</label>
+ <div class="q" id="emrCssrsGate"><label class="qlabel">C-SSRS in EMR?</label>
+  <div class="opts yesno" data-field="cssrsInEmr"><button type="button" class="opt" data-val="no">Screen here</button><button type="button" class="opt" data-val="yes">Enter result</button></div>
+  <div class="reveal hidden" id="emrCssrsOnly"><label class="qlabel">Risk level</label>
    <div class="opts" data-field="suicideRisk"><button type="button" class="opt" data-val="low">Low</button><button type="button" class="opt warnv" data-val="moderate">Moderate</button><button type="button" class="opt dangerv" data-val="high">High</button></div>
-   <div class="note" style="margin-top:6px">Note will record: C-SSRS completed in EMR; risk = selected level.</div>
   </div></div>
  <div class="safety-grid">
   <div class="safety-col" id="cssrsCol">
-   <div class="sub2">2A · Suicide (C-SSRS)</div>
-   <p class="note" style="margin:0 0 8px;font-size:12px;color:var(--mut)">Screening tool only. Positive or moderate/high risk → full assessment; obtain ED psychiatric evaluation if you lack formal suicide-risk training.</p>
+   <div class="sub2">Suicide (C-SSRS)</div>
    <div class="q"><label class="qlabel">Screen completed?</label>
     <div class="opts yesno" data-field="cssrsDone"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
     <div class="reveal hidden" id="cssrsRisk"><label class="qlabel">Risk level</label>
      <div class="opts" data-field="suicideRisk"><button type="button" class="opt" data-val="low">Low</button><button type="button" class="opt warnv" data-val="moderate">Moderate</button><button type="button" class="opt dangerv" data-val="high">High</button></div>
-     <div class="reveal hidden alert red" id="hiRiskMsg">Moderate/High — complete safety plan &amp; lethal means below; crisis services auto-pinned. If you are <b>not formally trained</b> in suicide risk assessment, obtain <b>ED psychiatric evaluation</b> before final disposition.</div>
+     <div class="reveal hidden alert red" id="hiRiskMsg">Moderate/high risk — complete safety plan and lethal means below.</div>
     </div></div>
-   <p class="ref-deeplink"><a href="#ref" id="suicideGuidanceLink">Open suicide disposition guidance →</a></p>
+   <p class="ref-deeplink"><a href="#ref" id="suicideGuidanceLink">Suicide disposition guidance →</a></p>
   </div>
   <div class="safety-col">
-   <div class="sub2">2B · Substance use</div>
+   <div class="sub2">Substance use</div>
    <div class="q"><label class="qlabel">Screen completed?</label>
     <div class="opts yesno" data-field="sudScreenDone"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
     <div class="reveal hidden" id="sudTools">
      <label class="qlabel">Tool</label>
-     <div class="opts" data-field="sudTool"><button type="button" class="opt" data-val="auditc">AUDIT-C</button><button type="button" class="opt" data-val="dast10">DAST-10</button><button type="button" class="opt" data-val="taps">TAPS</button><button type="button" class="opt" data-val="clinical">Clinical only</button></div>
-     <div class="reveal hidden" id="sudScoreWrap"><label class="qlabel">Score <span class="note" id="sudPosHint"></span></label><input type="number" id="sudScore" style="max-width:100%" placeholder="score"></div>
-     <div class="reveal hidden" id="sudClinicalWrap"><label class="qlabel">Positive screen?</label>
+     <div class="opts" data-field="sudTool"><button type="button" class="opt" data-val="auditc">AUDIT-C</button><button type="button" class="opt" data-val="dast10">DAST-10</button><button type="button" class="opt" data-val="taps">TAPS</button><button type="button" class="opt" data-val="clinical">Clinical</button></div>
+     <div class="reveal hidden" id="sudScoreWrap"><label class="qlabel">Score</label><input type="number" id="sudScore" style="max-width:100%" placeholder="score"><span class="note" id="sudPosHint"></span></div>
+     <div class="reveal hidden" id="sudClinicalWrap"><label class="qlabel">Positive?</label>
       <div class="opts yesno" data-field="sudClinical"><button type="button" class="opt" data-val="positive">Yes</button><button type="button" class="opt" data-val="negative">No</button></div></div>
     </div></div>
   </div>
   <div class="safety-col">
-   <div class="sub2">2C · Violence</div>
+   <div class="sub2">Violence</div>
    <div class="q"><label class="qlabel">Acute violence risk?</label>
     <div class="opts yesno" data-field="violence"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
     <div class="reveal hidden" id="violenceMsg">
-     <p class="note" style="margin:0 0 8px">Acute violence prediction has limited validity — document risk factors; clinical judgment governs.</p>
      <div class="mini" id="violenceFactorsWrap">
-      <label><input type="checkbox" data-store="violenceFactors.weapons"> Access to weapons</label>
+      <label><input type="checkbox" data-store="violenceFactors.weapons"> Weapons access</label>
       <label><input type="checkbox" data-store="violenceFactors.priorViolence"> Prior violence</label>
       <label><input type="checkbox" data-store="violenceFactors.substance"> Substance use</label>
       <label><input type="checkbox" data-store="violenceFactors.command"> Command symptoms</label>
       <label><input type="checkbox" data-store="violenceFactors.identifiableTarget"> Identifiable target</label>
      </div>
-     <div class="alert red" style="margin-top:8px"><b>Duty to warn / Tarasoff:</b> document victim, notification, and protective action.</div>
     </div>
    </div>
   </div>
  </div>
+ <div id="safetyInterventions" class="interventions-compact hidden">
+  <div class="safety-grid" id="interventionsGrid">
+   <div class="safety-col">
+    <div class="sub2">Safety plan</div>
+    <div class="q"><label class="qlabel">In EMR?</label>
+     <div class="opts yesno" data-field="safetyPlanInEmr"><button type="button" class="opt" data-val="no">No</button><button type="button" class="opt" data-val="yes">Yes</button></div></div>
+    <div class="q" id="planDoneWrap"><label class="qlabel">Stanley-Brown done?</label><div class="opts yesno" data-field="planDone"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div></div>
+   </div>
+   <div class="safety-col">
+    <div class="sub2">Firearms</div>
+    <div class="q"><label class="qlabel">Firearms access?</label>
+     <div class="opts yesno" data-field="firearm"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
+     <div class="reveal hidden" id="firearmPlanWrap"><label class="qlabel">Action</label>
+      <div class="mini">
+       <label><input type="checkbox" data-store="firearmPlan.safe"> Locked in safe</label>
+       <label><input type="checkbox" data-store="firearmPlan.noaccess"> No access</label>
+       <label><input type="checkbox" data-store="firearmPlan.removed"> Removed</label>
+       <label><input type="checkbox" data-store="firearmPlan.other"> Other</label>
+      </div>
+      <input type="text" data-text="firearmOther" placeholder="Other"></div></div>
+   </div>
+   <div class="safety-col">
+    <div class="sub2">Other means</div>
+    <div class="q"><label class="qlabel">Med stockpile?</label>
+     <div class="opts yesno" data-field="meds"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
+     <div class="reveal hidden" id="medsPlanWrap"><label class="qlabel">Action</label>
+      <div class="mini">
+       <label><input type="checkbox" data-store="medsPlan.safe"> Locked</label>
+       <label><input type="checkbox" data-store="medsPlan.noaccess"> No access</label>
+       <label><input type="checkbox" data-store="medsPlan.removed"> Removed</label>
+       <label><input type="checkbox" data-store="medsPlan.other"> Other</label>
+      </div>
+      <input type="text" data-text="medsOther" placeholder="Other"></div></div>
+    <div class="q"><label class="qlabel">Other means?</label>
+     <div class="opts yesno" data-field="otherMeansDone"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
+     <div class="reveal hidden" id="otherMeansWrap">
+      <div class="mini">
+       <label><input type="checkbox" data-store="otherMeans.caustic"> Caustic liquids</label>
+       <label><input type="checkbox" data-store="otherMeans.other"> Other</label>
+      </div>
+      <input type="text" data-text="otherMeansOther" placeholder="Other"></div></div>
+   </div>
+  </div>
+ </div>
  <div id="l2AttestationGate" class="alert amber hidden" style="margin-top:14px">
-  <label class="mini"><input type="checkbox" id="l2ClinicianAttested"> <b>Reviewed with a trained clinician</b> (psychiatry / crisis) — required for moderate/high suicide risk or violence concern</label>
+  <label class="mini"><input type="checkbox" id="l2ClinicianAttested"> <b>Reviewed with trained clinician</b></label>
  </div>
  </div>
 </section>
+</div>
 
-<!-- LAYER 4 -->
-<section class="layer hidden" id="L4">
- <div class="step-kicker"><span class="num">03</span><span class="lbl">Plan</span><span class="ln"></span></div>
- <div class="step-head"><div class="ltitle">Safety interventions</div>
- <div class="ldesc">Completed before discharge — not referrals.</div></div>
- <div id="l4CollabBanner" class="alert amber collab-banner hidden"><b>Complete with a trained clinician</b> (psychiatry / crisis). Moderate/high risk requires safety plan, lethal-means counseling, and attestation below.</div>
- <div class="safety-grid" id="interventionsGrid">
-  <div class="safety-col">
-   <div class="sub2">Safety plan</div>
-   <div class="q"><label class="qlabel">Already documented in the EMR?</label>
-    <div class="opts yesno" data-field="safetyPlanInEmr"><button type="button" class="opt" data-val="no">No — complete here</button><button type="button" class="opt" data-val="yes">Yes — in chart</button></div></div>
-   <div class="q" id="planDoneWrap"><label class="qlabel">Stanley-Brown plan completed?</label><div class="opts yesno" data-field="planDone"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div></div>
-  </div>
-  <div class="safety-col">
-   <div class="sub2">Lethal means · Firearms</div>
-   <div class="q"><label class="qlabel">Firearms access?</label>
-    <div class="opts yesno" data-field="firearm"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
-    <div class="reveal hidden" id="firearmPlanWrap"><label class="qlabel">Action taken</label>
-     <div class="mini">
-      <label><input type="checkbox" data-store="firearmPlan.safe"> Firearm / trigger locked within a safe</label>
-      <label><input type="checkbox" data-store="firearmPlan.noaccess"> Patient unable to access</label>
-      <label><input type="checkbox" data-store="firearmPlan.removed"> Removed from home via collateral assistance</label>
-      <label><input type="checkbox" data-store="firearmPlan.other"> Other</label>
-     </div>
-     <input type="text" data-text="firearmOther" placeholder="Other — describe"></div></div>
-  </div>
-  <div class="safety-col">
-   <div class="sub2">Medication &amp; other means</div>
-   <div class="q"><label class="qlabel">Medication stockpile?</label>
-    <div class="opts yesno" data-field="meds"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
-    <div class="reveal hidden" id="medsPlanWrap"><label class="qlabel">Action taken</label>
-     <div class="mini">
-      <label><input type="checkbox" data-store="medsPlan.safe"> Medications locked within a safe</label>
-      <label><input type="checkbox" data-store="medsPlan.noaccess"> Patient unable to access</label>
-      <label><input type="checkbox" data-store="medsPlan.removed"> Removed from home via collateral assistance</label>
-      <label><input type="checkbox" data-store="medsPlan.other"> Other</label>
-     </div>
-     <input type="text" data-text="medsOther" placeholder="Other — describe"></div></div>
-   <div class="q"><label class="qlabel">Other means discussed?</label>
-    <div class="opts yesno" data-field="otherMeansDone"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
-    <div class="reveal hidden" id="otherMeansWrap">
-     <div class="mini">
-      <label><input type="checkbox" data-store="otherMeans.caustic"> Removal of caustic liquids</label>
-      <label><input type="checkbox" data-store="otherMeans.other"> Other</label>
-     </div>
-     <input type="text" data-text="otherMeansOther" placeholder="Other — describe"></div></div>
-  </div>
- </div>
- <div class="sub2">Coordination</div>
- <div class="q"><label class="qlabel">Post-discharge phone contact plan</label>
-  <div class="opts" data-field="callback"><button type="button" class="opt" data-val="24h">24-hour callback</button><button type="button" class="opt" data-val="72h">72-hour callback</button><button type="button" class="opt" data-val="weekly">Weekly until engaged</button></div></div>
- <div class="grid2">
-  <div><label class="qlabel">PCP notified?</label><div class="opts" data-field="pcp"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button><button type="button" class="opt" data-val="nopcp">No PCP</button></div></div>
-  <div><label class="qlabel">Pharmacy confirmed?</label><div class="opts yesno" data-field="pharmacy"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div></div>
- </div>
- <div id="l4AttestationGate" class="alert amber hidden" style="margin-top:14px">
-  <label class="mini"><input type="checkbox" id="l4ClinicianAttested"> <b>Reviewed with a trained clinician</b> — required before discharge when suicide risk is moderate/high or violence concern is present</label>
- </div>
-</section>
-
-<!-- LAYER 5 -->
-<section class="layer hidden" id="L5">
- <div class="step-kicker"><span class="num">04</span><span class="lbl">Referrals</span><span class="ln"></span></div>
+<div class="slide-panel" data-step="3">
+<section class="layer float-card" id="L5">
+ <div class="step-kicker"><span class="num">04</span><span class="lbl">Plan</span><span class="ln"></span></div>
+ <div class="step-head"><div class="ltitle">Resources &amp; follow-up</div></div>
  <div class="l5-fresh note" id="l5Fresh"></div>
  <div class="ldesc" id="l5ctx"></div>
  <div id="socialCarePrompt" class="sc-banner hidden">
@@ -654,12 +672,12 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
  <div id="panels"></div>
  <div id="followUpBlock" class="follow-up-block hidden"></div>
 </section>
+</div>
 
-<!-- LAYER 6 -->
-<section class="layer hidden" id="L6">
- <div class="step-kicker"><span class="num">04</span><span class="lbl">Deliver</span><span class="ln"></span></div>
- <div class="step-head"><div class="ltitle">Hand off the plan</div>
- <div class="ldesc">The plan is complete. Send each document to the right person — that's the only thing left.</div></div>
+<div class="slide-panel" data-step="4">
+<section class="layer float-card" id="L6">
+ <div class="step-kicker"><span class="num">05</span><span class="lbl">Deliver</span><span class="ln"></span></div>
+ <div class="step-head"><div class="ltitle">Hand off the plan</div></div>
  <div id="deliverGate" class="deliver-gate hidden"></div>
  <div id="deliverCards"></div>
  <div class="deliver-foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12l4 4L19 7"/></svg>Nothing here is stored. Patient details print and stay with you; the referral leaves blank patient fields for you to fill.</div>
@@ -686,7 +704,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
     <button type="button" class="opt" data-val="outpatient">Outpatient brief</button>
     <button type="button" class="opt" data-val="consult">Consult note stub</button>
    </div>
-   <div class="note" id="packetVariantHint">Clinician summary + referral cover + patient 1-pager</div>
+   <div class="note" id="packetVariantHint" style="display:none"></div>
   </div>
   <div class="q">
    <label class="qlabel">Print documents</label>
@@ -711,6 +729,9 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
  <button type="button" class="hidden" id="copyChartBtn"></button>
  <button type="button" class="hidden" id="printBtn" disabled></button>
 </section>
+</div>
+
+</div></div>
 
 <section id="packet"></section>
 <div id="warmHandoff" class="warm-overlay hidden" role="dialog" aria-labelledby="warmHandoffTitle" aria-modal="true">
@@ -1357,7 +1378,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 var NATIONAL=[{"county":"National","cat":"Emergency","name":"911 — Emergency","phone":"911","svc":"Police, fire & medical emergency — or go to the nearest ER","access":"All ages","panel":"D"},{"county":"National","cat":"Crisis line","name":"988 Suicide & Crisis Lifeline","phone":"988","svc":"Call or text 988 — 24/7 crisis & suicide prevention","access":"All ages","panel":"D"},{"county":"National","cat":"Crisis line","name":"Crisis Text Line","phone":"741741","svc":"Text HOME to 741741 — 24/7 text crisis support","access":"All ages","panel":"D"},{"county":"National","cat":"Crisis line","name":"Veterans Crisis Line","phone":"988","svc":"Dial 988 then press 1 — 24/7 veteran crisis support","access":"Veterans","panel":"D","flag":"veteran"},{"county":"National","cat":"Crisis line","name":"Trans Lifeline","phone":"877-565-8860","svc":"Peer crisis support for transgender people","access":"All ages","panel":"D","flag":"lgbtq"},{"county":"National","cat":"Substance use","name":"SAMHSA National Helpline","phone":"1-800-662-4357","svc":"24/7 free, confidential treatment referral (alcohol & drugs)","access":"All · multilingual","panel":"C"},{"county":"National","cat":"Substance use","name":"Narcotics Anonymous (NA)","phone":"1-818-773-9999","svc":"Mutual-aid recovery meetings & info","access":"All","panel":"C"},{"county":"National","cat":"Substance use","name":"SMART Recovery","phone":"1-440-951-5357","svc":"Science-based mutual-aid recovery groups","access":"All","panel":"C"},{"county":"National","cat":"Substance use","name":"Never Use Alone","phone":"1-800-484-3731","svc":"24/7 overdose-prevention hotline for people using alone","access":"All","panel":"C"},{"county":"National","cat":"Referral","name":"211 — United Way","phone":"211","svc":"24/7 referral to housing, food, transport, benefits & more","access":"All","panel":"F","need":"catchall"},{"county":"National","cat":"Benefits","name":"Ohio Medicaid Consumer Hotline","phone":"1-800-324-8680","svc":"Enroll in / manage Medicaid & managed-care plans","access":"Medicaid","panel":"F","need":"financial"},{"county":"National","cat":"Benefits","name":"Ohio Benefits (SNAP / cash / childcare)","phone":"1-844-640-6446","svc":"Apply for SNAP food, cash assistance & Medicaid","access":"Income-based","panel":"F","need":"financial"},{"county":"National","cat":"Benefits","name":"Social Security (SSI / SSDI)","phone":"1-800-772-1213","svc":"Disability & retirement benefits","access":"All","panel":"F","need":"financial"},{"county":"National","cat":"Transportation","name":"Medicaid Non-Emergency Transportation (NEMT)","phone":"1-800-324-8680","svc":"Free rides to covered appointments — call your managed-care plan or the Medicaid hotline","access":"Medicaid","panel":"F","need":"transport"},{"county":"National","cat":"Domestic violence","name":"National Domestic Violence Hotline","phone":"1-800-799-7233","svc":"24/7 confidential DV support & safety planning (text START to 88788)","access":"All","panel":"F","need":"dv"},{"county":"National","cat":"Childcare","name":"Head Start / Early Head Start Locator","phone":"1-866-763-6481","svc":"Free early-childhood education & childcare","access":"Income-based","panel":"F","need":"childcare"},{"county":"National","cat":"Pediatric","name":"Boys Town National Hotline","phone":"1-800-448-3000","svc":"24/7 counseling for kids, teens & families","access":"Youth & families","panel":"G","flag":"pediatric"},{"county":"National","cat":"Pediatric","name":"National Parent & Youth Helpline","phone":"1-855-427-2736","svc":"Support for parents & caregivers in crisis","access":"Families","panel":"G","flag":"pediatric"},{"county":"National","cat":"Perinatal","name":"Postpartum Support International (PSI)","phone":"1-800-944-4773","svc":"Perinatal mood & anxiety support (call or text)","access":"Perinatal","panel":"G","flag":"perinatal"},{"county":"National","cat":"Perinatal","name":"National Maternal Mental Health Hotline","phone":"1-833-852-6262","svc":"24/7 free support for pregnant & postpartum people","access":"Perinatal","panel":"G","flag":"perinatal"},{"county":"National","cat":"Veteran","name":"Vet Center Combat Call Center","phone":"1-877-927-8387","svc":"24/7 readjustment-counseling line staffed by combat veterans","access":"Veterans & families","panel":"G","flag":"veteran"},{"county":"National","cat":"Veteran","name":"VA Caregiver Support Line","phone":"1-855-260-3274","svc":"Support for those caring for veterans","access":"Veteran caregivers","panel":"G","flag":"veteran"},{"county":"National","cat":"LGBTQ+","name":"The Trevor Project","phone":"1-866-488-7386","svc":"24/7 crisis support for LGBTQ+ youth (<25); text START to 678-678","access":"LGBTQ+ youth","panel":"G","flag":"lgbtq"},{"county":"National","cat":"LGBTQ+","name":"PFLAG (find a local chapter)","phone":"1-202-467-8180","svc":"Peer support for LGBTQ+ people & families","access":"All","panel":"G","flag":"lgbtq"},{"county":"National","cat":"TBI / neuro","name":"Brain Injury Association of Ohio","phone":"1-855-444-6443","svc":"Information, resources & support for brain injury","access":"All","panel":"G","flag":"tbi"},{"county":"National","cat":"IDD","name":"Ohio Dept. of Developmental Disabilities","phone":"1-866-313-6733","svc":"Statewide DD services & MUI/abuse reporting","access":"All","panel":"G","flag":"idd"},{"county":"National","cat":"IDD","name":"The Arc of Ohio","phone":"1-800-875-2723","svc":"Advocacy & support for people with IDD & families","access":"All","panel":"G","flag":"idd"},{"county":"National","cat":"Serious illness","name":"CancerCare","phone":"1-800-813-4673","svc":"Free counseling, support groups & financial help","access":"Serious illness","panel":"G","flag":"seriousMed"},{"county":"National","cat":"Caregiver","name":"NAMI HelpLine","phone":"1-800-950-6264","svc":"Information & support for mental illness (M-F); text 62640","access":"All","panel":"G","flag":"seriousMed"},{"county":"Columbus (Franklin)","cat":"Geriatric","name":"Central Ohio Area Agency on Aging","phone":"1-800-589-7277","svc":"In-home care, benefits & caregiver support for older adults","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"Cleveland (Cuyahoga)","cat":"Geriatric","name":"Western Reserve Area Agency on Aging","phone":"1-216-621-0303","svc":"In-home care, benefits & caregiver support for older adults","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"National","cat":"Geriatric","name":"Eldercare Locator","phone":"1-800-677-1116","svc":"National referral to local aging services","access":"Age 60+","panel":"G","flag":"geriatric"},{"county":"National","cat":"Geriatric","name":"Ohio Adult Protective Services (elder abuse)","phone":"1-855-644-6277","svc":"Report suspected abuse/neglect of older adults","access":"Age 60+","panel":"G","flag":"geriatric"},{"county":"Columbus (Franklin)","cat":"IDD","name":"Franklin County Board of Developmental Disabilities","phone":"1-614-475-6440","svc":"Eligibility, service coordination & supports","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Cleveland (Cuyahoga)","cat":"IDD","name":"Cuyahoga County Board of Developmental Disabilities","phone":"1-216-241-8230","svc":"Eligibility, service coordination & supports","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Columbus (Franklin)","cat":"Justice","name":"Reeb Avenue Center — reentry & workforce","phone":"1-614-525-2112","svc":"Job training & social services (reentry-friendly)","access":"All","national":1,"panel":"G","flag":"justice"},{"county":"Cleveland (Cuyahoga)","cat":"Justice","name":"Cuyahoga County Reentry — via 211","phone":"211","svc":"Reentry case management, ID, housing & job linkage","access":"Justice-involved","national":1,"panel":"G","flag":"justice"},{"county":"National","cat":"Justice","name":"Ohio Justice & Policy Center","phone":"1-513-421-1108","svc":"Legal help & reentry advocacy","access":"Justice-involved","panel":"G","flag":"justice"},{"county":"National","cat":"Interpreter","name":"Patient's Medicaid plan member line / Ohio Medicaid Consumer Hotline","phone":"1-800-324-8680","svc":"Free spoken + ASL interpreters — call the number on the patient's insurance card (TTY 711)","access":"Free to Medicaid members","panel":"I","auto":1},{"county":"National","cat":"Interpreter","name":"988 — language & ASL access","phone":"988","svc":"Press 2 for Spanish; ASL via videophone / 'ASL Now'; 240+ languages","access":"Free · 24/7","panel":"I","auto":1},{"county":"National","cat":"Interpreter","name":"211 — phone interpretation","phone":"211","svc":"Built-in telephone interpretation for resource referrals","access":"Free · 24/7","panel":"I","auto":1},{"county":"National","cat":"Interpreter","name":"Ohio Relay (Deaf / HoH telephone access)","phone":"711","svc":"Relay for Deaf, DeafBlind, hard-of-hearing & speech-disabled (English 800-750-0750 · Spanish 888-269-0678)","access":"Free · 24/7","panel":"I","auto":1},{"county":"Columbus (Franklin)","cat":"Interpreter","name":"US Together — Interpreter Services","phone":"1-614-581-4357","svc":"74 languages; phone & in-person for medical, legal & social settings","access":"Requesting agency billed (free to patient)","national":1,"panel":"I"},{"county":"Columbus (Franklin)","cat":"Interpreter","name":"Asian American Community Services","phone":"1-614-220-4023","svc":"30+ Asian languages incl. Nepali; 24/7 phone & in-person","access":"Requesting agency billed","national":1,"panel":"I"},{"county":"Columbus (Franklin)","cat":"Interpreter","name":"CRIS — Community Refugee & Immigration Services","phone":"1-614-235-5747","svc":"Interpretation & case management in dozens of languages","access":"Free / low-cost","national":1,"panel":"I"},{"county":"Columbus (Franklin)","cat":"Interpreter","name":"Ethiopian Tewahedo Social Services (ETSS)","phone":"1-614-252-5362","svc":"Translation & navigators (Kiswahili, Lingala, Kirundi, French, etc.)","access":"Free / low-cost","national":1,"panel":"I"},{"county":"Columbus (Franklin)","cat":"Interpreter","name":"Somali Community Association of Ohio","phone":"1-614-262-4068","svc":"Somali interpretation & translation","access":"Free / low-cost","national":1,"panel":"I"},{"county":"Columbus (Franklin)","cat":"Interpreter","name":"Bhutanese Community of Central Ohio","phone":"1-614-396-8965","svc":"Nepali / Bhutanese interpretation & health navigation","access":"Free","national":1,"panel":"I"},{"county":"Columbus (Franklin)","cat":"Interpreter","name":"Deaf Services Center — ASL interpreting","phone":"1-614-841-1991","svc":"ASL interpreting (in-person & scheduled); videophone 614-515-6065","access":"Agency billed (free to patient)","national":1,"panel":"I"},{"county":"Cleveland (Cuyahoga)","cat":"Interpreter","name":"US Together — Cleveland (Interpreter Services)","phone":"1-216-456-9630","svc":"270+ interpreters, ~74 languages; in-person, phone & virtual","access":"Requesting agency billed (free to patient)","national":1,"panel":"I"},{"county":"Cleveland (Cuyahoga)","cat":"Interpreter","name":"Asian Services in Action (ASIA, Inc.)","phone":"1-216-881-0330","svc":"Face-to-face, phone & virtual interpreting + document translation","access":"Requesting agency billed","national":1,"panel":"I"},{"county":"Cleveland (Cuyahoga)","cat":"Interpreter","name":"Catholic Charities — Migration & Refugee Services","phone":"1-216-939-3737","svc":"Resettlement/immigration services in many languages","access":"Refugee/immigrant services","national":1,"panel":"I"},{"county":"Cleveland (Cuyahoga)","cat":"Interpreter","name":"Building Hope in the City — Hope Center","phone":"1-216-241-9400","svc":"Walk-in refugee/immigrant center with staff language support","access":"Free center services","national":1,"panel":"I"},{"county":"Cleveland (Cuyahoga)","cat":"Interpreter","name":"Cleveland Hearing & Speech Center — ASL interpreting","phone":"1-216-231-0787","svc":"In-person/video ASL + spoken-language interpreting; after-hours 216-258-3520","access":"Agency billed (free to patient)","national":1,"panel":"I"},{"county":"Toledo (Lucas)","cat":"Geriatric","name":"Area Office on Aging of Northwestern Ohio","phone":"1-419-382-0624","svc":"Area Agency on Aging: care management, in-home services, caregiver support","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"Toledo (Lucas)","cat":"IDD","name":"Lucas County Board of Developmental Disabilities","phone":"1-419-380-4000","svc":"Eligibility, service coordination, early intervention & supports","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Toledo (Lucas)","cat":"Interpreter","name":"US Together — Toledo","phone":"1-419-469-2529","svc":"Refugee resettlement, interpretation & case management","access":"Requesting agency billed","national":1,"panel":"I"},{"county":"Toledo (Lucas)","cat":"Interpreter","name":"DSC of NW Ohio (Interlink Deaf Services) — ASL","phone":"1-419-720-3935","svc":"ASL/Spanish interpreting, speech-to-text, advocacy","access":"Agency billed (free to patient)","national":1,"panel":"I"},{"county":"Cincinnati (Hamilton)","cat":"Geriatric","name":"Council on Aging of Southwestern Ohio","phone":"1-513-721-1025","svc":"Area Agency on Aging: in-home care, Elderly Services Program","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"Cincinnati (Hamilton)","cat":"IDD","name":"Hamilton County Developmental Disabilities Services","phone":"1-513-794-3300","svc":"Service coordination, early intervention, waivers, employment support","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Cincinnati (Hamilton)","cat":"Interpreter","name":"Catholic Charities Southwestern Ohio","phone":"1-513-241-7745","svc":"Refugee resettlement, immigration legal & interpretation","access":"Sliding scale","national":1,"panel":"I"},{"county":"Cincinnati (Hamilton)","cat":"Interpreter","name":"Su Casa Hispanic Center (Catholic Charities)","phone":"1-513-761-1588","svc":"Spanish-language navigation, interpretation & immigrant services","access":"Many services free","national":1,"panel":"I"},{"county":"Cincinnati (Hamilton)","cat":"Interpreter","name":"RefugeeConnect","phone":"1-513-304-1994","svc":"Refugee navigation, education & community integration","access":"Free · refugee families","national":1,"panel":"I"},{"county":"Dayton (Montgomery)","cat":"Geriatric","name":"Area Agency on Aging, PSA 2","phone":"1-937-223-4357","svc":"In-home support, caregiver support & case management (9-county)","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"Dayton (Montgomery)","cat":"IDD","name":"Montgomery County Board of Developmental Disabilities Services","phone":"1-937-890-0730","svc":"Service coordination, early intervention, employment/day support","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Dayton (Montgomery)","cat":"Interpreter","name":"Welcome Dayton (City of Dayton)","phone":"1-937-333-3679","svc":"Immigrant integration hub; referrals to legal/health/language access","access":"Free · all immigrants/refugees","national":1,"panel":"I"},{"county":"Dayton (Montgomery)","cat":"Interpreter","name":"Catholic Social Services of the Miami Valley","phone":"1-937-223-7217","svc":"Refugee resettlement w/ interpreter services & counseling","access":"Refugees & low-income","national":1,"panel":"I"},{"county":"Akron (Summit)","cat":"Geriatric","name":"Direction Home Akron Canton (Area Agency on Aging 10B)","phone":"1-330-896-9172","svc":"In-home care coordination, PASSPORT & caregiver support","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"Akron (Summit)","cat":"IDD","name":"Summit County Developmental Disabilities Board (Summit DD)","phone":"1-330-634-8000","svc":"Service coordination, early intervention & supports","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Akron (Summit)","cat":"Interpreter","name":"International Institute of Akron","phone":"1-330-376-5106","svc":"On-site/phone/video interpreting, translation & refugee services","access":"Immigrants/refugees","national":1,"panel":"I"},{"county":"Canton (Stark)","cat":"Geriatric","name":"Direction Home Akron Canton (Area Agency on Aging)","phone":"1-800-421-7277","svc":"Home-care waivers, meals & long-term-care navigation","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"Canton (Stark)","cat":"IDD","name":"Stark County Board of Developmental Disabilities (StarkDD)","phone":"1-330-477-5200","svc":"Service coordination, early intervention & waivers","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Canton (Stark)","cat":"Interpreter","name":"Greenleaf Center — Deaf / Interpreting Services (ASL)","phone":"1-330-376-3665","svc":"ASL, DeafBlind & hard-of-hearing interpreting","access":"Agency billed","national":1,"panel":"I"},{"county":"Youngstown (Mahoning)","cat":"Geriatric","name":"Direction Home of Eastern Ohio (Area Agency on Aging 11)","phone":"1-330-505-2300","svc":"PASSPORT, in-home care & caregiver support","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"Youngstown (Mahoning)","cat":"IDD","name":"Mahoning County Board of Developmental Disabilities (MCBDD)","phone":"1-330-799-2763","svc":"Service & support administration, early intervention","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Youngstown (Mahoning)","cat":"Interpreter","name":"OCCHA — Hispanic Services (Spanish interpretation)","phone":"1-330-781-1808","svc":"Certified medical/legal Spanish interpretation & social services","access":"All","national":1,"panel":"I"}]
 "use strict";
 if(/[?&]embed/.test(location.search))document.body.classList.add("embed");
-var S={pathway:null,cleared:null,setting:null,city:"",zip:"",insurance:null,lang:"English",interpreter:"no",
+var S={pathway:null,workflowStep:0,cleared:null,setting:null,city:"",zip:"",insurance:null,lang:"English",interpreter:"no",
  lifeStage:"adult",flags:{perinatal:0,veteran:0,lgbtq:0,sud:0,tbi:0,idd:0,seriousMed:0,justice:0,unhoused:0},
  acuteConcern:null,cssrsInEmr:null,cssrsDone:null,suicideRisk:null,sudScreenDone:null,sudTool:null,sudScore:"",sudClinical:null,violence:null,
  violenceFactors:{weapons:0,priorViolence:0,substance:0,command:0,identifiableTarget:0},
@@ -1537,30 +1558,86 @@ function violenceFactorsNote(){
  var parts=[];for(var k in labels){if(S.violenceFactors[k])parts.push(labels[k]);}
  return parts.length?"Yes — "+parts.join("; "):"Yes";
 }
-function intakeCompleteCount(){return ["cleared","insurance","setting","disp","zip","lifeStage"].filter(intakeFieldDone).length;}
+function intakeCompleteCount(){return ["insurance","disp","zip","lifeStage"].filter(intakeFieldDone).length;}
 function renderIntakeLegend(){
  var el=$("#intakeLegend");if(!el)return;
- var n=intakeCompleteCount();
- el.innerHTML='<div class="it"><span class="sq need"></span>Required — still needed</div><div class="it"><span class="sq done"></span>Required — done</div><div class="cnt">'+n+' of 6 required complete</div>';
+ el.innerHTML="";
  $$("[data-req]").forEach(function(dot){
   var k=dot.dataset.req;
-  dot.classList.toggle("need",!intakeFieldDone(k));
-  dot.classList.toggle("done",intakeFieldDone(k));
+  dot.style.opacity=intakeFieldDone(k)?"0.35":"1";
  });
 }
-function spineIndex(){
- if(!L0ok())return 0;
- if(!L2ok())return 1;
- if(!L4ok()||selectedCount()<1||!L5FollowUpOk())return 2;
- return 3;
+var WORKFLOW_STEPS=5;
+var STEP_LABELS=["Gate","Clinical","Safety","Plan","Deliver"];
+function gateOk(){return S.pathway&&S.cleared==="yes";}
+function contextOk(){return S.insurance&&locOk()&&L3ok()&&L1ok();}
+function safetyStepOk(){return L2ok();}
+function applyPlanDefaults(){
+ if(!needsInterventionQuestions()){
+  if(S.planDone==null&&S.safetyPlanInEmr==null)S.planDone="no";
+  if(S.firearm==null)S.firearm="no";
+  if(S.meds==null)S.meds="no";
+  if(S.otherMeansDone==null)S.otherMeansDone="no";
+ }
+ if(S.callback==null)S.callback="72h";
+ if(S.pcp==null)S.pcp="nopcp";
+ if(S.pharmacy==null)S.pharmacy="no";
 }
-function spineStepDone(i){
- if(i===0)return L0ok();
- if(i===1)return L2ok();
- if(i===2)return L4ok()&&selectedCount()>=1&&L5FollowUpOk();
- if(i===3)return L6ok();
+function planStepOk(){applyPlanDefaults();return L4ok()&&selectedCount()>=1&&L5FollowUpOk();}
+function needsInterventionQuestions(){return hiRisk()||S.violence==="yes";}
+function workflowStepDone(i){
+ if(i===0)return gateOk();
+ if(i===1)return contextOk();
+ if(i===2)return safetyStepOk();
+ if(i===3)return planStepOk();
+ if(i===4)return L6ok();
  return false;
 }
+function syncWorkflowStepFromProgress(){
+ if(!S.pathway){S.workflowStep=0;return;}
+ if(!gateOk()){S.workflowStep=0;return;}
+ if(!contextOk()){S.workflowStep=1;return;}
+ if(!safetyStepOk()){S.workflowStep=2;return;}
+ if(!planStepOk()){S.workflowStep=3;return;}
+ S.workflowStep=4;
+}
+function renderSlide(){
+ var track=$("#slideTrack"),shell=$("#slideShell"),sticky=$("#progressSticky");
+ var step=S.workflowStep||0;
+ if(track){
+  track.style.transform="translateX(-"+step*100+"%)";
+  track.classList.toggle("slide-back",!!S._slideBack);
+  S._slideBack=false;
+ }
+ if(shell)shell.classList.toggle("hidden",!S.pathway);
+ if(sticky)sticky.classList.toggle("hidden",!S.pathway);
+}
+function renderGateAutoNote(){
+ var el=$("#gateAutoNote");if(!el)return;
+ if(S.pathway==="ed")el.textContent="ED disposition — discharging from Acute / Inpatient once medically cleared. Full C-SSRS safety screening.";
+ else if(S.pathway==="outpatient")el.textContent="Outpatient disposition — discharging from outpatient clinic once medically cleared. Acute concern gate applies.";
+ else el.textContent="";
+ var sw=$("#settingWrap");if(sw)sw.classList.toggle("hidden",!!S.pathway);
+}
+function goWorkflowStep(n,back){
+ if(!S.pathway)return;
+ n=Math.max(0,Math.min(WORKFLOW_STEPS-1,n));
+ if(n>(S.workflowStep||0)&&!workflowStepDone(n-1))return;
+ S._slideBack=back&&n<(S.workflowStep||0);
+ S.workflowStep=n;
+ render();
+ try{window.scrollTo({top:0,behavior:"smooth"});}catch(e){}
+}
+function workflowContinue(){
+ var step=S.workflowStep||0;
+ if(step<WORKFLOW_STEPS-1&&workflowStepDone(step))goWorkflowStep(step+1,false);
+}
+function workflowBack(){
+ var step=S.workflowStep||0;
+ if(step>0)goWorkflowStep(step-1,true);
+}
+function spineIndex(){return Math.min(S.workflowStep||0,WORKFLOW_STEPS-1);}
+function spineStepDone(i){return workflowStepDone(i);}
 function pathwayLabel(){
  if(S.pathway==="ed")return "ED Dispo";
  if(S.pathway==="outpatient")return "Outpatient Dispo";
@@ -1577,6 +1654,7 @@ function syncPathwaySetting(){
 }
 function choosePathway(p){
  S.pathway=p;
+ S.workflowStep=0;
  S.acuteConcern=null;
  if(p==="ed"){S.setting="Acute";}
  else{S.setting=null;S.dispo=null;S.intensity=null;S.residType=null;}
@@ -1585,7 +1663,7 @@ function choosePathway(p){
  render();
 }
 function clearPathway(){
- S.pathway=null;S.setting=null;S.acuteConcern=null;S.cleared=null;S.insurance=null;
+ S.pathway=null;S.workflowStep=0;S.setting=null;S.acuteConcern=null;S.cleared=null;S.insurance=null;
  S.dispo=null;S.intensity=null;S.residType=null;
  render();
 }
@@ -1601,27 +1679,36 @@ function navInEmbed(view){
 }
 function renderSpine(){
  var el=$("#spine");if(!el)return;
+ var sticky=$("#progressSticky");
  var ctx=$("#pathwayContext");
  if(!S.pathway){
-  el.classList.add("hidden");
+  if(sticky)sticky.classList.add("hidden");
   if(ctx){ctx.classList.add("hidden");ctx.innerHTML="";}
   return;
  }
- el.classList.remove("hidden");
+ if(sticky)sticky.classList.remove("hidden");
  if(ctx){
   var lbl=pathwayLabel();
   ctx.classList.toggle("hidden",!lbl);
   ctx.innerHTML=lbl?('<span>'+esc(lbl)+'</span><button type="button" class="change-path" id="changePathwayBtn">Change pathway</button>'):"";
   var ch=$("#changePathwayBtn");if(ch)ch.addEventListener("click",clearPathway);
  }
- var labels=["Intake","Safety","Plan","Deliver"];
+ var labels=STEP_LABELS;
  var cur=spineIndex();
  el.innerHTML=labels.map(function(lbl,i){
   var done=spineStepDone(i);
-  var now=i===cur&&!done;
-  var cls="seg"+(done?" done":"")+(now?" now":"");
-  return '<div class="'+cls+'"><div class="bar"></div><div class="t">'+lbl+'</div></div>';
+  var now=i===cur;
+  var future=!done&&!now;
+  var cls="seg"+(done?" done":"")+(now?" now":"")+(future?" future":"");
+  var canBack=i<cur&&done;
+  return '<div class="'+cls+'" data-spine="'+i+'"'+(canBack?' role="button" tabindex="0"':'')+'><div class="bar"></div><div class="t">'+lbl+'</div></div>';
  }).join("");
+ el.querySelectorAll("[data-spine]").forEach(function(seg){
+  var i=parseInt(seg.dataset.spine,10);
+  if(i>=cur||!spineStepDone(i))return;
+  seg.addEventListener("click",function(){goWorkflowStep(i,true);});
+  seg.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();goWorkflowStep(i,true);}});
+ });
 }
 function updateContextTagline(){
  var el=$("#mhTagline");if(!el)return;
@@ -2311,7 +2398,7 @@ function sudPositive(){if(S.sudScreenDone!=="yes")return false;
  if(S.sudTool==="auditc")return n>=3; if(S.sudTool==="dast10")return n>=3; if(S.sudTool==="taps")return n>=1; return false;}
 
 /* ---- completion ---- */
-function L0ok(){return S.cleared==="yes"&&S.setting&&locOk()&&S.insurance&&L3ok()&&L1ok();}
+function L0ok(){return gateOk()&&contextOk()&&S.setting;}
 function L1ok(){return !!S.lifeStage;}
 function needsCollaborationAttestation(){return hiRisk()||S.violence==="yes";}
 function attestationOk(){return !needsCollaborationAttestation()||S.clinicianAttested;}
@@ -2373,17 +2460,18 @@ function show(id,on){$(id).classList.toggle("hidden",!on);}
 function rev(id,on){$(id).classList.toggle("hidden",!on);}
 function render(){
  renderSpine();
+ renderGateAutoNote();
+ renderSlide();
  updateContextTagline();
  renderGateSummary();
+ renderIntakeLegend();
  syncGateSelects();
  syncOptsFromS();
  show("#pathwayFork",!S.pathway);
- show("#L0",!!S.pathway);
  rev("#notCleared",S.cleared==="no");
- $("#zipMeta").textContent=locOk()?(function(){var c=patientCounty();if(!c)return "→ location noted — outside listed metros (national resources shown)";var cl=waCluster(c)||nyCluster(c)||upstateCluster(c)||wvCluster(c)||paCluster(c)||miCluster(c)||nvCluster(c)||catalogCluster(c);return "→ "+c+(cl?" · regional metro":"");}()):"";
- show("#L1",false);
+ $("#zipMeta").textContent=locOk()?(function(){var c=patientCounty();if(!c)return "";var cl=waCluster(c)||nyCluster(c)||upstateCluster(c)||wvCluster(c)||paCluster(c)||miCluster(c)||nvCluster(c)||catalogCluster(c);return c+(cl?" · metro":"");}()):"";
  show("#interpreterWrap",!!S.lang&&S.lang!=="English");
- // L2 reveals
+ show("#settingWrap",false);
  show("#quickSafety",isOutpatient());
  rev("#quickSafetyOk",isOutpatient()&&S.acuteConcern==="no");
  show("#fullScreen",!isOutpatient()||S.acuteConcern==="yes");
@@ -2391,35 +2479,26 @@ function render(){
  rev("#emrCssrsOnly",S.cssrsInEmr==="yes");
  show("#cssrsCol",S.cssrsInEmr!=="yes");
  var collab=needsCollaborationAttestation();
+ var needInt=needsInterventionQuestions();
  show("#safetyCollabBanner",collab);
- show("#l4CollabBanner",collab);
+ show("#safetyInterventions",needInt);
  show("#l2AttestationGate",collab);
- show("#l4AttestationGate",collab);
  show("#l6AttestationGate",collab&&gateDone);
  var l2Att=$("#l2ClinicianAttested");if(l2Att)l2Att.checked=S.clinicianAttested;
- var l4Att=$("#l4ClinicianAttested");if(l4Att)l4Att.checked=S.clinicianAttested;
  var l6Att=$("#l6ClinicianAttested");if(l6Att)l6Att.checked=S.clinicianAttested;
  rev("#cssrsRisk",S.cssrsDone==="yes"||S.cssrsInEmr==="yes");
  rev("#hiRiskMsg",hiRisk());
  rev("#sudTools",S.sudScreenDone==="yes");
  rev("#sudScoreWrap",S.sudScreenDone==="yes"&&S.sudTool&&S.sudTool!=="clinical");
  rev("#sudClinicalWrap",S.sudScreenDone==="yes"&&S.sudTool==="clinical");
- var hint={auditc:"(positive ≥4 men / ≥3 women)",dast10:"(positive ≥3)",taps:"(positive ≥1)"}[S.sudTool]||"";
- $("#sudPosHint").textContent=hint;
+ $("#sudPosHint").textContent="";
  rev("#violenceMsg",S.violence==="yes");
- show("#L2",L0ok());
- $("#opOnlyNote").style.display=isOutpatient()?"block":"none";
- // L4
- show("#L4",gateDone);
+ $("#opOnlyNote").style.display="none";
  rev("#planDoneWrap",S.safetyPlanInEmr!=="yes");
  rev("#firearmPlanWrap",S.firearm==="yes");
  rev("#medsPlanWrap",S.meds==="yes");
  rev("#otherMeansWrap",S.otherMeansDone==="yes");
- // L5
- show("#L5",gateDone);
- if(gateDone){renderPanels();renderFollowUp();}
- // L6
- show("#L6",gateDone);
+ if(L0ok()){renderPanels();renderFollowUp();}
  renderL6ErBlock();
  var lp=$("#largePrintToggle");if(lp)lp.checked=S.largePrint;
  renderL6status();
@@ -2849,7 +2928,7 @@ document.addEventListener("change",function(e){
  if(e.target.id==="includeReferralCover"){S.includeReferralCover=e.target.checked;renderL6status();return;}
  if(e.target.id==="includeResourceHandoff"){S.includeResourceHandoff=e.target.checked;renderL6status();return;}
  if(e.target.id==="largePrintToggle"){S.largePrint=e.target.checked;renderL6status();return;}
- if(e.target.id==="l2ClinicianAttested"||e.target.id==="l4ClinicianAttested"||e.target.id==="l6ClinicianAttested"){
+ if(e.target.id==="l2ClinicianAttested"||e.target.id==="l6ClinicianAttested"){
   S.clinicianAttested=e.target.checked;render();return;
  }
  if(e.target.dataset.store!==undefined){setPath(e.target.dataset.store,e.target.checked);render();}
@@ -2858,10 +2937,18 @@ document.addEventListener("change",function(e){
 /* ---- status bar ---- */
 function chk(ok,label){return '<span class="chk '+(ok?"ok":"")+'">'+(ok?"✓":"○")+' <b>'+label+'</b></span>';}
 function renderStatus(){
+ if(!S.pathway){$("#statusInner").innerHTML="";return;}
  var saveNote=lastSaveLabel?'<span class="save-chip">· '+lastSaveLabel+'</span>':"";
- $("#statusInner").innerHTML=chk(L0ok(),"Intake")+chk(L2ok(),"Safety")+chk(L4ok()&&selectedCount()>=1&&L5FollowUpOk(),"Plan")+chk(L6ok(),"Deliver")+saveNote+
-  '<button class="btn" id="jump" '+(L6ok()?"":"disabled")+'>Go to deliver ↓</button>';
- var j=$("#jump");if(j)j.onclick=function(){$("#L6").scrollIntoView({behavior:"smooth"});};
+ var step=S.workflowStep||0;
+ var backDis=step<=0?" disabled":"";
+ var contDis=!workflowStepDone(step)||step>=WORKFLOW_STEPS-1?" disabled":"";
+ var contLbl=step>=WORKFLOW_STEPS-2?"Continue →":"Continue →";
+ $("#statusInner").innerHTML=
+  '<button type="button" class="nav-btn back" id="wfBack"'+backDis+'>← Back</button>'+
+  saveNote+
+  '<button type="button" class="btn nav-btn cont" id="wfContinue"'+contDis+'>'+contLbl+'</button>';
+ var b=$("#wfBack");if(b&&!b.disabled)b.onclick=workflowBack;
+ var c=$("#wfContinue");if(c&&!c.disabled)c.onclick=workflowContinue;
 }
 function renderL6status(){
  var items=[["Safety screening",L2ok()],["Safety plan & means",planAndMeansOk()],["Coordination",S.callback!=null&&S.pcp!=null&&S.pharmacy!=null],["Referrals ("+selectedCount()+")",selectedCount()>=1],["Follow-up",L5FollowUpOk()],["Packet · "+packetVariantLabel(S.packetVariant||"full"),true]];
@@ -3563,6 +3650,7 @@ function restoreSavedPlan(p){
  if(!S.pathway&&saved.setting==="Outpatient")S.pathway="outpatient";
  else if(!S.pathway&&saved.setting==="Acute")S.pathway="ed";
  if(p.savedAt)lastSaveLabel="Resumed "+new Date(p.savedAt).toLocaleString([],{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});
+ syncWorkflowStepFromProgress();
 }
 function activateView(v,fromHash){
  v=(v==="ref")?"ref":(v==="directory")?"directory":(v==="social-care")?"social-care":(v==="psych-ref")?"psych-ref":"tool";

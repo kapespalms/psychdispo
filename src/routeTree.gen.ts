@@ -21,6 +21,7 @@ import { Route as DispoRouteImport } from './routes/dispo'
 import { Route as DirectoryRouteImport } from './routes/directory'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppIntakePsychiatryRouteImport } from './routes/app/intake/psychiatry'
 
 const WorkflowRoute = WorkflowRouteImport.update({
   id: '/workflow',
@@ -82,6 +83,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppIntakePsychiatryRoute = AppIntakePsychiatryRouteImport.update({
+  id: '/app/intake/psychiatry',
+  path: '/app/intake/psychiatry',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -96,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/sign-up': typeof SignUpRoute
   '/social-care': typeof SocialCareRoute
   '/workflow': typeof WorkflowRoute
+  '/app/intake/psychiatry': typeof AppIntakePsychiatryRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -110,6 +117,7 @@ export interface FileRoutesByTo {
   '/sign-up': typeof SignUpRoute
   '/social-care': typeof SocialCareRoute
   '/workflow': typeof WorkflowRoute
+  '/app/intake/psychiatry': typeof AppIntakePsychiatryRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -125,6 +133,7 @@ export interface FileRoutesById {
   '/sign-up': typeof SignUpRoute
   '/social-care': typeof SocialCareRoute
   '/workflow': typeof WorkflowRoute
+  '/app/intake/psychiatry': typeof AppIntakePsychiatryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -141,6 +150,7 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/social-care'
     | '/workflow'
+    | '/app/intake/psychiatry'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -155,6 +165,7 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/social-care'
     | '/workflow'
+    | '/app/intake/psychiatry'
   id:
     | '__root__'
     | '/'
@@ -169,6 +180,7 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/social-care'
     | '/workflow'
+    | '/app/intake/psychiatry'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -184,6 +196,7 @@ export interface RootRouteChildren {
   SignUpRoute: typeof SignUpRoute
   SocialCareRoute: typeof SocialCareRoute
   WorkflowRoute: typeof WorkflowRoute
+  AppIntakePsychiatryRoute: typeof AppIntakePsychiatryRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -272,6 +285,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/intake/psychiatry': {
+      id: '/app/intake/psychiatry'
+      path: '/app/intake/psychiatry'
+      fullPath: '/app/intake/psychiatry'
+      preLoaderRoute: typeof AppIntakePsychiatryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -288,6 +308,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignUpRoute: SignUpRoute,
   SocialCareRoute: SocialCareRoute,
   WorkflowRoute: WorkflowRoute,
+  AppIntakePsychiatryRoute: AppIntakePsychiatryRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
