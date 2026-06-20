@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "hooks": {
+    "subagentStart": [
+      {
+        "command": ".cursor/hooks/inject-ux-gaps.sh",
+        "matcher": "generalPurpose|shell"
+      }
+    ],
+    "subagentStop": [
+      {
+        "command": ".cursor/hooks/ux-gap-followup.sh",
+        "matcher": "generalPurpose|shell",
+        "loop_limit": 1
+      }
+    ]
+  }
+}

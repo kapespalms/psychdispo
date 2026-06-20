@@ -1,0 +1,37 @@
+{
+  "updated": "2026-06-19",
+  "source": "docs/build-spec-gap-analysis.md",
+  "sync_note": "Re-curate when gap analysis or HEAD changes. Top 3 next builds drive realistic_next.",
+  "unfinished": [
+    "Phase 1 blurb backfill (~5 / ~1,394 curated)",
+    "Phase 1 lastVerified on resource cards and handoffs",
+    "Canonical patient.* schema vs flat patientBlurb keys",
+    "Grade chip on resource cards (print gate only today)",
+    "Addendum B: Already in EMR? off-ramp",
+    "Addendum B: collaboration banner + attestation (moderate/high C-SSRS)",
+    "Addendum B: structured violence risk-factor checklist + validity caveat",
+    "Phase 4: Supabase/Clerk auth (defer until content + safety stable)",
+    "Phase 4: Save as template (scaffold-only, not full S)",
+    "Phase 4: library UI (templates, favorites, blurbs, preferences)",
+    "Curator meter and inline My blurbs UI",
+    "Align blurb length rule (spec 220 chars vs skill ~80) before mass backfill"
+  ],
+  "weakest_ux": [
+    "Resource cards missing cost, bring, hours, lastVerified",
+    "Template apply / Save as template discoverability",
+    "Grade chip absent on cards; >6 only blocked at print",
+    "One-page patient print layout untested (regression QA)",
+    "ER nearest override by county/ZIP not wired",
+    "Large-print toggle missing on patient packet",
+    "Agency consent copy thinner than spec",
+    "localStorage saves full S (not PHI-safe for cloud sync)",
+    "Mobile deliver cards and handoff readability"
+  ],
+  "realistic_next": [
+    "Batch blurbs for user's state from scripts/research deliverables",
+    "Addendum B: Already in EMR? off-ramp + attestation before L4/L6 proceed",
+    "Lock patient.* schema then backfill lastVerified on cards/handoffs",
+    "One-page patient print regression check (crisis → follow-up → ER → resources)",
+    "Save as template scaffold-only stub toward Phase 4 library"
+  ]
+}
