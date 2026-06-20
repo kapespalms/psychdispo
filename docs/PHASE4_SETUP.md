@@ -28,24 +28,24 @@ Never commit `.env`, `.env.local`, or real keys.
 
 ### Vercel (production)
 
-Vercel CLI is not installed in this workspace. Set production env vars manually:
+**Status (2026-06-20):** Production env vars are set on `fiscmak/psychdispo-caringcompass` via Vercel CLI:
 
-1. Open [Vercel Dashboard](https://vercel.com) → your PsychDispo project → **Settings → Environment Variables**
-2. Add for **Production** (and Preview if desired):
+| Name | Production |
+|------|------------|
+| `VITE_SUPABASE_URL` | Encrypted (matches `https://kqvpptcmnaeqvmlxlvba.supabase.co`) |
+| `VITE_SUPABASE_ANON_KEY` | Encrypted (from Supabase → Project Settings → API) |
 
-| Name | Value |
-|------|-------|
-| `VITE_SUPABASE_URL` | `https://kqvpptcmnaeqvmlxlvba.supabase.co` |
-| `VITE_SUPABASE_ANON_KEY` | anon key from Supabase → Project Settings → API |
-
-3. Redeploy after saving.
-
-Alternatively, with Vercel CLI installed:
+Add or rotate via CLI (values from `.env.local`, never echo keys in logs):
 
 ```bash
-vercel env add VITE_SUPABASE_URL production
-vercel env add VITE_SUPABASE_ANON_KEY production
+cd psychdispo
+set -a && source .env.local && set +a
+npx vercel env add VITE_SUPABASE_URL production --value "$VITE_SUPABASE_URL" --yes --force
+npx vercel env add VITE_SUPABASE_ANON_KEY production --value "$VITE_SUPABASE_ANON_KEY" --yes --force
+npx vercel deploy --prod --yes
 ```
+
+Preview/Development: add the same names in Vercel if you want Supabase on preview deployments.
 
 ## 2. Database migration
 
@@ -69,9 +69,9 @@ supabase link --project-ref your-project-ref
 supabase db push
 ```
 
-## 3. Auth configuration (manual — Supabase Dashboard)
+## 3. Auth configuration (Supabase Dashboard — required for magic link/OAuth)
 
-MCP cannot set auth redirect URLs or OAuth providers. Complete these in the Supabase Dashboard for project `kqvpptcmnaeqvmlxlvba`:
+Supabase MCP has no tool for auth URL configuration (only database, logs, keys, etc.). Set redirects in the Supabase Dashboard for project `kqvpptcmnaeqvmlxlvba` (or use the [Management API](https://supabase.com/docs/reference/api/update-auth-config) with a personal access token):
 
 ### URL configuration
 
@@ -103,6 +103,21 @@ Enabled by default. Customize email templates under **Authentication → Email T
 3. Sign in at `/sign-in` via magic link or Google.
 4. Complete a disposition plan → **Save as template** on Deliver.
 5. Open **My plans** — template should appear (loaded from Supabase when signed in).
+
+
+## Phase 4 production checklist
+
+| Step | Status | Notes |
+|------|--------|-------|
+| Local `.env.local` with `VITE_SUPABASE_*` | Done | Gitignored |
+| Migration `phase4_templates` on `kqvpptcmnaeqvmlxlvba` | Done | MCP |
+| Vercel Production `VITE_SUPABASE_URL` | Done | CLI 2026-06-20 |
+| Vercel Production `VITE_SUPABASE_ANON_KEY` | Done | CLI 2026-06-20 |
+| Production redeploy | Done | `vercel deploy --prod` |
+| `https://psychdispo.com/sign-in` returns 200 | Done | Magic link button enabled when env present |
+| Supabase **Site URL** = `https://psychdispo.com` | **Manual** | Authentication → URL Configuration |
+| Redirect URLs (localhost + production callback) | **Manual** | See table in §3 |
+| Google OAuth (optional) | Optional | §3 |
 
 ## Guest vs signed-in
 

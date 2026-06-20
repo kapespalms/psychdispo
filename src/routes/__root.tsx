@@ -1,4 +1,5 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/router";
 import {
   Outlet,
   Link,
@@ -75,7 +76,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+export const Route = createRootRouteWithContext<{ queryClient: typeof queryClient }>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -121,7 +122,9 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>{children}</AuthProvider>
+        </QueryClientProvider>
         <Scripts />
       </body>
     </html>
@@ -138,7 +141,6 @@ const TOOL_ROUTES = new Set([
 ]);
 
 function RootComponent() {
-  const { queryClient } = Route.useRouteContext();
   const router = useRouter();
   const path = router.state.location.pathname;
   const hideShellHeader =
@@ -166,11 +168,9 @@ function RootComponent() {
   }, [router]);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        {!hideShellHeader && <SiteHeader />}
-        <Outlet />
-      </AuthProvider>
-    </QueryClientProvider>
+    <>
+      {!hideShellHeader && <SiteHeader />}
+      <Outlet />
+    </>
   );
 }
