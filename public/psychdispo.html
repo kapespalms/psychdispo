@@ -1568,10 +1568,14 @@ function renderIntakeLegend(){
  });
 }
 var WORKFLOW_STEPS=5;
-var STEP_LABELS=["Gate","Clinical","Safety","Plan","Deliver"];
+var STEP_LABELS=["Gate","Context","Safety","Plan","Deliver"];
 function gateOk(){return S.pathway&&S.cleared==="yes";}
 function contextOk(){return S.insurance&&locOk()&&L3ok()&&L1ok();}
-function safetyStepOk(){return L2ok();}
+function interventionsOk(){
+ if(!needsInterventionQuestions())return true;
+ return planAndMeansOk();
+}
+function safetyStepOk(){return L2ok()&&interventionsOk();}
 function applyPlanDefaults(){
  if(!needsInterventionQuestions()){
   if(S.planDone==null&&S.safetyPlanInEmr==null)S.planDone="no";
