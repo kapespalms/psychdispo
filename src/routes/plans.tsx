@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { deletePlan, listPlans, planMeta, resumePlanToGuestDraft, type SavedPlan } from "@/lib/plans";
+import { deleteTemplate, listTemplates, type PlanTemplate } from "@/lib/templates";
 
 export const Route = createFileRoute("/plans")({
   head: () => ({
@@ -14,9 +15,13 @@ function PlansPage() {
   const { user, ready } = useAuth();
   const navigate = useNavigate();
   const [plans, setPlans] = useState<SavedPlan[]>([]);
+  const [templates, setTemplates] = useState<PlanTemplate[]>([]);
 
   const refresh = useCallback(() => {
-    if (user) setPlans(listPlans(user.email));
+    if (user) {
+      setPlans(listPlans(user.email));
+      setTemplates(listTemplates(user.email));
+    }
   }, [user]);
 
   useEffect(() => {
@@ -40,6 +45,13 @@ function PlansPage() {
     refresh();
   }
 
+  function handleDeleteTemplate(id: string) {
+    if (!user) return;
+    if (!window.confirm("Delete this template?")) return;
+    deleteTemplate(user.email, id);
+    refresh();
+  }
+
   if (!ready || !user) {
     return (
       <div className="min-h-[50vh] flex items-center justify-center text-sm text-muted-foreground">
@@ -57,8 +69,8 @@ function PlansPage() {
               My plans
             </h1>
             <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-              Saved disposition plans on this device. Resume to continue or delete when no longer
-              needed.
+              Saved disposition plans and scaffold-only templates on this device. Patient details never
+              leave this device — templates store defaults and resource selections only.
             </p>
           </div>
           <Link
@@ -137,6 +149,44 @@ function PlansPage() {
               );
             })}
           </ul>
+        )}
+
+        {templates.length > 0 && (
+          <div className="mt-10">
+            <h2 className="font-serif text-xl font-semibold mb-3">Plan templates</h2>
+            <p className="text-sm text-muted-foreground mb-4">
+              Scaffold-only — no patient identifiers. Save new templates from the Deliver step.
+            </p>
+            <ul className="space-y-3">
+              {templates.map((t) => {
+                const date = new Date(t.updatedAt).toLocaleDateString([], {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                });
+                return (
+                  <li
+                    key={t.id}
+                    className="border border-border bg-white rounded-sm p-4 flex flex-col sm:flex-row sm:items-center gap-3"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium truncate">{t.name}</h3>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {t.type} · edited {date}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteTemplate(t.id)}
+                      className="px-3 py-1.5 text-sm text-muted-foreground border border-border hover:text-destructive"
+                    >
+                      Delete
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         )}
       </div>
     </div>
