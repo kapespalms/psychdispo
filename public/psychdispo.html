@@ -183,6 +183,32 @@ body.embed .progress-sticky{top:44px}
 .deliver-foot{font-size:12px;color:var(--faint);margin-top:8px;display:flex;align-items:center;gap:8px;padding:0 34px 8px}
 .deliver-foot svg{width:15px;height:15px;color:var(--sage);flex:none}
 .deliver-advanced{margin:0 34px 16px;padding:12px 14px;border:1px dashed var(--line);border-radius:8px;background:#fbf7ee;font-size:12.5px}
+.express-toggle{display:flex;align-items:center;gap:10px;font-size:13px;margin:0 0 12px;padding:9px 12px;background:#e7f0ec;border-radius:9px;border:1px solid var(--line)}
+.express-toggle label{display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:600;color:var(--ink)}
+.express-loc-line{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:14px;margin:4px 0 8px}
+.express-loc-line .loc-suggest{font-weight:600;color:var(--ink)}
+.express-change-loc{font-size:12px;color:var(--t);font-weight:600;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;text-decoration:underline;text-underline-offset:2px}
+.ctx-accordion{margin-top:12px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fafbfd}
+.ctx-accordion-toggle{width:100%;display:flex;align-items:center;gap:8px;padding:10px 14px;background:none;border:none;cursor:pointer;font:inherit;text-align:left;font-size:13px;font-weight:600;color:var(--mut);touch-action:manipulation}
+.ctx-accordion-chevron{width:14px;height:14px;flex:none;stroke:var(--mut);fill:none;stroke-width:2;transition:transform .2s}
+.ctx-accordion.open .ctx-accordion-chevron{transform:rotate(180deg)}
+.ctx-accordion-body{display:none;padding:12px 14px;border-top:1px solid var(--line);background:var(--card)}
+.ctx-accordion.open .ctx-accordion-body{display:block}
+.express-safety-gate{margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.plan-top-matches{display:flex;flex-direction:column;gap:10px;margin:0 0 12px}
+.plan-match-card{display:block;border:2px solid var(--line);border-radius:12px;padding:14px 16px;background:#fff;cursor:pointer;position:relative;touch-action:manipulation;text-align:left;width:100%;font:inherit;color:inherit}
+.plan-match-card.sel{border-color:var(--t);background:#f8f9ff;box-shadow:0 0 0 1px var(--t) inset}
+.plan-match-card .nm{font-size:17px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.plan-match-card .blurb{font-size:13px;color:var(--mut);line-height:1.45}
+.plan-match-card .meta{font-size:12.5px;color:var(--t);font-weight:600;margin-top:6px}
+.plan-expand-link,.deliver-more-link{display:inline-block;margin:8px 0 12px;font-size:13px;font-weight:600;color:var(--t);cursor:pointer;background:none;border:none;font-family:inherit;text-decoration:underline;text-underline-offset:2px;padding:0;touch-action:manipulation}
+.panels-compact-wrap.hidden{display:none}
+.deliver-primary{display:flex;flex-direction:column;gap:10px;margin:8px 0 4px;padding:0 34px}
+.deliver-primary .btn-big{min-height:52px;font-size:16px;font-weight:700;border-radius:12px;padding:14px 20px;border:none;cursor:pointer;font-family:inherit;width:100%;touch-action:manipulation}
+.deliver-primary .btn-big.primary{background:var(--t);color:#fff}
+.deliver-primary .btn-big.secondary{background:#fff;color:var(--t);border:2px solid var(--t)}
+.deliver-cards-advanced.hidden{display:none}
+.express-hide-domain{display:none!important}
 .mh-tagline b{font-style:normal;font-weight:600;color:var(--terra);letter-spacing:.13em;font-size:11px;text-transform:uppercase}
 .template-callout{font-size:12.5px;color:var(--mut);background:#f7f8fc;border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:0 0 14px;line-height:1.45}
 .template-callout a{color:var(--t);font-weight:600;text-decoration:none}
@@ -579,10 +605,19 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
  <div class="step-kicker"><span class="num">01</span><span class="lbl">Gate</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Pathway gate</div></div>
  <div id="gateAutoNote" class="gate-auto-note"></div>
+ <div id="expressToggleWrap" class="express-toggle hidden"><label><input type="checkbox" id="expressOpToggle" checked> Express — fewer steps</label></div>
  <div class="q"><div class="field-label" id="lblCleared"><span class="req-mark" aria-hidden="true">■</span>Medically cleared?</div>
   <div class="opts yesno" data-field="cleared" role="group" aria-labelledby="lblCleared"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
  </div>
  <div class="reveal hidden alert red" id="notCleared">Not medically cleared — complete medical workup / stabilization before psychiatric disposition. This tool is for medically-cleared patients only.</div>
+ <div id="expressEssentials" class="hidden">
+  <div class="q gate-wide"><div class="field-label"><span class="req-mark" aria-hidden="true">■</span>Patient home — city or ZIP</div>
+   <input type="text" id="locExpress" placeholder="e.g. Bellingham or 98225" style="max-width:320px" autocomplete="address-level2">
+   <span class="note" id="zipMetaExpress"></span>
+  </div>
+  <div class="express-loc-line" id="expressLocLine"><span>Suggested level:</span><span class="loc-suggest" id="expressLocSuggest">Outpatient</span><button type="button" class="express-change-loc" id="expressChangeLoc">Change level</button></div>
+  <div class="reveal hidden" id="expressLocExpand"><div class="loc-cols"><div class="loc-col community-col"><div class="loc-col-h">Community</div><div class="opts loc-opts" id="expressLocCommunityOpts"></div></div></div></div>
+ </div>
 </section>
 <div class="card-foot"><button type="button" class="card-continue" id="cardContinue0" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </div>
@@ -595,14 +630,14 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
  <div id="intakeLegend" class="legend"></div>
  <div id="gateSummary" class="gate-summary hidden"></div>
  <div class="gate-grid">
-  <div class="q gate-wide"><div class="field-label"><span class="req-mark" data-req="insurance" aria-hidden="true">■</span>Insurance</div>
+  <div class="q gate-wide" id="contextInsBlock"><div class="field-label"><span class="req-mark" data-req="insurance" aria-hidden="true">■</span>Insurance</div>
    <div class="opts ins-row" id="insuranceOpts" role="group" aria-label="Insurance"></div>
   </div>
   <div class="q gate-wide" id="settingWrap"><div class="field-label"><span class="req-mark" data-req="setting" aria-hidden="true">■</span>Discharging from</div>
    <select id="selSetting"><option value="">— Select setting —</option><option value="Acute">Acute / Inpatient (ED, hospital, urgent care)</option><option value="Outpatient">Outpatient clinic / office</option></select>
    <div class="note" style="margin-top:4px">Acute/inpatient uses full safety screening. Outpatient can skip it when there is no acute concern.</div>
   </div>
-  <div class="q gate-wide"><div class="field-label"><span class="req-mark" aria-hidden="true">■</span>Disposition / level of care</div>
+  <div class="q gate-wide" id="contextDispBlock"><div class="field-label"><span class="req-mark" aria-hidden="true">■</span>Disposition / level of care</div>
    <div class="loc-cols" id="dispLocCols">
     <div class="loc-col community-col">
      <div class="loc-col-h">Community</div>
@@ -615,12 +650,18 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
    </div>
    <div class="note" id="opOnlyNote" style="display:none;margin-top:5px">Outpatient — community only (OP, IOP, PHP).</div>
   </div>
-  <div class="q gate-wide"><div class="field-label"><span class="req-mark" data-req="zip" aria-hidden="true">■</span>Patient home — city or ZIP</div>
+  <div class="q gate-wide" id="contextZipBlock"><div class="field-label"><span class="req-mark" data-req="zip" aria-hidden="true">■</span>Patient home — city or ZIP</div>
    <input type="text" id="loc" placeholder="e.g. Bellingham or 98225" style="max-width:320px" autocomplete="address-level2">
    <span class="note" id="zipMeta"></span>
   </div>
  </div>
- <div class="intake-divider">
+ <div id="ctxAccordion" class="ctx-accordion">
+  <button type="button" class="ctx-accordion-toggle" id="ctxAccordionBtn" aria-expanded="false">Insurance &amp; patient details <span class="note">(optional)</span><svg class="ctx-accordion-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+  <div class="ctx-accordion-body" id="ctxAccordionBody">
+   <div class="q gate-wide hidden" id="ctxAccordionIns"><div class="field-label">Insurance</div>
+    <div class="opts ins-row" id="insuranceOptsAccordion" role="group" aria-label="Insurance"></div>
+   </div>
+   <div class="intake-divider ctx-accordion-details">
  <div class="sub2" style="border:none;padding-top:0">Who is the patient?</div>
  <div class="sub2">1A · Demographics</div>
  <div class="grid2">
@@ -657,7 +698,9 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
     <button type="button" class="opt" data-flag="seriousMed">Serious Medical Illness</button>
    </div>
   </div>
+  </div>
  </div>
+  </div>
  </div>
  </div>
 </section>
@@ -669,6 +712,11 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
  <div class="step-kicker"><span class="num">03</span><span class="lbl">Safety</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Safety screening</div></div>
  <div id="safetyCollabBanner" class="alert amber collab-banner hidden"><b>Clinician review required</b> — moderate/high C-SSRS or violence concern. Complete safety plan &amp; means with a trained clinician, then attest before Plan or Deliver.</div>
+ <div id="expressSafetyGate" class="express-safety-gate hidden">
+  <div class="q"><label class="qlabel">Anything to document for safety?</label>
+   <div class="opts" data-field="expressSafetyDoc"><button type="button" class="opt" data-val="no">No</button><button type="button" class="opt" data-val="emr">In EMR</button><button type="button" class="opt" data-val="screen">Screen here</button></div>
+  </div>
+ </div>
  <div class="q hidden" id="quickSafety"><label class="qlabel">Acute safety concern now?</label>
   <div class="opts yesno" data-field="acuteConcern"><button type="button" class="opt" data-val="no">No</button><button type="button" class="opt dangerv" data-val="yes">Yes</button></div>
   <div class="reveal hidden alert good" id="quickSafetyOk">No acute concern — screening skipped.</div></div>
@@ -826,7 +874,9 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
   <button type="button" class="btn sec" id="dismissSocialCareBtn" style="background:transparent;border:none;color:var(--mut);font-weight:600">Dismiss</button>
  </div>
  <div id="selectedTray"></div>
- <div id="panels"></div>
+ <div id="planTopMatches" class="plan-top-matches hidden"></div>
+ <button type="button" class="plan-expand-link hidden" id="planShowAllBtn">Show all</button>
+ <div id="panelsCompactWrap" class="panels-compact-wrap"><div id="panels"></div></div>
  <div id="followUpBlock" class="follow-up-block hidden"></div>
  <div id="l5FkglGate" class="l6-gate l6-gate-warn hidden"></div>
 </section>
@@ -838,7 +888,9 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
  <div class="step-kicker"><span class="num">05</span><span class="lbl">Deliver</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Hand off the plan</div></div>
  <div id="deliverGate" class="deliver-gate hidden"></div>
- <div id="deliverCards"></div>
+ <div id="deliverPrimary" class="deliver-primary hidden"></div>
+ <button type="button" class="deliver-more-link hidden" id="deliverMoreBtn">More options</button>
+ <div id="deliverAdvancedWrap" class="deliver-cards-advanced hidden"><div id="deliverCards"></div></div>
  <div class="deliver-foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12l4 4L19 7"/></svg>Nothing here is stored. Patient details print and stay with you; the referral leaves blank patient fields for you to fill.</div>
  <div class="deliver-advanced">
   <div class="phi-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Patient details never leave this device — print/export stays local; your library saves templates only.</div>
@@ -1557,7 +1609,8 @@ var S={pathway:null,workflowStep:0,cleared:null,setting:null,city:"",zip:"",insu
  erOverride:"",largePrint:false,
  social:{housing:0,food:0,transport:0,dv:0,financial:0,childcare:0,legal:0,employment:0,utilities:0},
  socialCare:{completed:false,promptDismissed:false,screener:{housing:null,foodWorry:null,foodLast:null,transport:null,utilities:null,safety:null,benefits:null},tonight:{housingSafe:null,dvSafe:null,transportHome:null},dvSafeToPrint:false,contextLine:"Recently seen for a mental health visit, medically cleared.",initials:""},
- selected:{},touched:{}};
+ selected:{},touched:{},
+ expressOp:true,expressSafetyDoc:null,expressLocExpanded:false,planShowAll:false,deliverMoreOpen:false,contextAccordionOpen:false};
 function $(s,c){return (c||document).querySelector(s);}
 function $$(s,c){return [].slice.call((c||document).querySelectorAll(s));}
 function esc(x){return (x==null?"":(""+x)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
@@ -1577,6 +1630,40 @@ function cityHintFromZip(z){var c=countyFromZip(z);if(!c)return "";
  return c.replace(/ \(regional\)/,"").trim();}
 function settingLabel(k){return ({Acute:"Acute / Inpatient",Outpatient:"Outpatient clinic",ED:"Acute / Inpatient",InptPsych:"Acute / Inpatient",InptMed:"Acute / Inpatient",Urgent:"Acute / Inpatient"}[k]||"—");}
 function isOutpatient(){return S.setting==="Outpatient";}
+function isExpressOp(){return S.pathway==="outpatient"&&S.expressOp!==false;}
+function workflowStepCount(){return isExpressOp()?4:5;}
+function physicalStep(logical){return isExpressOp()?([0,2,3,4][logical]||0):logical;}
+function stepLabels(){return isExpressOp()?["Essentials","Safety","Plan","Deliver"]:["Gate","Context","Safety","Plan","Deliver"];}
+function expressEssentialsOk(){
+ if(!gateOk())return false;
+ if(!locOk())return false;
+ if(!S.setting)S.setting="Outpatient";
+ if(!L3ok()){if(!dispLocValue())applyDispLoc("community|outpatient");}
+ return L3ok();
+}
+function expressSafetyScreenOk(){
+ ensureSafetyGate();
+ if(expressSafetyEngagedIncomplete())return false;
+ if(needsCollaborationAttestation()&&!attestationOk())return false;
+ return true;
+}
+function expressSafetyEngagedIncomplete(){
+ ensureSafetyGate();
+ var domains=["suicide","violence","substances"];
+ for(var i=0;i<domains.length;i++){
+  var d=domains[i];
+  if(S.safetyGate[d]!=null&&!safetyGateComplete(d))return true;
+ }
+ return false;
+}
+function expressSafetyOk(){
+ if(S.expressSafetyDoc==null)return false;
+ if(S.expressSafetyDoc==="no")return true;
+ if(S.expressSafetyDoc==="emr")return true;
+ if(S.expressSafetyDoc==="screen")return expressSafetyScreenOk();
+ return false;
+}
+function planCompactView(){return (isExpressOp()||isOutpatient())&&!S.planShowAll;}
 function normalizeSetting(v){
  if(!v)return null;
  if(v==="Outpatient")return "Outpatient";
@@ -1600,21 +1687,34 @@ function normalizeInsurance(v){
  return v;
 }
 function rebuildInsuranceOpts(){
- var el=$("#insuranceOpts");if(!el)return;
  var ins=normalizeInsurance(S.insurance);
- el.innerHTML=INSURANCE_OPTS.map(function(v){
-  return '<button type="button" class="opt'+(ins===v?" sel":"")+'" data-ins="'+v+'" aria-pressed="'+(ins===v?"true":"false")+'">'+v+'</button>';
- }).join("");
+ function row(id){
+  var el=$(id);if(!el)return;
+  el.innerHTML=INSURANCE_OPTS.map(function(v){
+   return '<button type="button" class="opt'+(ins===v?" sel":"")+'" data-ins="'+v+'" aria-pressed="'+(ins===v?"true":"false")+'">'+v+'</button>';
+  }).join("");
+ }
+ row("#insuranceOpts");
+ row("#insuranceOptsAccordion");
 }
 function rebuildDispLocButtons(){
  var cur=dispLocValue(),opOnly=isOutpatient();
- var comm=$("#locCommunityOpts"),res=$("#locResidentialOpts");
- if(!comm||!res)return;
- function btn(o){
-  return '<button type="button" class="opt'+(o.v===cur?" sel":"")+'" data-disp-loc="'+o.v+'" aria-pressed="'+(o.v===cur?"true":"false")+'">'+o.t+'</button>';
+ function fill(sel){
+  var comm=$(sel);if(!comm)return;
+  function btn(o){
+   return '<button type="button" class="opt'+(o.v===cur?" sel":"")+'" data-disp-loc="'+o.v+'" aria-pressed="'+(o.v===cur?"true":"false")+'">'+o.t+'</button>';
+  }
+  comm.innerHTML=DISPO_LOC_OPTS.filter(function(o){return o.col==="community";}).map(btn).join("");
  }
- comm.innerHTML=DISPO_LOC_OPTS.filter(function(o){return o.col==="community";}).map(btn).join("");
- res.innerHTML=DISPO_LOC_OPTS.filter(function(o){return o.col==="residential";}).map(btn).join("");
+ fill("#locCommunityOpts");
+ fill("#expressLocCommunityOpts");
+ var res=$("#locResidentialOpts");
+ if(res){
+  function btn(o){
+   return '<button type="button" class="opt'+(o.v===cur?" sel":"")+'" data-disp-loc="'+o.v+'" aria-pressed="'+(o.v===cur?"true":"false")+'">'+o.t+'</button>';
+  }
+  res.innerHTML=DISPO_LOC_OPTS.filter(function(o){return o.col==="residential";}).map(btn).join("");
+ }
  var rc=$("#residentialLocCol");if(rc)rc.classList.toggle("dimmed",opOnly);
 }
 function syncStoreChips(){
@@ -1920,10 +2020,12 @@ function renderIntakeLegend(){
   dot.style.opacity=intakeFieldDone(k)?"0.35":"1";
  });
 }
-var WORKFLOW_STEPS=5;
 var STEP_LABELS=["Gate","Context","Safety","Plan","Deliver"];
 function gateOk(){return S.pathway&&S.cleared==="yes";}
-function contextOk(){return S.insurance&&locOk()&&L3ok()&&L1ok();}
+function contextOk(){
+ if(isExpressOp())return expressEssentialsOk();
+ return S.insurance&&locOk()&&L3ok()&&L1ok();
+}
 function interventionsOk(){
  if(!needsInterventionQuestions())return true;
  return planAndMeansOk();
@@ -1949,6 +2051,13 @@ function needsInterventionQuestions(){
  return false;
 }
 function workflowStepDone(i){
+ if(isExpressOp()){
+  if(i===0)return expressEssentialsOk();
+  if(i===1)return expressSafetyOk();
+  if(i===2)return planStepOk();
+  if(i===3)return L6ok();
+  return false;
+ }
  if(i===0)return gateOk();
  if(i===1)return contextOk();
  if(i===2)return safetyStepOk();
@@ -1958,6 +2067,13 @@ function workflowStepDone(i){
 }
 function syncWorkflowStepFromProgress(){
  if(!S.pathway){S.workflowStep=0;return;}
+ if(isExpressOp()){
+  if(!expressEssentialsOk()){S.workflowStep=0;return;}
+  if(!expressSafetyOk()){S.workflowStep=1;return;}
+  if(!planStepOk()){S.workflowStep=2;return;}
+  S.workflowStep=3;
+  return;
+ }
  if(!gateOk()){S.workflowStep=0;return;}
  if(!contextOk()){S.workflowStep=1;return;}
  if(!safetyStepOk()){S.workflowStep=2;return;}
@@ -1966,7 +2082,7 @@ function syncWorkflowStepFromProgress(){
 }
 function renderSlide(){
  var track=$("#slideTrack"),shell=$("#slideShell"),sticky=$("#progressSticky");
- var step=S.workflowStep||0;
+ var step=physicalStep(S.workflowStep||0);
  if(track){
   track.style.transform="translateX(-"+step*100+"%)";
   track.classList.toggle("slide-back",!!S._slideBack);
@@ -1978,13 +2094,14 @@ function renderSlide(){
 function renderGateAutoNote(){
  var el=$("#gateAutoNote");if(!el)return;
  if(S.pathway==="ed")el.textContent="ED disposition — discharging from Acute / Inpatient once medically cleared. Full C-SSRS safety screening.";
+ else if(S.pathway==="outpatient"&&isExpressOp())el.textContent="Outpatient express — essentials, optional safety, top resource matches.";
  else if(S.pathway==="outpatient")el.textContent="Outpatient disposition — discharging from outpatient clinic once medically cleared. Acute concern gate applies.";
  else el.textContent="";
  var sw=$("#settingWrap");if(sw)sw.classList.toggle("hidden",!!S.pathway);
 }
 function goWorkflowStep(n,back){
  if(!S.pathway)return;
- n=Math.max(0,Math.min(WORKFLOW_STEPS-1,n));
+ n=Math.max(0,Math.min(workflowStepCount()-1,n));
  if(n>(S.workflowStep||0)&&!workflowStepDone(n-1))return;
  S._slideBack=back&&n<(S.workflowStep||0);
  S.workflowStep=n;
@@ -1993,13 +2110,13 @@ function goWorkflowStep(n,back){
 }
 function workflowContinue(){
  var step=S.workflowStep||0;
- if(step<WORKFLOW_STEPS-1&&workflowStepDone(step))goWorkflowStep(step+1,false);
+ if(step<workflowStepCount()-1&&workflowStepDone(step))goWorkflowStep(step+1,false);
 }
 function workflowBack(){
  var step=S.workflowStep||0;
  if(step>0)goWorkflowStep(step-1,true);
 }
-function spineIndex(){return Math.min(S.workflowStep||0,WORKFLOW_STEPS-1);}
+function spineIndex(){return Math.min(S.workflowStep||0,workflowStepCount()-1);}
 function spineStepDone(i){return workflowStepDone(i);}
 function pathwayLabel(){
  if(S.pathway==="ed")return "ED Dispo";
@@ -2019,8 +2136,13 @@ function choosePathway(p){
  S.pathway=p;
  S.workflowStep=0;
  S.acuteConcern=null;
- if(p==="ed"){S.setting="Acute";}
- else{S.setting=null;S.dispo=null;S.intensity=null;S.residType=null;}
+ S.expressSafetyDoc=null;
+ S.planShowAll=false;
+ S.deliverMoreOpen=false;
+ S.contextAccordionOpen=false;
+ S.expressLocExpanded=false;
+ if(p==="ed"){S.setting="Acute";S.expressOp=false;}
+ else{S.expressOp=true;S.setting=null;S.dispo=null;S.intensity=null;S.residType=null;}
  syncPathwaySetting();
  rebuildDispLocSelect();
  render();
@@ -2056,7 +2178,7 @@ function renderSpine(){
   ctx.innerHTML=lbl?('<span>'+esc(lbl)+'</span><button type="button" class="change-path" id="changePathwayBtn">Change pathway</button>'):"";
   var ch=$("#changePathwayBtn");if(ch)ch.addEventListener("click",clearPathway);
  }
- var labels=STEP_LABELS;
+ var labels=stepLabels();
  var cur=spineIndex();
  el.innerHTML=labels.map(function(lbl,i){
   var done=spineStepDone(i);
@@ -2105,15 +2227,28 @@ function renderDeliverScreen(){
     sens.length+' sensitive resource'+(sens.length>1?"s are":" is")+' hidden from the printed patient sheet — confirm it\'s safe to print, or leave off.';
   }else{gate.classList.add("hidden");gate.innerHTML="";}
  }
- var cards=$("#deliverCards");if(!cards)return;
- if(!L6ok()){cards.innerHTML='<div class="note">Complete safety, plan, referrals, and follow-up to unlock deliver actions.</div>';return;}
- var ok=L6ok();
- var dis=!ok?' disabled':'';
+ var primary=$("#deliverPrimary"),moreBtn=$("#deliverMoreBtn"),advWrap=$("#deliverAdvancedWrap"),cards=$("#deliverCards");
+ if(!primary)return;
+ if(!L6ok()){
+  primary.classList.remove("hidden");
+  primary.innerHTML='<div class="note">Complete safety, plan, referrals, and follow-up to unlock deliver actions.</div>';
+  if(cards)cards.innerHTML="";
+  if(moreBtn)moreBtn.classList.add("hidden");
+  if(advWrap)advWrap.classList.add("hidden");
+  return;
+ }
+ var ok=L6ok(),dis=!ok?' disabled':'';
+ primary.classList.remove("hidden");
+ primary.innerHTML=
+  '<button type="button" class="btn-big primary" data-deliver="print-patient"'+dis+'>Print patient sheet</button>'+
+  '<button type="button" class="btn-big secondary" data-deliver="copy-chart"'+dis+'>Copy chart note</button>';
+ if(moreBtn){
+  moreBtn.classList.remove("hidden");
+  moreBtn.textContent=S.deliverMoreOpen?"Fewer options":"More options";
+ }
+ if(advWrap)advWrap.classList.toggle("hidden",!S.deliverMoreOpen);
+ if(!cards)return;
  var html="";
- html+=deliverAct("patient","Patient take-home","One page, plain language: crisis numbers, follow-up, resources.","For the patient",
-  '<button type="button" class="btn ghost" data-deliver="preview-patient"'+dis+'>Preview</button><button type="button" class="btn primary" data-deliver="print-patient"'+dis+'>Print</button>');
- html+=deliverAct("note","Note for the chart","Full clinical detail — copy into your EHR or print.","For your record",
-  '<button type="button" class="btn primary" data-deliver="copy-chart"'+dis+'>Copy text</button><button type="button" class="btn" data-deliver="print-chart"'+dis+'>Print</button>');
  referralDeliverTargets().forEach(function(r){
   html+=deliverAct("ref","Referral to "+r.name,"Cover sheet for the program — attach your face sheet before sending.","For the receiving program",
    '<button type="button" class="btn" data-deliver="email" data-ref="'+esc(rid(r))+'"'+dis+'>Email</button><button type="button" class="btn" data-deliver="fax" data-ref="'+esc(rid(r))+'"'+dis+'>Fax</button><button type="button" class="btn ghost" data-deliver="print-ref" data-ref="'+esc(rid(r))+'"'+dis+'>Print</button>');
@@ -2715,7 +2850,7 @@ document.addEventListener("keydown",function(e){
  if(tag==="input"&&(e.target.type==="text"||e.target.type==="number"||e.target.type==="search"||e.target.type==="email"))return;
  if(!S.pathway)return;
  var step=S.workflowStep||0;
- if(step>=WORKFLOW_STEPS-1||!workflowStepDone(step))return;
+ if(step>=workflowStepCount()-1||!workflowStepDone(step))return;
  e.preventDefault();
  workflowContinue();
 });
@@ -2739,6 +2874,19 @@ function setField(f,v){
  if(f==="apptScheduled"&&v==="no"){S.warm=null;}
  if(f==="refMethod"&&v!=="fax"){S.refSheet=null;}
  if(f==="packetVariant"){applyPacketVariantDefaults(v);updatePacketVariantHint();}
+ if(f==="expressSafetyDoc"){
+  if(v==="no"){
+   S.safetyGate={suicide:null,homicide:null,violence:null,substances:null};
+   S.safetyOpen={suicide:false,homicide:false,violence:false,substances:false};
+   S.cssrsDone=null;S.suicideRisk=null;S.homicideRisk=null;S.sudScreenDone=null;S.sudTool=null;S.sudScore="";S.sudClinical=null;S.violence=null;S.cssrsInEmr=null;
+  }else if(v==="emr"){
+   S.safetyGate={suicide:"emr",homicide:"emr",violence:"emr",substances:"emr"};
+  }else if(v==="screen"){
+   S.safetyGate={suicide:null,homicide:null,violence:null,substances:null};
+   S.safetyOpen={suicide:false,homicide:false,violence:false,substances:false};
+  }
+  return;
+ }
  if(f==="acuteConcern"&&v==="no"){
   S.safetyGate={suicide:null,homicide:null,violence:null,substances:null};
   S.safetyOpen={suicide:false,homicide:false,violence:false,substances:false};
@@ -2760,6 +2908,18 @@ $("#loc").addEventListener("input",function(e){
  syncLocInput(v);
  render();
 });
+var locExpressEl=$("#locExpress");if(locExpressEl)locExpressEl.addEventListener("input",function(e){
+ var v=e.target.value;
+ if(/^\d/.test(v.trim())){v=v.replace(/[^0-9]/g,"").slice(0,5);e.target.value=v;}
+ syncLocInput(v);
+ var l=$("#loc");if(l)l.value=v;
+ render();
+});
+var expressChangeLoc=$("#expressChangeLoc");if(expressChangeLoc)expressChangeLoc.addEventListener("click",function(){S.expressLocExpanded=!S.expressLocExpanded;render();});
+var expressOpToggle=$("#expressOpToggle");if(expressOpToggle)expressOpToggle.addEventListener("change",function(e){S.expressOp=e.target.checked;S.workflowStep=0;render();});
+var ctxAccordionBtn=$("#ctxAccordionBtn");if(ctxAccordionBtn)ctxAccordionBtn.addEventListener("click",function(){S.contextAccordionOpen=!S.contextAccordionOpen;render();});
+var planShowAllBtn=$("#planShowAllBtn");if(planShowAllBtn)planShowAllBtn.addEventListener("click",function(){S.planShowAll=true;render();});
+var deliverMoreBtn=$("#deliverMoreBtn");if(deliverMoreBtn)deliverMoreBtn.addEventListener("click",function(){S.deliverMoreOpen=!S.deliverMoreOpen;render();});
 
 [{id:"selSetting",f:"setting"}].forEach(function(x){
  var el=$("#"+x.id);if(!el)return;
@@ -2809,6 +2969,7 @@ function needsCollaborationAttestation(){
 }
 function attestationOk(){return !needsCollaborationAttestation()||S.clinicianAttested;}
 function L2ok(){
+ if(isExpressOp())return expressSafetyOk();
  if(isOutpatient()){if(S.acuteConcern==="no")return true;if(S.acuteConcern!=="yes")return false;}
  ensureSafetyGate();
  if(safetyEngagedIncomplete())return false;
@@ -2859,9 +3020,58 @@ function L6ok(){return L2ok()&&L4ok()&&L5FollowUpOk()&&selectedCount()>=1&&attes
 /* ---- render visibility + reveals ---- */
 function show(id,on){$(id).classList.toggle("hidden",!on);}
 function rev(id,on){$(id).classList.toggle("hidden",!on);}
+function renderContextLayout(){
+ var acc=$("#ctxAccordion"),ess=$("#expressEssentials"),l0body=$("#L0 .card-body");
+ if(!acc)return;
+ var anchor=isExpressOp()?ess:l0body;
+ if(anchor&&acc.parentElement!==anchor)anchor.appendChild(acc);
+ acc.classList.toggle("open",!!S.contextAccordionOpen);
+ var btn=$("#ctxAccordionBtn");if(btn)btn.setAttribute("aria-expanded",S.contextAccordionOpen?"true":"false");
+ var insMain=$("#contextInsBlock"),insAcc=$("#ctxAccordionIns");
+ if(insMain)insMain.classList.toggle("hidden",isExpressOp());
+ if(insAcc)insAcc.classList.toggle("hidden",!isExpressOp());
+ show("#contextDispBlock",!isExpressOp());
+ show("#contextZipBlock",!isExpressOp());
+}
+function renderExpressEssentials(){
+ var wrap=$("#expressEssentials"),toggle=$("#expressToggleWrap"),tog=$("#expressOpToggle");
+ show("#expressEssentials",isExpressOp());
+ show("#expressToggleWrap",S.pathway==="outpatient");
+ if(tog)tog.checked=S.expressOp!==false;
+ var le=$("#locExpress");if(le){le.value=locDisplay();}
+ var zm=$("#zipMetaExpress");if(zm)zm.textContent=$("#zipMeta").textContent;
+ var sug=$("#expressLocSuggest");if(sug)sug.textContent=dispLocShort()||"Outpatient";
+ rev("#expressLocExpand",!!S.expressLocExpanded);
+ if(isExpressOp()&&!dispLocValue())applyDispLoc("community|outpatient");
+}
+function planMatchCard(r){
+ var id=rid(r),sel=!!S.selected[id],c=clipCategory(r);
+ return '<label class="plan-match-card'+(sel?" sel":"")+'"><input type="checkbox" data-res="'+esc(id)+'" '+(sel?"checked":"")+' style="position:absolute;opacity:0;width:1px;height:1px">'+
+  '<div class="nm">'+esc(r.name)+'<span class="cat '+c.cls+'">'+esc(c.cat)+'</span></div>'+
+  '<div class="blurb">'+esc(patientBlurbFor(r))+'</div>'+
+  '<div class="meta">'+esc(r.phone||"")+'</div></label>';
+}
+function renderPlanTopMatches(){
+ var el=$("#planTopMatches"),wrap=$("#panelsCompactWrap"),btn=$("#planShowAllBtn");
+ var compact=planCompactView()&&locOk()&&gateOk();
+ if(wrap)wrap.classList.toggle("hidden",compact);
+ if(btn){
+  btn.classList.toggle("hidden",!compact);
+  btn.textContent=isExpressOp()?"+ Add more resources":"Show all";
+  btn.style.display=S.planShowAll?"none":"";
+ }
+ if(!el)return;
+ if(!compact){el.innerHTML="";el.classList.add("hidden");return;}
+ var ids=(S._topMatchIds||[]).slice(0,3);
+ if(!ids.length){el.innerHTML='<div class="note">Enter ZIP to see matched resources.</div>';el.classList.remove("hidden");return;}
+ el.classList.remove("hidden");
+ el.innerHTML=ids.map(function(id){var r=resById(id);return r?planMatchCard(r):"";}).join("");
+}
 function render(){
  renderSpine();
  renderGateAutoNote();
+ renderExpressEssentials();
+ renderContextLayout();
  renderSlide();
  updateContextTagline();
  renderGateSummary();
@@ -2870,12 +3080,16 @@ function render(){
  syncOptsFromS();
  show("#pathwayFork",!S.pathway);
  rev("#notCleared",S.cleared==="no");
- $("#zipMeta").textContent=locOk()?(function(){var c=patientCounty();if(!c)return "";var cl=waCluster(c)||nyCluster(c)||upstateCluster(c)||wvCluster(c)||paCluster(c)||miCluster(c)||nvCluster(c)||catalogCluster(c);return c+(cl?" · metro":"");}()):"";
+ var zipNote=locOk()?(function(){var c=patientCounty();if(!c)return "";var cl=waCluster(c)||nyCluster(c)||upstateCluster(c)||wvCluster(c)||paCluster(c)||miCluster(c)||nvCluster(c)||catalogCluster(c);return c+(cl?" · metro":"");}()):"";
+ $("#zipMeta").textContent=zipNote;
+ var zm2=$("#zipMetaExpress");if(zm2)zm2.textContent=zipNote;
  show("#interpreterWrap",!!S.lang&&S.lang!=="English");
  show("#settingWrap",false);
- show("#quickSafety",isOutpatient());
- rev("#quickSafetyOk",isOutpatient()&&S.acuteConcern==="no");
- show("#fullScreen",!isOutpatient()||S.acuteConcern==="yes");
+ show("#quickSafety",isOutpatient()&&!isExpressOp());
+ rev("#quickSafetyOk",isOutpatient()&&!isExpressOp()&&S.acuteConcern==="no");
+ show("#expressSafetyGate",isExpressOp());
+ show("#fullScreen",isExpressOp()?(S.expressSafetyDoc==="screen"):(!isOutpatient()||S.acuteConcern==="yes"));
+ var hom=$("#domainHomicide");if(hom)hom.classList.toggle("express-hide-domain",isExpressOp());
  ensureSafetyGate();
  var gateDone=L0ok()&&L2ok();
  var sg=S.safetyGate;
@@ -2899,7 +3113,7 @@ function render(){
  rev("#firearmPlanWrap",S.firearm==="yes");
  rev("#medsPlanWrap",S.meds==="yes");
  rev("#otherMeansWrap",S.otherMeansDone==="yes");
- if(L0ok()){renderPanels();renderFollowUp();renderL5FkglGate();}
+ if(L0ok()){renderPanels();renderPlanTopMatches();renderFollowUp();renderL5FkglGate();}
  renderL6ErBlock();
  var lp=$("#largePrintToggle");if(lp)lp.checked=S.largePrint;
  renderL6status();
@@ -3301,6 +3515,20 @@ function renderPanels(){
  // compute auto-checks then apply to any resource the user hasn't manually toggled
  var auto={};
  P.forEach(function(p){p.subs.forEach(function(sub){if(sub.list.length===1)auto[rid(sub.list[0])]=1;sub.list.forEach(function(r){if(autoMatch(r))auto[rid(r)]=1;});});});
+ var autoList=[];
+ P.forEach(function(p){p.subs.forEach(function(sub){sub.list.forEach(function(r){if(auto[rid(r)])autoList.push(r);});});});
+ autoList.sort(function(a,b){
+  function rank(r){
+   if(r.panel==="A"&&/Psychiatrist|PMHNP/i.test(r.sub||""))return 0;
+   if(r.panel==="A")return 1;
+   if(r.panel==="B")return 2;
+   if(r.panel==="C")return 3;
+   if(r.panel==="D")return 4;
+   return 5;
+  }
+  return rank(a)-rank(b);
+ });
+ S._topMatchIds=autoList.map(function(r){return rid(r);});
  P.forEach(function(p){p.subs.forEach(function(sub){sub.list.forEach(function(r){var id=rid(r);if(!(id in S.touched)){S.selected[id]=auto[id]?true:(S.selected[id]||false);}});});});
  var out="";
  P.forEach(function(p){var body=p.mini?miniHTML(p.mini):"";p.subs.forEach(function(sub){body+=subSection(sub.title,sub.list);});out+=panelHTML(p.key,body);});
@@ -3354,7 +3582,7 @@ function renderStatus(){
  var saveNote=lastSaveLabel?'<span class="save-chip">· '+lastSaveLabel+'</span>':"";
  var step=S.workflowStep||0;
  var backDis=step<=0?" disabled":"";
- var contDis=!workflowStepDone(step)||step>=WORKFLOW_STEPS-1?" disabled":"";
+ var contDis=!workflowStepDone(step)||step>=workflowStepCount()-1?" disabled":"";
  var contLbl="Continue";
  var contSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg>';
  $("#statusInner").innerHTML=
@@ -3363,7 +3591,7 @@ function renderStatus(){
   '<button type="button" class="btn nav-btn cont" id="wfContinue"'+contDis+'>'+contLbl+contSvg+'</button>';
  var b=$("#wfBack");if(b&&!b.disabled)b.onclick=workflowBack;
  var c=$("#wfContinue");if(c&&!c.disabled)c.onclick=workflowContinue;
- var canCont=workflowStepDone(step)&&step<WORKFLOW_STEPS-1;
+ var canCont=workflowStepDone(step)&&step<workflowStepCount()-1;
  $$(".card-continue").forEach(function(btn){
   btn.disabled=!canCont;
   if(canCont)btn.onclick=workflowContinue;
@@ -4151,6 +4379,8 @@ window.addEventListener("hashchange",function(){var v=viewFromHash();if(v)activa
   syncOptsFromS();
  }
  updateSavePlanBtn();
+ var pm=location.search.match(/[?&]pathway=(ed|outpatient)/i);
+ if(pm&&!S.pathway)choosePathway(pm[1].toLowerCase()==="ed"?"ed":"outpatient");
 })();
 $("#savePlanBtn").addEventListener("click",function(){
  if(readSessionUser())showSavePlanDialog();
