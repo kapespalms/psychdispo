@@ -19,10 +19,8 @@ export function SiteHeader() {
         <Link to="/" className="font-serif text-[23px] font-bold tracking-tight shrink-0">
           Psych<span className="italic text-[#2A43C0]">Dispo</span>
         </Link>
-        <div className="hidden lg:flex items-center gap-2 font-serif italic text-[13.5px] text-[#6f6a5f]">
-          <span className="not-italic font-semibold text-[#BC5B3A] text-[11px] tracking-[0.13em] uppercase">
-            1,400+ verified resources
-          </span>
+        <div className="hidden lg:flex items-center gap-2 text-[13px] text-[#6f6a5f]">
+          <span className="font-semibold text-[#BC5B3A]">Verified resources</span>
           <span>·</span>
           <span>all 50 states</span>
         </div>

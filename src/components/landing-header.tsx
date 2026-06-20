@@ -11,10 +11,8 @@ export function LandingHeader() {
           Psych<span className="italic text-[#2A43C0]">Dispo</span>
         </Link>
 
-        <p className="hidden md:block font-serif italic text-[13.5px] text-[#6f6a5f] mx-auto text-center">
-          <span className="not-italic font-semibold text-[#BC5B3A] text-[11px] tracking-[0.13em] uppercase">
-            1,400+ verified resources
-          </span>
+        <p className="hidden md:block text-[13px] text-[#6f6a5f] mx-auto text-center">
+          <span className="font-semibold text-[#BC5B3A]">Verified resources</span>
           <span className="mx-2">·</span>
           all 50 states
         </p>

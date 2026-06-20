@@ -56,7 +56,7 @@ function SignInPage() {
     <AuthShell
       kicker="Account"
       title="Sign in"
-      subtitle="Save your templates, favorite resources, and custom blurbs. Patient work always stays on your device."
+      subtitle="Save templates, favorite resources, and custom blurbs. Patient work stays on your device."
       footer={
         <>
           No passwords. We never store patient information — only your account, templates, and

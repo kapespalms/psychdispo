@@ -98,24 +98,24 @@ textarea{max-width:100%;min-height:54px;resize:vertical}
 body.embed .progress-sticky{top:44px}
 .spine{display:flex;gap:6px;padding:14px 34px 10px}
 .spine .seg{flex:1;cursor:pointer}
-.spine .seg .bar{height:4px;border-radius:2px;background:#e8e0d0;transition:background .2s}
+.spine .seg .bar{height:3px;border-radius:2px;background:#e8e0d0;transition:background .2s}
 .spine .seg.done .bar{background:var(--sage)}
 .spine .seg.now .bar{background:var(--t)}
 .spine .seg.future .bar{background:#e8e0d0}
-.spine .seg .t{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:600;margin-top:7px;transition:color .2s}
+.spine .seg .t{font-size:11px;letter-spacing:.01em;text-transform:none;color:var(--faint);font-weight:600;margin-top:8px;transition:color .2s;line-height:1.2}
 .spine .seg.now .t{color:var(--t)}
 .spine .seg.done .t{color:var(--sage)}
 .slide-shell{overflow:hidden;margin:0;padding:8px 0 16px}
 .slide-track{display:flex;transition:transform .38s cubic-bezier(.4,0,.2,1);will-change:transform}
 .slide-track.slide-back{transition-timing-function:cubic-bezier(.4,0,.6,1)}
 .slide-panel{flex:0 0 100%;min-width:100%;padding:0 16px;box-sizing:border-box}
-.float-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:0;box-shadow:0 4px 28px rgba(34,32,42,.07)}
+.float-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:0;box-shadow:0 1px 3px rgba(34,32,42,.06)}
 .float-card+.float-card{margin-top:14px;border-top:none}
 .slide-panel .layer{border:none;border-radius:0;margin:0;padding:18px 20px;box-shadow:none;background:transparent}
 .slide-panel .layer+.layer{border-top:1px solid var(--line);padding-top:20px;margin-top:4px}
 .step-kicker{display:flex;align-items:center;gap:10px;margin-bottom:4px;padding:0 34px}
 .step-kicker .num{font-family:var(--serif);font-size:13px;color:var(--terra);font-weight:600}
-.step-kicker .lbl{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);font-weight:600}
+.step-kicker .lbl{font-size:11px;letter-spacing:.04em;text-transform:none;color:var(--faint);font-weight:600}
 .step-kicker .ln{flex:1;height:1px;background:var(--line)}
 .step-head{padding:0 34px 6px}
 .step-head .ltitle{font-family:var(--serif);font-weight:700;font-size:33px;letter-spacing:-.3px;margin:2px 0 5px;line-height:1.1}
@@ -125,7 +125,7 @@ body.embed .progress-sticky{top:44px}
 .legend,.gate-summary,#intakeLegend,#gateSummary,#pathwayContext,#l5ctx,#l6status,#gateAutoNote{display:none!important}
 #l5Fresh{display:none}
 .note.in-workflow{display:none}
-.pathway-card .pblurb{display:none}
+.pathway-card .pblurb{font-size:13px;color:var(--mut);line-height:1.45;margin:0}
 .pathway-head .pdesc{display:none}
 .statusbar .nav-btn{min-height:44px;padding:10px 18px;font-size:14px;font-weight:600;border-radius:10px;cursor:pointer;font-family:inherit}
 .statusbar .nav-btn.back{background:#fff;color:var(--t);border:1px solid var(--t);margin-left:0}
@@ -173,15 +173,19 @@ body.embed .progress-sticky{top:44px}
 .act .meta{flex:1}.act .ti{font-weight:600;font-size:16px;margin-bottom:1px}.act .ds{font-size:12.5px;color:var(--mut)}
 .act .who{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:600;margin-top:3px}
 .act .btns{display:flex;gap:8px;flex-shrink:0}
-.act .btn{font-size:13px;font-weight:600;border-radius:9px;padding:9px 15px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;font-family:inherit}
+.act .btn{font-size:13px;font-weight:600;border-radius:9px;padding:9px 15px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;font-family:inherit;min-height:44px;touch-action:manipulation}
 .act .btn.primary{background:var(--t);border-color:var(--t);color:#fff}
 .act .btn.ghost{color:var(--mut)}
 .act .btn:disabled{opacity:.45;cursor:not-allowed}
 .deliver-foot{font-size:12px;color:var(--faint);margin-top:8px;display:flex;align-items:center;gap:8px;padding:0 34px 8px}
 .deliver-foot svg{width:15px;height:15px;color:var(--sage);flex:none}
 .deliver-advanced{margin:0 34px 16px;padding:12px 14px;border:1px dashed var(--line);border-radius:8px;background:#fbf7ee;font-size:12.5px}
-.express-toggle{display:flex;align-items:center;gap:8px;font-size:13px;margin:0 0 8px;padding:7px 10px;background:#e7f0ec;border-radius:8px;border:1px solid var(--line)}
-.express-toggle label{display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:600;color:var(--ink)}
+.express-toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px;margin:0 0 12px;padding:10px 14px;background:var(--card);border-radius:10px;border:1px solid var(--line)}
+.express-mode-label{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);flex:none}
+.express-mode-track{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#f7f4ec;flex-shrink:0}
+.express-mode-opt{min-height:44px;padding:0 16px;font-size:13px;font-weight:600;border:none;background:transparent;cursor:pointer;font-family:inherit;color:var(--mut);touch-action:manipulation}
+.express-mode-opt.sel{background:var(--t);color:#fff}
+.express-mode-opt:not(.sel):hover{color:var(--ink)}
 .express-loc-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;margin:2px 0 4px}
 .express-loc-line .loc-suggest{font-weight:600;color:var(--ink)}
 .express-change-loc{font-size:12px;color:var(--t);font-weight:600;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;text-decoration:underline;text-underline-offset:2px}
@@ -205,7 +209,7 @@ body.embed .progress-sticky{top:44px}
 .plan-expand-link,.deliver-more-link{display:inline-block;margin:8px 0 12px;font-size:13px;font-weight:600;color:var(--t);cursor:pointer;background:none;border:none;font-family:inherit;text-decoration:underline;text-underline-offset:2px;padding:0;touch-action:manipulation}
 .panels-compact-wrap.hidden{display:none!important;max-height:0!important;opacity:0!important;overflow:hidden!important}
 .deliver-primary{display:flex;flex-direction:column;gap:10px;margin:8px 0 4px;padding:0 34px}
-.deliver-primary .btn-big{min-height:52px;font-size:16px;font-weight:700;border-radius:12px;padding:14px 20px;border:none;cursor:pointer;font-family:inherit;width:100%;touch-action:manipulation}
+.deliver-primary .btn-big{min-height:44px;font-size:15px;font-weight:700;border-radius:10px;padding:12px 20px;border:none;cursor:pointer;font-family:inherit;width:100%;touch-action:manipulation}
 .deliver-primary .btn-big.primary{background:var(--t);color:#fff}
 .deliver-primary .btn-big.secondary{background:#fff;color:var(--t);border:2px solid var(--t)}
 .deliver-cards-advanced.hidden{display:none!important;max-height:0!important;opacity:0!important}
@@ -280,7 +284,7 @@ body.embed .progress-sticky{top:44px}
 .statusbar .nav-btn.cont{margin-left:auto}
 .chk{font-size:12px;color:var(--mut);display:flex;align-items:center;gap:4px}
 .chk.ok{color:var(--good)}.chk b{font-size:13px}
-.btn{margin-left:auto;background:var(--t);color:#fff;border:none;border-radius:10px;padding:11px 18px;font-size:14px;font-weight:700;cursor:pointer}
+.btn{margin-left:auto;background:var(--t);color:#fff;border:none;border-radius:10px;padding:11px 18px;font-size:14px;font-weight:700;cursor:pointer;min-height:44px;touch-action:manipulation}
 .btn:disabled{background:#aebdbb;cursor:not-allowed}
 .btn.sec{background:#fff;color:var(--t);border:1px solid var(--t);margin-left:0}
 .save-chip{font-size:11px;color:var(--good);white-space:nowrap;margin-left:2px}
@@ -402,7 +406,7 @@ body.embed .wrap{padding-bottom:24px}
 .mh-word{font-family:var(--serif);font-size:29px;font-weight:700;color:var(--ink);letter-spacing:-.5px;line-height:1}
 .mh-word i{color:var(--t);font-style:italic}
 .mh-kicker{font-size:10px;letter-spacing:1.9px;text-transform:uppercase;color:var(--mut);font-weight:600}
-.mh-tagline{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--mut);white-space:nowrap}
+.mh-tagline{font-family:var(--sans);font-style:normal;font-size:13px;color:var(--mut);white-space:nowrap}
 @media(max-width:900px){.mh-tagline,.mh-kicker{display:none}.mh-top{padding:12px 16px}}
 .tabbar{background:var(--t2);position:sticky;top:0;z-index:30}
 .tabs{display:flex;gap:2px;max-width:980px;margin:0 auto;padding:0 8px}
@@ -493,12 +497,15 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 .q{margin:5px 0}
 .field-label{margin-bottom:4px}
 .gate-grid{gap:4px 8px;margin-top:0}
-.ins-zip-line{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:flex-end}
-.ins-zip-ins{flex:1 1 260px;min-width:0}
-.ins-zip-loc{flex:0 1 188px;min-width:132px}
-.ins-zip-loc input[type=text]{width:100%;max-width:200px}
+.ins-zip-line{display:grid;grid-template-columns:minmax(0,1fr) 200px;gap:12px 16px;align-items:end}
+.ins-zip-ins{min-width:0}
+.ins-zip-loc{min-width:0}
+.ins-zip-loc input[type=text]{width:100%;max-width:none}
+.ins-zip-ins .field-label,.ins-zip-loc .field-label{margin-bottom:6px}
 .ins-zip-ins .ins-row{display:flex;flex-wrap:wrap;gap:5px}
-@media(max-width:480px){.ins-zip-line{flex-direction:column;align-items:stretch}.ins-zip-loc{flex:1 1 100%}.ins-zip-loc input[type=text]{max-width:100%}}
+@media(max-width:480px){.ins-zip-line{grid-template-columns:1fr}}
+.plan-match-head{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:0 0 10px}
+.plan-match-card .blurb{font-size:12.5px;line-height:1.4}
 .gate-row-2{gap:6px 10px}
 .intake-divider{margin-top:8px;padding-top:8px}
 .intake-divider>.sub2:first-child{display:none}
@@ -580,7 +587,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 <span class="mh-word">Psych<i>Dispo</i></span>
 <span class="mh-kicker">Psychiatric Disposition · Discharge Planning · All 50 states</span>
 </a>
-<span class="mh-tagline" id="mhTagline"><b>1,400+ verified resources</b> &nbsp;·&nbsp; all 50 states</span>
+<span class="mh-tagline" id="mhTagline"><b>Verified resources</b> &nbsp;·&nbsp; all 50 states</span>
 </header>
 <div class="tabbar"><div class="tabs"><button class="tab on" data-view="tool">PsychDispo · Plan</button><button class="tab" data-view="social-care">Social Care Plan</button><button class="tab" data-view="ref">Psych Emerg · Review</button><button class="tab" data-view="directory">Resource Directory</button><button class="tab" data-view="psych-ref">Psych Ref</button></div></div>
 <div class="wrap">
@@ -589,19 +596,19 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 
 <div id="pathwayFork" class="pathway-fork">
  <div class="pathway-head">
-  <div class="ptitle">Choose your disposition pathway</div>
-  <div class="pdesc">Two entry points — same tools, tailored safety screening for the setting.</div>
+  <div class="ptitle">Select disposition setting</div>
+  <div class="pdesc">Inpatient/ED or outpatient clinic — same workflow, setting-appropriate screening.</div>
  </div>
  <div class="pathway-cards">
   <button type="button" class="pathway-card ed" data-pathway="ed">
    <div class="pcard-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-   <div class="pname">Psych ED Dispo</div>
-   <div class="pblurb">Inpatient or acute care discharge — full safety screening (C-SSRS, violence, SUD).</div>
+   <div class="pname">Inpatient / ED discharge</div>
+   <div class="pblurb">Acute settings with full safety screening.</div>
   </button>
   <button type="button" class="pathway-card op" data-pathway="outpatient">
    <div class="pcard-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 10.5L12 4l9 6.5V20a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1v-9.5z"/></svg></div>
-   <div class="pname">Psych Outpatient Dispo</div>
-   <div class="pblurb">Outpatient clinic — acute concern gate; skip heavy safety when no acute concern.</div>
+   <div class="pname">Outpatient discharge</div>
+   <div class="pblurb">Clinic discharge with express workflow by default.</div>
   </button>
  </div>
 </div>
@@ -611,11 +618,11 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 
 <div class="slide-panel" data-step="0">
 <section class="layer float-card" id="Lgate">
- <div class="step-kicker"><span class="num">01</span><span class="lbl">Gate</span><span class="ln"></span></div>
- <div class="step-head"><div class="ltitle">Pathway gate</div></div>
+ <div class="step-kicker"><span class="num">01</span><span class="lbl">Case Setup</span><span class="ln"></span></div>
+ <div class="step-head"><div class="ltitle">Case setup</div></div>
  <div class="slide-body">
  <div id="gateAutoNote" class="gate-auto-note"></div>
- <div id="expressToggleWrap" class="express-toggle hidden"><label><input type="checkbox" id="expressOpToggle" checked> Express — fewer steps</label></div>
+ <div id="expressToggleWrap" class="express-toggle hidden"><span class="express-mode-label">Workflow</span><div class="express-mode-track" role="group" aria-label="Workflow mode"><button type="button" class="express-mode-opt sel" id="expressModeExpress" data-express="1">Express</button><button type="button" class="express-mode-opt" id="expressModeFull" data-express="0">Full workflow</button></div></div>
  <div class="q"><div class="field-label" id="lblCleared"><span class="req-mark" aria-hidden="true">■</span>Medically cleared?</div>
   <div class="opts yesno" data-field="cleared" role="group" aria-labelledby="lblCleared"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
  </div>
@@ -645,8 +652,8 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 <div class="slide-panel" data-step="1">
 <section class="layer float-card" id="L0">
  <div class="card-body slide-body">
- <div class="step-kicker"><span class="num">02</span><span class="lbl">Clinical</span><span class="ln"></span></div>
- <div class="step-head"><div class="ltitle">Clinical context</div></div>
+ <div class="step-kicker"><span class="num">02</span><span class="lbl">Patient &amp; Coverage</span><span class="ln"></span></div>
+ <div class="step-head"><div class="ltitle">Patient &amp; coverage</div></div>
  <div class="gate-grid">
   <div class="q gate-wide ins-zip-row" id="contextInsZipBlock">
    <div class="ins-zip-line">
@@ -680,7 +687,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
   </div>
  </div>
  <div id="ctxAccordion" class="ctx-accordion">
-  <button type="button" class="ctx-accordion-toggle" id="ctxAccordionBtn" aria-expanded="false">Patient details <span class="note">(optional)</span><svg class="ctx-accordion-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+  <button type="button" class="ctx-accordion-toggle" id="ctxAccordionBtn" aria-expanded="false">Patient details<svg class="ctx-accordion-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
   <div class="ctx-accordion-body" id="ctxAccordionBody">
    <div class="intake-divider ctx-accordion-details">
  <div class="sub2" style="border:none;padding-top:0">Who is the patient?</div>
@@ -730,20 +737,20 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 
 <div class="slide-panel" data-step="2">
 <section class="layer float-card" id="L2">
- <div class="step-kicker"><span class="num">03</span><span class="lbl">Safety</span><span class="ln"></span></div>
- <div class="step-head"><div class="ltitle">Safety screening</div></div>
+ <div class="step-kicker"><span class="num">03</span><span class="lbl">Safety Review</span><span class="ln"></span></div>
+ <div class="step-head"><div class="ltitle">Safety review</div></div>
  <div class="slide-body">
  <div id="safetyCollabBanner" class="alert amber collab-banner hidden"><b>Clinician review required</b> — moderate/high C-SSRS or violence concern. Complete safety plan &amp; means with a trained clinician, then attest before Plan or Deliver.</div>
  <div id="expressSafetyGate" class="express-safety-gate hidden">
   <div class="q"><label class="qlabel">Anything to document for safety?</label>
-   <div class="opts" data-field="expressSafetyDoc"><button type="button" class="opt" data-val="no">No</button><button type="button" class="opt" data-val="emr">In EMR</button><button type="button" class="opt" data-val="screen">Screen here</button></div>
+   <div class="opts" data-field="expressSafetyDoc"><button type="button" class="opt" data-val="no">No concern</button><button type="button" class="opt" data-val="emr">In EMR</button><button type="button" class="opt" data-val="screen">Help me document</button></div>
   </div>
  </div>
  <div class="q hidden" id="quickSafety"><label class="qlabel">Acute safety concern now?</label>
   <div class="opts yesno" data-field="acuteConcern"><button type="button" class="opt" data-val="no">No</button><button type="button" class="opt dangerv" data-val="yes">Yes</button></div>
   <div class="reveal hidden alert good" id="quickSafetyOk">No acute concern — screening skipped.</div></div>
  <div id="fullScreen">
- <p class="note" id="safetyOptInNote" style="margin:0 0 8px">Open only the areas you need to document or screen.</p>
+ <p class="note" id="safetyOptInNote" style="margin:0 0 8px">Document only what applies.</p>
  <div class="safety-domains" id="safetyDomains">
   <div class="safety-domain-row" id="domainSuicide" data-domain="suicide">
    <button type="button" class="safety-domain-toggle" data-safety-toggle="suicide" aria-expanded="false">
@@ -753,8 +760,8 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
    </button>
    <div class="safety-domain-body" id="bodySuicide">
     <div class="opts safety-gate-opts" data-safety-gate="suicide">
-     <button type="button" class="opt" data-val="emr"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span class="gate-lbl">Document in EMR</span></button>
-     <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Need help</span></button>
+     <button type="button" class="opt" data-val="emr"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span class="gate-lbl">In EMR</span></button>
+     <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Help me document</span></button>
      <button type="button" class="opt" data-val="none"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span><span class="gate-lbl">No concern</span></button>
     </div>
     <div class="reveal hidden" id="suicideRiskReveal">
@@ -773,8 +780,8 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
    </button>
    <div class="safety-domain-body" id="bodyHomicide">
     <div class="opts safety-gate-opts" data-safety-gate="homicide">
-     <button type="button" class="opt" data-val="emr"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span class="gate-lbl">Document in EMR</span></button>
-     <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Need help</span></button>
+     <button type="button" class="opt" data-val="emr"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span class="gate-lbl">In EMR</span></button>
+     <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Help me document</span></button>
      <button type="button" class="opt" data-val="none"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span><span class="gate-lbl">No concern</span></button>
     </div>
     <div class="reveal hidden" id="homicideHelpReveal">
@@ -792,8 +799,8 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
    </button>
    <div class="safety-domain-body" id="bodyViolence">
     <div class="opts safety-gate-opts" data-safety-gate="violence">
-     <button type="button" class="opt" data-val="emr"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span class="gate-lbl">Document in EMR</span></button>
-     <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Need help</span></button>
+     <button type="button" class="opt" data-val="emr"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span class="gate-lbl">In EMR</span></button>
+     <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Help me document</span></button>
      <button type="button" class="opt" data-val="none"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span><span class="gate-lbl">No concern</span></button>
     </div>
     <div class="reveal hidden" id="violenceHelpReveal">
@@ -820,8 +827,8 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
    </button>
    <div class="safety-domain-body" id="bodySubstances">
     <div class="opts safety-gate-opts" data-safety-gate="substances">
-     <button type="button" class="opt" data-val="emr"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span class="gate-lbl">Document in EMR</span></button>
-     <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Need help</span></button>
+     <button type="button" class="opt" data-val="emr"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span class="gate-lbl">In EMR</span></button>
+     <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Help me document</span></button>
      <button type="button" class="opt" data-val="none"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span><span class="gate-lbl">No concern</span></button>
     </div>
     <div class="reveal hidden" id="substancesHelpReveal">
@@ -887,8 +894,8 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 
 <div class="slide-panel" data-step="3">
 <section class="layer float-card" id="L5">
- <div class="step-kicker"><span class="num">04</span><span class="lbl">Plan</span><span class="ln"></span></div>
- <div class="step-head"><div class="ltitle">Resources &amp; follow-up</div></div>
+ <div class="step-kicker"><span class="num">04</span><span class="lbl">Resources</span><span class="ln"></span></div>
+ <div class="step-head"><div class="ltitle">Resources</div></div>
  <div class="plan-compact-head">
  <div id="planTopMatches" class="plan-top-matches hidden"></div>
  <button type="button" class="plan-expand-link hidden" id="planShowAllBtn">Show all</button>
@@ -912,16 +919,16 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 
 <div class="slide-panel" data-step="4">
 <section class="layer float-card" id="L6">
- <div class="step-kicker"><span class="num">05</span><span class="lbl">Deliver</span><span class="ln"></span></div>
- <div class="step-head"><div class="ltitle">Hand off the plan</div></div>
+ <div class="step-kicker"><span class="num">05</span><span class="lbl">Handoff</span><span class="ln"></span></div>
+ <div class="step-head"><div class="ltitle">Handoff</div></div>
  <div class="slide-body">
  <div id="deliverGate" class="deliver-gate hidden"></div>
  <div id="deliverPrimary" class="deliver-primary hidden"></div>
  <button type="button" class="deliver-more-link hidden" id="deliverMoreBtn">More options</button>
  <div id="deliverAdvancedWrap" class="deliver-cards-advanced expand-block"><div id="deliverCards"></div></div>
- <div class="deliver-foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12l4 4L19 7"/></svg>Nothing here is stored. Patient details print and stay with you; the referral leaves blank patient fields for you to fill.</div>
+ <div class="deliver-foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12l4 4L19 7"/></svg>Nothing stored remotely. Patient details print locally; referral forms leave patient fields blank.</div>
  <div class="deliver-advanced">
-  <div class="phi-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Patient details never leave this device — print/export stays local; your library saves templates only.</div>
+  <div class="phi-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Patient information remains on this device and is never transmitted.</div>
   <div class="q" id="l6ErBlock">
    <label class="qlabel">Nearest ER / PES</label>
    <div class="note" id="l6ErAuto" style="margin-bottom:6px"></div>
@@ -1662,7 +1669,7 @@ function isOutpatient(){return S.setting==="Outpatient";}
 function isExpressOp(){return S.pathway==="outpatient"&&S.expressOp!==false;}
 function workflowStepCount(){return isExpressOp()?4:5;}
 function physicalStep(logical){return isExpressOp()?([0,2,3,4][logical]||0):logical;}
-function stepLabels(){return isExpressOp()?["Essentials","Safety","Plan","Deliver"]:["Gate","Context","Safety","Plan","Deliver"];}
+function stepLabels(){return isExpressOp()?["Case Setup","Safety Review","Resources","Handoff"]:["Case Setup","Patient & Coverage","Safety Review","Resources","Handoff"];}
 function expressEssentialsOk(){
  if(!gateOk())return false;
  if(!locOk())return false;
@@ -1887,8 +1894,8 @@ function ensureSafetyOpen(){
  if(!S.safetyOpen)S.safetyOpen={suicide:false,homicide:false,violence:false,substances:false};
 }
 function safetyGatePillLabel(g){
- if(g==="emr")return "Document in EMR";
- if(g==="help")return "Need help";
+ if(g==="emr")return "In EMR";
+ if(g==="help")return "Help me document";
  if(g==="none")return "No concern";
  return "";
 }
@@ -2146,11 +2153,20 @@ function workflowBack(){
 function spineIndex(){return Math.min(S.workflowStep||0,workflowStepCount()-1);}
 function spineStepDone(i){return workflowStepDone(i);}
 function pathwayLabel(){
- if(S.pathway==="ed")return "ED Dispo";
- if(S.pathway==="outpatient")return "Outpatient Dispo";
- if(S.setting==="Acute")return "ED Dispo";
- if(S.setting==="Outpatient")return "Outpatient Dispo";
+ if(S.pathway==="ed")return "Inpatient / ED";
+ if(S.pathway==="outpatient")return "Outpatient";
+ if(S.setting==="Acute")return "Inpatient / ED";
+ if(S.setting==="Outpatient")return "Outpatient";
  return "";
+}
+function workflowContinueLabel(step){
+ if(step>=workflowStepCount()-1)return "Continue";
+ if(step===0)return "Continue";
+ var next=stepLabels()[step+1]||"";
+ if(next==="Safety Review")return "Review safety";
+ if(next==="Resources")return "Choose resources";
+ if(next==="Handoff")return "Finish";
+ return "Continue";
 }
 function syncPathwaySetting(){
  if(S.pathway==="ed"){S.setting="Acute";return;}
@@ -2255,7 +2271,7 @@ function renderDeliverScreen(){
  primary.classList.remove("hidden");
  primary.innerHTML=
   '<button type="button" class="btn-big primary" data-deliver="print-patient"'+dis+'>Print patient sheet</button>'+
-  '<button type="button" class="btn-big secondary" data-deliver="copy-chart"'+dis+'>Copy chart note</button>';
+  '<button type="button" class="btn-big secondary" data-deliver="copy-chart"'+dis+'>Copy for chart</button>';
  if(moreBtn){
   moreBtn.classList.remove("hidden");
   moreBtn.textContent=S.deliverMoreOpen?"Fewer options":"More options";
@@ -2920,7 +2936,15 @@ var locExpressEl=$("#locExpress");if(locExpressEl)locExpressEl.addEventListener(
  render();
 });
 var expressChangeLoc=$("#expressChangeLoc");if(expressChangeLoc)expressChangeLoc.addEventListener("click",function(){S.expressLocExpanded=!S.expressLocExpanded;render();});
-var expressOpToggle=$("#expressOpToggle");if(expressOpToggle)expressOpToggle.addEventListener("change",function(e){S.expressOp=e.target.checked;S.workflowStep=0;render();});
+document.querySelectorAll(".express-mode-opt").forEach(function(btn){
+ btn.addEventListener("click",function(){
+  var express=btn.dataset.express==="1";
+  if(express===isExpressOp())return;
+  S.expressOp=express;
+  S.workflowStep=0;
+  render();
+ });
+});
 var ctxAccordionBtn=$("#ctxAccordionBtn");if(ctxAccordionBtn)ctxAccordionBtn.addEventListener("click",function(){S.contextAccordionOpen=!S.contextAccordionOpen;render();});
 var planShowAllBtn=$("#planShowAllBtn");if(planShowAllBtn)planShowAllBtn.addEventListener("click",function(){S.planShowAll=true;render();});
 var deliverMoreBtn=$("#deliverMoreBtn");if(deliverMoreBtn)deliverMoreBtn.addEventListener("click",function(){S.deliverMoreOpen=!S.deliverMoreOpen;render();});
@@ -3035,21 +3059,26 @@ function renderContextLayout(){
  show("#contextDispBlock",!isExpressOp());
 }
 function renderExpressEssentials(){
- var wrap=$("#expressEssentials"),toggle=$("#expressToggleWrap"),tog=$("#expressOpToggle");
+ var wrap=$("#expressEssentials"),toggle=$("#expressToggleWrap");
  show("#expressEssentials",isExpressOp());
  show("#expressToggleWrap",S.pathway==="outpatient");
- if(tog)tog.checked=S.expressOp!==false;
+ $$(".express-mode-opt").forEach(function(btn){
+  var on=(btn.dataset.express==="1")===isExpressOp();
+  btn.classList.toggle("sel",on);
+  btn.setAttribute("aria-pressed",on?"true":"false");
+ });
  var le=$("#locExpress");if(le){le.value=locDisplay();}
  var zm=$("#zipMetaExpress");if(zm)zm.textContent=$("#zipMeta").textContent;
  var sug=$("#expressLocSuggest");if(sug)sug.textContent=dispLocShort()||"Outpatient";
  var xl=$("#expressLocExpand");if(xl)xl.classList.toggle("is-open",!!S.expressLocExpanded);
  if(isExpressOp()&&!dispLocValue())applyDispLoc("community|outpatient");
 }
+function planMatchBlurb(r){return truncateText(patientBlurbFor(r),58);}
 function planMatchCard(r){
  var id=rid(r),sel=!!S.selected[id],c=clipCategory(r);
  return '<label class="plan-match-card'+(sel?" sel":"")+'"><input type="checkbox" data-res="'+esc(id)+'" '+(sel?"checked":"")+' style="position:absolute;opacity:0;width:1px;height:1px">'+
   '<div class="nm">'+esc(r.name)+'<span class="cat '+c.cls+'">'+esc(c.cat)+'</span></div>'+
-  '<div class="blurb">'+esc(patientBlurbFor(r))+'</div>'+
+  '<div class="blurb">'+esc(planMatchBlurb(r))+'</div>'+
   '<div class="meta">'+esc(r.phone||"")+'</div></label>';
 }
 function renderPlanTopMatches(){
@@ -3064,9 +3093,9 @@ function renderPlanTopMatches(){
  if(!el)return;
  if(!compact){el.innerHTML="";el.classList.add("hidden");return;}
  var ids=(S._topMatchIds||[]).slice(0,3);
- if(!ids.length){el.innerHTML='<div class="note">Enter ZIP to see matched resources.</div>';el.classList.remove("hidden");return;}
+ if(!ids.length){el.innerHTML='<div class="note">Enter home city or ZIP to see recommendations.</div>';el.classList.remove("hidden");return;}
  el.classList.remove("hidden");
- el.innerHTML=ids.map(function(id){var r=resById(id);return r?planMatchCard(r):"";}).join("");
+ el.innerHTML='<div class="plan-match-head">Recommended near the patient</div>'+ids.map(function(id){var r=resById(id);return r?planMatchCard(r):"";}).join("");
 }
 function render(){
  renderSpine();
@@ -3580,7 +3609,7 @@ function renderStatus(){
  var step=S.workflowStep||0;
  var backDis=step<=0?" disabled":"";
  var contDis=!workflowStepDone(step)||step>=workflowStepCount()-1?" disabled":"";
- var contLbl="Continue";
+ var contLbl=workflowContinueLabel(step);
  var contSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg>';
  $("#statusInner").innerHTML=
   '<button type="button" class="nav-btn back" id="wfBack"'+backDis+'>← Back</button>'+
@@ -3591,6 +3620,9 @@ function renderStatus(){
  var canCont=workflowStepDone(step)&&step<workflowStepCount()-1;
  $$(".card-continue").forEach(function(btn){
   btn.disabled=!canCont;
+  var svg=btn.querySelector("svg");
+  btn.textContent=contLbl;
+  if(svg)btn.appendChild(svg);
   if(canCont)btn.onclick=workflowContinue;
  });
 }
