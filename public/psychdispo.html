@@ -483,14 +483,15 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 .ico-sf svg{width:1.15em;height:1.15em;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
 .slide-shell{padding:2px 0 0;margin-bottom:0;min-height:0}
 #view-tool .workflow-sheet:has(#slideShell:not(.hidden)),
-#view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){display:flex;flex-direction:column;max-height:calc(100dvh - var(--workflow-chrome) - 12px);overflow:hidden;margin-bottom:4px;min-height:0}
+#view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){display:flex;flex-direction:column;height:calc(100dvh - var(--workflow-chrome) - 12px);min-height:min(360px,calc(100dvh - var(--workflow-chrome) - 12px));max-height:calc(100dvh - var(--workflow-chrome) - 12px);overflow:hidden;margin-bottom:4px}
 #view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .workflow-body,
 #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)) .workflow-body{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
 #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)) #pathwayFork{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 #view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .slide-shell{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
 #view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .slide-track{flex:1;min-height:0;align-items:stretch;display:flex}
-.slide-panel{display:flex;flex-direction:column;flex:0 0 100%;min-width:100%;height:100%;min-height:0;max-height:100%;overflow:hidden;padding:0 12px;box-sizing:border-box}
+.slide-panel{display:flex;flex-direction:column;flex:0 0 100%;min-width:100%;align-self:stretch;height:100%;min-height:min(320px,calc(100dvh - var(--workflow-chrome) - 72px));max-height:calc(100dvh - var(--workflow-chrome) - 72px);overflow:hidden;padding:0 12px;box-sizing:border-box}
 .slide-panel>.float-card,.slide-panel>.layer{flex:1 1 auto;display:flex;flex-direction:column;overflow:hidden;padding:6px 12px 0;margin:0;min-height:0}
+.slide-panel>.float-card{border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:0 1px 3px rgba(34,32,42,.06)}
 .slide-panel .step-kicker,.slide-panel .step-head{flex-shrink:0}
 .slide-panel .slide-body,.slide-panel .card-body{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable}
 .slide-panel .plan-compact-head{flex-shrink:0}
@@ -537,7 +538,9 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 .pathway-card.op .pcard-ico{background:#e7f0ec;color:var(--sage)}
 .pathway-card .pcard-ico svg{width:18px;height:18px;stroke-width:1.75}
 @media(max-width:680px){
- #view-tool .workflow-sheet:has(#slideShell:not(.hidden)){max-height:calc(100dvh - var(--workflow-chrome) - 8px)}
+ #view-tool .workflow-sheet:has(#slideShell:not(.hidden)),
+ #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){height:calc(100dvh - var(--workflow-chrome) - 8px);min-height:min(320px,calc(100dvh - var(--workflow-chrome) - 8px));max-height:calc(100dvh - var(--workflow-chrome) - 8px)}
+ .slide-panel{min-height:min(280px,calc(100dvh - var(--workflow-chrome) - 64px));max-height:calc(100dvh - var(--workflow-chrome) - 64px)}
  body:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:calc(var(--mh-h) + var(--tabbar-h));padding-bottom:env(safe-area-inset-bottom,0px)}
  body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px}
  #view-tool:has(#slideShell:not(.hidden)) .statusbar{display:none!important}
