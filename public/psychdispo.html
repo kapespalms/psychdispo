@@ -50,18 +50,20 @@ textarea{max-width:100%;min-height:54px;resize:vertical}
 .safety-col .opts{flex-wrap:wrap}
 .safety-col .opt{font-size:12.5px;padding:7px 11px;white-space:normal}
 .safety-col .reveal{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
-.safety-domains{display:flex;flex-direction:column;gap:8px;margin-top:4px}
-.safety-domain-row{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:#fafbfd}
-.safety-domain-h{display:flex;align-items:center;gap:6px;margin-bottom:6px}
-.safety-domain-title{font-family:var(--sans);font-size:13px;font-weight:600;font-style:normal;color:var(--ink)}
+.safety-domains{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+.safety-domain-row{border:1px solid var(--line);border-radius:10px;background:#fafbfd;overflow:hidden}
+.safety-domain-toggle{width:100%;display:flex;align-items:center;gap:8px;padding:9px 12px;background:none;border:none;cursor:pointer;font:inherit;text-align:left;touch-action:manipulation}
+.safety-domain-title{font-family:var(--sans);font-size:13px;font-weight:600;font-style:normal;color:var(--ink);flex:none}
+.safety-domain-pill{font-size:10.5px;font-weight:600;color:var(--mut);margin-left:auto}
+.safety-domain-row.open .safety-domain-pill{display:none}
+.safety-chevron{width:16px;height:16px;flex:none;stroke:var(--mut);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s;margin-left:4px}
+.safety-domain-row.open .safety-chevron{transform:rotate(180deg)}
+.safety-domain-body{display:none;padding:0 10px 10px}
+.safety-domain-row.open .safety-domain-body{display:block}
 .safety-gate-opts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
 .safety-gate-opts .opt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11px;padding:6px 4px;min-height:54px;white-space:normal;line-height:1.2;text-align:center}
 .safety-gate-opts .opt .gate-lbl{font-size:10.5px;font-weight:600;line-height:1.15}
 .safety-domain-row .reveal{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
-.safety-domain-row .req-dot{width:9px;height:9px;border-radius:2px;flex:none}
-.safety-domain-row .req-dot.need{background:var(--req)}
-.safety-domain-row .req-dot.done{background:var(--sage)}
-.safety-domain-row .req-dot.off{opacity:0}
 .safety-domain-row .q{margin:0 0 6px}
 .safety-domain-row .q>label.qlabel{font-size:12.5px;margin-bottom:5px}
 @media(max-width:900px){.safety-grid{grid-template-columns:1fr}}
@@ -666,71 +668,96 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 <section class="layer float-card" id="L2">
  <div class="step-kicker"><span class="num">03</span><span class="lbl">Safety</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Safety screening</div></div>
- <div id="safetyCollabBanner" class="alert amber collab-banner hidden"><b>Clinician review required</b> — moderate/high C-SSRS, homicide, or violence concern. Complete safety plan &amp; means with a trained clinician, then attest before Plan or Deliver.</div>
+ <div id="safetyCollabBanner" class="alert amber collab-banner hidden"><b>Clinician review required</b> — moderate/high C-SSRS or violence concern. Complete safety plan &amp; means with a trained clinician, then attest before Plan or Deliver.</div>
  <div class="q hidden" id="quickSafety"><label class="qlabel">Acute safety concern now?</label>
   <div class="opts yesno" data-field="acuteConcern"><button type="button" class="opt" data-val="no">No</button><button type="button" class="opt dangerv" data-val="yes">Yes</button></div>
   <div class="reveal hidden alert good" id="quickSafetyOk">No acute concern — screening skipped.</div></div>
  <div id="fullScreen">
+ <p class="note" id="safetyOptInNote" style="margin:0 0 8px">Open only the areas you need to document or screen.</p>
  <div class="safety-domains" id="safetyDomains">
-  <div class="safety-domain-row" id="domainSuicide">
-   <div class="safety-domain-h"><span class="req-dot need" id="reqSuicide"></span><span class="safety-domain-title">Suicide</span></div>
-   <div class="opts safety-gate-opts" data-safety-gate="suicide">
-    <button type="button" class="opt" data-val="emr"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span class="gate-lbl">In EMR</span></button>
-    <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Need help</span></button>
-    <button type="button" class="opt" data-val="none"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span><span class="gate-lbl">No concern</span></button>
-   </div>
-   <div class="reveal hidden" id="suicideRiskReveal">
-    <div class="q"><label class="qlabel">C-SSRS risk level</label>
-     <div class="opts" data-field="suicideRisk"><button type="button" class="opt" data-val="low">Low</button><button type="button" class="opt warnv" data-val="moderate">Moderate</button><button type="button" class="opt dangerv" data-val="high">High</button></div>
-     <div class="reveal hidden alert red" id="hiRiskMsg">Moderate/high risk — complete safety plan and lethal means below.</div>
+  <div class="safety-domain-row" id="domainSuicide" data-domain="suicide">
+   <button type="button" class="safety-domain-toggle" data-safety-toggle="suicide" aria-expanded="false">
+    <span class="safety-domain-title">Suicide</span>
+    <span class="safety-domain-pill" id="pillSuicide"></span>
+    <svg class="safety-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+   </button>
+   <div class="safety-domain-body" id="bodySuicide">
+    <div class="opts safety-gate-opts" data-safety-gate="suicide">
+     <button type="button" class="opt" data-val="emr"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span class="gate-lbl">Document in EMR</span></button>
+     <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Need help</span></button>
+     <button type="button" class="opt" data-val="none"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span><span class="gate-lbl">No concern</span></button>
+    </div>
+    <div class="reveal hidden" id="suicideRiskReveal">
+     <div class="q"><label class="qlabel">C-SSRS risk level</label>
+      <div class="opts" data-field="suicideRisk"><button type="button" class="opt" data-val="low">Low</button><button type="button" class="opt warnv" data-val="moderate">Moderate</button><button type="button" class="opt dangerv" data-val="high">High</button></div>
+      <div class="reveal hidden alert red" id="hiRiskMsg">Moderate/high risk — complete safety plan and lethal means below.</div>
+     </div>
     </div>
    </div>
   </div>
-  <div class="safety-domain-row" id="domainHomicide">
-   <div class="safety-domain-h"><span class="req-dot need" id="reqHomicide"></span><span class="safety-domain-title">Homicide</span></div>
-   <div class="opts safety-gate-opts" data-safety-gate="homicide">
-    <button type="button" class="opt" data-val="emr"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span class="gate-lbl">In EMR</span></button>
-    <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Need help</span></button>
-    <button type="button" class="opt" data-val="none"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span><span class="gate-lbl">No concern</span></button>
-   </div>
-   <div class="reveal hidden" id="homicideHelpReveal">
-    <div class="q"><label class="qlabel">Acute homicide risk?</label>
-     <div class="opts yesno" data-field="homicideRisk"><button type="button" class="opt dangerv" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
+  <div class="safety-domain-row" id="domainHomicide" data-domain="homicide">
+   <button type="button" class="safety-domain-toggle" data-safety-toggle="homicide" aria-expanded="false">
+    <span class="safety-domain-title">Homicide</span>
+    <span class="safety-domain-pill" id="pillHomicide"></span>
+    <svg class="safety-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+   </button>
+   <div class="safety-domain-body" id="bodyHomicide">
+    <div class="opts safety-gate-opts" data-safety-gate="homicide">
+     <button type="button" class="opt" data-val="emr"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span class="gate-lbl">Document in EMR</span></button>
+     <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Need help</span></button>
+     <button type="button" class="opt" data-val="none"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span><span class="gate-lbl">No concern</span></button>
+    </div>
+    <div class="reveal hidden" id="homicideHelpReveal">
+     <div class="q"><label class="qlabel">Acute homicide risk?</label>
+      <div class="opts yesno" data-field="homicideRisk"><button type="button" class="opt dangerv" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
+     </div>
     </div>
    </div>
   </div>
-  <div class="safety-domain-row" id="domainViolence">
-   <div class="safety-domain-h"><span class="req-dot need" id="reqViolence"></span><span class="safety-domain-title">Violence</span></div>
-   <div class="opts safety-gate-opts" data-safety-gate="violence">
-    <button type="button" class="opt" data-val="emr"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span class="gate-lbl">In EMR</span></button>
-    <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Need help</span></button>
-    <button type="button" class="opt" data-val="none"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span><span class="gate-lbl">No concern</span></button>
-   </div>
-   <div class="reveal hidden" id="violenceHelpReveal">
-    <div class="q"><label class="qlabel">Acute violence risk?</label>
-     <div class="opts yesno" data-field="violence"><button type="button" class="opt dangerv" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
-     <div class="reveal hidden" id="violenceMsg">
-      <div class="opts chip-row" id="violenceFactorsWrap">
-       <button type="button" class="opt" data-store="violenceFactors.weapons">Weapons access</button>
-       <button type="button" class="opt" data-store="violenceFactors.priorViolence">Prior violence</button>
-       <button type="button" class="opt" data-store="violenceFactors.substance">Substance use</button>
-       <button type="button" class="opt" data-store="violenceFactors.command">Command symptoms</button>
-       <button type="button" class="opt" data-store="violenceFactors.identifiableTarget">Identifiable target</button>
+  <div class="safety-domain-row" id="domainViolence" data-domain="violence">
+   <button type="button" class="safety-domain-toggle" data-safety-toggle="violence" aria-expanded="false">
+    <span class="safety-domain-title">Violence</span>
+    <span class="safety-domain-pill" id="pillViolence"></span>
+    <svg class="safety-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+   </button>
+   <div class="safety-domain-body" id="bodyViolence">
+    <div class="opts safety-gate-opts" data-safety-gate="violence">
+     <button type="button" class="opt" data-val="emr"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span class="gate-lbl">Document in EMR</span></button>
+     <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Need help</span></button>
+     <button type="button" class="opt" data-val="none"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span><span class="gate-lbl">No concern</span></button>
+    </div>
+    <div class="reveal hidden" id="violenceHelpReveal">
+     <div class="q"><label class="qlabel">Acute violence risk?</label>
+      <div class="opts yesno" data-field="violence"><button type="button" class="opt dangerv" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
+      <div class="reveal hidden" id="violenceMsg">
+       <div class="opts chip-row" id="violenceFactorsWrap">
+        <button type="button" class="opt" data-store="violenceFactors.weapons">Weapons access</button>
+        <button type="button" class="opt" data-store="violenceFactors.priorViolence">Prior violence</button>
+        <button type="button" class="opt" data-store="violenceFactors.substance">Substance use</button>
+        <button type="button" class="opt" data-store="violenceFactors.command">Command symptoms</button>
+        <button type="button" class="opt" data-store="violenceFactors.identifiableTarget">Identifiable target</button>
+       </div>
       </div>
      </div>
     </div>
    </div>
   </div>
-  <div class="safety-domain-row" id="domainSubstances">
-   <div class="safety-domain-h"><span class="req-dot need" id="reqSubstances"></span><span class="safety-domain-title">Substances</span></div>
-   <div class="opts safety-gate-opts" data-safety-gate="substances">
-    <button type="button" class="opt" data-val="emr"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span class="gate-lbl">In EMR</span></button>
-    <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Need help</span></button>
-    <button type="button" class="opt" data-val="none"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span><span class="gate-lbl">No concern</span></button>
-   </div>
-   <div class="reveal hidden" id="substancesHelpReveal">
-    <div class="q"><label class="qlabel">AUDIT-C screen</label>
-     <div class="opts yesno" data-field="sudClinical"><button type="button" class="opt warnv" data-val="positive">Positive</button><button type="button" class="opt" data-val="negative">Negative</button></div>
+  <div class="safety-domain-row" id="domainSubstances" data-domain="substances">
+   <button type="button" class="safety-domain-toggle" data-safety-toggle="substances" aria-expanded="false">
+    <span class="safety-domain-title">Substances</span>
+    <span class="safety-domain-pill" id="pillSubstances"></span>
+    <svg class="safety-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+   </button>
+   <div class="safety-domain-body" id="bodySubstances">
+    <div class="opts safety-gate-opts" data-safety-gate="substances">
+     <button type="button" class="opt" data-val="emr"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span class="gate-lbl">Document in EMR</span></button>
+     <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Need help</span></button>
+     <button type="button" class="opt" data-val="none"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span><span class="gate-lbl">No concern</span></button>
+    </div>
+    <div class="reveal hidden" id="substancesHelpReveal">
+     <div class="q"><label class="qlabel">AUDIT-C screen</label>
+      <div class="opts yesno" data-field="sudClinical"><button type="button" class="opt warnv" data-val="positive">Positive</button><button type="button" class="opt" data-val="negative">Negative</button></div>
+     </div>
     </div>
    </div>
   </div>
@@ -2714,6 +2741,7 @@ function setField(f,v){
  if(f==="packetVariant"){applyPacketVariantDefaults(v);updatePacketVariantHint();}
  if(f==="acuteConcern"&&v==="no"){
   S.safetyGate={suicide:null,homicide:null,violence:null,substances:null};
+  S.safetyOpen={suicide:false,homicide:false,violence:false,substances:false};
   S.cssrsDone=null;S.suicideRisk=null;S.homicideRisk=null;S.sudScreenDone=null;S.sudTool=null;S.sudScore="";S.sudClinical=null;S.violence=null;S.cssrsInEmr=null;
  }
  if(f==="violence"&&v==="no"){S.violenceFactors={weapons:0,priorViolence:0,substance:0,command:0,identifiableTarget:0};}
@@ -2742,6 +2770,8 @@ $("#loc").addEventListener("input",function(e){
  });
 });
 document.addEventListener("click",function(e){
+ var toggle=e.target.closest("[data-safety-toggle]");
+ if(toggle){toggleSafetyDomain(toggle.dataset.safetyToggle);render();return;}
  var ins=e.target.closest("[data-ins]");if(ins){
   setField("insurance",ins.dataset.ins);render();return;
  }
@@ -2857,20 +2887,12 @@ function render(){
  show("#l6AttestationGate",collab&&gateDone);
  var l2Att=$("#l2ClinicianAttested");if(l2Att)l2Att.checked=S.clinicianAttested;
  var l6Att=$("#l6ClinicianAttested");if(l6Att)l6Att.checked=S.clinicianAttested;
- ["suicide","homicide","violence","substances"].forEach(function(d){
-  var req=safetyDomainRequired(d),done=safetyGateComplete(d);
-  var dot=$("#req"+d.charAt(0).toUpperCase()+d.slice(1));
-  if(dot){
-   dot.classList.toggle("need",req&&!done);
-   dot.classList.toggle("done",req&&done);
-   dot.classList.toggle("off",!req);
-  }
- });
- rev("#suicideRiskReveal",sg.suicide==="emr"||sg.suicide==="help");
+ renderSafetyDomains();
+ rev("#suicideRiskReveal",sg.suicide==="help");
  rev("#homicideHelpReveal",sg.homicide==="help");
  rev("#violenceHelpReveal",sg.violence==="help");
  rev("#substancesHelpReveal",sg.substances==="help");
- rev("#hiRiskMsg",hiRisk());
+ rev("#hiRiskMsg",sg.suicide==="help"&&hiRisk());
  rev("#violenceMsg",sg.violence==="help"&&S.violence==="yes");
  $("#opOnlyNote").style.display="none";
  rev("#planDoneWrap",S.safetyPlanInEmr!=="yes");
@@ -3700,7 +3722,7 @@ function buildPacket(){
  var suic=suicideScreenNote();
  var sudTxt=substanceScreenNote();
  var homTxt=homicideScreenNote();
- var violTxt=violenceFactorsNote().replace(/^Yes/,"<b>Yes</b>").replace(/^No concern/,"<b>No concern</b>").replace(/^Documented in EMR/,"<b>Documented in EMR</b>")+(S.violence==="yes"?" — Tarasoff/duty-to-warn documented separately":"");
+ var violTxt=violenceScreenNote();
  var fu=S.apptScheduled==="yes"
   ? kvRow("Appointment scheduled","Yes")+kvRow("Follow-up with",esc(fuRes?fuRes.name:"—"))+kvRow("Date / time",(esc(S.plan2.fuDate)||'<span class="blank"></span>')+" "+(esc(S.plan2.fuTime)||""))+kvRow("Warm handoff",esc(S.warm||"—"))+(fuRes&&fuRes.phone?kvRow("Phone",'<a href="tel:'+tel(fuRes.phone)+'">'+esc(fuRes.phone)+'</a>'):"")
   : S.apptScheduled==="no"
@@ -3798,7 +3820,7 @@ function buildChartText(){
   "Suicide risk: "+suic,
   "Homicide risk: "+homTxt,
   "Substance-use screen: "+sudTxt,
-  "Acute violence risk: "+violenceFactorsNote()+(S.violence==="yes"?" — Tarasoff/duty-to-warn documented separately":""),
+  "Acute violence risk: "+violenceScreenNote(),
   collabNote?"Collaboration: "+collabNote:"",
   "",
   "SAFETY INTERVENTIONS",
