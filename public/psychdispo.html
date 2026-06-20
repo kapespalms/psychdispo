@@ -122,10 +122,7 @@ body.embed .progress-sticky{top:44px}
 .step-head .ldesc{display:none}
 .layer{border:none;border-radius:0;margin:0;padding:18px 34px 24px;box-shadow:none}
 .layer+.layer{border-top:1px solid var(--line)}
-.legend{display:none}
-.gate-summary{display:none}
-#intakeLegend{display:none}
-#l5ctx{display:none}
+.legend,.gate-summary,#intakeLegend,#gateSummary,#pathwayContext,#l5ctx,#l6status,#gateAutoNote{display:none!important}
 #l5Fresh{display:none}
 .note.in-workflow{display:none}
 .pathway-card .pblurb{display:none}
@@ -183,12 +180,12 @@ body.embed .progress-sticky{top:44px}
 .deliver-foot{font-size:12px;color:var(--faint);margin-top:8px;display:flex;align-items:center;gap:8px;padding:0 34px 8px}
 .deliver-foot svg{width:15px;height:15px;color:var(--sage);flex:none}
 .deliver-advanced{margin:0 34px 16px;padding:12px 14px;border:1px dashed var(--line);border-radius:8px;background:#fbf7ee;font-size:12.5px}
-.express-toggle{display:flex;align-items:center;gap:10px;font-size:13px;margin:0 0 12px;padding:9px 12px;background:#e7f0ec;border-radius:9px;border:1px solid var(--line)}
+.express-toggle{display:flex;align-items:center;gap:8px;font-size:13px;margin:0 0 8px;padding:7px 10px;background:#e7f0ec;border-radius:8px;border:1px solid var(--line)}
 .express-toggle label{display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:600;color:var(--ink)}
-.express-loc-line{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:14px;margin:4px 0 8px}
+.express-loc-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;margin:2px 0 4px}
 .express-loc-line .loc-suggest{font-weight:600;color:var(--ink)}
 .express-change-loc{font-size:12px;color:var(--t);font-weight:600;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;text-decoration:underline;text-underline-offset:2px}
-.ctx-accordion{margin-top:12px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fafbfd}
+.ctx-accordion{margin-top:8px;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fafbfd}
 .ctx-accordion-toggle{width:100%;display:flex;align-items:center;gap:8px;padding:10px 14px;background:none;border:none;cursor:pointer;font:inherit;text-align:left;font-size:13px;font-weight:600;color:var(--mut);touch-action:manipulation}
 .ctx-accordion-chevron{width:14px;height:14px;flex:none;stroke:var(--mut);fill:none;stroke-width:2;transition:transform .2s}
 .ctx-accordion.open .ctx-accordion-chevron{transform:rotate(180deg)}
@@ -378,8 +375,8 @@ body.embed .progress-sticky{top:44px}
 body.embed .mh-top,body.embed .hero{display:none!important}
 body.embed{padding-bottom:0}
 body.embed .wrap{padding-bottom:24px}
-.pathway-fork{padding:28px 34px 8px}
-.pathway-head{text-align:center;margin-bottom:22px}
+.pathway-fork{padding:18px 24px 6px}
+.pathway-head{text-align:center;margin-bottom:14px}
 .pathway-head .ptitle{font-family:var(--serif);font-weight:700;font-size:28px;letter-spacing:-.3px;margin:0 0 6px}
 .pathway-head .pdesc{font-size:14px;color:var(--mut);margin:0;line-height:1.5}
 .gate-auto-note{font-size:13px;color:var(--mut);background:#f7f8fc;border:1px solid var(--line);border-radius:9px;padding:10px 14px;margin:0 0 16px;line-height:1.45}
@@ -428,10 +425,6 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 .refbody a{color:var(--t2)}
 .refs ol{padding-left:20px;font-size:12px}.refs li{margin:3px 0}
 
-.gate-summary{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px;padding:12px 14px;background:#f8f9fd;border:1px solid var(--line);border-radius:10px;min-height:44px;align-items:center}
-.gate-chip{font-size:12px;padding:5px 10px;border-radius:999px;background:#fff;border:1px solid var(--line);color:var(--ink)}
-.gate-chip b{color:var(--t);font-weight:600}
-.gate-chip.miss{color:var(--mut);font-style:italic;border-style:dashed}
 .loc-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
 .loc-row .field{flex:1;min-width:140px;max-width:220px}
 .dir-toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
@@ -480,16 +473,22 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 
 .ico-sf{display:inline-flex;align-items:center;justify-content:center;flex:none}
 .ico-sf svg{width:1.15em;height:1.15em;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
-.slide-shell{padding:4px 0 0;margin-bottom:0}
-.slide-panel{display:flex;flex-direction:column;min-height:calc(100dvh - 148px);max-height:calc(100dvh - 148px);overflow:hidden}
-.slide-panel .float-card,.slide-panel .layer{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:10px 16px 0;margin:0;min-height:0}
+.slide-shell{padding:2px 0 0;margin-bottom:0}
+.slide-panel{display:flex;flex-direction:column;min-height:calc(100dvh - 136px);max-height:calc(100dvh - 136px);overflow:hidden}
+.slide-panel .float-card,.slide-panel .layer{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:8px 14px 0;margin:0;min-height:0}
 .slide-panel .card-body{flex:1;min-height:0;overflow:hidden}
-.step-kicker{margin-bottom:2px;padding-top:2px}
-.step-head{padding-bottom:2px}
-.step-head .ltitle{font-size:24px;margin:0 0 2px;line-height:1.08}
-.q{margin:7px 0}
-.field-label{margin-bottom:6px}
-.gate-grid{gap:6px 10px;margin-top:0}
+.step-kicker{margin-bottom:0;padding-top:0}
+.step-head{padding-bottom:0}
+.step-head .ltitle{font-size:22px;margin:0 0 2px;line-height:1.08}
+.q{margin:5px 0}
+.field-label{margin-bottom:4px}
+.gate-grid{gap:4px 8px;margin-top:0}
+.ins-zip-line{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:flex-end}
+.ins-zip-ins{flex:1 1 260px;min-width:0}
+.ins-zip-loc{flex:0 1 188px;min-width:132px}
+.ins-zip-loc input[type=text]{width:100%;max-width:200px}
+.ins-zip-ins .ins-row{display:flex;flex-wrap:wrap;gap:5px}
+@media(max-width:480px){.ins-zip-line{flex-direction:column;align-items:stretch}.ins-zip-loc{flex:1 1 100%}.ins-zip-loc input[type=text]{max-width:100%}}
 .gate-row-2{gap:6px 10px}
 .intake-divider{margin-top:8px;padding-top:8px}
 .intake-divider>.sub2:first-child{display:none}
@@ -502,15 +501,15 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 .safety-col{padding:6px 8px}
 .safety-col .sub2{font-size:10px;margin-bottom:4px}
 .ins-row .opt,.loc-opts .opt{min-height:42px;padding:8px 12px;font-size:13px;white-space:normal;line-height:1.2}
-.loc-cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
+.loc-cols{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start}
 .loc-col-h{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t);margin:0 0 6px}
 .loc-col.dimmed .loc-col-h{color:var(--faint)}
 .loc-col.dimmed .opt{opacity:.55}
 .loc-opts{display:flex;flex-direction:column;gap:6px;flex-wrap:nowrap}
 .loc-opts .opt{width:100%;text-align:left}
 .chip-row .opt{font-size:12px;padding:6px 10px;min-height:38px}
-.card-foot{flex:none;position:sticky;bottom:0;margin:8px -16px 0;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,rgba(255,253,248,0) 0%,var(--card) 28%);border-top:1px solid var(--line);z-index:4}
-.card-foot .card-continue{width:100%;min-height:48px;font-size:15px;font-weight:700;border-radius:12px;border:none;background:var(--t);color:#fff;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:8px;touch-action:manipulation}
+.card-foot{flex:none;position:sticky;bottom:0;margin:4px -14px 0;padding:8px 14px calc(8px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,rgba(255,253,248,0) 0%,var(--card) 28%);border-top:1px solid var(--line);z-index:4}
+.card-foot .card-continue{width:100%;min-height:44px;font-size:15px;font-weight:700;border-radius:10px;border:none;background:var(--t);color:#fff;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:8px;touch-action:manipulation}
 .card-foot .card-continue:disabled{background:#aebdbb;cursor:not-allowed;opacity:1}
 .card-foot .card-continue svg{width:18px;height:18px;stroke-width:2;flex:none}
 .pathway-card .pcard-ico{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;color:var(--t)}
@@ -611,9 +610,18 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
  </div>
  <div class="reveal hidden alert red" id="notCleared">Not medically cleared — complete medical workup / stabilization before psychiatric disposition. This tool is for medically-cleared patients only.</div>
  <div id="expressEssentials" class="hidden">
-  <div class="q gate-wide"><div class="field-label"><span class="req-mark" aria-hidden="true">■</span>Patient home — city or ZIP</div>
-   <input type="text" id="locExpress" placeholder="e.g. Bellingham or 98225" style="max-width:320px" autocomplete="address-level2">
-   <span class="note" id="zipMetaExpress"></span>
+  <div class="q gate-wide ins-zip-row">
+   <div class="ins-zip-line">
+    <div class="ins-zip-ins">
+     <div class="field-label"><span class="req-mark" aria-hidden="true">■</span>Insurance</div>
+     <div class="opts ins-row" id="insuranceOptsExpress" role="group" aria-label="Insurance"></div>
+    </div>
+    <div class="ins-zip-loc">
+     <div class="field-label"><span class="req-mark" aria-hidden="true">■</span>Home city / ZIP</div>
+     <input type="text" id="locExpress" placeholder="e.g. Bellingham or 98225" autocomplete="address-level2">
+     <span class="note" id="zipMetaExpress"></span>
+    </div>
+   </div>
   </div>
   <div class="express-loc-line" id="expressLocLine"><span>Suggested level:</span><span class="loc-suggest" id="expressLocSuggest">Outpatient</span><button type="button" class="express-change-loc" id="expressChangeLoc">Change level</button></div>
   <div class="reveal hidden" id="expressLocExpand"><div class="loc-cols"><div class="loc-col community-col"><div class="loc-col-h">Community</div><div class="opts loc-opts" id="expressLocCommunityOpts"></div></div></div></div>
@@ -627,11 +635,19 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
  <div class="card-body">
  <div class="step-kicker"><span class="num">02</span><span class="lbl">Clinical</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Clinical context</div></div>
- <div id="intakeLegend" class="legend"></div>
- <div id="gateSummary" class="gate-summary hidden"></div>
  <div class="gate-grid">
-  <div class="q gate-wide" id="contextInsBlock"><div class="field-label"><span class="req-mark" data-req="insurance" aria-hidden="true">■</span>Insurance</div>
-   <div class="opts ins-row" id="insuranceOpts" role="group" aria-label="Insurance"></div>
+  <div class="q gate-wide ins-zip-row" id="contextInsZipBlock">
+   <div class="ins-zip-line">
+    <div class="ins-zip-ins" id="contextInsBlock">
+     <div class="field-label"><span class="req-mark" data-req="insurance" aria-hidden="true">■</span>Insurance</div>
+     <div class="opts ins-row" id="insuranceOpts" role="group" aria-label="Insurance"></div>
+    </div>
+    <div class="ins-zip-loc" id="contextZipBlock">
+     <div class="field-label"><span class="req-mark" data-req="zip" aria-hidden="true">■</span>Home city / ZIP</div>
+     <input type="text" id="loc" placeholder="e.g. Bellingham or 98225" autocomplete="address-level2">
+     <span class="note" id="zipMeta"></span>
+    </div>
+   </div>
   </div>
   <div class="q gate-wide" id="settingWrap"><div class="field-label"><span class="req-mark" data-req="setting" aria-hidden="true">■</span>Discharging from</div>
    <select id="selSetting"><option value="">— Select setting —</option><option value="Acute">Acute / Inpatient (ED, hospital, urgent care)</option><option value="Outpatient">Outpatient clinic / office</option></select>
@@ -650,17 +666,10 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
    </div>
    <div class="note" id="opOnlyNote" style="display:none;margin-top:5px">Outpatient — community only (OP, IOP, PHP).</div>
   </div>
-  <div class="q gate-wide" id="contextZipBlock"><div class="field-label"><span class="req-mark" data-req="zip" aria-hidden="true">■</span>Patient home — city or ZIP</div>
-   <input type="text" id="loc" placeholder="e.g. Bellingham or 98225" style="max-width:320px" autocomplete="address-level2">
-   <span class="note" id="zipMeta"></span>
-  </div>
  </div>
  <div id="ctxAccordion" class="ctx-accordion">
-  <button type="button" class="ctx-accordion-toggle" id="ctxAccordionBtn" aria-expanded="false">Insurance &amp; patient details <span class="note">(optional)</span><svg class="ctx-accordion-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+  <button type="button" class="ctx-accordion-toggle" id="ctxAccordionBtn" aria-expanded="false">Patient details <span class="note">(optional)</span><svg class="ctx-accordion-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
   <div class="ctx-accordion-body" id="ctxAccordionBody">
-   <div class="q gate-wide hidden" id="ctxAccordionIns"><div class="field-label">Insurance</div>
-    <div class="opts ins-row" id="insuranceOptsAccordion" role="group" aria-label="Insurance"></div>
-   </div>
    <div class="intake-divider ctx-accordion-details">
  <div class="sub2" style="border:none;padding-top:0">Who is the patient?</div>
  <div class="sub2">1A · Demographics</div>
@@ -1695,7 +1704,7 @@ function rebuildInsuranceOpts(){
   }).join("");
  }
  row("#insuranceOpts");
- row("#insuranceOptsAccordion");
+ row("#insuranceOptsExpress");
 }
 function rebuildDispLocButtons(){
  var cur=dispLocValue(),opOnly=isOutpatient();
@@ -2012,9 +2021,7 @@ function violenceFactorsNote(){
  return parts.length?"Yes — "+parts.join("; "):"Yes";
 }
 function intakeCompleteCount(){return ["insurance","disp","zip","lifeStage"].filter(intakeFieldDone).length;}
-function renderIntakeLegend(){
- var el=$("#intakeLegend");if(!el)return;
- el.innerHTML="";
+function renderReqMarks(){
  $$("[data-req]").forEach(function(dot){
   var k=dot.dataset.req;
   dot.style.opacity=intakeFieldDone(k)?"0.35":"1";
@@ -2172,12 +2179,7 @@ function renderSpine(){
   return;
  }
  if(sticky)sticky.classList.remove("hidden");
- if(ctx){
-  var lbl=pathwayLabel();
-  ctx.classList.toggle("hidden",!lbl);
-  ctx.innerHTML=lbl?('<span>'+esc(lbl)+'</span><button type="button" class="change-path" id="changePathwayBtn">Change pathway</button>'):"";
-  var ch=$("#changePathwayBtn");if(ch)ch.addEventListener("click",clearPathway);
- }
+ if(ctx){ctx.classList.add("hidden");ctx.innerHTML="";}
  var labels=stepLabels();
  var cur=spineIndex();
  el.innerHTML=labels.map(function(lbl,i){
@@ -2195,15 +2197,7 @@ function renderSpine(){
   seg.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();goWorkflowStep(i,true);}});
  });
 }
-function updateContextTagline(){
- var el=$("#mhTagline");if(!el)return;
- if(!locOk()&&!S.insurance){el.innerHTML='<b>1,400+ verified resources</b> &nbsp;·&nbsp; all 50 states';return;}
- var parts=[];
- if(locDisplay())parts.push(esc(locDisplay()));
- if(S.insurance)parts.push(esc(S.insurance));
- if(S.setting)parts.push(esc(settingLabel(S.setting).split(" / ")[0]));
- el.textContent=parts.join(" · ")||"";
-}
+function updateContextTagline(){}
 var ACT_ICO={
  patient:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/></svg>',
  note:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="8" y="4" width="12" height="16" rx="2"/><path d="M16 4V2H6a2 2 0 00-2 2v12"/></svg>',
@@ -2298,21 +2292,8 @@ function buildPrintContent(mode){
  return buildPacket();
 }
 
-function renderGateSummary(){
- var el=$("#gateSummary");if(!el)return;
- var chips=[];
- if(S.cleared==="yes")chips.push('<span class="gate-chip"><b>Cleared</b> · medically stable</span>');
- else if(S.cleared==="no")chips.push('<span class="gate-chip miss">Not cleared — stop</span>');
- if(S.setting)chips.push('<span class="gate-chip"><b>From</b> · '+esc(settingLabel(S.setting))+'</span>');
- if(locOk()){
-  var loc=locDisplay();var m=patientCounty();if(m)loc+=" · "+m;
-  chips.push('<span class="gate-chip"><b>Home</b> · '+esc(loc)+'</span>');
- }
- if(S.insurance)chips.push('<span class="gate-chip"><b>Insurance</b> · '+esc(S.insurance)+'</span>');
- if(L3ok())chips.push('<span class="gate-chip"><b>Disposition</b> · '+esc(dispLocShort())+'</span>');
- el.innerHTML=chips.length?chips.join(""):'<span class="gate-chip miss">Complete the fields below to begin</span>';
- renderIntakeLegend();
-}
+
+function renderGateSummary(){renderReqMarks();}
 var DIR_INIT=0;
 function initDirectory(){
  if(DIR_INIT)return;DIR_INIT=1;
@@ -3027,11 +3008,8 @@ function renderContextLayout(){
  if(anchor&&acc.parentElement!==anchor)anchor.appendChild(acc);
  acc.classList.toggle("open",!!S.contextAccordionOpen);
  var btn=$("#ctxAccordionBtn");if(btn)btn.setAttribute("aria-expanded",S.contextAccordionOpen?"true":"false");
- var insMain=$("#contextInsBlock"),insAcc=$("#ctxAccordionIns");
- if(insMain)insMain.classList.toggle("hidden",isExpressOp());
- if(insAcc)insAcc.classList.toggle("hidden",!isExpressOp());
+ show("#contextInsZipBlock",!isExpressOp());
  show("#contextDispBlock",!isExpressOp());
- show("#contextZipBlock",!isExpressOp());
 }
 function renderExpressEssentials(){
  var wrap=$("#expressEssentials"),toggle=$("#expressToggleWrap"),tog=$("#expressOpToggle");
@@ -3075,7 +3053,6 @@ function render(){
  renderSlide();
  updateContextTagline();
  renderGateSummary();
- renderIntakeLegend();
  syncGateSelects();
  syncOptsFromS();
  show("#pathwayFork",!S.pathway);
@@ -3471,9 +3448,6 @@ function renderFollowUp(){
  updateWarmHandoffBtns();
 }
 function renderPanels(){
- var c=patientCounty();
- renderL5Fresh();
- $("#l5ctx").textContent="ZIP "+S.zip+(c?" · "+c:" · all metros")+(waCluster(c)||nyCluster(c)||upstateCluster(c)?" · regional metro":"")+" · "+S.insurance+" insurance · "+(S.dispo==="community"?("community / "+(S.intensity||"").toUpperCase()):"residential / "+(S.residType||""));
  var P=[];
  var aSubs=[{title:"Psychiatrist / PMHNP (medication management)",list:pick(function(r){return r.panel==="A"&&/Psychiatrist/.test(r.sub||"");})},
   {title:"Therapy / counseling (LCSW, LPC, psychology, peer)",list:pick(function(r){return r.panel==="A"&&/Therapy/.test(r.sub||"");})}];
@@ -3598,8 +3572,6 @@ function renderStatus(){
  });
 }
 function renderL6status(){
- var items=[["Safety screening",L2ok()],["Safety plan & means",planAndMeansOk()],["Coordination",S.callback!=null&&S.pcp!=null&&S.pharmacy!=null],["Referrals ("+selectedCount()+")",selectedCount()>=1],["Follow-up",L5FollowUpOk()],["Packet · "+packetVariantLabel(S.packetVariant||"full"),true]];
- $("#l6status").innerHTML=items.map(function(i){return chk(i[1],i[0]);}).join(" ");
  renderDeliverScreen();
  updateSavePlanBtn();
  updatePacketVariantHint();
