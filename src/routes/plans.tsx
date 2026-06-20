@@ -96,7 +96,9 @@ function PlansPage() {
           <div className="border border-border bg-white rounded-sm p-8 text-center">
             <p className="font-serif text-xl text-muted-foreground">No saved plans yet</p>
             <p className="mt-2 text-sm text-muted-foreground">
-              Complete a disposition workflow and save your plan from the packet step.
+              Complete a disposition workflow and save your plan from the Deliver step. You can also{" "}
+              <strong>Save as template</strong> on Deliver to reuse defaults (scaffold only — no patient
+              info) on your next case.
             </p>
             <Link
               to="/dispo"
