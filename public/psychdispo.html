@@ -494,7 +494,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 .slide-panel.is-active{pointer-events:auto}
 .slide-panel>.float-card,.slide-panel>.layer{flex:1 1 auto;display:flex;flex-direction:column;overflow:hidden;padding:6px 12px 0;margin:0;min-height:0;pointer-events:auto}
 .slide-panel>.float-card{border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:0 1px 3px rgba(34,32,42,.06)}
-.slide-panel .step-kicker,.slide-panel .step-head{flex-shrink:0}
+.slide-panel .step-kicker,.slide-panel .step-head,.slide-panel .slide-nav-top{flex-shrink:0}
 .slide-panel .slide-body,.slide-panel .card-body{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;touch-action:pan-y;padding-bottom:calc(var(--card-foot-h) + 8px)}
 @media(min-width:681px){.slide-panel .slide-body,.slide-panel .card-body{padding-bottom:calc(var(--statusbar-h) + 16px)}}
 .slide-panel .plan-compact-head{flex-shrink:0}
@@ -532,8 +532,17 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 .loc-opts{display:flex;flex-direction:column;gap:6px;flex-wrap:nowrap}
 .loc-opts .opt{width:100%;text-align:left}
 .chip-row .opt{font-size:12px;padding:6px 10px;min-height:38px}
-.card-foot{flex:none;position:sticky;bottom:0;margin:2px -12px 0;padding:6px 12px calc(6px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,rgba(255,253,248,0) 0%,var(--card) 24%);border-top:1px solid var(--line);z-index:4}
-.card-foot .card-continue{width:100%;min-height:44px;font-size:15px;font-weight:700;border-radius:10px;border:none;background:var(--t);color:#fff;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:8px;touch-action:manipulation}
+.slide-nav-top{display:flex;gap:8px;align-items:center;padding:8px 0 4px;min-height:36px;max-height:40px}
+.slide-nav-top .nav-btn{min-height:36px;padding:6px 12px;font-size:13px;font-weight:600;border-radius:10px;cursor:pointer;font-family:inherit;touch-action:manipulation;flex:none}
+.slide-nav-top .nav-btn.back{background:#fff;color:var(--t);border:1px solid var(--t)}
+.slide-nav-top .nav-btn.cont{background:var(--t);color:#fff;border:none;margin-left:auto;display:inline-flex;align-items:center;gap:6px}
+.slide-nav-top .nav-btn.cont svg{width:16px;height:16px;stroke-width:2;flex:none}
+.slide-nav-top .nav-btn:disabled{opacity:.45;cursor:not-allowed}
+.slide-nav-top .nav-btn.cont:disabled{background:#aebdbb;opacity:1}
+.card-foot{flex:none;position:sticky;bottom:0;margin:2px -12px 0;padding:6px 12px calc(6px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,rgba(255,253,248,0) 0%,var(--card) 24%);border-top:1px solid var(--line);z-index:4;display:flex;gap:8px;align-items:center}
+.card-foot .card-back{min-height:44px;padding:8px 14px;font-size:13px;font-weight:700;border-radius:10px;background:#fff;color:var(--t);border:1px solid var(--t);cursor:pointer;font-family:inherit;touch-action:manipulation;flex:none}
+.card-foot .card-back:disabled{opacity:.45;cursor:not-allowed}
+.card-foot .card-continue{width:auto;flex:1;margin-left:auto;min-height:44px;font-size:15px;font-weight:700;border-radius:10px;border:none;background:var(--t);color:#fff;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:8px;touch-action:manipulation}
 .card-foot .card-continue:disabled{background:#aebdbb;cursor:not-allowed;opacity:1}
 .card-foot .card-continue svg{width:18px;height:18px;stroke-width:2;flex:none}
 .pathway-card .pcard-ico{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;color:var(--t)}
@@ -632,6 +641,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 <section class="layer float-card" id="Lgate">
  <div class="step-kicker"><span class="num">01</span><span class="lbl">Case Setup</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Case setup</div></div>
+ <div class="slide-nav-top"><button type="button" class="nav-btn back slide-nav-back" disabled>← Back</button><button type="button" class="nav-btn cont slide-nav-cont" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <div class="slide-body">
  <div id="gateAutoNote" class="gate-auto-note"></div>
  <div id="expressToggleWrap" class="express-toggle hidden"><span class="express-mode-label">Workflow</span><div class="express-mode-track" role="group" aria-label="Workflow mode"><button type="button" class="express-mode-opt sel" id="expressModeExpress" data-express="1">Express</button><button type="button" class="express-mode-opt" id="expressModeFull" data-express="0">Full workflow</button></div></div>
@@ -658,13 +668,14 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
  </div>
  </div>
 </section>
-<div class="card-foot"><button type="button" class="card-continue" id="cardContinue0" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
+<div class="card-foot"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue0" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </div>
 
 <div class="slide-panel" data-step="1">
 <section class="layer float-card" id="L0">
  <div class="step-kicker"><span class="num">02</span><span class="lbl">Patient &amp; Coverage</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Patient &amp; coverage</div></div>
+ <div class="slide-nav-top"><button type="button" class="nav-btn back slide-nav-back" disabled>← Back</button><button type="button" class="nav-btn cont slide-nav-cont" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <div class="slide-body card-body">
  <div class="gate-grid">
   <div class="q gate-wide ins-zip-row" id="contextInsZipBlock">
@@ -744,13 +755,14 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
  </div>
  </div>
 </section>
-<div class="card-foot"><button type="button" class="card-continue" id="cardContinue1" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
+<div class="card-foot"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue1" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </div>
 
 <div class="slide-panel" data-step="2">
 <section class="layer float-card" id="L2">
  <div class="step-kicker"><span class="num">03</span><span class="lbl">Safety Review</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Safety review</div></div>
+ <div class="slide-nav-top"><button type="button" class="nav-btn back slide-nav-back" disabled>← Back</button><button type="button" class="nav-btn cont slide-nav-cont" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <div class="slide-body">
  <div id="safetyCollabBanner" class="alert amber collab-banner hidden"><b>Clinician review required</b> — moderate/high C-SSRS or violence concern. Complete safety plan &amp; means with a trained clinician, then attest before Plan or Deliver.</div>
  <div id="expressSafetyGate" class="express-safety-gate hidden">
@@ -901,13 +913,14 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
  </div>
  </div>
 </section>
-<div class="card-foot"><button type="button" class="card-continue" id="cardContinue2" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
+<div class="card-foot"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue2" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </div>
 
 <div class="slide-panel" data-step="3">
 <section class="layer float-card" id="L5">
  <div class="step-kicker"><span class="num">04</span><span class="lbl">Resources</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Resources</div></div>
+ <div class="slide-nav-top"><button type="button" class="nav-btn back slide-nav-back" disabled>← Back</button><button type="button" class="nav-btn cont slide-nav-cont" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <div class="plan-compact-head">
  <div id="planTopMatches" class="plan-top-matches hidden"></div>
  <button type="button" class="plan-expand-link hidden" id="planShowAllBtn">Show all</button>
@@ -926,13 +939,14 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
  <div id="l5FkglGate" class="l6-gate l6-gate-warn hidden"></div>
  </div>
 </section>
-<div class="card-foot"><button type="button" class="card-continue" id="cardContinue3" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
+<div class="card-foot"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue3" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </div>
 
 <div class="slide-panel" data-step="4">
 <section class="layer float-card" id="L6">
  <div class="step-kicker"><span class="num">05</span><span class="lbl">Handoff</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Handoff</div></div>
+ <div class="slide-nav-top"><button type="button" class="nav-btn back slide-nav-back" disabled>← Back</button><button type="button" class="nav-btn cont slide-nav-cont" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <div class="slide-body">
  <div id="deliverGate" class="deliver-gate hidden"></div>
  <div id="deliverPrimary" class="deliver-primary hidden"></div>
@@ -988,7 +1002,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
  <button type="button" class="hidden" id="copyChartBtn"></button>
  <button type="button" class="hidden" id="printBtn" disabled></button>
 </section>
-<div class="card-foot"><button type="button" class="card-continue" id="cardContinue4" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
+<div class="card-foot"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue4" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </div>
 
 </div></div>
@@ -3620,8 +3634,10 @@ function renderStatus(){
  if(!S.pathway){$("#statusInner").innerHTML="";return;}
  var saveNote=lastSaveLabel?'<span class="save-chip">· '+lastSaveLabel+'</span>':"";
  var step=S.workflowStep||0;
- var backDis=step<=0?" disabled":"";
- var contDis=!workflowStepDone(step)||step>=workflowStepCount()-1?" disabled":"";
+ var canBack=step>0;
+ var canCont=workflowStepDone(step)&&step<workflowStepCount()-1;
+ var backDis=canBack?"":" disabled";
+ var contDis=canCont?"":" disabled";
  var contLbl=workflowContinueLabel(step);
  var contSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg>';
  $("#statusInner").innerHTML=
@@ -3630,14 +3646,21 @@ function renderStatus(){
   '<button type="button" class="btn nav-btn cont" id="wfContinue"'+contDis+'>'+contLbl+contSvg+'</button>';
  var b=$("#wfBack");if(b&&!b.disabled)b.onclick=workflowBack;
  var c=$("#wfContinue");if(c&&!c.disabled)c.onclick=workflowContinue;
- var canCont=workflowStepDone(step)&&step<workflowStepCount()-1;
- $$(".card-continue").forEach(function(btn){
+ function syncContBtn(btn){
   btn.disabled=!canCont;
   var svg=btn.querySelector("svg");
   btn.textContent=contLbl;
   if(svg)btn.appendChild(svg);
-  if(canCont)btn.onclick=workflowContinue;
- });
+  btn.onclick=canCont?workflowContinue:null;
+ }
+ function syncBackBtn(btn){
+  btn.disabled=!canBack;
+  btn.onclick=canBack?workflowBack:null;
+ }
+ $$(".slide-nav-back").forEach(syncBackBtn);
+ $$(".slide-nav-cont").forEach(syncContBtn);
+ $$(".card-back").forEach(syncBackBtn);
+ $$(".card-continue").forEach(syncContBtn);
 }
 function renderL6status(){
  renderDeliverScreen();
