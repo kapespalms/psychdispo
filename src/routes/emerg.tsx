@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ToolFrame } from "@/components/tool-frame";
+import { psychdispoEmbedSrc } from "@/lib/psychdispo-embed";
 
 export const Route = createFileRoute("/emerg")({
   head: () => ({
@@ -30,7 +31,7 @@ function EmergPage() {
 
   return (
     <ToolFrame
-      src={`/psychdispo.html?embed=1#${iframeHash}`}
+      src={psychdispoEmbedSrc(iframeHash)}
       title="Psych Emerg · Review"
     />
   );

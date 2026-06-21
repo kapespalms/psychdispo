@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ToolFrame } from "@/components/tool-frame";
+import { psychdispoEmbedSrc } from "@/lib/psychdispo-embed";
 
 export const Route = createFileRoute("/directory")({
   head: () => ({
@@ -17,6 +18,9 @@ export const Route = createFileRoute("/directory")({
 
 function DirectoryPage() {
   return (
-    <ToolFrame src="/psychdispo.html?embed=1#directory" title="PsychDispo resource directory" />
+    <ToolFrame
+      src={psychdispoEmbedSrc("directory")}
+      title="PsychDispo resource directory"
+    />
   );
 }

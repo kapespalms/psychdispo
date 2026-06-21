@@ -13,14 +13,15 @@ export type ToolFrameProps = {
 function PhiBanner() {
   return (
     <div
-      className="shrink-0 flex items-center gap-2 text-xs text-[#22202A] bg-[#eef1fb] border-b border-[#cdd5f5] px-4 py-2.5"
+      className="shrink-0 flex items-center gap-2.5 text-sm text-[var(--ink)] bg-[#eef1fb] border-b border-[#cdd5f5] px-5 py-2.5"
       role="status"
     >
       <svg
-        className="w-4 h-4 text-[#2A43C0] shrink-0"
+        className="w-4 h-4 text-[var(--t)] shrink-0"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
+        strokeWidth="1.75"
         aria-hidden
       >
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
@@ -63,13 +64,14 @@ export function ToolFrame({ src, title, showPhiBanner }: ToolFrameProps) {
   }, [user, src, supabaseEnabled]);
 
   return (
-    <div className="flex flex-col h-[100dvh] min-h-0 overflow-hidden bg-[#f6f6f3]">
+    <div className="flex flex-col flex-1 min-h-0 bg-[var(--shell-bg)]">
       {showPhiBanner && <PhiBanner />}
       <iframe
         ref={iframeRef}
         src={src}
         title={title}
-        className="flex-1 w-full border-0 min-h-[280px]"
+        className="w-full flex-1 min-h-[80vh] border-0"
+        style={{ height: "calc(100dvh - var(--shell-header, 108px))" }}
       />
     </div>
   );

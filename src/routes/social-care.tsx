@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ToolFrame } from "@/components/tool-frame";
+import { psychdispoEmbedSrc } from "@/lib/psychdispo-embed";
 
 export const Route = createFileRoute("/social-care")({
   head: () => ({
@@ -18,7 +19,7 @@ export const Route = createFileRoute("/social-care")({
 function SocialCarePage() {
   return (
     <ToolFrame
-      src="/psychdispo.html?embed=1#social-care"
+      src={psychdispoEmbedSrc("social-care")}
       title="PsychDispo — Social Care Plan"
     />
   );

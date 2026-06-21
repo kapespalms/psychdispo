@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ToolFrame } from "@/components/tool-frame";
+import { psychdispoEmbedSrc } from "@/lib/psychdispo-embed";
 
 export const Route = createFileRoute("/dispo")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -22,11 +23,7 @@ export const Route = createFileRoute("/dispo")({
 
 function DispoPage() {
   const { resume, template, fresh } = Route.useSearch();
-  const params = new URLSearchParams({ embed: "1" });
-  if (resume) params.set("resume", "1");
-  if (template) params.set("template", "1");
-  if (fresh) params.set("fresh", "1");
-  const src = `/psychdispo.html?${params.toString()}#plan`;
+  const src = psychdispoEmbedSrc("plan", { resume, template, fresh });
   return (
     <ToolFrame
       src={src}
