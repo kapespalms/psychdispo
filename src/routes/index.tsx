@@ -86,6 +86,15 @@ function Index() {
         </section>
 
         <footer className="landing-foot shrink-0 py-2 text-[0.6875rem] leading-snug text-[var(--mut)] border-t border-[var(--line)]">
+          <p className="mb-1">
+            <Link to="/trust" className="text-link">
+              Trust
+            </Link>
+            <span aria-hidden="true"> · </span>
+            <Link to="/about" className="text-link">
+              About
+            </Link>
+          </p>
           Reference only — not a substitute for clinical judgment. Life-threatening emergency: 911.
         </footer>
       </main>

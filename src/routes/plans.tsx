@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
+import { EditorialPage } from "@/components/editorial-page";
 import { useAuth } from "@/lib/auth";
 import { deleteCloudTemplate, fetchCloudTemplates } from "@/lib/cloud-library";
 import { isSupabaseConfigured } from "@/lib/supabase";
@@ -91,160 +92,119 @@ function PlansPage() {
 
   if (!ready || !user) {
     return (
-      <div className="min-h-[50vh] flex items-center justify-center text-sm text-muted-foreground">
+      <div className="flex flex-1 min-h-0 items-center justify-center text-sm text-[var(--mut)]">
         Loading…
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f6f6f3]">
-      <div className="max-w-3xl mx-auto px-6 py-10 md:py-14">
-        <div className="flex items-start justify-between gap-4 mb-8">
-          <div>
-            <h1 className="font-serif text-3xl md:text-4xl font-semibold tracking-tight">
-              My plans
-            </h1>
-            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-              Saved disposition plans stay on this device. Cloud-synced templates store defaults and
-              resource selections only — never patient details.
-            </p>
-            {cloudError && (
-              <p className="mt-2 text-sm text-destructive">Cloud library: {cloudError}</p>
-            )}
-          </div>
-          <Link
-            to="/dispo"
-            search={{ fresh: "1" }}
-            className="shrink-0 text-sm font-medium text-[#2640C8] hover:underline pt-1"
-          >
-            New plan →
+    <EditorialPage
+      kicker="Account"
+      title="My plans"
+      subtitle="Saved disposition plans stay on this device. Cloud-synced templates store defaults and resource selections only — never patient details."
+      actions={
+        <Link to="/dispo" search={{ fresh: "1" }} className="nav-bar-link">
+          new plan →
+        </Link>
+      }
+    >
+      {cloudError && (
+        <p className="form-error mb-6" role="alert">
+          Cloud library: {cloudError}
+        </p>
+      )}
+
+      {templates.length > 0 && (
+        <section className="mb-10">
+          <p className="kicker mb-3">Templates</p>
+          <p className="text-[0.875rem] leading-relaxed text-[var(--mut)] mb-4">
+            Scaffold-only — no patient identifiers. Save new templates from the Deliver step.
+          </p>
+          <ul>
+            {templates.map((t) => {
+              const date = new Date(t.updatedAt).toLocaleDateString([], {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              });
+              return (
+                <li key={t.id} className="editorial-list-row">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-serif text-[1.125rem] font-medium truncate">{t.name}</h3>
+                    <p className="text-xs text-[var(--mut)] mt-1">
+                      {t.type} · edited {date}
+                    </p>
+                  </div>
+                  <div className="flex gap-2 shrink-0">
+                    <button type="button" onClick={() => handleUseTemplate(t)} className="btn-blue">
+                      Use template
+                    </button>
+                    <button type="button" onClick={() => handleDeleteTemplate(t.id)} className="nav-bar-link">
+                      delete
+                    </button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
+
+      {plans.length === 0 ? (
+        <div className="py-8 text-center border-t border-[var(--line)]">
+          <p className="font-serif text-[1.25rem] text-[var(--mut)]">No saved plans yet</p>
+          <p className="mt-2 text-[0.875rem] leading-relaxed text-[var(--mut)] max-w-md mx-auto">
+            Complete a disposition workflow and save your plan from the Deliver step. You can also{" "}
+            <strong className="text-[var(--ink)] font-medium">Save as template</strong> on Deliver to
+            reuse defaults (scaffold only — no patient info) on your next case.
+          </p>
+          <Link to="/dispo" search={{ fresh: "1" }} className="btn-blue inline-block mt-6">
+            Start a plan
           </Link>
         </div>
-
-        {templates.length > 0 && (
-          <div className="mb-10">
-            <h2 className="font-serif text-xl font-semibold mb-3">Plan templates</h2>
-            <p className="text-sm text-muted-foreground mb-4">
-              Scaffold-only — no patient identifiers. Save new templates from the Deliver step.
-            </p>
-            <ul className="space-y-3">
-              {templates.map((t) => {
-                const date = new Date(t.updatedAt).toLocaleDateString([], {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                });
-                return (
-                  <li
-                    key={t.id}
-                    className="border border-border bg-white rounded-sm p-4 flex flex-col sm:flex-row sm:items-center gap-3"
-                  >
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-medium truncate">{t.name}</h3>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {t.type} · edited {date}
-                      </p>
-                    </div>
-                    <div className="flex gap-2 shrink-0">
-                      <button
-                        type="button"
-                        onClick={() => handleUseTemplate(t)}
-                        className="px-4 py-2 text-sm font-semibold bg-[#2640C8] text-white hover:bg-[#1b2f9c] transition-colors"
-                      >
-                        Use template
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteTemplate(t.id)}
-                        className="px-3 py-1.5 text-sm text-muted-foreground border border-border hover:text-destructive"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        )}
-
-        {plans.length === 0 ? (
-          <div className="border border-border bg-white rounded-sm p-8 text-center">
-            <p className="font-serif text-xl text-muted-foreground">No saved plans yet</p>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Complete a disposition workflow and save your plan from the Deliver step. You can also{" "}
-              <strong>Save as template</strong> on Deliver to reuse defaults (scaffold only — no patient
-              info) on your next case.
-            </p>
-            <Link
-              to="/dispo"
-              search={{ fresh: "1" }}
-              className="inline-block mt-6 px-5 py-2.5 bg-[#2640C8] text-white text-sm font-semibold hover:bg-[#1b2f9c] transition-colors"
-            >
-              Start a plan
-            </Link>
-          </div>
-        ) : (
-          <div>
-            <h2 className="font-serif text-xl font-semibold mb-3">Saved plans (this device)</h2>
-            <ul className="space-y-3">
-              {plans.map((plan) => {
-                const meta = planMeta(plan);
-                const date = new Date(plan.updatedAt).toLocaleString([], {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                  hour: "numeric",
-                  minute: "2-digit",
-                });
-                return (
-                  <li
-                    key={plan.id}
-                    className="border border-border bg-white rounded-sm p-5 flex flex-col sm:flex-row sm:items-center gap-4"
-                  >
-                    <div className="flex-1 min-w-0">
-                      <h2 className="font-serif text-lg font-semibold truncate">{plan.name}</h2>
-                      <p className="text-xs text-muted-foreground mt-1">{date}</p>
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        <span className="text-xs px-2 py-0.5 bg-[#eef1fb] text-[#1b2f9c] rounded-full">
-                          {meta.location}
+      ) : (
+        <section>
+          <p className="kicker mb-3">This device</p>
+          <ul>
+            {plans.map((plan) => {
+              const meta = planMeta(plan);
+              const date = new Date(plan.updatedAt).toLocaleString([], {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+                hour: "numeric",
+                minute: "2-digit",
+              });
+              return (
+                <li key={plan.id} className="editorial-list-row">
+                  <div className="flex-1 min-w-0">
+                    <h2 className="font-serif text-[1.125rem] font-medium truncate">{plan.name}</h2>
+                    <p className="text-xs text-[var(--mut)] mt-1">{date}</p>
+                    <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2 text-xs text-[var(--mut)]">
+                      <span>{meta.location}</span>
+                      {meta.setting && (
+                        <span>
+                          · {meta.setting === "Acute" ? "Acute / Inpatient" : "Outpatient"}
                         </span>
-                        {meta.setting && (
-                          <span className="text-xs px-2 py-0.5 bg-muted text-muted-foreground rounded-full">
-                            {meta.setting === "Acute" ? "Acute / Inpatient" : "Outpatient"}
-                          </span>
-                        )}
-                        {meta.insurance && (
-                          <span className="text-xs px-2 py-0.5 bg-muted text-muted-foreground rounded-full">
-                            {meta.insurance}
-                          </span>
-                        )}
-                      </div>
+                      )}
+                      {meta.insurance && <span>· {meta.insurance}</span>}
                     </div>
-                    <div className="flex gap-2 shrink-0">
-                      <button
-                        type="button"
-                        onClick={() => handleResume(plan)}
-                        className="px-4 py-2 text-sm font-semibold bg-[#2640C8] text-white hover:bg-[#1b2f9c] transition-colors"
-                      >
-                        Resume
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(plan.id)}
-                        className="px-4 py-2 text-sm text-muted-foreground border border-border hover:text-destructive hover:border-destructive/30 transition-colors"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        )}
-      </div>
-    </div>
+                  </div>
+                  <div className="flex gap-2 shrink-0">
+                    <button type="button" onClick={() => handleResume(plan)} className="btn-blue">
+                      Resume
+                    </button>
+                    <button type="button" onClick={() => handleDelete(plan.id)} className="nav-bar-link">
+                      delete
+                    </button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
+    </EditorialPage>
   );
 }

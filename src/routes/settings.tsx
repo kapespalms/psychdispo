@@ -1,5 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { EditorialPage } from "@/components/editorial-page";
 import { useAuth } from "@/lib/auth";
 import { getDefaults, saveDefaults, type UserDefaults } from "@/lib/user-defaults";
 import { pageHead } from "@/lib/seo";
@@ -73,89 +74,90 @@ function SettingsPage() {
 
   if (!ready || !user) {
     return (
-      <div className="min-h-[50vh] flex items-center justify-center text-sm text-muted-foreground">
+      <div className="flex flex-1 min-h-0 items-center justify-center text-sm text-[var(--mut)]">
         Loading…
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f6f6f3]">
-      <div className="max-w-lg mx-auto px-6 py-10 md:py-14">
-        <h1 className="font-serif text-3xl md:text-4xl font-semibold tracking-tight">
-          Your defaults
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-          Pre-fill new disposition plans with your usual setting, insurance, and home location.
-          Stored on this device only.
-        </p>
-
-        <form
-          onSubmit={handleSubmit}
-          className="mt-8 border border-border bg-white p-6 md:p-8 space-y-5 shadow-sm"
-        >
-          <div>
-            <label htmlFor="setting" className="block text-sm font-medium mb-1.5">
-              Default discharging setting
-            </label>
-            <select
-              id="setting"
-              value={setting}
-              onChange={(e) => setSetting(e.target.value)}
-              className="w-full px-3 py-2.5 border border-border rounded-sm bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#2640C8]/30 focus:border-[#2640C8]"
-            >
-              {SETTING_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="insurance" className="block text-sm font-medium mb-1.5">
-              Default insurance
-            </label>
-            <select
-              id="insurance"
-              value={insurance}
-              onChange={(e) => setInsurance(e.target.value)}
-              className="w-full px-3 py-2.5 border border-border rounded-sm bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#2640C8]/30 focus:border-[#2640C8]"
-            >
-              {INSURANCE_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="homeLocation" className="block text-sm font-medium mb-1.5">
-              Default patient home — city or ZIP
-            </label>
-            <input
-              id="homeLocation"
-              type="text"
-              value={homeLocation}
-              onChange={(e) => setHomeLocation(e.target.value)}
-              placeholder="e.g. Bellingham or 98225"
-              className="w-full px-3 py-2.5 border border-border rounded-sm bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#2640C8]/30 focus:border-[#2640C8]"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full py-3 bg-[#2640C8] text-white text-sm font-semibold tracking-wide hover:bg-[#1b2f9c] transition-colors"
+    <EditorialPage
+      kicker="Account"
+      title="Your defaults"
+      subtitle="Pre-fill new disposition plans with your usual setting, insurance, and home location. Stored on this device only."
+      actions={
+        <Link to="/plans" className="nav-bar-link">
+          my plans
+        </Link>
+      }
+    >
+      <form onSubmit={handleSubmit} className="space-y-5 max-w-md">
+        <div>
+          <label htmlFor="setting" className="kicker block mb-2">
+            Default discharging setting
+          </label>
+          <select
+            id="setting"
+            value={setting}
+            onChange={(e) => setSetting(e.target.value)}
+            className="form-input"
           >
-            Save defaults
-          </button>
+            {SETTING_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </div>
 
-          {saved && (
-            <p className="text-sm text-center text-[#1c7a3f]">Defaults saved.</p>
-          )}
-        </form>
-      </div>
-    </div>
+        <div>
+          <label htmlFor="insurance" className="kicker block mb-2">
+            Default insurance
+          </label>
+          <select
+            id="insurance"
+            value={insurance}
+            onChange={(e) => setInsurance(e.target.value)}
+            className="form-input"
+          >
+            {INSURANCE_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="homeLocation" className="kicker block mb-2">
+            Default patient home — city or ZIP
+          </label>
+          <input
+            id="homeLocation"
+            type="text"
+            value={homeLocation}
+            onChange={(e) => setHomeLocation(e.target.value)}
+            placeholder="e.g. Bellingham or 98225"
+            className="form-input"
+          />
+        </div>
+
+        <button type="submit" className="btn-blue w-full text-center">
+          Save defaults
+        </button>
+
+        {saved && (
+          <p className="text-sm text-center text-[var(--ink)]" role="status">
+            Defaults saved.
+          </p>
+        )}
+      </form>
+
+      <p className="mt-8 text-[0.8125rem] leading-relaxed text-[var(--mut)]">
+        <Link to="/trust" className="text-link-accent">
+          How we handle your data
+        </Link>
+      </p>
+    </EditorialPage>
   );
 }
