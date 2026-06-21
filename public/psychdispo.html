@@ -3222,6 +3222,241 @@ function countyOK(r){var c=patientCounty();
  var catcl=catalogCluster(c);if(catcl)return catcl.indexOf(r.county)>=0;
  return r.county===c;}
 
+/* ---- Resource directory (P0) ---- */
+var DIR_INIT=0;
+var DIR_OH_COUNTIES=null;
+var DIR_PANEL_BUCKETS={clinical:["A","B"],crisis:["D"],substance:["C"],social:["F"],specialty:["G"],language:["I"]};
+function dirOhioCounties(){
+ if(DIR_OH_COUNTIES)return DIR_OH_COUNTIES;
+ var out=[];
+ DATA.forEach(function(r){
+  var c=r.county;
+  if(!c||c==="National"||/statewide/i.test(c))return;
+  if(typeof CATALOG_ALL_METROS!=="undefined"&&CATALOG_ALL_METROS.indexOf(c)>=0)return;
+  if(typeof NYREGION!=="undefined"&&(NYREGION.indexOf(c)>=0||UPSTATEREGION.indexOf(c)>=0))return;
+  if(typeof WVREGION!=="undefined"&&WVREGION.indexOf(c)>=0)return;
+  if(typeof PAREGION!=="undefined"&&PAREGION.indexOf(c)>=0)return;
+  if(typeof MIREGION!=="undefined"&&MIREGION.indexOf(c)>=0)return;
+  if(typeof NVREGION!=="undefined"&&NVREGION.indexOf(c)>=0)return;
+  if(typeof WANW!=="undefined"&&(WANW.indexOf(c)>=0||WASW.indexOf(c)>=0||c==="Washington (statewide)"))return;
+  if(out.indexOf(c)<0)out.push(c);
+ });
+ DIR_OH_COUNTIES=out.sort();
+ return DIR_OH_COUNTIES;
+}
+function countyToState(c){
+ if(!c)return "";
+ if(c==="National")return "National";
+ var sm=c.match(/^(.+) \(statewide\)$/i);
+ if(sm)return sm[1];
+ var i,st;
+ if(typeof CATALOG_STATE_NAMES!=="undefined"&&typeof CATALOG_STATE_METROS!=="undefined"){
+  for(i=0;i<CATALOG_STATE_NAMES.length;i++){
+   st=CATALOG_STATE_NAMES[i];
+   if(CATALOG_STATE_METROS[st]&&CATALOG_STATE_METROS[st].indexOf(c)>=0)return st;
+  }
+ }
+ if(typeof PAREGION!=="undefined"&&PAREGION.indexOf(c)>=0)return "Pennsylvania";
+ if(typeof MIREGION!=="undefined"&&MIREGION.indexOf(c)>=0)return "Michigan";
+ if(typeof NVREGION!=="undefined"&&NVREGION.indexOf(c)>=0)return "Nevada";
+ if(typeof WVREGION!=="undefined"&&WVREGION.indexOf(c)>=0)return "West Virginia";
+ if(typeof NYREGION!=="undefined"&&(NYREGION.indexOf(c)>=0||UPSTATEREGION.indexOf(c)>=0))return c==="Northern New Jersey"?"New Jersey":"New York";
+ if(typeof WANW!=="undefined"&&(WANW.indexOf(c)>=0||WASW.indexOf(c)>=0||c==="Washington (statewide)"))return "Washington";
+ if(dirOhioCounties().indexOf(c)>=0)return "Ohio";
+ return "";
+}
+function referralMethod(r){
+ if(r.fax&&r.email)return "Fax · Email";
+ if(r.fax)return "Fax: "+r.fax;
+ if(r.email)return "Email";
+ var acc=(r.access||"").split("·")[0].trim();
+ return acc||"Call";
+}
+function dirTypeLabel(r){
+ var m=metaOf(r);
+ if(m.sub)return m.sub.replace(/ \(.+\)$/,"").split(" — ")[0];
+ if(m.need&&m.need!=="other"){
+  var needs={housing:"Housing",food:"Food",dv:"Domestic violence",financial:"Benefits",legal:"Legal",employment:"Employment",catchall:"211 / navigation",other:"Social care"};
+  if(needs[m.need])return needs[m.need];
+ }
+ if(m.spec&&m.spec!=="other"){
+  var specs={fep:"First episode",perinatal:"Perinatal",geriatric:"Geriatric",pediatric:"Pediatric",veteran:"Veteran",eating:"Eating disorder",cancer:"Oncology",trauma:"Trauma",other:"Specialty"};
+  if(specs[m.spec])return specs[m.spec];
+ }
+ return r.cat||"—";
+}
+function dirAllStates(){
+ var s={"National":1};
+ if(typeof CATALOG_STATE_NAMES!=="undefined")CATALOG_STATE_NAMES.forEach(function(n){s[n]=1;});
+ ["Ohio","Washington","New York","New Jersey","West Virginia","Pennsylvania","Michigan","Nevada"].forEach(function(n){s[n]=1;});
+ return ["National"].concat(Object.keys(s).filter(function(k){return k!=="National";}).sort());
+}
+function dirRegionsForState(state){
+ if(!state)return [];
+ var out=[],seen={};
+ function add(c){if(c&&!seen[c]){seen[c]=1;out.push(c);}}
+ if(state==="National"){add("National");return out;}
+ DATA.forEach(function(r){if(r.county&&countyToState(r.county)===state)add(r.county);});
+ if(typeof CATALOG_STATE_METROS!=="undefined"&&CATALOG_STATE_METROS[state]){
+  add(state+" (statewide)");
+  CATALOG_STATE_METROS[state].forEach(add);
+ }
+ if(state==="Ohio")dirOhioCounties().forEach(add);
+ if(state==="Washington"){add("Washington (statewide)");if(typeof WANW!=="undefined")WANW.forEach(add);if(typeof WASW!=="undefined")WASW.forEach(add);}
+ if(state==="West Virginia"){add("West Virginia (statewide)");if(typeof WVREGION!=="undefined")WVREGION.forEach(add);}
+ if(state==="Pennsylvania"&&typeof PAREGION!=="undefined")PAREGION.forEach(add);
+ if(state==="Michigan"&&typeof MIREGION!=="undefined")MIREGION.forEach(add);
+ if(state==="Nevada"&&typeof NVREGION!=="undefined")NVREGION.forEach(add);
+ if(state==="New York"){
+  if(typeof NYREGION!=="undefined")NYREGION.forEach(function(c){if(c!=="Northern New Jersey")add(c);});
+  if(typeof UPSTATEREGION!=="undefined")UPSTATEREGION.forEach(add);
+ }
+ if(state==="New Jersey")add("Northern New Jersey");
+ return out.sort();
+}
+function dirCatsForBucket(bucket){
+ if(!bucket)return [...new Set(DATA.map(function(r){return r.cat;}).filter(Boolean))].sort();
+ var panels=DIR_PANEL_BUCKETS[bucket];
+ if(!panels)return [];
+ var out=new Set();
+ DATA.forEach(function(r){if(panels.indexOf(metaOf(r).panel)>=0&&r.cat)out.add(r.cat);});
+ return [...out].sort();
+}
+function dirRecordInZipArea(r,zip){
+ if(!zip||zip.length!==5)return true;
+ if((r.county||"")==="National")return true;
+ var zr=countyFromZip(zip);
+ if(!zr)return true;
+ var c=r.county||"";
+ if(c===zr)return true;
+ if(/\(statewide\)/i.test(c)){
+  var sn=c.replace(/ \(statewide\)/i,"");
+  if(typeof isCatalogStateZip!=="undefined"&&isCatalogStateZip(zip,sn))return true;
+  if(sn==="Washington"&&typeof isWaZip!=="undefined"&&isWaZip(zip))return true;
+  if(sn==="West Virginia"&&typeof isWvZip!=="undefined"&&isWvZip(zip))return true;
+  if(sn==="Nevada"&&typeof isNvZip!=="undefined"&&isNvZip(zip))return true;
+  if(sn==="Pennsylvania"&&typeof isPaZip!=="undefined"&&isPaZip(zip))return true;
+  if(sn==="Michigan"&&typeof isMiZip!=="undefined"&&isMiZip(zip))return true;
+ }
+ if(typeof catalogCluster!=="undefined"&&catalogCluster(zr)&&catalogCluster(c)===catalogCluster(zr))return true;
+ if(typeof nyCluster!=="undefined"&&nyCluster(zr)&&nyCluster(c)===nyCluster(zr))return true;
+ if(typeof wvCluster!=="undefined"&&wvCluster(zr)&&wvCluster(c)===wvCluster(zr))return true;
+ if(typeof waCluster!=="undefined"&&waCluster(zr)&&waCluster(c)===waCluster(zr))return true;
+ if(typeof upstateCluster!=="undefined"&&upstateCluster(zr)&&upstateCluster(c)===upstateCluster(zr))return true;
+ if(typeof paCluster!=="undefined"&&paCluster(zr)&&paCluster(c)===paCluster(zr))return true;
+ if(typeof miCluster!=="undefined"&&miCluster(zr)&&miCluster(c)===miCluster(zr))return true;
+ if(typeof nvCluster!=="undefined"&&nvCluster(zr)&&nvCluster(c)===nvCluster(zr))return true;
+ return false;
+}
+function dirMatchCare(r,bucket,sub){
+ if(sub&&r.cat!==sub)return false;
+ if(!bucket)return true;
+ var panels=DIR_PANEL_BUCKETS[bucket];
+ return panels&&panels.indexOf(metaOf(r).panel)>=0;
+}
+function dirMatchRecord(r,opts){
+ if(opts.state&&countyToState(r.county||"")!==opts.state)return false;
+ if(opts.region&&(r.county||"")!==opts.region)return false;
+ if(!dirRecordInZipArea(r,opts.zip))return false;
+ if(!dirMatchCare(r,opts.bucket,opts.sub))return false;
+ if(opts.q){
+  var blob=((r.name||"")+" "+(r.svc||"")+" "+(r.cat||"")+" "+(r.county||"")+" "+(r.phone||"")).toLowerCase();
+  if(blob.indexOf(opts.q)<0)return false;
+ }
+ return true;
+}
+function dirRefreshRegions(){
+ var st=$("#dirState")?$("#dirState").value:"";
+ var sel=$("#dirCounty");if(!sel)return;
+ var keep=sel.value;
+ sel.innerHTML='<option value="">All regions</option>';
+ dirRegionsForState(st).forEach(function(c){
+  var o=document.createElement("option");o.value=c;o.textContent=c;sel.appendChild(o);
+ });
+ for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===keep){sel.value=keep;break;}}
+}
+function dirRefreshCareSubs(){
+ var bucket=$("#dirCareBucket")?$("#dirCareBucket").value:"";
+ var sel=$("#dirCareSub");if(!sel)return;
+ var keep=sel.value;
+ sel.innerHTML='<option value="">All subtypes</option>';
+ dirCatsForBucket(bucket).forEach(function(c){
+  var o=document.createElement("option");o.value=c;o.textContent=c;sel.appendChild(o);
+ });
+ for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===keep){sel.value=keep;break;}}
+}
+function dirUpdateZipHint(){
+ var hint=$("#dirZipHint"),zipEl=$("#dirZip"),stSel=$("#dirState");
+ if(!hint)return;
+ var zip=zipEl?zipEl.value.replace(/\D/g,""):"";
+ if(zip.length!==5){hint.textContent="";return;}
+ var region=countyFromZip(zip);
+ var st=region?countyToState(region):"";
+ hint.textContent=region?(st?(st+" · "+region):region):"ZIP not mapped — select state and region manually.";
+ if(stSel&&st&&st!=="National"&&!stSel.value){stSel.value=st;dirRefreshRegions();}
+ var sel=$("#dirCounty");
+ if(sel&&region){
+  var found=false,i;
+  for(i=0;i<sel.options.length;i++){if(sel.options[i].value===region){found=true;break;}}
+  if(!found){var o=document.createElement("option");o.value=region;o.textContent=region;sel.appendChild(o);}
+  if(!sel.value)sel.value=region;
+ }
+}
+function initDirectory(){
+ if(DIR_INIT)return;DIR_INIT=1;
+ var stSel=$("#dirState");
+ if(stSel){
+  dirAllStates().forEach(function(st){
+   var o=document.createElement("option");o.value=st;o.textContent=st;stSel.appendChild(o);
+  });
+  stSel.addEventListener("change",function(){dirRefreshRegions();renderDirectory();});
+ }
+ var zipEl=$("#dirZip");
+ if(zipEl)zipEl.addEventListener("input",function(){dirUpdateZipHint();renderDirectory();});
+ var bucketEl=$("#dirCareBucket");
+ if(bucketEl)bucketEl.addEventListener("change",function(){dirRefreshCareSubs();renderDirectory();});
+ ["dirQ","dirCounty","dirCareSub"].forEach(function(id){
+  var el=$("#"+id);if(!el)return;
+  el.addEventListener("input",renderDirectory);
+  if(el.tagName==="SELECT")el.addEventListener("change",renderDirectory);
+ });
+ dirRefreshRegions();
+ dirRefreshCareSubs();
+}
+function renderDirectory(){
+ initDirectory();
+ var opts={
+  state:$("#dirState")?$("#dirState").value:"",
+  zip:$("#dirZip")?$("#dirZip").value.replace(/\D/g,""):"",
+  region:$("#dirCounty")?$("#dirCounty").value:"",
+  bucket:$("#dirCareBucket")?$("#dirCareBucket").value:"",
+  sub:$("#dirCareSub")?$("#dirCareSub").value:"",
+  q:($("#dirQ")&&$("#dirQ").value||"").toLowerCase().trim()
+ };
+ var hasFilter=!!(opts.state||opts.region||opts.zip.length===5||opts.bucket||opts.sub||opts.q);
+ var list=ALL.filter(function(r){
+  if(r.county==="National"||r.national)return true;
+  if(!hasFilter)return true;
+  return dirMatchRecord(r,opts);
+ });
+ list.sort(function(a,b){
+  var an=a.county==="National"||a.national?0:1,bn=b.county==="National"||b.national?0:1;
+  if(an!==bn)return an-bn;
+  return ((a.county||"")+"|"+(a.name||"")).localeCompare((b.county||"")+"|"+(b.name||""));
+ });
+ var localCount=list.filter(function(r){return r.county!=="National"&&!r.national;}).length;
+ if($("#dirCount")){
+  var msg=localCount+" resource"+(localCount===1?"":"s");
+  if(list.length>localCount)msg+=" · includes "+(list.length-localCount)+" national";
+  msg+=" · "+DATA.length+" in database";
+  $("#dirCount").textContent=msg;
+ }
+ if(!$("#dirBody"))return;
+ $("#dirBody").innerHTML=list.slice(0,200).map(function(r){
+  return '<tr><td class="dtype">'+esc(dirTypeLabel(r))+'</td><td><div class="dn">'+esc(r.name)+'</div></td><td>'+esc(r.county||"—")+'</td><td class="dp"><a href="tel:'+tel(r.phone)+'">'+esc(r.phone||"—")+'</a></td><td class="dref">'+esc(referralMethod(r))+'</td></tr>';
+ }).join("")+(list.length>200?'<tr><td colspan="5" class="dm">Showing first 200 — narrow your search.</td></tr>':"");
+}
+
 /* ---- generic option/flag wiring ---- */
 function applyOpt(opt){
  if(opt.dataset.val!==undefined && opt.parentElement && opt.parentElement.dataset.safetyGate){

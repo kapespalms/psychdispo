@@ -1,5 +1,5 @@
 /** Bump when public/psychdispo.html changes so iframe embeds bypass stale browser cache. */
-export const PSYCHDISPO_HTML_BUILD = "nori-3";
+export const PSYCHDISPO_HTML_BUILD = "dir-p0-1";
 
 export function psychdispoEmbedSrc(
   hash: string,
