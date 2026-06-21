@@ -87,7 +87,7 @@ function SignInPage() {
           </button>
         </div>
       ) : (
-        <form onSubmit={handleMagicLink} className="space-y-5">
+        <form onSubmit={handleMagicLink} className="space-y-5" noValidate>
           <div>
             <label htmlFor="email" className="kicker block mb-2">
               Work email
@@ -96,14 +96,17 @@ function SignInPage() {
               id="email"
               type="email"
               autoComplete="email"
+              required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2.5 border border-[var(--line)] rounded-none bg-white text-sm focus:outline-none focus:border-[var(--ink)]"
+              aria-invalid={error ? "true" : undefined}
+              aria-describedby={error ? "sign-in-error" : undefined}
+              className="form-input"
               placeholder="you@hospital.org"
             />
           </div>
           {error && (
-            <p className="text-sm text-destructive bg-destructive/5 border border-destructive/20 px-3 py-2 rounded-sm">
+            <p id="sign-in-error" className="form-error" role="alert">
               {error}
             </p>
           )}
@@ -125,7 +128,7 @@ function SignInPage() {
             type="button"
             onClick={handleGoogle}
             disabled={loading}
-            className="w-full min-h-[44px] border border-[var(--line)] bg-white text-sm font-medium hover:border-[var(--ink)] transition-colors disabled:opacity-40"
+            className="btn-secondary"
           >
             {supabaseEnabled ? "Continue with Google" : "Continue with Google (demo)"}
           </button>

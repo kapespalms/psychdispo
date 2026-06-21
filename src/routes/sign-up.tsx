@@ -51,12 +51,13 @@ function SignUpPage() {
 
   return (
     <AuthShell
+      kicker="Account"
       title="Create your account"
       subtitle="Free for clinicians. Save templates and sync your library when signed in. No PHI required to sign up."
       footer={
         <>
           Already have an account?{" "}
-          <Link to="/sign-in" className="text-[#2640C8] font-medium hover:underline">
+          <Link to="/sign-in" className="text-link-accent">
             Sign in
           </Link>
         </>
@@ -64,61 +65,66 @@ function SignUpPage() {
     >
       {sent ? (
         <div className="space-y-4 text-center">
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            Check <strong>{email}</strong> for your sign-in link. First-time users are created
-            automatically.
+          <p className="text-sm text-[var(--mut)] leading-relaxed">
+            Check <strong className="text-[var(--ink)]">{email}</strong> for your sign-in link. First-time
+            users are created automatically.
           </p>
           <button
             type="button"
             onClick={() => setSent(false)}
-            className="text-sm text-[#2640C8] hover:underline"
+            className="text-link text-sm bg-transparent border-none cursor-pointer font-[inherit] p-0"
           >
             Use a different email
           </button>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5" noValidate>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium mb-1.5">
+            <label htmlFor="email" className="kicker block mb-2">
               Work email
             </label>
             <input
               id="email"
               type="email"
               autoComplete="email"
+              required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2.5 border border-border rounded-sm bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#2640C8]/30 focus:border-[#2640C8]"
+              aria-invalid={error ? "true" : undefined}
+              aria-describedby={error ? "sign-up-error" : undefined}
+              className="form-input"
               placeholder="you@hospital.org"
             />
           </div>
           {error && (
-            <p className="text-sm text-destructive bg-destructive/5 border border-destructive/20 px-3 py-2 rounded-sm">
+            <p id="sign-up-error" className="form-error" role="alert">
               {error}
             </p>
           )}
           {!supabaseEnabled && (
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Supabase is not configured — this creates a demo account on this device only.
+            <p className="text-xs text-[var(--mut)] leading-relaxed">
+              Cloud sign-in is not configured — this creates a demo account on this device only.
             </p>
           )}
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-[#2640C8] text-white text-sm font-semibold tracking-wide hover:bg-[#1b2f9c] transition-colors disabled:opacity-50"
+            className="btn-blue w-full text-center disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {loading
               ? "Sending…"
               : supabaseEnabled
-                ? "Email me a sign-in link"
+                ? "Email sign-in link"
                 : "Create demo account"}
           </button>
-          <p className="text-xs text-muted-foreground text-center leading-relaxed">
-            By creating an account you agree this tool is for clinical reference only and does not
-            store patient identifiers.
+          <p className="text-xs text-[var(--mut)] text-center leading-relaxed">
+            By creating an account you agree this tool is for clinical reference only and does not store
+            patient identifiers.
           </p>
-          <p className="text-xs text-muted-foreground text-center">
-            <Link to="/dispo" className="text-[#2640C8] hover:underline">Continue as guest</Link>
+          <p className="text-xs text-[var(--mut)] text-center">
+            <Link to="/dispo" className="text-link-accent">
+              Continue as guest
+            </Link>
           </p>
         </form>
       )}

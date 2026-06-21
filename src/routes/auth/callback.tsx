@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { pageHead } from "@/lib/seo";
@@ -54,16 +54,28 @@ function AuthCallbackPage() {
 
   if (error) {
     return (
-      <div className="min-h-[50vh] flex flex-col items-center justify-center gap-3 px-4 text-center">
-        <p className="text-sm text-destructive">{error}</p>
-        <a href="/sign-in" className="text-sm text-[#2A43C0] hover:underline">Back to sign in</a>
+      <div className="flex flex-1 min-h-0 items-center justify-center px-6 py-10">
+        <div className="state-panel">
+          <p className="script-kicker script-kicker-compact">Sign in</p>
+          <h1>Could not complete sign in</h1>
+          <p className="form-error" role="alert">
+            {error}
+          </p>
+          <Link to="/sign-in" className="text-link-accent text-sm">
+            Back to sign in
+          </Link>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-[50vh] flex items-center justify-center text-sm text-muted-foreground">
-      Signing you in…
+    <div className="flex flex-1 min-h-0 items-center justify-center px-6 py-10">
+      <div className="state-panel">
+        <p className="script-kicker script-kicker-compact">Account</p>
+        <h1>Signing you in</h1>
+        <p>Completing authentication…</p>
+      </div>
     </div>
   );
 }

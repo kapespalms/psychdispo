@@ -406,6 +406,8 @@ body.embed .mh-top,body.embed .hero,body.embed .tabbar{display:none!important}
 body.embed{--mh-h:0px;--tabbar-h:0px;--workflow-chrome:var(--statusbar-h);height:100%;min-height:100%;overflow:hidden;display:flex;flex-direction:column;padding-bottom:0;background:var(--bg)}
 body.embed .wrap{flex:1;min-height:0;display:flex;flex-direction:column;padding:0;margin:0;max-width:none}
 body.embed #view-tool{flex:1;min-height:0;display:flex;flex-direction:column;min-width:0;height:100%}
+body.embed #view-directory,body.embed #view-social-care,body.embed #view-ref{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+body.embed #view-directory .layer{padding:1rem 1.25rem 1.5rem;margin:0;border:none}
 body.embed .statusbar{flex-shrink:0}
 #pathwayFork.hidden,#slideShell.hidden{display:none!important;pointer-events:none!important;visibility:hidden!important}
 .pathway-fork{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;justify-content:center;padding:1rem 1.5rem 1.25rem;max-width:56rem;margin:0 auto;width:100%;box-sizing:border-box}
@@ -466,17 +468,21 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 .dir-search-wrap{align-self:end;justify-self:end;width:100%;max-width:280px}
 .dir-search-wrap #dirQ{max-width:100%;width:100%;margin:0}
 .dir-pop-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.dir-pop-tab{font:inherit;border:1px solid var(--line);background:#fff;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;color:var(--mut);transition:border-color .15s,background .15s,color .15s;touch-action:manipulation}
+.dir-pop-tab{font:inherit;border:1px solid var(--line);background:#fff;min-height:44px;padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;color:var(--mut);transition:border-color .15s,background .15s,color .15s;touch-action:manipulation}
 .dir-pop-tab:hover{border-color:var(--ink);color:var(--ink)}
+.dir-pop-tab:focus-visible{outline:1px solid var(--ink);outline-offset:2px}
 .dir-pop-tab.sel{background:var(--t);color:#fff;border-color:var(--t)}
 .dir-filters{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
 .dir-filter-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.dir-filter-row input[type=text],.dir-filter-row input[type=search],.dir-filter-row select{min-height:44px}
 .dir-filter-row input[type=text],.dir-filter-row input[type=search]{flex:1;min-width:120px;max-width:100%}
 .dir-filter-row input#dirZip{flex:0 1 100px;max-width:110px;min-width:90px}
 .dir-filter-row select{flex:1;min-width:160px;max-width:100%}
 @media(max-width:680px){.dir-head{grid-template-columns:1fr}.dir-search-wrap{max-width:100%;justify-self:stretch}}
 .dir-hint{font-size:12px;color:var(--mut);margin:0 0 10px;min-height:1.2em}
-.dir-count{font-size:12px;color:var(--mut);margin:0 0 10px}
+.dir-count{font-size:12px;color:var(--mut);margin:0 0 10px;min-height:1.2em}
+.dir-empty{text-align:center;padding:2rem 1rem!important;color:var(--mut);font-size:14px;line-height:1.5}
+.dir-foot{font-size:11px;color:var(--mut);margin:12px 0 0;padding-top:10px;border-top:1px solid var(--line);line-height:1.45}
 .dir-table{width:100%;border-collapse:collapse;font-size:13px}
 .dir-table th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);padding:8px 10px;border-bottom:2px solid var(--line);background:#fafbfd;white-space:nowrap}
 .dir-table td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
@@ -688,12 +694,12 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
   <p class="pathway-desc">Inpatient/ED or outpatient clinic — same workflow, setting-appropriate screening.</p>
  </div>
  <div class="pathway-cards">
-  <button type="button" class="pathway-card ed" data-pathway="ed">
+  <button type="button" class="pathway-card ed" data-pathway="ed" aria-label="Inpatient or ED discharge — acute settings with full safety screening">
    <span class="pathway-card-num">01</span>
    <div class="pathway-card-title">Inpatient / <span class="pathway-accent">ED</span> discharge</div>
    <div class="pathway-card-blurb">Acute settings with full safety screening.</div>
   </button>
-  <button type="button" class="pathway-card op" data-pathway="outpatient">
+  <button type="button" class="pathway-card op" data-pathway="outpatient" aria-label="Outpatient clinic discharge — express workflow by default">
    <span class="pathway-card-num">02</span>
    <div class="pathway-card-title">Outpatient <span class="pathway-accent">clinic</span> discharge</div>
    <div class="pathway-card-blurb">Clinic discharge with express workflow by default.</div>
@@ -1257,10 +1263,10 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
   </div>
  </div>
  <div class="dir-pop-tabs" role="tablist" aria-label="Population">
-  <button type="button" class="dir-pop-tab" data-pop="child" role="tab">Child</button>
+  <button type="button" class="dir-pop-tab" data-pop="child" role="tab" aria-selected="false">Child</button>
   <button type="button" class="dir-pop-tab sel" data-pop="adult" role="tab" aria-selected="true">Adult</button>
-  <button type="button" class="dir-pop-tab" data-pop="geriatric" role="tab">Geriatric</button>
-  <button type="button" class="dir-pop-tab" data-pop="crisis" role="tab">Crisis</button>
+  <button type="button" class="dir-pop-tab" data-pop="geriatric" role="tab" aria-selected="false">Geriatric</button>
+  <button type="button" class="dir-pop-tab" data-pop="crisis" role="tab" aria-selected="false">Crisis</button>
  </div>
  <div class="dir-filters">
   <div class="dir-filter-row">
@@ -1279,6 +1285,7 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
  <div class="dir-hint" id="dirZipHint"></div>
  <div class="dir-count" id="dirCount"></div>
  <div style="overflow-x:auto"><table class="dir-table"><thead><tr><th>Type</th><th>Organization</th><th>Region</th><th>Phone</th><th>Referral</th></tr></thead><tbody id="dirBody"></tbody></table></div>
+ <p class="dir-foot">Reference only — verify contact and eligibility before referral. Life-threatening emergency: 911 · Crisis: 988.</p>
 </section>
 </div>
 <div id="view-ref" class="hidden"><section class="layer" id="reference">
@@ -3546,12 +3553,21 @@ function renderDirectory(){
  });
  var localCount=list.filter(function(r){return r.county!=="National"&&!r.national;}).length;
  if($("#dirCount")){
-  var msg=localCount+" resource"+(localCount===1?"":"s");
-  if(list.length>localCount)msg+=" · includes "+(list.length-localCount)+" national";
-  msg+=" · "+DATA.length+" in database";
+  var msg;
+  if(localCount===0&&list.length===0){
+   msg="No resources match these filters — try another population tab, region, or care type.";
+  }else{
+   msg=localCount+" resource"+(localCount===1?"":"s");
+   if(list.length>localCount)msg+=" · includes "+(list.length-localCount)+" national";
+   msg+=" · "+DATA.length+" in database";
+  }
   $("#dirCount").textContent=msg;
  }
  if(!$("#dirBody"))return;
+ if(!list.length){
+  $("#dirBody").innerHTML='<tr><td colspan="5" class="dir-empty">No matching resources. Adjust filters or select the Crisis tab for national lines.</td></tr>';
+  return;
+ }
  $("#dirBody").innerHTML=list.slice(0,200).map(function(r){
   return '<tr><td class="dtype">'+esc(dirTypeLabel(r))+'</td><td><div class="dn">'+esc(r.name)+'</div></td><td>'+esc(r.county||"—")+'</td><td class="dp"><a href="tel:'+tel(r.phone)+'">'+esc(r.phone||"—")+'</a></td><td class="dref">'+esc(referralMethod(r))+'</td></tr>';
  }).join("")+(list.length>200?'<tr><td colspan="5" class="dm">Showing first 200 — narrow your search.</td></tr>':"");

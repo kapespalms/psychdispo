@@ -22,7 +22,9 @@ export function AuthShell({
           <p className="text-[0.9375rem] leading-relaxed text-[var(--mut)] mb-6">{subtitle}</p>
           <hr className="journal-rule-light mb-6" />
           {children}
-          <p className="mt-6 text-[0.75rem] leading-relaxed text-[var(--mut)]">{footer}</p>
+          <p className="mt-6 pt-4 border-t border-[var(--line)] text-[0.75rem] leading-relaxed text-[var(--mut)]">
+            {footer}
+          </p>
         </div>
       </main>
     </div>

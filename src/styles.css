@@ -130,6 +130,75 @@
     border: 1.5px solid color-mix(in srgb, var(--t) 35%, var(--line));
   }
 
+  .form-input {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.625rem 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: 0;
+    background: #fff;
+    font-size: 0.875rem;
+    color: var(--ink);
+    font-family: inherit;
+  }
+  .form-input:focus {
+    outline: none;
+    border-color: var(--ink);
+  }
+  .form-input[aria-invalid="true"] {
+    border-color: var(--req);
+  }
+
+  .form-error {
+    font-size: 0.875rem;
+    color: var(--req);
+    background: color-mix(in srgb, var(--req) 8%, #fff);
+    border: 1px solid color-mix(in srgb, var(--req) 25%, var(--line));
+    padding: 0.625rem 0.75rem;
+    line-height: 1.45;
+  }
+
+  .btn-secondary {
+    width: 100%;
+    min-height: 44px;
+    border: 1px solid var(--line);
+    background: #fff;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: inherit;
+    color: var(--ink);
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .btn-secondary:hover:not(:disabled) {
+    border-color: var(--ink);
+  }
+  .btn-secondary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .state-panel {
+    max-width: 24rem;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+  }
+  .state-panel h1 {
+    font-family: var(--font-sans);
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    margin: 0 0 0.75rem;
+  }
+  .state-panel p {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--mut);
+    margin: 0 0 1.25rem;
+  }
+
   .landing-screen {
     height: 100%;
   }
@@ -256,7 +325,10 @@
 
   .nav-bar-link {
     position: relative;
-    display: inline-block;
+    display: inline-flex;
+    align-items: flex-end;
+    min-height: 44px;
+    padding-top: 0.45rem;
     padding-bottom: 0.45rem;
     font-size: 0.8125rem;
     font-weight: 500;
@@ -377,6 +449,14 @@
     color: var(--mut);
     border-bottom: 1px solid var(--line);
     background: var(--paper);
+  }
+
+  @media (max-width: 639px) {
+    .phi-banner {
+      font-size: 0.75rem;
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+    }
   }
 
   @media (min-width: 640px) {
