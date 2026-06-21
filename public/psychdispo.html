@@ -59,7 +59,14 @@ textarea{max-width:100%;min-height:54px;resize:vertical}
 .safety-chevron{width:16px;height:16px;flex:none;stroke:var(--mut);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s;margin-left:4px}
 .safety-domain-row.open .safety-chevron{transform:rotate(180deg)}
 .safety-domain-body{max-height:0;overflow:hidden;padding:0 10px;transition:max-height .28s ease}
-.safety-domain-row.open .safety-domain-body{max-height:min(360px,42vh);overflow-y:auto;overscroll-behavior:contain;padding:0 10px 10px;-webkit-overflow-scrolling:touch}
+.safety-domain-row.open .safety-domain-body{max-height:min(520px,52vh);overflow-y:auto;overscroll-behavior:contain;padding:0 10px 10px;-webkit-overflow-scrolling:touch}
+.risk-doc-acc{margin-top:8px;border:1px solid var(--line);border-radius:8px;background:#fafbfd;padding:0 10px 8px}
+.risk-doc-acc>summary{cursor:pointer;font-size:12.5px;font-weight:600;color:var(--mut);padding:8px 2px;list-style:none;display:flex;align-items:center;gap:6px}
+.risk-doc-acc>summary::-webkit-details-marker{display:none}
+.risk-doc-acc>summary::before{content:"▸";font-size:11px;color:var(--faint);transition:transform .2s}
+.risk-doc-acc[open]>summary::before{transform:rotate(90deg)}
+.risk-doc-acc .risk-doc-body{padding-top:4px}
+.risk-doc-acc textarea{max-width:100%;min-height:48px;font-size:13px}
 .safety-gate-opts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
 .safety-gate-opts .opt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11px;padding:6px 4px;min-height:54px;white-space:normal;line-height:1.2;text-align:center}
 .safety-gate-opts .opt .gate-lbl{font-size:10.5px;font-weight:600;line-height:1.15}
@@ -788,11 +795,29 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
      <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Help me document</span></button>
      <button type="button" class="opt" data-val="none"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span><span class="gate-lbl">No concern</span></button>
     </div>
-    <div class="reveal hidden" id="suicideRiskReveal">
+     <div class="reveal hidden" id="suicideRiskReveal">
      <div class="q"><label class="qlabel">C-SSRS risk level</label>
       <div class="opts" data-field="suicideRisk"><button type="button" class="opt" data-val="low">Low</button><button type="button" class="opt warnv" data-val="moderate">Moderate</button><button type="button" class="opt dangerv" data-val="high">High</button></div>
       <div class="reveal hidden alert red" id="hiRiskMsg">Moderate/high risk — complete safety plan and lethal means below.</div>
      </div>
+    </div>
+    <div class="reveal hidden" id="suicideRiskDocWrap">
+     <details class="risk-doc-acc">
+      <summary>Document risk</summary>
+      <div class="risk-doc-body">
+       <div class="sub2" style="margin:4px 0 6px;border:none;padding:0;font-size:10px">Protective factors</div>
+       <div class="opts chip-row">
+        <button type="button" class="opt" data-protective="socialSupport">Social support</button>
+        <button type="button" class="opt" data-protective="reasonsForLiving">Reasons for living</button>
+        <button type="button" class="opt" data-protective="treatmentEngagement">Treatment engagement</button>
+        <button type="button" class="opt" data-protective="meansRestricted">Means restricted</button>
+        <button type="button" class="opt" data-protective="futureOrientation">Future orientation</button>
+        <button type="button" class="opt" data-protective="familyCommunity">Family / community</button>
+       </div>
+       <div class="q"><label class="qlabel">Driving factors <span class="note">(1–2 sentences)</span></label><textarea data-formulation="driving" placeholder="What increases risk today?" rows="2"></textarea></div>
+       <div class="q"><label class="qlabel">Mitigating factors <span class="note">(1–2 sentences)</span></label><textarea data-formulation="mitigating" placeholder="What lowers risk or supports safety?" rows="2"></textarea></div>
+      </div>
+     </details>
     </div>
    </div>
   </div>
@@ -811,6 +836,16 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
     <div class="reveal hidden" id="homicideHelpReveal">
      <div class="q"><label class="qlabel">Acute homicide risk?</label>
       <div class="opts yesno" data-field="homicideRisk"><button type="button" class="opt dangerv" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
+     </div>
+     <div class="reveal hidden" id="tarasoffHomicideWrap">
+      <div class="q"><label class="qlabel">Tarasoff / duty to protect</label>
+       <div class="opts chip-row">
+        <button type="button" class="opt" data-store="tarasoff.warned">Victim warned</button>
+        <button type="button" class="opt" data-store="tarasoff.notified">LE notified</button>
+        <button type="button" class="opt" data-store="tarasoff.hold">Involuntary hold</button>
+        <button type="button" class="opt" data-store="tarasoff.na">N/A — no identifiable victim</button>
+       </div>
+      </div>
      </div>
     </div>
    </div>
@@ -837,6 +872,34 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
         <button type="button" class="opt" data-store="violenceFactors.substance">Substance use</button>
         <button type="button" class="opt" data-store="violenceFactors.command">Command symptoms</button>
         <button type="button" class="opt" data-store="violenceFactors.identifiableTarget">Identifiable target</button>
+       </div>
+      </div>
+     </div>
+     <div class="reveal hidden" id="violenceRiskDocWrap">
+      <details class="risk-doc-acc">
+       <summary>Document risk</summary>
+       <div class="risk-doc-body">
+        <div class="sub2" style="margin:4px 0 6px;border:none;padding:0;font-size:10px">Protective factors</div>
+        <div class="opts chip-row">
+         <button type="button" class="opt" data-protective="socialSupport">Social support</button>
+         <button type="button" class="opt" data-protective="reasonsForLiving">Reasons for living</button>
+         <button type="button" class="opt" data-protective="treatmentEngagement">Treatment engagement</button>
+         <button type="button" class="opt" data-protective="meansRestricted">Means restricted</button>
+         <button type="button" class="opt" data-protective="futureOrientation">Future orientation</button>
+         <button type="button" class="opt" data-protective="familyCommunity">Family / community</button>
+        </div>
+        <div class="q"><label class="qlabel">Driving factors <span class="note">(1–2 sentences)</span></label><textarea data-formulation="driving" placeholder="What increases violence risk today?" rows="2"></textarea></div>
+        <div class="q"><label class="qlabel">Mitigating factors <span class="note">(1–2 sentences)</span></label><textarea data-formulation="mitigating" placeholder="What lowers risk or supports safety?" rows="2"></textarea></div>
+       </div>
+      </details>
+     </div>
+     <div class="reveal hidden" id="tarasoffViolenceWrap">
+      <div class="q"><label class="qlabel">Tarasoff / duty to protect</label>
+       <div class="opts chip-row">
+        <button type="button" class="opt" data-store="tarasoff.warned">Victim warned</button>
+        <button type="button" class="opt" data-store="tarasoff.notified">LE notified</button>
+        <button type="button" class="opt" data-store="tarasoff.hold">Involuntary hold</button>
+        <button type="button" class="opt" data-store="tarasoff.na">N/A — no identifiable victim</button>
        </div>
       </div>
      </div>
@@ -1658,6 +1721,8 @@ var S={pathway:null,workflowStep:0,cleared:null,setting:null,city:"",zip:"",insu
  safetyOpen:{suicide:false,homicide:false,violence:false,substances:false},
  cssrsInEmr:null,cssrsDone:null,suicideRisk:null,homicideRisk:null,sudScreenDone:null,sudTool:null,sudScore:"",sudClinical:null,violence:null,
  violenceFactors:{weapons:0,priorViolence:0,substance:0,command:0,identifiableTarget:0},
+ riskFormulation:{driving:"",mitigating:"",protective:[]},
+ tarasoff:{warned:0,notified:0,hold:0,na:0},
  dispo:null,intensity:null,residType:null,
  safetyPlanInEmr:null,planDone:null,clinicianAttested:false,
  firearm:null,meds:null,
@@ -1784,10 +1849,79 @@ function syncStoreChips(){
   if(el.type==="checkbox")return;
   var p=el.dataset.store.split("."),on=false;
   if(p.length===2&&p[0]==="violenceFactors")on=!!S.violenceFactors[p[1]];
+  else if(p.length===2&&p[0]==="tarasoff")on=!!S.tarasoff[p[1]];
   else if(p.length===2)on=!!S[p[0]][p[1]];
   el.classList.toggle("sel",on);
   el.setAttribute("aria-pressed",on?"true":"false");
  });
+ syncProtectiveChips();
+}
+var PROTECTIVE_LABELS={socialSupport:"social support",reasonsForLiving:"reasons for living",treatmentEngagement:"treatment engagement",meansRestricted:"means already restricted",futureOrientation:"future orientation",familyCommunity:"family/community ties"};
+function ensureRiskFormulation(){if(!S.riskFormulation)S.riskFormulation={driving:"",mitigating:"",protective:[]};}
+function syncProtectiveChips(){
+ ensureRiskFormulation();
+ $$("[data-protective]").forEach(function(el){
+  var on=S.riskFormulation.protective.indexOf(el.dataset.protective)>=0;
+  el.classList.toggle("sel",on);
+  el.setAttribute("aria-pressed",on?"true":"false");
+ });
+ $$("[data-formulation]").forEach(function(el){
+  var k=el.dataset.formulation;
+  if(S.riskFormulation[k]!=null&&el.value!==S.riskFormulation[k])el.value=S.riskFormulation[k];
+ });
+}
+function toggleProtective(key){
+ ensureRiskFormulation();
+ var arr=S.riskFormulation.protective,i=arr.indexOf(key);
+ if(i>=0)arr.splice(i,1);else arr.push(key);
+}
+function protectiveFactorsNote(){
+ ensureRiskFormulation();
+ if(!S.riskFormulation.protective.length)return "";
+ return S.riskFormulation.protective.map(function(k){return PROTECTIVE_LABELS[k]||k;}).join("; ");
+}
+function tarasoffApplicable(){
+ ensureSafetyGate();
+ return (S.safetyGate.homicide==="help"&&S.homicideRisk==="yes")||(S.safetyGate.violence==="help"&&S.violence==="yes");
+}
+function tarasoffChartNote(){
+ if(!S.tarasoff)return "—";
+ if(S.tarasoff.na)return "N/A — no identifiable victim";
+ var parts=[];
+ if(S.tarasoff.warned)parts.push("victim warned");
+ if(S.tarasoff.notified)parts.push("law enforcement notified");
+ if(S.tarasoff.hold)parts.push("involuntary hold considered/placed");
+ return parts.length?parts.join("; "):"Documented per local policy — actions pending";
+}
+function safetyDocumentationLines(){
+ ensureSafetyGate();
+ var lines=[],sg=S.safetyGate;
+ if(sg.suicide==="help"&&S.suicideRisk){
+  lines.push("RISK STRATIFICATION");
+  lines.push("Suicide (C-SSRS): "+S.suicideRisk.toUpperCase()+(S.suicideRisk==="moderate"?" (intermediate)":""));
+  lines.push("");
+ }
+ var prot=protectiveFactorsNote();
+ var rf=S.riskFormulation||{};
+ if((sg.suicide==="help"||sg.violence==="help")&&prot){
+  lines.push("PROTECTIVE FACTORS");
+  lines.push(prot);
+  lines.push("");
+ }
+ if((sg.suicide==="help"||sg.violence==="help")&&(rf.driving||rf.mitigating)){
+  lines.push("CLINICAL FORMULATION");
+  if(rf.driving)lines.push("Driving: "+rf.driving);
+  if(rf.mitigating)lines.push("Mitigating: "+rf.mitigating);
+  lines.push("");
+ }
+ if(tarasoffApplicable()){
+  lines.push("TARASOFF / DUTY TO PROTECT");
+  if(S.safetyGate.homicide==="help")lines.push("Homicide screen: "+homicideScreenNote());
+  if(S.safetyGate.violence==="help")lines.push("Violence screen: "+violenceScreenNote());
+  lines.push("Actions: "+tarasoffChartNote());
+  lines.push("");
+ }
+ return lines.join("\n");
 }
 function dispLocValue(){if(S.dispo==="community"&&S.intensity)return "community|"+S.intensity;if(S.dispo==="residential"&&S.residType)return "residential|"+S.residType;return "";}
 function dispLocShort(){
@@ -2058,7 +2192,7 @@ function violenceScreenNote(){
  if(g==="none")return "No concern";
  if(g==="emr")return "Documented in EMR";
  if(g==="help"){
-  if(S.violence==="yes")return violenceFactorsNote()+(S.violence==="yes"?" — Tarasoff/duty-to-warn documented separately":"");
+  if(S.violence==="yes")return violenceFactorsNote();
   if(S.violence==="no")return "No acute violence concern";
   return "—";
  }
@@ -2926,6 +3060,7 @@ function setField(f,v){
    S.safetyGate={suicide:null,homicide:null,violence:null,substances:null};
    S.safetyOpen={suicide:false,homicide:false,violence:false,substances:false};
    S.cssrsDone=null;S.suicideRisk=null;S.homicideRisk=null;S.sudScreenDone=null;S.sudTool=null;S.sudScore="";S.sudClinical=null;S.violence=null;S.cssrsInEmr=null;
+   S.riskFormulation={driving:"",mitigating:"",protective:[]};S.tarasoff={warned:0,notified:0,hold:0,na:0};
   }else if(v==="emr"){
    S.safetyGate={suicide:"emr",homicide:"emr",violence:"emr",substances:"emr"};
   }else if(v==="screen"){
@@ -2938,8 +3073,10 @@ function setField(f,v){
   S.safetyGate={suicide:null,homicide:null,violence:null,substances:null};
   S.safetyOpen={suicide:false,homicide:false,violence:false,substances:false};
   S.cssrsDone=null;S.suicideRisk=null;S.homicideRisk=null;S.sudScreenDone=null;S.sudTool=null;S.sudScore="";S.sudClinical=null;S.violence=null;S.cssrsInEmr=null;
+  S.riskFormulation={driving:"",mitigating:"",protective:[]};S.tarasoff={warned:0,notified:0,hold:0,na:0};
  }
- if(f==="violence"&&v==="no"){S.violenceFactors={weapons:0,priorViolence:0,substance:0,command:0,identifiableTarget:0};}
+ if(f==="homicideRisk"&&v==="no"){S.tarasoff={warned:0,notified:0,hold:0,na:0};}
+ if(f==="violence"&&v==="no"){S.violenceFactors={weapons:0,priorViolence:0,substance:0,command:0,identifiableTarget:0};S.tarasoff={warned:0,notified:0,hold:0,na:0};}
  if(f==="safetyPlanInEmr"&&v==="yes"){S.planDone="yes";}
  if(f==="safetyPlanInEmr"&&v==="no"){S.planDone=null;}
  if(f==="otherMeansDone"&&v==="no"){S.otherMeans.caustic=0;S.otherMeans.other=0;S.otherMeansOther="";}
@@ -2947,6 +3084,13 @@ function setField(f,v){
 function setPath(p,val){
  var a=p.split(".");
  if(a.length===2&&a[0]==="violenceFactors"){S.violenceFactors[a[1]]=val?1:0;return;}
+ if(a.length===2&&a[0]==="tarasoff"){
+  if(!S.tarasoff)S.tarasoff={warned:0,notified:0,hold:0,na:0};
+  if(a[1]==="na"&&val){S.tarasoff={warned:0,notified:0,hold:0,na:1};return;}
+  if(val)S.tarasoff.na=0;
+  S.tarasoff[a[1]]=val?1:0;
+  return;
+ }
  S[a[0]][a[1]]=val?1:0;
 }
 $("#loc").addEventListener("input",function(e){
@@ -2997,9 +3141,10 @@ document.addEventListener("click",function(e){
 });
 var sudScoreEl=$("#sudScore");if(sudScoreEl)sudScoreEl.addEventListener("input",function(e){S.sudScore=e.target.value;render();});
 document.addEventListener("input",function(e){
- var p2=e.target.dataset.plan2,tx=e.target.dataset.text;
+ var p2=e.target.dataset.plan2,tx=e.target.dataset.text,fm=e.target.dataset.formulation;
  if(p2){S.plan2[p2]=e.target.value;render();}
  if(tx){S[tx]=e.target.value;render();}
+ if(fm){ensureRiskFormulation();S.riskFormulation[fm]=e.target.value;scheduleSave();}
 });
 
 /* ---- SUD positivity ---- */
@@ -3159,8 +3304,12 @@ function render(){
  var l6Att=$("#l6ClinicianAttested");if(l6Att)l6Att.checked=S.clinicianAttested;
  renderSafetyDomains();
  rev("#suicideRiskReveal",sg.suicide==="help");
+ rev("#suicideRiskDocWrap",sg.suicide==="help");
  rev("#homicideHelpReveal",sg.homicide==="help");
  rev("#violenceHelpReveal",sg.violence==="help");
+ rev("#violenceRiskDocWrap",sg.violence==="help");
+ rev("#tarasoffHomicideWrap",sg.homicide==="help"&&S.homicideRisk==="yes");
+ rev("#tarasoffViolenceWrap",sg.violence==="help"&&S.violence==="yes");
  rev("#substancesHelpReveal",sg.substances==="help");
  rev("#hiRiskMsg",sg.suicide==="help"&&hiRisk());
  rev("#violenceMsg",sg.violence==="help"&&S.violence==="yes");
@@ -3667,9 +3816,14 @@ document.addEventListener("change",function(e){
   else{
    var st=e.target.dataset.store,sp=st.split("."),cur=0;
    if(sp.length===2&&sp[0]==="violenceFactors")cur=S.violenceFactors[sp[1]];
+   else if(sp.length===2&&sp[0]==="tarasoff")cur=S.tarasoff[sp[1]];
    else if(sp.length===2)cur=S[sp[0]][sp[1]];
    setPath(st,!cur);
   }
+  render();return;
+ }
+ if(e.target.dataset.protective!==undefined){
+  toggleProtective(e.target.dataset.protective);
   render();return;
  }
 });
@@ -4160,6 +4314,7 @@ function buildChartText(){
   "Acute violence risk: "+violenceScreenNote(),
   collabNote?"Collaboration: "+collabNote:"",
   "",
+  safetyDocumentationLines(),
   "SAFETY INTERVENTIONS",
   "Stanley-Brown safety plan: "+(S.planDone==="yes"?"Completed":S.planDone==="no"?"Not completed":"—"),
   "Firearm access addressed: "+(S.firearm||"—"),
@@ -4422,6 +4577,11 @@ function restoreSavedPlan(p){
  if(saved.selected)S.selected=Object.assign({},saved.selected);
  if(saved.touched)S.touched=Object.assign({},saved.touched);
  if(saved.violenceFactors)S.violenceFactors=Object.assign({},S.violenceFactors,saved.violenceFactors);
+ if(saved.riskFormulation){
+  S.riskFormulation=Object.assign({driving:"",mitigating:"",protective:[]},saved.riskFormulation);
+  if(!Array.isArray(S.riskFormulation.protective))S.riskFormulation.protective=[];
+ }
+ if(saved.tarasoff)S.tarasoff=Object.assign({warned:0,notified:0,hold:0,na:0},saved.tarasoff);
  if(saved.safetyGate)S.safetyGate=Object.assign({suicide:null,homicide:null,violence:null,substances:null},saved.safetyGate);
  ensureSafetyGate();
  if(saved.clinicianAttested)S.clinicianAttested=saved.clinicianAttested;
