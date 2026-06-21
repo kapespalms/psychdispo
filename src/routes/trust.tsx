@@ -49,7 +49,19 @@ function TrustPage() {
             content.
           </p>
           <p>
-            Authentication uses magic links or Google OAuth. We do not store passwords.
+            Sign-in today uses Supabase Auth: a one-time link to your work email or Google OAuth.
+            We do not store passwords.
+          </p>
+        </EditorialSection>
+
+        <EditorialSection label="Enterprise" title="Single sign-on (Phase 2)">
+          <p>
+            Hospital and health-system SSO (SAML/OIDC through your identity provider) is planned for
+            a later enterprise phase — not available yet.
+          </p>
+          <p>
+            Until then, use email sign-in link or Google as above. If your organization needs SSO
+            before Phase 2, contact us and we will note your interest.
           </p>
         </EditorialSection>
 

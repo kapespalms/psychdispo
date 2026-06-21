@@ -154,6 +154,7 @@ function SettingsPage() {
       </form>
 
       <p className="mt-8 text-[0.8125rem] leading-relaxed text-[var(--mut)]">
+        Enterprise SSO is planned for Phase 2.{" "}
         <Link to="/trust" className="text-link-accent">
           How we handle your data
         </Link>

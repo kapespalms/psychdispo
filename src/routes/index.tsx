@@ -1,6 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { HeroIllustration } from "@/components/hero-illustration";
 import { LandingHeader } from "@/components/landing-header";
+import {
+  guestDraftSummary,
+  hasMeaningfulPlan,
+  loadGuestDraft,
+  type PlanPayload,
+} from "@/lib/plans";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
@@ -42,6 +49,15 @@ const CONTENTS = [
 ] as const;
 
 function Index() {
+  const [draft, setDraft] = useState<PlanPayload | null>(null);
+
+  useEffect(() => {
+    const p = loadGuestDraft();
+    setDraft(hasMeaningfulPlan(p) ? p : null);
+  }, []);
+
+  const resume = draft ? guestDraftSummary(draft) : null;
+
   return (
     <div className="landing-screen flex flex-col flex-1 min-h-0 overflow-hidden text-[var(--ink)]">
       <LandingHeader />
@@ -58,17 +74,51 @@ function Index() {
               emergency and consult psychiatry. Patient details remain on your device.
             </p>
             <p className="flex flex-wrap items-center gap-3 sm:gap-4">
-              <Link to="/dispo" className="btn-blue">
-                Open plan
-              </Link>
-              <Link to="/directory" className="nav-bar-link">
-                directory
-              </Link>
+              {resume ? (
+                <>
+                  <Link to="/dispo" search={{ fresh: "1" }} className="nav-bar-link">
+                    start fresh
+                  </Link>
+                  <Link to="/directory" className="nav-bar-link">
+                    directory
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/dispo" className="btn-blue">
+                    Open plan
+                  </Link>
+                  <Link to="/directory" className="nav-bar-link">
+                    directory
+                  </Link>
+                </>
+              )}
             </p>
           </header>
 
           <HeroIllustration className="landing-hero-art w-full max-w-[360px] mx-auto lg:max-w-none lg:ml-auto hidden sm:block" />
         </section>
+
+        {resume && (
+          <section className="landing-resume shrink-0 mb-3 sm:mb-4" aria-labelledby="landing-resume-heading">
+            <p className="kicker mb-2">In progress</p>
+            <h2 id="landing-resume-heading" className="headline-display headline-display-compact mb-2">
+              Resume your plan
+            </h2>
+            <p className="text-[0.875rem] leading-relaxed text-[var(--mut)] mb-3 max-w-[32rem]">
+              Saved {resume.savedLabel}
+              {resume.detail !== "Disposition plan" && (
+                <>
+                  {" "}
+                  · <span className="text-[var(--ink)]">{resume.detail}</span>
+                </>
+              )}
+            </p>
+            <Link to="/dispo" search={{ resume: "1" }} className="btn-blue inline-block">
+              Resume plan
+            </Link>
+          </section>
+        )}
 
         <hr className="journal-rule shrink-0" />
 
