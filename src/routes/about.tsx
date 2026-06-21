@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { EditorialFooterLinks } from "@/components/editorial-footer-links";
 import { EditorialPage, EditorialSection } from "@/components/editorial-page";
 import { pageHead } from "@/lib/seo";
 
@@ -20,11 +21,14 @@ function About() {
       subtitle="Psychiatric disposition and discharge planning with verified community resources in all 50 states. Created by Kristen Palmer, MD."
       footer={
         <>
-          Resources are individually verified (✓) or curated national/statewide lines. For
-          medically cleared patients.{" "}
-          <Link to="/trust" className="text-link-accent">
-            Trust & data
-          </Link>
+          <EditorialFooterLinks />
+          <span className="block mt-3">
+            Resources are individually verified (✓) or curated national/statewide lines. For
+            medically cleared patients.{" "}
+            <Link to="/trust" className="text-link-accent">
+              Trust & data
+            </Link>
+          </span>
         </>
       }
     >

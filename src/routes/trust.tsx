@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { EditorialFooterLinks } from "@/components/editorial-footer-links";
 import { EditorialPage, EditorialSection } from "@/components/editorial-page";
 import { pageHead } from "@/lib/seo";
 
@@ -23,8 +24,11 @@ function TrustPage() {
       subtitle="Plain-language summary of what stays on your device, what we store when you sign in, and how to reach us."
       footer={
         <>
-          Reference only — not a substitute for clinical judgment. Life-threatening emergency:{" "}
-          <strong className="text-[var(--ink)]">911</strong>.
+          <EditorialFooterLinks />
+          <span className="block mt-3">
+            Reference only — not a substitute for clinical judgment. Life-threatening emergency:{" "}
+            <strong className="text-[var(--ink)]">911</strong>.
+          </span>
         </>
       }
     >
