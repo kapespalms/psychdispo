@@ -5,6 +5,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap');
 :root{--paper:#F4EFE5;--t:#2A43C0;--t2:#1b2f9c;--bg:var(--paper);--ink:#22202A;--mut:#6f6a5f;--faint:#9b9587;--line:#E6DECE;--card:#FFFDF8;--red:#B23A2E;--redbg:#fbeae8;--amber:#9A6A1E;--amberbg:#f7efdc;--good:#3C7A66;--goodbg:#e7f0ec;--terra:#BC5B3A;--req:#C05A44;--sage:#3C7A66;--gold:#9A7320;--serif:"Playfair Display",Georgia,"Times New Roman",serif;--sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;--mh-h:44px;--tabbar-h:42px;--statusbar-h:52px;--card-foot-h:58px;--workflow-chrome:calc(var(--mh-h) + var(--tabbar-h) + var(--statusbar-h));}
 *{box-sizing:border-box}
+html{height:100%}
 body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased;padding-bottom:calc(var(--statusbar-h) + env(safe-area-inset-bottom,0px))}
 header{background:#fff;border-bottom:1px solid var(--line)}
 .brandbar{max-width:980px;margin:0 auto;display:flex;align-items:center;gap:11px;padding:14px 16px}
@@ -403,8 +404,10 @@ body.embed .progress-sticky{top:0}
 .pkfoot{margin-top:10px;font-size:10px;color:var(--mut);border-top:1px solid var(--line);padding-top:6px;display:flex;justify-content:space-between}
 .lines div{border-bottom:1px solid #cdd6d5;height:1.7em}
 body.embed .mh-top,body.embed .hero,body.embed .tabbar{display:none!important}
-body.embed{--mh-h:0px;--tabbar-h:0px;--workflow-chrome:var(--statusbar-h);padding-bottom:calc(var(--statusbar-h) + env(safe-area-inset-bottom,0px))}
-body.embed .wrap{padding-bottom:12px}
+body.embed{--mh-h:0px;--tabbar-h:0px;--workflow-chrome:var(--statusbar-h);height:100%;overflow:hidden;display:flex;flex-direction:column;padding-bottom:0}
+body.embed .wrap{flex:1;min-height:0;display:flex;flex-direction:column;padding:0;margin:0;max-width:none}
+body.embed #view-tool{flex:1;min-height:0;display:flex;flex-direction:column;min-width:0}
+body.embed .statusbar{flex-shrink:0}
 #pathwayFork.hidden,#slideShell.hidden{display:none!important;pointer-events:none!important;visibility:hidden!important}
 .pathway-fork{padding:12px 18px 4px;min-height:0}
 .pathway-head{text-align:center;margin-bottom:10px}
@@ -507,6 +510,9 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 .slide-shell{padding:2px 0 0;margin-bottom:0;min-height:0}
 #view-tool .workflow-sheet:has(#slideShell:not(.hidden)),
 #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){display:flex;flex-direction:column;height:calc(100dvh - var(--workflow-chrome) - 12px);min-height:min(360px,calc(100dvh - var(--workflow-chrome) - 12px));max-height:calc(100dvh - var(--workflow-chrome) - 12px);overflow:hidden;margin-bottom:4px}
+body.embed #view-tool .workflow-sheet:has(#slideShell:not(.hidden)),
+body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-height:0;height:auto;max-height:none;margin:0;border-radius:0;border-left:none;border-right:none}
+#view-tool:has(#slideShell:not(.hidden)) .slide-nav-top{display:none!important}
 #view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .workflow-body,
 #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)) .workflow-body{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
 #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)) #pathwayFork{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--statusbar-h) + 8px);pointer-events:auto}
@@ -623,6 +629,17 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
  @page{margin:14mm}
  @page :first{margin:10mm}
 }
+/* Keyword definitions — hover / focus / tap to learn (clinician UI only) */
+.kw{border-bottom:1px dotted var(--faint);cursor:help;position:relative;text-decoration:none;font-weight:inherit}
+.kw:focus{outline:none}
+.kw:focus-visible{outline:2px solid var(--t);outline-offset:2px;border-radius:2px}
+.kw::after{content:attr(data-def);position:absolute;left:50%;bottom:calc(100% + 7px);transform:translateX(-50%);width:max-content;max-width:min(280px,calc(100vw - 32px));padding:8px 11px;background:var(--ink);color:#fff;font-size:12.5px;font-weight:400;line-height:1.45;border-radius:8px;box-shadow:0 6px 20px rgba(34,32,42,.22);white-space:normal;text-align:left;z-index:200;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .12s ease;letter-spacing:normal;text-transform:none}
+.kw:hover::after,.kw:focus-visible::after,.kw.kw-open::after{opacity:1;visibility:visible}
+@media(pointer:coarse){.kw.kw-open::after{position:fixed;left:50%;top:auto;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%)}}
+.kw-legend{font-size:11px;color:var(--faint);margin:0 0 10px;font-style:normal;font-weight:500;letter-spacing:.01em}
+.patient-onepager .kw{border-bottom:none;cursor:inherit}
+.patient-onepager .kw::after{display:none!important}
+@media print{.kw{border-bottom:none!important}.kw::after{display:none!important}}
 </style></head>
 <body>
 <header class="mh-top">
@@ -728,7 +745,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
      <div class="opts loc-opts" id="locResidentialOpts"></div>
     </div>
    </div>
-   <div class="note" id="opOnlyNote" style="display:none;margin-top:5px">Outpatient — community only (OP, IOP, PHP).</div>
+   <div class="note" id="opOnlyNote" style="display:none;margin-top:5px">Outpatient — community only (OP, <span class="kw" tabindex="0" role="term" data-def="Intensive Outpatient Program — about 9–19 hours of structured treatment per week while living at home.">IOP</span>, <span class="kw" tabindex="0" role="term" data-def="Partial Hospitalization — daily structured treatment (~20+ hours/week); step-down from inpatient or step-up from outpatient.">PHP</span>).</div>
   </div>
  </div>
  <div id="ctxAccordion" class="ctx-accordion">
@@ -746,13 +763,13 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
    </div>
    <div class="pd-section">
     <div class="sub2">Population</div>
-    <div class="q"><label class="qlabel">Life stage <span class="req-mark" aria-hidden="true">■</span></label>
+    <div class="q"><label class="qlabel"><span class="kw" tabindex="0" role="term" data-def="Age band (child, adult, geriatric) used for resource matching and safety-plan language.">Life stage</span> <span class="req-mark" aria-hidden="true">■</span></label>
      <div class="opts" data-field="lifeStage"><button type="button" class="opt" data-val="child">Child / Adolescent (&lt;18)</button><button type="button" class="opt" data-val="adult">Adult (18–64)</button><button type="button" class="opt" data-val="geriatric">Geriatric (≥65)</button></div></div>
     <div class="pop-flags-grid" data-multi="1">
   <div class="pop-col">
    <div class="sub2">Reproductive · Military · Identity</div>
    <div class="opts">
-    <button type="button" class="opt" data-flag="perinatal">Perinatal (pregnant or ≤12 mo postpartum)</button>
+    <button type="button" class="opt" data-flag="perinatal"><span class="kw" tabindex="0" role="term" data-def="Pregnant or within 12 months postpartum — matches perinatal-specialized programs.">Perinatal</span> (pregnant or ≤12 mo postpartum)</button>
     <button type="button" class="opt" data-flag="veteran">Veteran / Active Duty / Military Family</button>
     <button type="button" class="opt" data-flag="lgbtq">LGBTQ+</button>
    </div>
@@ -814,9 +831,9 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
      <button type="button" class="opt" data-val="none"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span><span class="gate-lbl">No concern</span></button>
     </div>
      <div class="reveal hidden" id="suicideRiskReveal">
-     <div class="q"><label class="qlabel">C-SSRS risk level</label>
+     <div class="q"><label class="qlabel"><span class="kw" tabindex="0" role="term" data-def="Columbia-Suicide Severity Rating Scale. Brief validated screener assigning low, moderate, or high suicide risk based on recent ideation and behavior.">C-SSRS</span> risk level</label>
       <div class="opts" data-field="suicideRisk"><button type="button" class="opt" data-val="low">Low</button><button type="button" class="opt warnv" data-val="moderate">Moderate</button><button type="button" class="opt dangerv" data-val="high">High</button></div>
-      <div class="reveal hidden alert red" id="hiRiskMsg">Moderate/high risk — complete safety plan and lethal means below.</div>
+      <div class="reveal hidden alert red" id="hiRiskMsg">Moderate/high risk — complete <span class="kw" tabindex="0" role="term" data-def="Collaborative plan listing warning signs, coping steps, supports, and how to make the environment safer before discharge.">safety plan</span> and <span class="kw" tabindex="0" role="term" data-def="Reducing access to suicide methods (firearms, medications, etc.) during elevated risk.">lethal means</span> below.</div>
      </div>
     </div>
     <div class="reveal hidden" id="suicideRiskDocWrap">
@@ -856,7 +873,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
       <div class="opts yesno" data-field="homicideRisk"><button type="button" class="opt dangerv" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
      </div>
      <div class="reveal hidden" id="tarasoffHomicideWrap">
-      <div class="q"><label class="qlabel">Tarasoff / duty to protect</label>
+      <div class="q"><label class="qlabel"><span class="kw" tabindex="0" role="term" data-def="Legal duty to protect an identifiable victim when a patient makes a credible threat of serious violence. Laws vary by state.">Tarasoff</span> / duty to protect</label>
        <div class="opts chip-row">
         <button type="button" class="opt" data-store="tarasoff.warned">Victim warned</button>
         <button type="button" class="opt" data-store="tarasoff.notified">LE notified</button>
@@ -912,7 +929,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
       </details>
      </div>
      <div class="reveal hidden" id="tarasoffViolenceWrap">
-      <div class="q"><label class="qlabel">Tarasoff / duty to protect</label>
+      <div class="q"><label class="qlabel"><span class="kw" tabindex="0" role="term" data-def="Legal duty to protect an identifiable victim when a patient makes a credible threat of serious violence. Laws vary by state.">Tarasoff</span> / duty to protect</label>
        <div class="opts chip-row">
         <button type="button" class="opt" data-store="tarasoff.warned">Victim warned</button>
         <button type="button" class="opt" data-store="tarasoff.notified">LE notified</button>
@@ -939,9 +956,9 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
     <div class="reveal hidden" id="substancesHelpReveal">
      <div class="q"><label class="qlabel">Screening tool</label>
       <div class="opts chip-row" data-field="sudTool">
-       <button type="button" class="opt" data-val="auditc">AUDIT-C</button>
-       <button type="button" class="opt" data-val="crafft">CRAFFT</button>
-       <button type="button" class="opt" data-val="sbirt">SBIRT</button>
+       <button type="button" class="opt" data-val="auditc"><span class="kw" tabindex="0" role="term" data-def="Three-question alcohol screen. Scores of 3+ (women) or 4+ (men) suggest hazardous drinking worth follow-up.">AUDIT-C</span></button>
+       <button type="button" class="opt" data-val="crafft"><span class="kw" tabindex="0" role="term" data-def="Six-item adolescent substance screen. Two or more positive answers suggest problematic use.">CRAFFT</span></button>
+       <button type="button" class="opt" data-val="sbirt"><span class="kw" tabindex="0" role="term" data-def="Screening, Brief Intervention, and Referral to Treatment — structured approach for substance use in medical settings.">SBIRT</span></button>
        <button type="button" class="opt" data-val="emr">In EMR</button>
       </div>
      </div>
@@ -951,7 +968,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
      <div class="q"><label class="qlabel">Withdrawal concern?</label>
       <div class="opts yesno" data-field="sudWithdrawal"><button type="button" class="opt warnv" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
      </div>
-     <div class="sub2" style="margin-top:8px">ASAM snapshot <span class="note">(chart only)</span></div>
+     <div class="sub2" style="margin-top:8px"><span class="kw" tabindex="0" role="term" data-def="Quick ASAM Criteria snapshot for charting — intoxication/withdrawal, psychiatric co-occurring, and recovery environment.">ASAM snapshot</span> <span class="note">(chart only)</span></div>
      <div class="opts chip-row">
       <button type="button" class="opt" data-store="sudAsam.intoxication">Intoxication / withdrawal</button>
       <button type="button" class="opt" data-store="sudAsam.psych">Psych co-occurring</button>
@@ -965,10 +982,10 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
  <div id="safetyInterventions" class="interventions-compact hidden">
   <div class="safety-grid" id="interventionsGrid">
    <div class="safety-col">
-    <div class="sub2">Safety plan</div>
+    <div class="sub2"><span class="kw" tabindex="0" role="term" data-def="Collaborative plan listing warning signs, coping steps, supports, and how to make the environment safer before discharge.">Safety plan</span></div>
     <div class="q"><label class="qlabel">In EMR?</label>
      <div class="opts yesno" data-field="safetyPlanInEmr"><button type="button" class="opt" data-val="no">No</button><button type="button" class="opt" data-val="yes">Yes</button></div></div>
-    <div class="q" id="planDoneWrap"><label class="qlabel">Stanley-Brown done?</label><div class="opts yesno" data-field="planDone"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div></div>
+    <div class="q" id="planDoneWrap"><label class="qlabel"><span class="kw" tabindex="0" role="term" data-def="Evidence-based six-step safety plan (warning signs through means restriction) done with the patient.">Stanley-Brown</span> done?</label><div class="opts yesno" data-field="planDone"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div></div>
    </div>
    <div class="safety-col">
     <div class="sub2">Firearms</div>
@@ -1068,7 +1085,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
   </div>
   <div class="q hidden" id="l6EmrPlanGate"><label class="qlabel">Safety plan already in EMR?</label>
    <div class="opts yesno" data-field="safetyPlanInEmr"><button type="button" class="opt" data-val="no">No</button><button type="button" class="opt" data-val="yes">Yes</button></div></div>
-  <div id="l6AttestationGate" class="l6-gate hidden"><label><input type="checkbox" id="l6ClinicianAttested"> <b>Reviewed with a trained clinician</b> — required for moderate/high C-SSRS or violence concern before deliver</label></div>
+  <div id="l6AttestationGate" class="l6-gate hidden"><label><input type="checkbox" id="l6ClinicianAttested"> <b>Reviewed with a trained clinician</b> — required for moderate/high <span class="kw" tabindex="0" role="term" data-def="Columbia-Suicide Severity Rating Scale. Brief validated screener assigning low, moderate, or high suicide risk based on recent ideation and behavior.">C-SSRS</span> or violence concern before deliver</label></div>
   <div class="q" style="margin-top:0">
    <label class="qlabel">Packet type</label>
    <div class="opts" data-field="packetVariant" id="packetVariantOpts">
@@ -1092,7 +1109,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
   <div id="l6FkglGate" class="l6-gate l6-gate-warn hidden"></div>
   <div class="l6-actions">
    <button class="btn sec hidden" id="genBtn">Build full packet preview</button>
-   <button class="btn sec hidden" id="warmHandoffBtnL6" type="button">Warm handoff mode</button>
+   <button class="btn sec hidden" id="warmHandoffBtnL6" type="button"><span class="kw" tabindex="0" role="term" data-def="Live phone introduction connecting the patient to the next provider or program before they leave.">Warm handoff</span> mode</button>
    <button class="btn sec" id="savePlanBtn">Save plan</button>
    <button class="btn sec" id="saveTemplateBtn">Save as template</button>
   </div>
@@ -1780,6 +1797,61 @@ var S={pathway:null,workflowStep:0,cleared:null,setting:null,city:"",zip:"",insu
 function $(s,c){return (c||document).querySelector(s);}
 function $$(s,c){return [].slice.call((c||document).querySelectorAll(s));}
 function esc(x){return (x==null?"":(""+x)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+var KEYWORDS={
+ cssrs:"Columbia-Suicide Severity Rating Scale. Brief validated screener assigning low, moderate, or high suicide risk based on recent ideation and behavior.",
+ safetyPlan:"Collaborative plan listing warning signs, coping steps, supports, and how to make the environment safer before discharge.",
+ spi:"Stanley-Brown Safety Planning Intervention — structured six-step plan completed with the patient.",
+ lethalMeans:"Reducing access to suicide methods (firearms, medications, etc.) during elevated risk.",
+ tarasoff:"Legal duty to protect an identifiable victim when a patient makes a credible threat of serious violence. Laws vary by state.",
+ auditc:"Three-question alcohol screen. Scores of 3+ (women) or 4+ (men) suggest hazardous drinking worth follow-up.",
+ crafft:"Six-item adolescent substance screen. Two or more positive answers suggest problematic use.",
+ asam:"Quick ASAM Criteria snapshot for charting — intoxication/withdrawal, psychiatric co-occurring, and recovery environment.",
+ warmHandoff:"Live phone introduction connecting the patient to the next provider or program before they leave.",
+ bridgingAppt:"Outpatient appointment booked before discharge to bridge until regular follow-up begins.",
+ callback72h:"Structured phone check within 72 hours of discharge to reassess safety and care engagement.",
+ transitionOfCare:"Post-discharge handoff bundle: bridging appointment, 72-hour callback, warm handoff, and means actions documented.",
+ lifeStage:"Age band (child, adult, geriatric) used for resource matching and safety-plan language.",
+ perinatal:"Pregnant or within 12 months postpartum — matches perinatal-specialized programs.",
+ idd:"Intellectual or developmental disability — may need adapted communication and specialized services.",
+ iop:"Intensive Outpatient Program — about 9–19 hours of structured treatment per week while living at home.",
+ php:"Partial Hospitalization — daily structured treatment (~20+ hours/week); step-down from inpatient or step-up from outpatient.",
+ express:"Streamlined workflow for low-risk outpatient discharges — fewer required fields when there is no acute safety concern.",
+ fullWorkflow:"Complete multi-step path with full safety screening and documentation gates.",
+ inEmr:"Already documented in the electronic medical record — no duplicate entry needed here.",
+ helpDocument:"PsychDispo walks through screening questions and builds chart-ready documentation.",
+ sud:"Substance Use Disorder — problematic alcohol or drug use active in the clinical picture.",
+ tbi:"Traumatic brain injury or related neuropsychiatric condition affecting cognition or behavior.",
+ stanleyBrown:"Evidence-based six-step safety plan (warning signs through means restriction) done with the patient.",
+ sbirt:"Screening, Brief Intervention, and Referral to Treatment — structured approach for substance use in medical settings.",
+ meansPlan:"Lethal-means counseling that went beyond discussion — concrete steps to restrict access were taken or arranged."
+};
+function kw(label,key){var d=KEYWORDS[key];if(!d)return esc(label);return '<span class="kw" tabindex="0" role="term" data-def="'+esc(d)+'">'+esc(label)+'</span>';}
+function initKwTouch(){
+ if(initKwTouch.done)return;
+ initKwTouch.done=1;
+ document.addEventListener("click",function(e){
+  var k=e.target.closest(".kw");
+  if(k&&k.closest(".patient-onepager"))return;
+  if(k){e.preventDefault();e.stopPropagation();var on=k.classList.contains("kw-open");$$(".kw.kw-open").forEach(function(x){x.classList.remove("kw-open");});if(!on)k.classList.add("kw-open");return;}
+  $$(".kw.kw-open").forEach(function(x){x.classList.remove("kw-open");});
+ });
+}
+function dispLocLabel(o){if(o.v==="community|iop")return kw("IOP","iop");if(o.v==="community|php")return kw("PHP","php");return esc(o.t);}
+function enhanceKwLabels(){
+ initKwTouch();
+ $$(".gate-lbl").forEach(function(el){
+  var t=el.textContent.trim();
+  if(t==="In EMR"&&!el.querySelector(".kw"))el.innerHTML=kw("In EMR","inEmr");
+  else if(t==="Help me document"&&!el.querySelector(".kw"))el.innerHTML=kw("Help me document","helpDocument");
+ });
+ $$("#expressSafetyGate .opt").forEach(function(el){
+  var t=el.textContent.trim();
+  if(t==="In EMR"&&!el.querySelector(".kw"))el.innerHTML=kw("In EMR","inEmr");
+  else if(t==="Help me document"&&!el.querySelector(".kw"))el.innerHTML=kw("Help me document","helpDocument");
+ });
+ var ex=$("#expressModeExpress");if(ex&&!ex.querySelector(".kw"))ex.innerHTML=kw("Express","express");
+ var full=$("#expressModeFull");if(full&&!full.querySelector(".kw"))full.innerHTML=kw("Full workflow","fullWorkflow");
+}
 function tel(p){return (p||"").replace(/[^0-9]/g,"");}
 function plain(s){if(!s)return "";var m=[[/medication management/gi,"help with medicines"],[/med management/gi,"help with medicines"],[/psychiatric|psychiatry/gi,"mental health"],[/substance[- ]use( disorder)?/gi,"drug & alcohol"],[/withdrawal management/gi,"safe detox"],[/detoxification|medical detox|detox/gi,"safe detox"],[/\bMAT\b/g,"medicine for addiction"],[/buprenorphine|naltrexone|methadone|suboxone/gi,"medicine for addiction"],[/intensive outpatient|\bIOP\b/gi,"day program"],[/partial hospitalization|\bPHP\b/gi,"day program"],[/coordinated specialty care/gi,"special care"],[/first-?episode psychosis/gi,"early psychosis care"],[/perinatal|reproductive/gi,"pregnancy & new-baby"],[/geriatric|older adult/gi,"older adults"],[/\bFQHC\b/gi,"community clinic"],[/case management/gi,"a helper to guide you"],[/crisis stabilization/gi,"short crisis care"],[/mobile crisis/gi,"a team that comes to you"],[/co-?occurring/gi,"both"],[/\bSUD\b/gi,"drug & alcohol"]];m.forEach(function(p){s=s.replace(p[0],p[1]);});return s.charAt(0).toUpperCase()+s.slice(1);}
 
@@ -1868,7 +1940,7 @@ function rebuildDispLocButtons(){
  function fill(sel){
   var comm=$(sel);if(!comm)return;
   function btn(o){
-   return '<button type="button" class="opt'+(o.v===cur?" sel":"")+'" data-disp-loc="'+o.v+'" aria-pressed="'+(o.v===cur?"true":"false")+'">'+o.t+'</button>';
+   return '<button type="button" class="opt'+(o.v===cur?" sel":"")+'" data-disp-loc="'+o.v+'" aria-pressed="'+(o.v===cur?"true":"false")+'">'+dispLocLabel(o)+'</button>';
   }
   comm.innerHTML=DISPO_LOC_OPTS.filter(function(o){return o.col==="community";}).map(btn).join("");
  }
@@ -1877,7 +1949,7 @@ function rebuildDispLocButtons(){
  var res=$("#locResidentialOpts");
  if(res){
   function btn(o){
-   return '<button type="button" class="opt'+(o.v===cur?" sel":"")+'" data-disp-loc="'+o.v+'" aria-pressed="'+(o.v===cur?"true":"false")+'">'+o.t+'</button>';
+   return '<button type="button" class="opt'+(o.v===cur?" sel":"")+'" data-disp-loc="'+o.v+'" aria-pressed="'+(o.v===cur?"true":"false")+'">'+dispLocLabel(o)+'</button>';
   }
   res.innerHTML=DISPO_LOC_OPTS.filter(function(o){return o.col==="residential";}).map(btn).join("");
  }
@@ -2039,17 +2111,17 @@ function renderTransitionOfCare(){
  function chipBtn(key,label){
   return '<button type="button" class="opt'+(tc[key]?" sel":"")+'" data-store="tocChips.'+key+'" aria-pressed="'+(tc[key]?"true":"false")+'">'+label+'</button>';
  }
- el.innerHTML='<div class="ltag">Transition of care</div>'+
-  '<div class="note" style="margin-bottom:8px">Highest-risk window after discharge — document bridging appt, 72 h callback, warm handoff, and means actions.</div>'+
-  '<div class="opts chip-row" style="flex-wrap:wrap">'+chipBtn("bridging","Bridging appt scheduled")+chipBtn("callback72h","72h callback planned")+
-   chipBtn("warmHandoff","Warm handoff done")+chipBtn("supportPerson","Support person engaged")+chipBtn("meansEnacted","Means plan enacted")+'</div>'+
+ el.innerHTML='<div class="ltag">'+kw("Transition of care","transitionOfCare")+'</div>'+
+  '<div class="note" style="margin-bottom:8px">Highest-risk window after discharge — document '+kw("bridging appt","bridgingAppt")+', '+kw("72 h callback","callback72h")+', '+kw("warm handoff","warmHandoff")+', and means actions.</div>'+
+  '<div class="opts chip-row" style="flex-wrap:wrap">'+chipBtn("bridging",kw("Bridging appt scheduled","bridgingAppt"))+chipBtn("callback72h",kw("72h callback planned","callback72h"))+
+   chipBtn("warmHandoff",kw("Warm handoff done","warmHandoff"))+chipBtn("supportPerson","Support person engaged")+chipBtn("meansEnacted",kw("Means plan enacted","meansPlan"))+'</div>'+
   '<div class="grid2" style="margin-top:10px">'+
    '<div><label class="qlabel">Appt with</label><input type="text" data-text="bridgingApptWho" placeholder="Clinician or program" value="'+esc(S.bridgingApptWho||"")+'"></div>'+
    '<div><label class="qlabel">When</label><input type="text" data-text="bridgingApptWhen" placeholder="Date / time" value="'+esc(S.bridgingApptWhen||"")+'"></div>'+
   '</div>'+
-  '<div class="q" style="margin-top:8px"><label class="qlabel">72h callback <span class="note">(who calls whom)</span></label>'+
+  '<div class="q" style="margin-top:8px"><label class="qlabel">'+kw("72h callback","callback72h")+' <span class="note">(who calls whom)</span></label>'+
    '<input type="text" data-text="callback72hNote" placeholder="e.g. RN calls patient within 72 h" value="'+esc(S.callback72hNote||"")+'" style="max-width:100%"></div>'+
-  '<div class="q"><label class="qlabel">Warm handoff note <span class="note">(one line)</span></label>'+
+  '<div class="q"><label class="qlabel">'+kw("Warm handoff","warmHandoff")+' note <span class="note">(one line)</span></label>'+
    '<input type="text" data-text="warmHandoffNote" placeholder="e.g. Spoke with IOP intake" value="'+esc(S.warmHandoffNote||"")+'" style="max-width:100%"></div>';
  syncStoreChips();
 }
@@ -3510,6 +3582,7 @@ function render(){
  renderStatus();
  updateSocialCarePrompt();
  scheduleSave();
+ enhanceKwLabels();
 }
 
 /* ---- resource card ---- */
@@ -3897,14 +3970,14 @@ function renderFollowUp(){
   '<div class="reveal'+apptYes+'" id="apptYesWrap"><div class="grid2">'+
    '<div><label class="qlabel">Date</label><input type="text" data-plan2="fuDate" placeholder="MM/DD/YYYY" value="'+esc(S.plan2.fuDate||"")+'"></div>'+
    '<div><label class="qlabel">Time</label><input type="text" data-plan2="fuTime" value="'+esc(S.plan2.fuTime||"")+'"></div>'+
-   '<div><label class="qlabel">Warm handoff completed?</label><div class="opts yesno" data-field="warm"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div></div>'+
+   '<div><label class="qlabel">'+kw("Warm handoff","warmHandoff")+' completed?</label><div class="opts yesno" data-field="warm"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div></div>'+
   '</div></div>'+
   '<div class="reveal'+apptNo+'" id="apptNoWrap">'+
    (methodOpts?'<label class="qlabel">How will the referral be sent?</label><div class="opts" data-field="refMethod">'+methodOpts+'</div>'+
     '<div class="note" style="margin-top:6px">Use call or fax when no appointment is scheduled yet.</div>':'<div class="note alert amber">No phone, fax, or email on file for this resource — verify contact info or pick another referral.</div>')+
    sheetBlock+
   '</div>'+
-  (fu?'<div style="margin-top:12px"><button type="button" class="btn sec" id="warmHandoffBtn" style="margin:0;min-height:44px">Warm handoff mode — tap to call</button></div>':'');
+  (fu?'<div style="margin-top:12px"><button type="button" class="btn sec" id="warmHandoffBtn" style="margin:0;min-height:44px">'+kw("Warm handoff","warmHandoff")+' mode — tap to call</button></div>':'');
  syncOptsFromS();
  var wh=$("#warmHandoffBtn");if(wh)wh.onclick=showWarmHandoff;
  updateWarmHandoffBtns();
