@@ -196,12 +196,27 @@ body.embed .progress-sticky{top:0}
 .express-loc-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;margin:2px 0 4px}
 .express-loc-line .loc-suggest{font-weight:600;color:var(--ink)}
 .express-change-loc{font-size:12px;color:var(--t);font-weight:600;cursor:pointer;background:none;border:none;font-family:inherit;padding:0;text-decoration:underline;text-underline-offset:2px}
-.ctx-accordion{margin-top:8px;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fafbfd}
-.ctx-accordion-toggle{width:100%;display:flex;align-items:center;gap:8px;padding:10px 14px;background:none;border:none;cursor:pointer;font:inherit;text-align:left;font-size:13px;font-weight:600;color:var(--mut);touch-action:manipulation}
-.ctx-accordion-chevron{width:14px;height:14px;flex:none;stroke:var(--mut);fill:none;stroke-width:2;transition:transform .2s}
-.ctx-accordion.open .ctx-accordion-chevron{transform:rotate(180deg)}
-.ctx-accordion-body{max-height:0;overflow:hidden;padding:0 14px;border-top:none;background:var(--card);transition:max-height .28s ease}
-.ctx-accordion.open .ctx-accordion-body{max-height:min(720px,58vh);overflow-y:auto;overscroll-behavior:contain;padding:12px 14px;border-top:1px solid var(--line);-webkit-overflow-scrolling:touch}
+.ctx-accordion{margin-top:10px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+.ctx-accordion-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;background:none;border:none;cursor:pointer;font:inherit;text-align:left;font-size:13px;font-weight:600;color:var(--ink);touch-action:manipulation;min-height:44px}
+.ctx-accordion-chevron{width:16px;height:16px;flex:none;stroke:var(--mut);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
+.ctx-accordion.open .ctx-accordion-toggle{color:var(--t);background:#f8f9fc}
+.ctx-accordion.open .ctx-accordion-chevron{transform:rotate(180deg);stroke:var(--t)}
+.ctx-accordion-body{max-height:0;overflow:hidden;padding:0 16px;border-top:none;background:var(--card);transition:max-height .28s ease}
+.ctx-accordion.open .ctx-accordion-body{max-height:min(820px,62vh);overflow-y:auto;overscroll-behavior:contain;padding:16px 16px 18px;border-top:1px solid var(--line);-webkit-overflow-scrolling:touch}
+.ctx-accordion-details.intake-divider{margin:0;padding:0;border:none}
+.ctx-accordion-details .pd-section{margin-bottom:4px}
+.ctx-accordion-details .sub2{margin:0 0 8px;padding:0;border:none;font-size:10px;letter-spacing:.14em;color:var(--mut)}
+.ctx-accordion-details .pd-section+.pd-section{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.ctx-accordion-details .pd-section+.pd-section>.sub2{margin-top:0}
+.ctx-accordion-details .grid2{gap:10px 14px;margin-bottom:0}
+.ctx-accordion-details .q{margin:0 0 10px}
+.ctx-accordion-details .q>label.qlabel{font-size:13px;font-weight:600;margin-bottom:7px;letter-spacing:normal;text-transform:none;color:var(--ink)}
+.ctx-accordion-details .pop-flags-grid{gap:10px;margin-top:10px}
+.ctx-accordion-details .pop-col{padding:10px 12px;border-radius:10px;background:#fafbfd}
+.ctx-accordion-details .pop-col .sub2{margin:0 0 8px;font-size:10px;letter-spacing:.12em}
+.ctx-accordion-details .pop-col .opt{font-size:12.5px;padding:7px 11px;min-height:40px;line-height:1.3}
+.ctx-accordion-details .opts[data-field="lifeStage"] .opt{white-space:normal;text-align:left;flex:1 1 calc(33.333% - 6px);min-width:min(100%,140px)}
+@media(max-width:680px){.ctx-accordion-details .opts[data-field="lifeStage"] .opt{flex:1 1 100%}}
 .expand-block{max-height:0;overflow:hidden;opacity:0;transition:max-height .28s ease,opacity .2s ease;margin:0;padding-top:0;padding-bottom:0}
 .expand-block.is-open{max-height:var(--expand-max,2400px);opacity:1;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 #expressLocExpand.expand-block.is-open{--expand-max:300px;margin-top:2px}
@@ -522,7 +537,6 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 .plan-match-card .blurb{font-size:12.5px;line-height:1.4}
 .gate-row-2{gap:6px 10px}
 .intake-divider{margin-top:8px;padding-top:8px}
-.intake-divider>.sub2:first-child{display:none}
 .intake-divider .sub2{margin:6px 0 4px;padding-top:6px;font-size:10px}
 .pop-flags-grid{gap:6px 8px;margin-top:4px}
 .pop-col{padding:6px 8px}
@@ -564,7 +578,8 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
  body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;padding-bottom:env(safe-area-inset-bottom,0px)}
  #view-tool:has(#slideShell:not(.hidden)) .statusbar{display:none!important}
  .step-head .ltitle{font-size:19px}
- .gate-auto-note,.intake-divider .sub2,#zipMeta,.pop-col .sub2,.ref-deeplink,.collab-banner{display:none!important}
+ .gate-auto-note,.intake-divider:not(.ctx-accordion-details) .sub2,#zipMeta,.pop-col .sub2,.ref-deeplink,.collab-banner{display:none!important}
+ .ctx-accordion-details .sub2,.ctx-accordion-details .pop-col .sub2{display:block!important}
  .pop-flags-grid{grid-template-columns:1fr 1fr}
  .loc-cols{grid-template-columns:1fr}
  .statusbar .nav-btn.cont{display:none}
@@ -720,18 +735,20 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
   <button type="button" class="ctx-accordion-toggle" id="ctxAccordionBtn" aria-expanded="false">Patient details<svg class="ctx-accordion-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
   <div class="ctx-accordion-body" id="ctxAccordionBody">
    <div class="intake-divider ctx-accordion-details">
- <div class="sub2" style="border:none;padding-top:0">Who is the patient?</div>
- <div class="sub2">1A · Demographics</div>
- <div class="grid2">
-  <div><div class="field-label">Preferred language</div>
-   <div class="opts" data-field="lang" id="langOpts"><button type="button" class="opt sel" data-val="English">English</button><button type="button" class="opt" data-val="Spanish">Spanish</button><button type="button" class="opt" data-val="Somali">Somali</button><button type="button" class="opt" data-val="Arabic">Arabic</button><button type="button" class="opt" data-val="Nepali">Nepali</button><button type="button" class="opt" data-val="French">French</button><button type="button" class="opt" data-val="ASL">ASL</button><button type="button" class="opt" data-val="Other">Other</button></div></div>
-  <div class="q hidden" id="interpreterWrap"><label class="qlabel">Interpreter needed?</label>
-   <div class="opts yesno" data-field="interpreter"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div></div>
- </div>
- <div class="sub2">1B · Population flags</div>
- <div class="q"><label class="qlabel">Life stage <span class="req">select one</span></label>
-  <div class="opts" data-field="lifeStage"><button type="button" class="opt" data-val="child">Child / Adolescent (&lt;18)</button><button type="button" class="opt" data-val="adult">Adult (18–64)</button><button type="button" class="opt" data-val="geriatric">Geriatric (≥65)</button></div></div>
- <div class="pop-flags-grid" data-multi="1">
+   <div class="pd-section">
+    <div class="sub2">Demographics</div>
+    <div class="grid2">
+     <div><div class="field-label">Preferred language</div>
+      <div class="opts" data-field="lang" id="langOpts"><button type="button" class="opt sel" data-val="English">English</button><button type="button" class="opt" data-val="Spanish">Spanish</button><button type="button" class="opt" data-val="Somali">Somali</button><button type="button" class="opt" data-val="Arabic">Arabic</button><button type="button" class="opt" data-val="Nepali">Nepali</button><button type="button" class="opt" data-val="French">French</button><button type="button" class="opt" data-val="ASL">ASL</button><button type="button" class="opt" data-val="Other">Other</button></div></div>
+     <div class="q hidden" id="interpreterWrap"><label class="qlabel">Interpreter needed?</label>
+      <div class="opts yesno" data-field="interpreter"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div></div>
+    </div>
+   </div>
+   <div class="pd-section">
+    <div class="sub2">Population</div>
+    <div class="q"><label class="qlabel">Life stage <span class="req-mark" aria-hidden="true">■</span></label>
+     <div class="opts" data-field="lifeStage"><button type="button" class="opt" data-val="child">Child / Adolescent (&lt;18)</button><button type="button" class="opt" data-val="adult">Adult (18–64)</button><button type="button" class="opt" data-val="geriatric">Geriatric (≥65)</button></div></div>
+    <div class="pop-flags-grid" data-multi="1">
   <div class="pop-col">
    <div class="sub2">Reproductive · Military · Identity</div>
    <div class="opts">
@@ -756,9 +773,10 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
     <button type="button" class="opt" data-flag="seriousMed">Serious Medical Illness</button>
    </div>
   </div>
+    </div>
+   </div>
   </div>
  </div>
-  </div>
  </div>
  </div>
 </section>
@@ -2126,6 +2144,46 @@ function syncGateSelects(){
  rebuildDispLocSelect();
  syncStoreChips();
 }
+var FLAG_LIFE_STAGE={
+ perinatal:{child:1,adult:1,geriatric:0},
+ veteran:{child:1,adult:1,geriatric:1},
+ lgbtq:{child:1,adult:1,geriatric:1},
+ justice:{child:1,adult:1,geriatric:1},
+ unhoused:{child:1,adult:1,geriatric:1},
+ sud:{child:1,adult:1,geriatric:1},
+ tbi:{child:1,adult:1,geriatric:0},
+ idd:{child:1,adult:1,geriatric:1},
+ seriousMed:{child:1,adult:1,geriatric:1}
+};
+function flagVisibleForStage(flag,stage){
+ stage=stage||S.lifeStage||"adult";
+ var row=FLAG_LIFE_STAGE[flag];
+ if(!row)return true;
+ return !!row[stage];
+}
+function pruneHiddenFlags(){
+ Object.keys(S.flags).forEach(function(fl){
+  if(!flagVisibleForStage(fl))S.flags[fl]=0;
+ });
+}
+function syncPopFlagColumns(){
+ $$(".pop-flags-grid .pop-col").forEach(function(col){
+  var visible=$$(".opt[data-flag]",col).some(function(o){return !o.classList.contains("hidden");});
+  col.classList.toggle("hidden",!visible);
+ });
+}
+function syncFlagsFromS(){
+ pruneHiddenFlags();
+ $$("[data-flag]").forEach(function(opt){
+  var fl=opt.dataset.flag,vis=flagVisibleForStage(fl),on=!!S.flags[fl];
+  opt.classList.toggle("hidden",!vis);
+  opt.classList.toggle("sel",vis&&on);
+  opt.setAttribute("aria-hidden",vis?"false":"true");
+  opt.setAttribute("aria-pressed",vis&&on?"true":"false");
+  opt.tabIndex=vis?0:-1;
+ });
+ syncPopFlagColumns();
+}
 function syncOptsFromS(){
  $$("[data-field]").forEach(function(wrap){
   var f=wrap.dataset.field,v=S[f];
@@ -2137,6 +2195,7 @@ function syncOptsFromS(){
    o.setAttribute("aria-pressed",on?"true":"false");
   });
  });
+ syncFlagsFromS();
  syncSafetyGateOpts();
 }
 function syncSafetyGateOpts(){
@@ -3120,6 +3179,7 @@ function applyOpt(opt){
   render();
  } else if(opt.dataset.flag!==undefined){
   var fl=opt.dataset.flag;
+  if(!flagVisibleForStage(fl))return;
   S.flags[fl]=S.flags[fl]?0:1;
   opt.classList.toggle("sel",!!S.flags[fl]);
   opt.setAttribute("aria-pressed",!!S.flags[fl]?"true":"false");
@@ -3519,7 +3579,12 @@ function lifeStageMatchRank(r){
 function subSection(title,list){if(!list.length)return "";return (title?'<div class="subhdr">'+esc(title)+'</div>':'')+'<div class="clips">'+list.map(resCard).join("")+'</div>';}
 var PMETA={A:["\u{1F9E0}","Mental health treatment","#2640C8","#eef1fb"],B:["⚕️","Primary care & health","#0F7A7A","#e7f4f3"],C:["\u{1F49A}","Substance use treatment","#1c7a3f","#e9f5ee"],D:["\u{1F198}","Crisis services","#b3261e","#fdeceb"],F:["\u{1F3E0}","Social needs","#8a5d00","#fbf1dd"],G:["⭐","Specialty & population","#6f3bb3","#f1ecfa"],I:["\u{1F4AC}","Interpreter / language access","#0a6f93","#e6f3f8"]};
 
-function activeFlag(f){if(f==="veteran")return !!(S.flags.veteran||S.insurance==="VA");if(f==="pediatric")return S.lifeStage==="child";if(f==="geriatric")return S.lifeStage==="geriatric";return !!S.flags[f];}
+function activeFlag(f){
+ if(f==="veteran")return !!(S.flags.veteran||S.insurance==="VA");
+ if(f==="pediatric")return S.lifeStage==="child";
+ if(f==="geriatric")return S.lifeStage==="geriatric";
+ return !!S.flags[f]&&flagVisibleForStage(f);
+}
 function isFoodBank(r){return r.cat==="Food"&&/food bank|food collective/i.test(r.name);}
 function isRegionalCrisisLine(r){
  if(r.panel!=="D"||r.national)return false;
@@ -4698,6 +4763,7 @@ function restoreSavedPlan(p){
  var saved=p.S;
  for(var k in saved){if(k==="selected"||k==="touched"||k==="flags"||k==="social"||k==="socialCare"||k==="firearmPlan"||k==="medsPlan"||k==="otherMeans"||k==="plan2")continue;S[k]=saved[k];}
  if(saved.flags)S.flags=Object.assign({},S.flags,saved.flags);
+ pruneHiddenFlags();
  if(saved.social)S.social=Object.assign({},S.social,saved.social);
  if(saved.socialCare)S.socialCare=Object.assign({},S.socialCare,saved.socialCare);
  if(saved.socialCare&&saved.socialCare.screener)S.socialCare.screener=Object.assign({},S.socialCare.screener,saved.socialCare.screener);
