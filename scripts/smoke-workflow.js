@@ -19,6 +19,8 @@ const required = [
   "function syncFlagsFromS(",
   "function flagVisibleForStage(",
   "var FLAG_LIFE_STAGE=",
+  "function applicablePops(",
+  "function syncDirPopTabs(",
 ];
 
 const missing = required.filter((sig) => !html.includes(sig));

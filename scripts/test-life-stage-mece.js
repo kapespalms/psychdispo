@@ -9,7 +9,11 @@ const html = fs.readFileSync(path.join(root, "public/psychdispo.html"), "utf8");
 
 const required = [
   "var FLAG_LIFE_STAGE=",
+  "var APPLICABLE_POP_BY_STAGE=",
   "function flagVisibleForStage(",
+  "function applicablePops(",
+  "function popApplicableForPatient(",
+  "function syncDirPopTabs(",
   "function syncFlagsFromS(",
   "function pruneHiddenFlags(",
   "function pedsOK(",
@@ -62,6 +66,16 @@ function topMatchOK(r, lifeStage) {
   return true;
 }
 
+const APPLICABLE_POP_BY_STAGE = {
+  child: ["child", "crisis"],
+  adult: ["adult", "crisis"],
+  geriatric: ["geriatric", "crisis"],
+};
+function applicablePops(stage) {
+  if (!stage) return ["child", "adult", "geriatric", "crisis"];
+  return APPLICABLE_POP_BY_STAGE[stage] || ["adult", "crisis"];
+}
+
 const stages = ["child", "adult", "geriatric"];
 const failures = [];
 
@@ -80,7 +94,15 @@ for (const stage of stages) {
   if (!adultOK(adult, stage)) failures.push(`adultOK generic @ ${stage}`);
   if (topMatchOK(peds, stage) !== (stage !== "adult")) failures.push(`topMatchOK peds @ ${stage}`);
   if (topMatchOK(ger, stage) !== (stage !== "adult")) failures.push(`topMatchOK ger @ ${stage}`);
+  const pops = applicablePops(stage);
+  if (pops.indexOf("crisis") < 0) failures.push(`crisis missing @ ${stage}`);
+  if (stage === "child" && pops.indexOf("geriatric") >= 0) failures.push(`geriatric tab @ child`);
+  if (stage === "geriatric" && pops.indexOf("child") >= 0) failures.push(`child tab @ geriatric`);
+  if (stage === "adult" && pops.indexOf("child") >= 0) failures.push(`child tab @ adult`);
+  if (stage === "adult" && pops.indexOf("geriatric") >= 0) failures.push(`geriatric tab @ adult`);
 }
+
+if (applicablePops(null).length !== 4) failures.push("browse mode should show all 4 pops");
 
 if (failures.length) {
   console.error("test-life-stage-mece FAIL:", failures.join("; "));

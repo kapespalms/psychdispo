@@ -2299,6 +2299,37 @@ var FLAG_LIFE_STAGE={
  idd:{child:1,adult:1,geriatric:1},
  seriousMed:{child:1,adult:1,geriatric:1}
 };
+var APPLICABLE_POP_BY_STAGE={
+ child:["child","crisis"],
+ adult:["adult","crisis"],
+ geriatric:["geriatric","crisis"]
+};
+function applicablePops(stage){
+ if(!stage)return ["child","adult","geriatric","crisis"];
+ return APPLICABLE_POP_BY_STAGE[stage]||["adult","crisis"];
+}
+function popApplicableForPatient(pop){
+ return applicablePops(S.lifeStage).indexOf(pop)>=0;
+}
+function syncDirPopTabs(){
+ var allowed=applicablePops(S.lifeStage);
+ $$(".dir-pop-tab").forEach(function(btn){
+  var pop=btn.dataset.pop||"";
+  var vis=allowed.indexOf(pop)>=0;
+  btn.classList.toggle("hidden",!vis);
+  btn.setAttribute("aria-hidden",vis?"false":"true");
+  btn.tabIndex=vis?0:-1;
+ });
+ if(allowed.indexOf(DIR_POP)<0){
+  DIR_POP=allowed[0]||"adult";
+  $$(".dir-pop-tab").forEach(function(b){
+   var pop=b.dataset.pop||"";
+   var on=!b.classList.contains("hidden")&&pop===DIR_POP;
+   b.classList.toggle("sel",on);
+   b.setAttribute("aria-selected",on?"true":"false");
+  });
+ }
+}
 function flagVisibleForStage(flag,stage){
  stage=stage||S.lifeStage||"adult";
  var row=FLAG_LIFE_STAGE[flag];
@@ -3533,6 +3564,7 @@ function initDirectory(){
  dirRefreshSubList();
  $$(".dir-pop-tab").forEach(function(btn){
   btn.addEventListener("click",function(){
+   if(btn.classList.contains("hidden"))return;
    DIR_POP=btn.dataset.pop||"adult";
    $$(".dir-pop-tab").forEach(function(b){
     var on=b===btn;
@@ -3555,6 +3587,7 @@ function initDirectory(){
 }
 function renderDirectory(){
  initDirectory();
+ syncDirPopTabs();
  var opts={
   pop:DIR_POP,
   state:$("#dirState")?$("#dirState").value.trim():"",
@@ -3708,6 +3741,10 @@ function setField(f,v){
   S.safetyOpen={suicide:false,homicide:false,violence:false,substances:false};
   S.cssrsDone=null;S.suicideRisk=null;S.homicideRisk=null;S.sudScreenDone=null;S.sudTool=null;S.sudScore="";S.sudClinical=null;S.violence=null;S.cssrsInEmr=null;
   S.riskFormulation={driving:"",mitigating:"",protective:[]};S.tarasoff={warned:0,notified:0,hold:0,na:0};
+ }
+ if(f==="lifeStage"){
+  pruneHiddenFlags();
+  syncDirPopTabs();
  }
  if(f==="homicideRisk"&&v==="no"){S.tarasoff={warned:0,notified:0,hold:0,na:0};}
  if(f==="violence"&&v==="no"){S.violenceFactors={weapons:0,priorViolence:0,substance:0,command:0,identifiableTarget:0};S.tarasoff={warned:0,notified:0,hold:0,na:0};}
@@ -3921,6 +3958,7 @@ function render(){
  renderGateSummary();
  syncGateSelects();
  syncOptsFromS();
+ syncDirPopTabs();
  show("#pathwayFork",!S.pathway);
  rev("#notCleared",S.cleared==="no");
  var zipNote=locOk()?(function(){var c=patientCounty();if(!c)return "";var cl=waCluster(c)||nyCluster(c)||upstateCluster(c)||wvCluster(c)||paCluster(c)||miCluster(c)||nvCluster(c)||catalogCluster(c);return c+(cl?" · metro":"");}()):"";
