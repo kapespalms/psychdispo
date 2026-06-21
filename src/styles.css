@@ -4,149 +4,197 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Clinical enterprise design tokens — aligned with public/psychdispo.html */
-/* Fonts loaded via <link> in __root.tsx head */
+/* Editorial system — medicine journal × Japanese grid. Not SaaS. */
 
 @theme inline {
   --font-serif: "EB Garamond", Georgia, serif;
   --font-sans: "Instrument Sans", system-ui, sans-serif;
   --font-mono: "Poppins", ui-monospace, monospace;
 
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-surface: var(--surface);
-  --color-surface-2: var(--surface-2);
-  --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
-  --color-border-strong: var(--border-strong);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-warning: var(--warning);
-  --color-warning-foreground: var(--warning-foreground);
 }
 
 :root {
   --t: #2a43c0;
   --t2: #1e3399;
   --req: #c05a44;
-  --shell-bg: #f7f8fa;
-  --paper: #f7f8fa;
-  --ink: #1a1d26;
-  --mut: #5c6370;
-  --line: #e2e5eb;
+  --paper: #fafaf8;
+  --ink: #1a1a1a;
+  --mut: #5c5c58;
+  --line: #d4d4d0;
   --card: #ffffff;
   --crisis: #b23a2e;
+  --sage: #3c7a66;
 
-  --background: var(--shell-bg);
+  --background: var(--paper);
   --foreground: var(--ink);
-  --surface: var(--shell-bg);
-  --surface-2: #eef0f4;
-  --muted: #eef0f4;
   --muted-foreground: var(--mut);
   --border: var(--line);
-  --border-strong: #c8cdd6;
-  --accent: var(--t);
-  --accent-foreground: #ffffff;
-  --card-foreground: var(--ink);
-  --popover: #ffffff;
-  --popover-foreground: var(--ink);
   --primary: var(--t);
   --primary-foreground: #ffffff;
-  --secondary: #ffffff;
-  --secondary-foreground: var(--ink);
-  --destructive: var(--crisis);
-  --destructive-foreground: #ffffff;
-  --input: var(--line);
-  --ring: var(--t);
-  --warning: #9a6a1e;
-  --warning-foreground: #3d3208;
-  --radius: 12px;
+  --radius: 0px;
 
-  --shell-header: 108px;
+  --measure: 42rem;
+  --page: 56rem;
+  --shell-header: 88px;
 }
 
 @layer base {
   * {
-    border-color: var(--color-border);
+    border-color: var(--border);
   }
   html {
-    font-size: 16px;
+    font-size: 17px;
   }
   html,
   body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
+    background-color: var(--paper);
+    color: var(--ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
-    font-feature-settings: "ss01", "cv11";
   }
   h1,
   h2,
   h3 {
     font-family: var(--font-serif);
-    letter-spacing: -0.01em;
-    font-weight: 600;
+    font-weight: 500;
+    letter-spacing: -0.02em;
   }
-  .font-mono {
-    font-feature-settings: "ss02";
+  :focus-visible {
+    outline: 1px solid var(--ink);
+    outline-offset: 2px;
   }
 }
 
 @layer components {
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 44px;
-    padding: 0 1.25rem;
-    font-size: 0.875rem;
+  .kicker {
+    font-size: 0.65rem;
     font-weight: 600;
-    border-radius: var(--radius);
-    background: var(--t);
-    color: #fff;
-    transition: background 0.15s ease;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--mut);
   }
-  .btn-primary:hover {
-    background: var(--t2);
+
+  .journal-rule {
+    border: none;
+    border-top: 1px solid var(--ink);
+    margin: 0;
   }
-  .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 44px;
-    padding: 0 1.25rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    border-radius: var(--radius);
-    background: #fff;
+
+  .journal-rule-light {
+    border: none;
+    border-top: 1px solid var(--line);
+    margin: 0;
+  }
+
+  .text-link {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--line);
+    transition: text-decoration-color 0.15s;
+  }
+  .text-link:hover {
+    text-decoration-color: var(--ink);
+  }
+
+  .text-link-accent {
     color: var(--t);
-    border: 1px solid var(--t);
-    transition: background 0.15s ease;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: color-mix(in srgb, var(--t) 40%, transparent);
   }
-  .btn-secondary:hover {
-    background: #f0f3fc;
+  .text-link-accent:hover {
+    text-decoration-color: var(--t);
   }
-  .clinical-card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    box-shadow: 0 1px 3px rgba(26, 29, 38, 0.06);
+
+  .btn-solid {
+    display: inline-block;
+    min-height: 44px;
+    line-height: 44px;
+    padding: 0 1.25rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--paper);
+    border: 1px solid var(--ink);
+    transition: background 0.15s, color 0.15s;
+  }
+  .btn-solid:hover {
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  .shell-header {
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .toc-row {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr auto;
+    gap: 1rem 1.25rem;
+    align-items: baseline;
+    padding: 1.125rem 0;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.15s;
+  }
+  .toc-row:hover .toc-title {
+    color: var(--t);
+  }
+  .toc-num {
+    font-family: var(--font-serif);
+    font-size: 1.125rem;
+    color: var(--mut);
+    font-variant-numeric: tabular-nums;
+  }
+  .toc-title {
+    font-family: var(--font-serif);
+    font-size: 1.375rem;
+    font-weight: 500;
+    line-height: 1.2;
+    transition: color 0.15s;
+  }
+  .toc-desc {
+    grid-column: 2 / -1;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--mut);
+    max-width: 36rem;
+  }
+  @media (min-width: 640px) {
+    .toc-row {
+      grid-template-columns: 2.5rem 12rem 1fr;
+    }
+    .toc-desc {
+      grid-column: 3;
+    }
+  }
+
+  .nav-text {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--mut);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .nav-text:hover {
+    color: var(--ink);
+  }
+  .nav-text-active {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
   }
 }

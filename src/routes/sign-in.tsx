@@ -66,7 +66,7 @@ function SignInPage() {
         <>
           No passwords. We never store patient information — only your account, templates, and
           preferences.{" "}
-          <Link to="/dispo" className="text-[#2A43C0] font-medium hover:underline">
+          <Link to="/dispo" className="text-link-accent">
             Continue as guest
           </Link>
         </>
@@ -74,13 +74,14 @@ function SignInPage() {
     >
       {sent ? (
         <div className="space-y-4 text-center">
-          <p className="text-sm text-[#6f6a5f] leading-relaxed">
-            Check <strong>{email}</strong> for your sign-in link. It expires in 15 minutes.
+          <p className="text-sm text-[var(--mut)] leading-relaxed">
+            Check <strong className="text-[var(--ink)]">{email}</strong> for your sign-in link. It
+            expires in 15 minutes.
           </p>
           <button
             type="button"
             onClick={() => setSent(false)}
-            className="text-sm text-[#2A43C0] hover:underline"
+            className="text-link text-sm bg-transparent border-none cursor-pointer font-[inherit] p-0"
           >
             Use a different email
           </button>
@@ -88,10 +89,7 @@ function SignInPage() {
       ) : (
         <form onSubmit={handleMagicLink} className="space-y-5">
           <div>
-            <label
-              htmlFor="email"
-              className="block text-[11px] tracking-[0.12em] uppercase font-semibold text-[#6f6a5f] mb-2"
-            >
+            <label htmlFor="email" className="kicker block mb-2">
               Work email
             </label>
             <input
@@ -100,7 +98,7 @@ function SignInPage() {
               autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3.5 py-2.5 border border-[#E6DECE] rounded-[10px] bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#2A43C0]/30 focus:border-[#2A43C0]"
+              className="w-full px-3 py-2.5 border border-[var(--line)] rounded-none bg-white text-sm focus:outline-none focus:border-[var(--ink)]"
               placeholder="you@hospital.org"
             />
           </div>
@@ -110,7 +108,7 @@ function SignInPage() {
             </p>
           )}
           {!supabaseEnabled && (
-            <p className="text-xs text-[#9b9587] leading-relaxed">
+            <p className="text-xs text-[var(--mut)] leading-relaxed">
               Cloud sign-in is not configured — magic link requires Supabase env keys. Google uses
               demo mode on this device.
             </p>
@@ -118,16 +116,16 @@ function SignInPage() {
           <button
             type="submit"
             disabled={loading || !supabaseEnabled}
-            className="w-full py-3 bg-[#2A43C0] text-white text-sm font-semibold rounded-[11px] hover:bg-[#1b2f9c] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn-solid w-full text-center disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            {loading ? "Sending…" : "Email me a sign-in link"}
+            {loading ? "Sending…" : "Email sign-in link"}
           </button>
-          <div className="text-center text-xs text-[#9b9587]">or</div>
+          <div className="text-center text-xs text-[var(--mut)]">or</div>
           <button
             type="button"
             onClick={handleGoogle}
             disabled={loading}
-            className="w-full py-3 border border-[#E6DECE] bg-white text-sm font-semibold rounded-[10px] hover:bg-[#fbf7ee] transition-colors disabled:opacity-50"
+            className="w-full min-h-[44px] border border-[var(--line)] bg-white text-sm font-medium hover:border-[var(--ink)] transition-colors disabled:opacity-40"
           >
             {supabaseEnabled ? "Continue with Google" : "Continue with Google (demo)"}
           </button>

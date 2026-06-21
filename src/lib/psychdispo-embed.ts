@@ -1,5 +1,5 @@
 /** Bump when public/psychdispo.html changes so iframe embeds bypass stale browser cache. */
-export const PSYCHDISPO_HTML_BUILD = "exec-ui-1";
+export const PSYCHDISPO_HTML_BUILD = "editorial-1";
 
 export function psychdispoEmbedSrc(
   hash: string,
