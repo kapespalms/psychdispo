@@ -27,14 +27,20 @@
   .toc a{margin-right:12px}
   a{color:var(--t)}
   .tip{font-size:13px;color:var(--mut);margin-top:6px}
+  body.embed{overflow-x:hidden}
+  body.embed .wrap{max-width:none;padding:1rem 1.25rem 3rem}
+  body.embed .page-hero{display:none}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@600;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
+<script>if(/[?&]embed/.test(location.search))document.body.classList.add("embed");</script>
 <div class="wrap">
-  <h1>Social Ref</h1>
-  <p class="sub">Copy-paste scripts for clinicians and social workers — housing tonight, 211, DV safety, rides, benefits &amp; ID. Patient-facing blurbs are ≤ grade 5. Verified local numbers live in the <a href="/directory">Resource Directory</a>.</p>
+  <div class="page-hero">
+    <h1>Social Ref</h1>
+    <p class="sub">Copy-paste scripts for clinicians and social workers — housing tonight, 211, DV safety, rides, benefits &amp; ID. Patient-facing blurbs are ≤ grade 5. Verified local numbers live in the <a href="/directory" target="_parent">Resource Directory</a>.</p>
+  </div>
 
   <nav class="toc">
     <a href="#housing-tonight">Housing tonight</a>

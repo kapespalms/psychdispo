@@ -14,5 +14,5 @@ export const Route = createFileRoute("/social-ref")({
 });
 
 function SocialRefPage() {
-  return <ToolFrame src="/socialref.html" title="Social Reference" />;
+  return <ToolFrame src="/socialref.html?embed=1" title="Social Reference" />;
 }

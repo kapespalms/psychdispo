@@ -14,5 +14,5 @@ export const Route = createFileRoute("/reference")({
 });
 
 function ReferencePage() {
-  return <ToolFrame src="/psychref.html" title="Psych Reference" />;
+  return <ToolFrame src="/psychref.html?embed=1" title="Psych Reference" />;
 }
