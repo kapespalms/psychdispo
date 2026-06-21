@@ -5,34 +5,35 @@ export function LandingHeader() {
   const { user, signOut } = useAuth();
 
   return (
-    <header className="border-b border-[#E6DECE] bg-[#FFFDF8]">
-      <div className="max-w-[1000px] mx-auto px-7 py-4 flex items-center gap-5">
-        <Link to="/" className="font-serif text-[23px] font-bold tracking-tight shrink-0">
-          Psych<span className="italic text-[#2A43C0]">Dispo</span>
+    <header className="shrink-0 bg-white border-b border-[var(--line)]">
+      <div className="max-w-[1040px] mx-auto px-5 sm:px-7 py-3.5 flex items-center gap-4">
+        <Link
+          to="/"
+          className="font-serif text-[1.375rem] font-semibold tracking-tight text-[var(--ink)] shrink-0"
+        >
+          Psych<span className="text-[var(--t)]">Dispo</span>
         </Link>
 
-        <p className="hidden md:block text-[13px] text-[#6f6a5f] mx-auto text-center">
-          <span className="font-semibold text-[#BC5B3A]">Verified resources</span>
-          <span className="mx-2">·</span>
-          all 50 states
+        <p className="hidden md:block text-sm text-[var(--mut)] mx-auto text-center">
+          Verified resources · all 50 states
         </p>
 
-        <div className="ml-auto flex items-center gap-3 shrink-0">
+        <div className="ml-auto flex items-center gap-1 shrink-0">
           {user ? (
             <>
-              <span className="hidden sm:inline text-xs tracking-[0.13em] uppercase font-semibold text-[#6f6a5f]">
+              <span className="hidden sm:inline text-sm text-[var(--mut)] px-1">
                 {user.name.split(" ")[0]}
               </span>
               <Link
                 to="/dispo"
-                className="text-xs tracking-[0.13em] uppercase font-semibold text-[#2A43C0] hover:underline"
+                className="inline-flex items-center min-h-[44px] px-4 text-sm font-semibold text-white bg-[var(--t)] rounded-[var(--radius)] hover:bg-[var(--t2)] transition-colors"
               >
                 Continue
               </Link>
               <button
                 type="button"
                 onClick={signOut}
-                className="text-xs text-[#6f6a5f] hover:text-[#22202A]"
+                className="inline-flex items-center min-h-[44px] px-3 text-sm text-[var(--mut)] hover:text-[var(--ink)]"
               >
                 Sign out
               </button>
@@ -40,7 +41,7 @@ export function LandingHeader() {
           ) : (
             <Link
               to="/sign-in"
-              className="text-xs tracking-[0.13em] uppercase font-semibold text-[#2A43C0] hover:underline"
+              className="inline-flex items-center min-h-[44px] px-4 text-sm font-semibold text-[var(--t)] border border-[var(--t)] rounded-[var(--radius)] hover:bg-[#f0f3fc] transition-colors"
             >
               Sign in
             </Link>

@@ -1,45 +1,68 @@
 import { Link, useRouter } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth";
 
+const TABS = [
+  { to: "/dispo" as const, label: "Disposition", match: (p: string) => p === "/dispo" },
+  {
+    to: "/directory" as const,
+    label: "Directory",
+    match: (p: string) => p === "/directory",
+  },
+  {
+    to: "/social-care" as const,
+    label: "Social Care",
+    match: (p: string) => p === "/social-care" || p === "/social-ref",
+  },
+  {
+    to: "/emerg" as const,
+    label: "Emergency",
+    match: (p: string) => p === "/emerg",
+  },
+] as const;
+
 export function SiteHeader() {
   const router = useRouter();
   const path = router.state.location.pathname;
   const { user, signOut } = useAuth();
 
-  const tabClass = (match: boolean) =>
-    `px-1 py-3.5 text-[11px] tracking-[0.15em] uppercase font-semibold border-b-2 transition-colors ${
-      match
-        ? "text-[#2A43C0] border-[#2A43C0]"
-        : "text-[#6f6a5f] border-transparent hover:text-[#22202A]"
-    }`;
+  const tabClass = (active: boolean) =>
+    [
+      "shrink-0 px-1 py-3 text-xs font-semibold tracking-wide border-b-2 transition-colors whitespace-nowrap",
+      active
+        ? "text-[var(--t)] border-[var(--t)]"
+        : "text-[var(--mut)] border-transparent hover:text-[var(--ink)]",
+    ].join(" ");
 
   return (
-    <header className="bg-[#FFFDF8] border-b border-[#E6DECE] shrink-0">
-      <div className="max-w-[1000px] mx-auto px-7 py-4 flex items-center justify-between gap-4">
-        <Link to="/" className="font-serif text-[23px] font-bold tracking-tight shrink-0">
-          Psych<span className="italic text-[#2A43C0]">Dispo</span>
+    <header className="shrink-0 bg-white border-b border-[var(--line)]">
+      <div className="max-w-[1040px] mx-auto px-5 sm:px-7 py-3.5 flex items-center justify-between gap-4">
+        <Link
+          to="/"
+          className="font-serif text-[1.375rem] font-semibold tracking-tight text-[var(--ink)] shrink-0"
+        >
+          Psych<span className="text-[var(--t)]">Dispo</span>
         </Link>
-        <div className="hidden lg:flex items-center gap-2 text-[13px] text-[#6f6a5f]">
-          <span className="font-semibold text-[#BC5B3A]">Verified resources</span>
-          <span>·</span>
-          <span>all 50 states</span>
-        </div>
-        <div className="flex items-center gap-2 shrink-0">
+
+        <p className="hidden lg:block text-sm text-[var(--mut)]">
+          Verified resources · all 50 states
+        </p>
+
+        <div className="flex items-center gap-1 shrink-0">
           {user ? (
             <>
               <Link
                 to="/plans"
-                className="hidden sm:inline text-xs text-[#2A43C0] hover:underline px-2"
+                className="hidden sm:inline-flex items-center min-h-[44px] px-3 text-sm font-medium text-[var(--t)] hover:underline"
               >
                 My plans
               </Link>
-              <span className="hidden sm:inline text-xs tracking-[0.1em] uppercase font-semibold text-[#6f6a5f]">
+              <span className="hidden sm:inline text-sm text-[var(--mut)] px-1">
                 {user.name.split(" ")[0]}
               </span>
               <button
                 type="button"
                 onClick={signOut}
-                className="text-xs text-[#6f6a5f] hover:text-[#22202A] px-2"
+                className="inline-flex items-center min-h-[44px] px-3 text-sm text-[var(--mut)] hover:text-[var(--ink)]"
               >
                 Sign out
               </button>
@@ -47,7 +70,7 @@ export function SiteHeader() {
           ) : (
             <Link
               to="/sign-in"
-              className="text-xs tracking-[0.13em] uppercase font-semibold text-[#2A43C0] hover:underline px-2"
+              className="inline-flex items-center min-h-[44px] px-4 text-sm font-semibold text-[var(--t)] border border-[var(--t)] rounded-[var(--radius)] hover:bg-[#f0f3fc] transition-colors"
             >
               Sign in
             </Link>
@@ -55,26 +78,16 @@ export function SiteHeader() {
         </div>
       </div>
 
-      <nav className="border-t border-[#E6DECE] bg-[#FFFDF8]">
-        <div className="max-w-[1000px] mx-auto px-7 flex gap-8 overflow-x-auto">
-          <Link to="/dispo" className={tabClass(path === "/dispo")}>
-            PsychDispo · Plan
-          </Link>
-          <Link to="/social-care" className={tabClass(path === "/social-care")}>
-            Social Care Plan
-          </Link>
-          <Link to="/social-ref" className={tabClass(path === "/social-ref")}>
-            Social Ref
-          </Link>
-          <Link to="/emerg" className={tabClass(path === "/emerg")}>
-            Psych Emerg · Review
-          </Link>
-          <Link to="/directory" className={tabClass(path === "/directory")}>
-            Resource Directory
-          </Link>
-          <Link to="/reference" className={tabClass(path === "/reference")}>
-            Psych Ref
-          </Link>
+      <nav
+        className="border-t border-[var(--line)] bg-white"
+        aria-label="Product navigation"
+      >
+        <div className="max-w-[1040px] mx-auto px-5 sm:px-7 flex gap-6 sm:gap-8 overflow-x-auto">
+          {TABS.map(({ to, label, match }) => (
+            <Link key={to} to={to} className={tabClass(match(path))}>
+              {label}
+            </Link>
+          ))}
         </div>
       </nav>
     </header>

@@ -8,7 +8,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, type CSSProperties, type ReactNode } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { useIframeTemplateSync } from "@/components/tool-frame";
 import { AuthProvider } from "@/lib/auth";
@@ -131,15 +131,6 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
-const TOOL_ROUTES = new Set([
-  "/dispo",
-  "/social-care",
-  "/social-ref",
-  "/directory",
-  "/emerg",
-  "/reference",
-]);
-
 function RootComponent() {
   const router = useRouter();
   const path = router.state.location.pathname;
@@ -147,8 +138,7 @@ function RootComponent() {
     path === "/" ||
     path === "/sign-in" ||
     path === "/sign-up" ||
-    path === "/auth/callback" ||
-    TOOL_ROUTES.has(path);
+    path === "/auth/callback";
 
   useIframeTemplateSync();
 
@@ -167,10 +157,21 @@ function RootComponent() {
     return () => window.removeEventListener("message", onMessage);
   }, [router]);
 
+  const showPhiBanner = path === "/dispo";
+
   return (
-    <>
+    <div className="flex flex-col min-h-dvh">
       {!hideShellHeader && <SiteHeader />}
-      <Outlet />
-    </>
+      <main
+        className="flex flex-col flex-1 min-h-0"
+        style={
+          showPhiBanner
+            ? ({ "--shell-header": "148px" } as CSSProperties)
+            : undefined
+        }
+      >
+        <Outlet />
+      </main>
+    </div>
   );
 }

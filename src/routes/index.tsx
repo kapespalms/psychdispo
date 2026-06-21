@@ -17,52 +17,96 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#F4EFE5] text-[#22202A]">
+    <div className="min-h-dvh flex flex-col bg-[var(--shell-bg)] text-[var(--ink)]">
       <LandingHeader />
 
-      <main className="flex-1 flex flex-col">
-        <section className="flex-1 flex flex-col lg:flex-row min-h-[560px]">
-          <Link
-            to="/dispo"
-            className="group flex-1 flex flex-col justify-center px-12 md:px-14 py-16 md:py-24 bg-[#F4EFE5] hover:bg-[#efe9dc] transition-colors border-b lg:border-b-0 lg:border-r border-[#E6DECE]"
-          >
-            <p className="text-[11px] tracking-[0.24em] uppercase font-semibold text-[#BC5B3A] mb-3.5">
-              Clinical workflow
+      <main className="flex-1">
+        <section className="max-w-[1040px] mx-auto px-5 sm:px-7 py-10 sm:py-14">
+          <div className="mb-10 max-w-xl">
+            <p className="text-xs font-semibold tracking-widest uppercase text-[var(--mut)] mb-3">
+              Clinical decision support
             </p>
-            <h2 className="font-serif text-[46px] md:text-[52px] font-bold leading-[1.02] tracking-tight mb-3.5">
-              Disposition planning
-            </h2>
-            <p className="text-[15px] leading-relaxed text-[#6f6a5f] max-w-[340px] mb-7">
-              From medical clearance to discharge — structured safety review, verified local
-              referrals, chart documentation, and a patient handout.
+            <h1 className="font-serif text-4xl sm:text-[2.75rem] font-semibold leading-tight tracking-tight mb-4">
+              Psychiatric disposition, documented
+            </h1>
+            <p className="text-base leading-relaxed text-[var(--mut)]">
+              Structured safety review, verified referrals, and discharge packets — built for
+              emergency and consult psychiatry teams.
             </p>
-            <span className="text-xs tracking-[0.16em] uppercase font-semibold text-[#2A43C0] group-hover:tracking-[0.2em] transition-all">
-              Open planner →
-            </span>
-          </Link>
+          </div>
 
-          <Link
-            to="/reference"
-            className="group flex-1 flex flex-col justify-center px-12 md:px-14 py-16 md:py-24 bg-[#1b1f3a] text-[#efe9dc] hover:bg-[#151829] transition-colors"
-          >
-            <p className="text-[11px] tracking-[0.24em] uppercase font-semibold text-[#b9a36e] mb-3.5">
-              Reference library
-            </p>
-            <h2 className="font-serif text-[46px] md:text-[52px] font-bold leading-[1.02] tracking-tight mb-3.5">
-              Psychiatry reference
-            </h2>
-            <p className="text-[15px] leading-relaxed text-[#c8c2b2] max-w-[340px] mb-7">
-              Assessment frameworks, level-of-care criteria, and emergency protocols — for
-              bedside use and training.
-            </p>
-            <span className="text-xs tracking-[0.16em] uppercase font-semibold text-[#cdd9ff] group-hover:tracking-[0.2em] transition-all">
-              Open reference →
-            </span>
-          </Link>
+          <div className="grid sm:grid-cols-2 gap-5">
+            <Link
+              to="/dispo"
+              className="clinical-card group p-7 sm:p-8 hover:border-[var(--t)] transition-colors"
+            >
+              <p className="text-xs font-semibold tracking-widest uppercase text-[var(--mut)] mb-2">
+                Disposition
+              </p>
+              <h2 className="font-serif text-2xl font-semibold mb-3 group-hover:text-[var(--t)] transition-colors">
+                Plan workflow
+              </h2>
+              <p className="text-sm leading-relaxed text-[var(--mut)] mb-6">
+                Medical clearance through deliver — safety domains, resource matching, chart note,
+                and patient packet.
+              </p>
+              <span className="text-sm font-semibold text-[var(--t)]">Open planner →</span>
+            </Link>
+
+            <Link
+              to="/directory"
+              className="clinical-card group p-7 sm:p-8 hover:border-[var(--t)] transition-colors"
+            >
+              <p className="text-xs font-semibold tracking-widest uppercase text-[var(--mut)] mb-2">
+                Directory
+              </p>
+              <h2 className="font-serif text-2xl font-semibold mb-3 group-hover:text-[var(--t)] transition-colors">
+                Verified resources
+              </h2>
+              <p className="text-sm leading-relaxed text-[var(--mut)] mb-6">
+                Search psychiatric and community programs by metro, category, or keyword — all 50
+                states.
+              </p>
+              <span className="text-sm font-semibold text-[var(--t)]">Browse directory →</span>
+            </Link>
+
+            <Link
+              to="/social-care"
+              className="clinical-card group p-7 sm:p-8 hover:border-[var(--t)] transition-colors"
+            >
+              <p className="text-xs font-semibold tracking-widest uppercase text-[var(--mut)] mb-2">
+                Social Care
+              </p>
+              <h2 className="font-serif text-2xl font-semibold mb-3 group-hover:text-[var(--t)] transition-colors">
+                HRSN screener
+              </h2>
+              <p className="text-sm leading-relaxed text-[var(--mut)] mb-6">
+                Tonight vs ongoing triage, resource matching, and printable handoff sheets.
+              </p>
+              <span className="text-sm font-semibold text-[var(--t)]">Open screener →</span>
+            </Link>
+
+            <Link
+              to="/emerg"
+              className="clinical-card group p-7 sm:p-8 hover:border-[var(--t)] transition-colors"
+            >
+              <p className="text-xs font-semibold tracking-widest uppercase text-[var(--mut)] mb-2">
+                Emergency
+              </p>
+              <h2 className="font-serif text-2xl font-semibold mb-3 group-hover:text-[var(--t)] transition-colors">
+                Psych emerg review
+              </h2>
+              <p className="text-sm leading-relaxed text-[var(--mut)] mb-6">
+                Suicide, agitation, psychosis, delirium — evidence-based protocols for acute
+                settings.
+              </p>
+              <span className="text-sm font-semibold text-[var(--t)]">Open reference →</span>
+            </Link>
+          </div>
         </section>
       </main>
 
-      <footer className="border-t border-[#E6DECE] bg-[#FFFDF8] text-center text-xs text-[#9b9587] py-4">
+      <footer className="border-t border-[var(--line)] bg-white text-center text-xs text-[var(--mut)] py-4 px-5">
         Reference only — not a substitute for clinical judgment. In a life-threatening emergency
         call 911.
       </footer>
