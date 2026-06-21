@@ -461,9 +461,20 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 
 .loc-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
 .loc-row .field{flex:1;min-width:140px;max-width:220px}
-.dir-toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;align-items:center}
-.dir-toolbar input[type=search],.dir-toolbar select{max-width:100%;flex:1;min-width:140px}
-.dir-toolbar input#dirZip{max-width:110px;min-width:90px;flex:0 1 110px}
+.dir-head{display:grid;grid-template-columns:1fr auto;gap:12px 20px;align-items:start;margin-bottom:14px}
+.dir-head-text{min-width:0}
+.dir-search-wrap{align-self:end;justify-self:end;width:100%;max-width:280px}
+.dir-search-wrap #dirQ{max-width:100%;width:100%;margin:0}
+.dir-pop-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.dir-pop-tab{font:inherit;border:1px solid var(--line);background:#fff;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;color:var(--mut);transition:border-color .15s,background .15s,color .15s;touch-action:manipulation}
+.dir-pop-tab:hover{border-color:var(--ink);color:var(--ink)}
+.dir-pop-tab.sel{background:var(--t);color:#fff;border-color:var(--t)}
+.dir-filters{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
+.dir-filter-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.dir-filter-row input[type=text],.dir-filter-row input[type=search]{flex:1;min-width:120px;max-width:100%}
+.dir-filter-row input#dirZip{flex:0 1 100px;max-width:110px;min-width:90px}
+.dir-filter-row select{flex:1;min-width:160px;max-width:100%}
+@media(max-width:680px){.dir-head{grid-template-columns:1fr}.dir-search-wrap{max-width:100%;justify-self:stretch}}
 .dir-hint{font-size:12px;color:var(--mut);margin:0 0 10px;min-height:1.2em}
 .dir-count{font-size:12px;color:var(--mut);margin:0 0 10px}
 .dir-table{width:100%;border-collapse:collapse;font-size:13px}
@@ -1235,16 +1246,35 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
 </div>
 <div id="view-directory" class="hidden">
 <section class="layer">
- <div class="ltag">Resource directory</div>
- <div class="ltitle">Search verified community resources</div>
- <div class="ldesc">Filter by state, ZIP, region, and care type. National crisis lines appear with every search.</div>
- <div class="dir-toolbar">
-  <select id="dirState" aria-label="Filter by state"><option value="">All states</option></select>
-  <input type="text" id="dirZip" placeholder="ZIP" maxlength="5" inputmode="numeric" pattern="[0-9]*" aria-label="ZIP code">
-  <select id="dirCounty" aria-label="Filter by region"><option value="">All regions</option></select>
-  <select id="dirCareBucket" aria-label="Care type"><option value="">All care types</option><option value="clinical">Clinical treatment</option><option value="crisis">Crisis</option><option value="substance">Substance use</option><option value="social">Social care</option><option value="specialty">Specialty populations</option><option value="language">Language access</option></select>
-  <select id="dirCareSub" aria-label="Care subtype"><option value="">All subtypes</option></select>
-  <input type="search" id="dirQ" placeholder="Search organization…" aria-label="Search resources">
+ <div class="dir-head">
+  <div class="dir-head-text">
+   <div class="ltag">Resource directory</div>
+   <div class="ltitle">Search verified community resources</div>
+   <div class="ldesc">Filter by population, location, and care type. National crisis lines appear on the Crisis tab.</div>
+  </div>
+  <div class="dir-search-wrap">
+   <input type="search" id="dirQ" placeholder="Search organization…" aria-label="Search resources">
+  </div>
+ </div>
+ <div class="dir-pop-tabs" role="tablist" aria-label="Population">
+  <button type="button" class="dir-pop-tab" data-pop="child" role="tab">Child</button>
+  <button type="button" class="dir-pop-tab sel" data-pop="adult" role="tab" aria-selected="true">Adult</button>
+  <button type="button" class="dir-pop-tab" data-pop="geriatric" role="tab">Geriatric</button>
+  <button type="button" class="dir-pop-tab" data-pop="crisis" role="tab">Crisis</button>
+ </div>
+ <div class="dir-filters">
+  <div class="dir-filter-row">
+   <input type="text" id="dirZip" placeholder="ZIP" maxlength="5" inputmode="numeric" pattern="[0-9]*" aria-label="ZIP code">
+   <input type="text" id="dirRegion" list="dirRegionList" placeholder="Region" aria-label="Filter by region" autocomplete="off">
+   <datalist id="dirRegionList"></datalist>
+   <input type="text" id="dirState" list="dirStateList" placeholder="State" aria-label="Filter by state" autocomplete="off">
+   <datalist id="dirStateList"></datalist>
+  </div>
+  <div class="dir-filter-row">
+   <input type="text" id="dirCareSub" list="dirSubList" placeholder="Subtype" aria-label="Care subtype" autocomplete="off">
+   <datalist id="dirSubList"></datalist>
+   <select id="dirCareBucket" aria-label="Care type"><option value="">All care types</option><option value="clinical">Clinical treatment</option><option value="crisis">Crisis</option><option value="substance">Substance use</option><option value="social">Social care</option><option value="specialty">Specialty populations</option><option value="language">Language access</option></select>
+  </div>
  </div>
  <div class="dir-hint" id="dirZipHint"></div>
  <div class="dir-count" id="dirCount"></div>
@@ -3224,6 +3254,7 @@ function countyOK(r){var c=patientCounty();
 
 /* ---- Resource directory (P0) ---- */
 var DIR_INIT=0;
+var DIR_POP="adult";
 var DIR_OH_COUNTIES=null;
 var DIR_PANEL_BUCKETS={clinical:["A","B"],crisis:["D"],substance:["C"],social:["F"],specialty:["G"],language:["I"]};
 function dirOhioCounties(){
@@ -3314,13 +3345,92 @@ function dirRegionsForState(state){
  if(state==="New Jersey")add("Northern New Jersey");
  return out.sort();
 }
-function dirCatsForBucket(bucket){
- if(!bucket)return [...new Set(DATA.map(function(r){return r.cat;}).filter(Boolean))].sort();
- var panels=DIR_PANEL_BUCKETS[bucket];
- if(!panels)return [];
+function dirTextMatch(input,value){
+ if(!input)return true;
+ if(!value)return false;
+ return value.toLowerCase().indexOf(input.trim().toLowerCase())>=0;
+}
+function dirIsPedsResource(r){
+ if(r.peds)return true;
+ var m=metaOf(r);
+ if(m.spec==="pediatric")return true;
+ return specOf(r)==="pediatric";
+}
+function dirIsGeriatricResource(r){
+ return isGeriatricOnly(r)||specOf(r)==="geriatric";
+}
+function dirIsCrisisResource(r){
+ var m=metaOf(r);
+ if(m.panel==="D")return true;
+ return /crisis/i.test(r.cat||"");
+}
+function dirMatchPopulation(r,pop){
+ if(pop==="crisis")return dirIsCrisisResource(r);
+ if(pop==="child"){
+  if(dirIsGeriatricResource(r)&&!dirIsPedsResource(r))return false;
+  if(dirIsPedsResource(r)||isPedsOnly(r))return true;
+  if(!dirIsGeriatricResource(r))return true;
+  return false;
+ }
+ if(pop==="geriatric"){
+  if(isPedsOnly(r)&&!dirIsGeriatricResource(r))return false;
+  if(dirIsGeriatricResource(r))return true;
+  if(!dirIsPedsResource(r))return true;
+  return false;
+ }
+ if(isPedsOnly(r))return false;
+ if(dirIsGeriatricResource(r))return false;
+ return true;
+}
+function dirFillDatalist(id,values){
+ var dl=$("#"+id);if(!dl)return;
+ var keep=new Set(values.filter(Boolean));
+ dl.innerHTML=[...keep].sort().map(function(v){return '<option value="'+esc(v)+'">';}).join("");
+}
+function dirRefreshStateList(){
+ dirFillDatalist("dirStateList",dirAllStates());
+}
+function dirSubsForBucket(bucket){
  var out=new Set();
- DATA.forEach(function(r){if(panels.indexOf(metaOf(r).panel)>=0&&r.cat)out.add(r.cat);});
+ DATA.forEach(function(r){
+  var m=metaOf(r);
+  if(bucket){
+   var panels=DIR_PANEL_BUCKETS[bucket];
+   if(!panels||panels.indexOf(m.panel)<0)return;
+  }
+  if(r.cat)out.add(r.cat);
+  if(m.sub)out.add(m.sub);
+  if(m.need&&m.need!=="other"){
+   var needs={housing:"Housing",food:"Food",dv:"Domestic violence",financial:"Benefits",legal:"Legal",employment:"Employment",catchall:"211 / navigation"};
+   if(needs[m.need])out.add(needs[m.need]);
+  }
+  if(m.spec&&m.spec!=="other"){
+   var specs={fep:"First episode",perinatal:"Perinatal",geriatric:"Geriatric",pediatric:"Pediatric",veteran:"Veteran",eating:"Eating disorder",cancer:"Oncology",trauma:"Trauma"};
+   if(specs[m.spec])out.add(specs[m.spec]);
+  }
+ });
  return [...out].sort();
+}
+function dirRefreshRegionList(){
+ var st=$("#dirState")?$("#dirState").value.trim():"";
+ var regions=dirRegionsForState(st);
+ if(!st){
+  var seen={},all=[];
+  dirAllStates().forEach(function(s){dirRegionsForState(s).forEach(function(c){if(c&&!seen[c]){seen[c]=1;all.push(c);}});});
+  regions=all.sort();
+ }
+ dirFillDatalist("dirRegionList",regions);
+}
+function dirRefreshSubList(){
+ dirFillDatalist("dirSubList",dirSubsForBucket($("#dirCareBucket")?$("#dirCareBucket").value:""));
+}
+function dirMatchSub(r,sub){
+ if(!sub)return true;
+ var subL=sub.toLowerCase().trim(),m=metaOf(r);
+ if(m.cat&&m.cat.toLowerCase().indexOf(subL)>=0)return true;
+ if(m.sub&&m.sub.toLowerCase().indexOf(subL)>=0)return true;
+ if(dirTypeLabel(r).toLowerCase().indexOf(subL)>=0)return true;
+ return false;
 }
 function dirRecordInZipArea(r,zip){
  if(!zip||zip.length!==5)return true;
@@ -3349,14 +3459,17 @@ function dirRecordInZipArea(r,zip){
  return false;
 }
 function dirMatchCare(r,bucket,sub){
- if(sub&&r.cat!==sub)return false;
+ if(!dirMatchSub(r,sub))return false;
  if(!bucket)return true;
  var panels=DIR_PANEL_BUCKETS[bucket];
  return panels&&panels.indexOf(metaOf(r).panel)>=0;
 }
 function dirMatchRecord(r,opts){
- if(opts.state&&countyToState(r.county||"")!==opts.state)return false;
- if(opts.region&&(r.county||"")!==opts.region)return false;
+ if(opts.state){
+  var st=countyToState(r.county||"");
+  if(!dirTextMatch(opts.state,st))return false;
+ }
+ if(opts.region&&!dirTextMatch(opts.region,r.county||""))return false;
  if(!dirRecordInZipArea(r,opts.zip))return false;
  if(!dirMatchCare(r,opts.bucket,opts.sub))return false;
  if(opts.q){
@@ -3365,77 +3478,64 @@ function dirMatchRecord(r,opts){
  }
  return true;
 }
-function dirRefreshRegions(){
- var st=$("#dirState")?$("#dirState").value:"";
- var sel=$("#dirCounty");if(!sel)return;
- var keep=sel.value;
- sel.innerHTML='<option value="">All regions</option>';
- dirRegionsForState(st).forEach(function(c){
-  var o=document.createElement("option");o.value=c;o.textContent=c;sel.appendChild(o);
- });
- for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===keep){sel.value=keep;break;}}
-}
-function dirRefreshCareSubs(){
- var bucket=$("#dirCareBucket")?$("#dirCareBucket").value:"";
- var sel=$("#dirCareSub");if(!sel)return;
- var keep=sel.value;
- sel.innerHTML='<option value="">All subtypes</option>';
- dirCatsForBucket(bucket).forEach(function(c){
-  var o=document.createElement("option");o.value=c;o.textContent=c;sel.appendChild(o);
- });
- for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===keep){sel.value=keep;break;}}
-}
 function dirUpdateZipHint(){
- var hint=$("#dirZipHint"),zipEl=$("#dirZip"),stSel=$("#dirState");
+ var hint=$("#dirZipHint"),zipEl=$("#dirZip"),stEl=$("#dirState"),regEl=$("#dirRegion");
  if(!hint)return;
  var zip=zipEl?zipEl.value.replace(/\D/g,""):"";
  if(zip.length!==5){hint.textContent="";return;}
  var region=countyFromZip(zip);
  var st=region?countyToState(region):"";
  hint.textContent=region?(st?(st+" · "+region):region):"ZIP not mapped — select state and region manually.";
- if(stSel&&st&&st!=="National"&&!stSel.value){stSel.value=st;dirRefreshRegions();}
- var sel=$("#dirCounty");
- if(sel&&region){
-  var found=false,i;
-  for(i=0;i<sel.options.length;i++){if(sel.options[i].value===region){found=true;break;}}
-  if(!found){var o=document.createElement("option");o.value=region;o.textContent=region;sel.appendChild(o);}
-  if(!sel.value)sel.value=region;
- }
+ if(stEl&&st&&st!=="National"&&!stEl.value.trim())stEl.value=st;
+ if(regEl&&region&&!regEl.value.trim())regEl.value=region;
+ dirRefreshRegionList();
 }
 function initDirectory(){
  if(DIR_INIT)return;DIR_INIT=1;
- var stSel=$("#dirState");
- if(stSel){
-  dirAllStates().forEach(function(st){
-   var o=document.createElement("option");o.value=st;o.textContent=st;stSel.appendChild(o);
+ dirRefreshStateList();
+ dirRefreshRegionList();
+ dirRefreshSubList();
+ $$(".dir-pop-tab").forEach(function(btn){
+  btn.addEventListener("click",function(){
+   DIR_POP=btn.dataset.pop||"adult";
+   $$(".dir-pop-tab").forEach(function(b){
+    var on=b===btn;
+    b.classList.toggle("sel",on);
+    b.setAttribute("aria-selected",on?"true":"false");
+   });
+   renderDirectory();
   });
-  stSel.addEventListener("change",function(){dirRefreshRegions();renderDirectory();});
- }
+ });
  var zipEl=$("#dirZip");
  if(zipEl)zipEl.addEventListener("input",function(){dirUpdateZipHint();renderDirectory();});
+ var stEl=$("#dirState");
+ if(stEl)stEl.addEventListener("input",function(){dirRefreshRegionList();renderDirectory();});
  var bucketEl=$("#dirCareBucket");
- if(bucketEl)bucketEl.addEventListener("change",function(){dirRefreshCareSubs();renderDirectory();});
- ["dirQ","dirCounty","dirCareSub"].forEach(function(id){
+ if(bucketEl)bucketEl.addEventListener("change",function(){dirRefreshSubList();renderDirectory();});
+ ["dirQ","dirRegion","dirCareSub"].forEach(function(id){
   var el=$("#"+id);if(!el)return;
   el.addEventListener("input",renderDirectory);
-  if(el.tagName==="SELECT")el.addEventListener("change",renderDirectory);
  });
- dirRefreshRegions();
- dirRefreshCareSubs();
 }
 function renderDirectory(){
  initDirectory();
  var opts={
-  state:$("#dirState")?$("#dirState").value:"",
+  pop:DIR_POP,
+  state:$("#dirState")?$("#dirState").value.trim():"",
   zip:$("#dirZip")?$("#dirZip").value.replace(/\D/g,""):"",
-  region:$("#dirCounty")?$("#dirCounty").value:"",
+  region:$("#dirRegion")?$("#dirRegion").value.trim():"",
   bucket:$("#dirCareBucket")?$("#dirCareBucket").value:"",
-  sub:$("#dirCareSub")?$("#dirCareSub").value:"",
+  sub:$("#dirCareSub")?$("#dirCareSub").value.trim():"",
   q:($("#dirQ")&&$("#dirQ").value||"").toLowerCase().trim()
  };
  var hasFilter=!!(opts.state||opts.region||opts.zip.length===5||opts.bucket||opts.sub||opts.q);
  var list=ALL.filter(function(r){
-  if(r.county==="National"||r.national)return true;
+  if(!dirMatchPopulation(r,opts.pop))return false;
+  if((r.national||r.county==="National")&&dirIsCrisisResource(r)&&opts.pop!=="crisis")return false;
+  if(r.county==="National"||r.national){
+   if(!hasFilter)return true;
+   return dirMatchRecord(r,opts);
+  }
   if(!hasFilter)return true;
   return dirMatchRecord(r,opts);
  });
