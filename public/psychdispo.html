@@ -3,7 +3,7 @@
 <title>PsychDispo — Psychiatric Disposition</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Instrument+Sans:wght@400;500;600;700;800&display=swap');
-:root{--paper:#fafaf8;--t:#2A43C0;--t2:#1e3399;--bg:var(--paper);--ink:#1a1a1a;--mut:#5c5c58;--faint:#8a8a86;--line:#d4d4d0;--card:#ffffff;--red:#B23A2E;--redbg:#fdeceb;--amber:#9A6A1E;--amberbg:#f7efdc;--good:#3C7A66;--goodbg:#e7f0ec;--terra:#BC5B3A;--req:#C05A44;--sage:#3C7A66;--gold:#9A7320;--radius:0px;--sans:"Instrument Sans",system-ui,sans-serif;--serif:"EB Garamond",Georgia,serif;--frame-radius:12px;--mh-h:44px;--tabbar-h:42px;--statusbar-h:52px;--card-foot-h:58px;--workflow-chrome:calc(var(--mh-h) + var(--tabbar-h) + var(--statusbar-h));}
+:root{--paper:#fafaf8;--t:#2A43C0;--t2:#1e3399;--bg:var(--paper);--ink:#1a1a1a;--mut:#5c5c58;--faint:#8a8a86;--line:#d4d4d0;--card:#ffffff;--red:#B23A2E;--redbg:#fdeceb;--amber:#9A6A1E;--amberbg:#f7efdc;--good:#3C7A66;--goodbg:#e7f0ec;--terra:#BC5B3A;--req:#C05A44;--sage:#3C7A66;--gold:#9A7320;--radius:0px;--sans:"Instrument Sans",system-ui,sans-serif;--serif:"EB Garamond",Georgia,serif;--frame-radius:12px;--mh-h:44px;--tabbar-h:42px;--statusbar-h:44px;--card-foot-h:44px;--workflow-chrome:calc(var(--mh-h) + var(--tabbar-h));}
 *{box-sizing:border-box}
 html{height:100%}
 body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;padding-bottom:calc(var(--statusbar-h) + env(safe-area-inset-bottom,0px))}
@@ -534,6 +534,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 body.embed #view-tool .workflow-sheet:has(#slideShell:not(.hidden)),
 body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-height:0;height:100%;max-height:none;margin:0;border-radius:0;border-left:none;border-right:none;border-top:none}
 #view-tool:has(#slideShell:not(.hidden)) .slide-nav-top{display:none!important}
+#view-tool:has(#slideShell:not(.hidden)) .statusbar{display:none!important}
 #view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .workflow-body,
 #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)) .workflow-body{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
 #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)) #pathwayFork{flex:1;min-height:0;overflow:hidden;overscroll-behavior:none;padding-bottom:0;pointer-events:auto}
@@ -544,9 +545,8 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
 .slide-panel>.float-card,.slide-panel>.layer{flex:1 1 auto;display:flex;flex-direction:column;overflow:hidden;padding:6px 12px 0;margin:0;min-height:0;pointer-events:auto}
 @media(max-width:680px){.slide-panel>.float-card,.slide-panel>.layer{padding:4px 10px 0}}
 .slide-panel>.float-card{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);box-shadow:0 1px 3px rgba(26,29,38,.06)}
-.slide-panel .step-kicker,.slide-panel .step-head,.slide-panel .slide-nav-top{flex-shrink:0}
-.slide-panel .slide-body,.slide-panel .card-body{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;touch-action:pan-y;padding-bottom:calc(var(--card-foot-h) + 8px)}
-@media(min-width:681px){.slide-panel .slide-body,.slide-panel .card-body{padding-bottom:calc(var(--statusbar-h) + 16px)}}
+.slide-panel .step-kicker,.slide-panel .step-head{flex-shrink:0}
+.slide-panel .slide-body,.slide-panel .card-body{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;touch-action:pan-y;padding-bottom:8px}
 .slide-panel .plan-compact-head{flex-shrink:0}
 .step-kicker{margin-bottom:0;padding-top:2px}
 .step-head{padding-bottom:2px}
@@ -581,20 +581,14 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
 .loc-opts{display:flex;flex-direction:column;gap:6px;flex-wrap:nowrap}
 .loc-opts .opt{width:100%;text-align:left}
 .chip-row .opt{font-size:12px;padding:6px 10px;min-height:38px}
-.slide-nav-top{display:flex;gap:8px;align-items:center;padding:8px 0 4px;min-height:36px;max-height:40px}
-.slide-nav-top .nav-btn{min-height:36px;padding:6px 12px;font-size:13px;font-weight:600;border-radius:10px;cursor:pointer;font-family:inherit;touch-action:manipulation;flex:none}
-.slide-nav-top .nav-btn.back{background:#fff;color:var(--t);border:1px solid var(--t)}
-.slide-nav-top .nav-btn.cont{background:var(--t);color:#fff;border:none;margin-left:auto;display:inline-flex;align-items:center;gap:6px}
-.slide-nav-top .nav-btn.cont svg{width:16px;height:16px;stroke-width:2;flex:none}
-.slide-nav-top .nav-btn:disabled{opacity:.45;cursor:not-allowed}
-.slide-nav-top .nav-btn.cont:disabled{background:#aebdbb;opacity:1}
-.card-foot{flex:none;position:sticky;bottom:0;margin:2px -12px 0;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,rgba(255,255,255,0) 0%,var(--card) 28%);border-top:1px solid var(--line);z-index:4;display:flex;gap:8px;align-items:center;box-shadow:0 -4px 12px rgba(26,29,38,.04)}
-.card-foot .card-back{min-height:44px;padding:8px 14px;font-size:13px;font-weight:600;border-radius:var(--radius);background:#fff;color:var(--t);border:1px solid var(--t);cursor:pointer;font-family:inherit;touch-action:manipulation;flex:none}
+.card-foot{flex:none;margin:0 -12px;padding:4px 12px calc(4px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:1px solid var(--line);z-index:4;display:flex;gap:8px;align-items:center;min-height:var(--card-foot-h);box-sizing:border-box}
+.card-foot .foot-save-chip{font-size:11px;color:var(--good);white-space:nowrap;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.card-foot .card-back{min-height:44px;padding:0 14px;font-size:13px;font-weight:600;border-radius:var(--radius);background:#fff;color:var(--t);border:1px solid var(--t);cursor:pointer;font-family:inherit;touch-action:manipulation;flex:none}
 .card-foot .card-back:disabled{opacity:.45;cursor:not-allowed}
-.card-foot .card-continue{width:auto;flex:1;margin-left:auto;min-height:44px;font-size:14px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;border-radius:0;border:none;background:var(--ink);color:#fff;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:8px;touch-action:manipulation;box-shadow:none;transition:background .15s}
+.card-foot .card-continue{width:auto;flex:1;margin-left:auto;min-height:44px;padding:0 14px;font-size:13px;font-weight:600;letter-spacing:.02em;text-transform:uppercase;border-radius:0;border:none;background:var(--ink);color:#fff;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:6px;touch-action:manipulation;box-shadow:none;transition:background .15s}
 .card-foot .card-continue:not(:disabled):hover{background:#333}
 .card-foot .card-continue:disabled{background:#aebdbb;cursor:not-allowed;opacity:1}
-.card-foot .card-continue svg{width:18px;height:18px;stroke-width:2;flex:none}
+.card-foot .card-continue svg{width:16px;height:16px;stroke-width:2;flex:none}
 .pathway-card .pcard-ico,.pathway-card .pname,.pathway-card .pblurb{display:none}
 @media(max-width:680px){
  #view-tool .workflow-sheet:has(#slideShell:not(.hidden)),
@@ -608,10 +602,8 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
  body:has(#view-tool #pathwayFork:not(.hidden)):not(.embed) #view-tool{flex:1;min-height:0;display:flex;flex-direction:column}
  body:has(#view-tool #slideShell:not(.hidden)):not(.embed) .workflow-sheet,
  body:has(#view-tool #pathwayFork:not(.hidden)):not(.embed) .workflow-sheet{flex:1;min-height:0;height:auto;max-height:none;margin:0}
- .slide-panel .slide-body,.slide-panel .card-body{padding-bottom:calc(var(--card-foot-h) + env(safe-area-inset-bottom,0px) + 8px)}
  body:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:calc(var(--mh-h) + var(--tabbar-h));padding-bottom:env(safe-area-inset-bottom,0px)}
  body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;padding-bottom:env(safe-area-inset-bottom,0px)}
- #view-tool:has(#slideShell:not(.hidden)) .statusbar{display:none!important}
  .progress-sticky .spine{padding:4px 10px 2px}
  .slide-panel .step-kicker{padding-top:0;margin-bottom:0}
  .slide-panel .step-head{padding-bottom:0}
@@ -621,10 +613,6 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
  .ctx-accordion-details .sub2,.ctx-accordion-details .pop-col .sub2{display:block!important}
  .pop-flags-grid{grid-template-columns:1fr 1fr}
  .loc-cols{grid-template-columns:1fr}
- .statusbar .nav-btn.cont{display:none}
-}
-@media(min-width:681px){
- .card-foot{display:none}
 }
 
 .intake-divider{margin-top:20px;padding-top:18px;border-top:2px solid var(--line)}
@@ -714,7 +702,6 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
 <section class="layer float-card" id="Lgate">
  <div class="step-kicker"><span class="num">01</span><span class="lbl">Case Setup</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Case setup</div></div>
- <div class="slide-nav-top"><button type="button" class="nav-btn back slide-nav-back" disabled>← Back</button><button type="button" class="nav-btn cont slide-nav-cont" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <div class="slide-body">
  <div id="gateAutoNote" class="gate-auto-note"></div>
  <div id="expressToggleWrap" class="express-toggle hidden"><span class="express-mode-label">Workflow</span><div class="express-mode-track" role="group" aria-label="Workflow mode"><button type="button" class="express-mode-opt sel" id="expressModeExpress" data-express="1">Express</button><button type="button" class="express-mode-opt" id="expressModeFull" data-express="0">Full workflow</button></div></div>
@@ -740,15 +727,14 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
   <div class="expand-block" id="expressLocExpand"><div class="loc-cols"><div class="loc-col community-col"><div class="loc-col-h">Community</div><div class="opts loc-opts" id="expressLocCommunityOpts"></div></div></div></div>
  </div>
  </div>
+ <div class="card-foot"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue0" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </section>
-<div class="card-foot"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue0" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </div>
 
 <div class="slide-panel" data-step="1">
 <section class="layer float-card" id="L0">
  <div class="step-kicker"><span class="num">02</span><span class="lbl">Patient &amp; Coverage</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Patient &amp; coverage</div></div>
- <div class="slide-nav-top"><button type="button" class="nav-btn back slide-nav-back" disabled>← Back</button><button type="button" class="nav-btn cont slide-nav-cont" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <div class="slide-body card-body">
  <div class="gate-grid">
   <div class="q gate-wide ins-zip-row" id="contextInsZipBlock">
@@ -830,15 +816,14 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
  </div>
  </div>
  </div>
+ <div class="card-foot"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue1" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </section>
-<div class="card-foot"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue1" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </div>
 
 <div class="slide-panel" data-step="2">
 <section class="layer float-card" id="L2">
  <div class="step-kicker"><span class="num">03</span><span class="lbl">Safety Review</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Safety review</div></div>
- <div class="slide-nav-top"><button type="button" class="nav-btn back slide-nav-back" disabled>← Back</button><button type="button" class="nav-btn cont slide-nav-cont" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <div class="slide-body">
  <div id="safetyCollabBanner" class="alert amber collab-banner hidden"><b>Clinician review required</b> — moderate/high C-SSRS or violence concern. Complete safety plan &amp; means with a trained clinician, then attest before Plan or Deliver.</div>
  <div id="expressSafetyGate" class="express-safety-gate hidden">
@@ -1062,15 +1047,14 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
  </div>
  </div>
  </div>
+ <div class="card-foot"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue2" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </section>
-<div class="card-foot"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue2" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </div>
 
 <div class="slide-panel" data-step="3">
 <section class="layer float-card" id="L5">
  <div class="step-kicker"><span class="num">04</span><span class="lbl">Resources</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Resources</div></div>
- <div class="slide-nav-top"><button type="button" class="nav-btn back slide-nav-back" disabled>← Back</button><button type="button" class="nav-btn cont slide-nav-cont" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <div class="plan-compact-head">
  <div id="planTopMatches" class="plan-top-matches hidden"></div>
  <button type="button" class="plan-expand-link hidden" id="planShowAllBtn">Show all</button>
@@ -1088,15 +1072,14 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
  <div id="followUpBlock" class="follow-up-block hidden"></div>
  <div id="l5FkglGate" class="l6-gate l6-gate-warn hidden"></div>
  </div>
+ <div class="card-foot"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue3" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </section>
-<div class="card-foot"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue3" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </div>
 
 <div class="slide-panel" data-step="4">
 <section class="layer float-card" id="L6">
  <div class="step-kicker"><span class="num">05</span><span class="lbl">Handoff</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Handoff</div></div>
- <div class="slide-nav-top"><button type="button" class="nav-btn back slide-nav-back" disabled>← Back</button><button type="button" class="nav-btn cont slide-nav-cont" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <div class="slide-body">
  <div id="transitionOfCareBlock" class="follow-up-block hidden"></div>
  <div id="deliverGate" class="deliver-gate hidden"></div>
@@ -1150,10 +1133,10 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
   <div id="postPacketBanner" class="post-banner hidden" role="status"></div>
  </div>
  </div>
+ <div class="card-foot"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue4" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <button type="button" class="hidden" id="copyChartBtn"></button>
  <button type="button" class="hidden" id="printBtn" disabled></button>
 </section>
-<div class="card-foot"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue4" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </div>
 
 </div></div>
@@ -3359,12 +3342,15 @@ function dirTextMatch(input,value){
 }
 function dirIsPedsResource(r){
  if(r.peds)return true;
+ if(r.flag==="pediatric"||r.spec==="pediatric")return true;
  var m=metaOf(r);
- if(m.spec==="pediatric")return true;
- return specOf(r)==="pediatric";
+ return m.spec==="pediatric";
 }
 function dirIsGeriatricResource(r){
- return isGeriatricOnly(r)||specOf(r)==="geriatric";
+ if(r.flag==="geriatric"||r.spec==="geriatric")return true;
+ if((r.cat||"").indexOf("Seniors & aging")>=0)return true;
+ var blob=((r.svc||"")+" "+(r.access||"")).toLowerCase();
+ return /geriatric|older adult|seniors?|elder/.test(blob);
 }
 function dirIsCrisisResource(r){
  var m=metaOf(r);
@@ -3373,21 +3359,33 @@ function dirIsCrisisResource(r){
 }
 function dirMatchPopulation(r,pop){
  if(pop==="crisis")return dirIsCrisisResource(r);
+ var pedsEx=dirIsPedsResource(r);
+ var gerEx=dirIsGeriatricResource(r);
  if(pop==="child"){
-  if(dirIsGeriatricResource(r)&&!dirIsPedsResource(r))return false;
-  if(dirIsPedsResource(r)||isPedsOnly(r))return true;
-  if(!dirIsGeriatricResource(r))return true;
-  return false;
+  if(gerEx&&!pedsEx)return false;
+  return pedsEx;
  }
  if(pop==="geriatric"){
-  if(isPedsOnly(r)&&!dirIsGeriatricResource(r))return false;
-  if(dirIsGeriatricResource(r))return true;
-  if(!dirIsPedsResource(r))return true;
-  return false;
+  if(pedsEx&&!gerEx)return false;
+  if(gerEx)return true;
+  return !pedsEx;
  }
- if(isPedsOnly(r))return false;
- if(dirIsGeriatricResource(r))return false;
+ if(pedsEx)return false;
+ if(gerEx)return false;
  return true;
+}
+function dirPopulationNote(pop,list){
+ if(!list.length){
+  if(pop==="child")return "No pediatric-specific entries for this region — try the Crisis tab for all-ages crisis lines, or widen geography.";
+  if(pop==="geriatric")return "No geriatric-specific entries for this region — try another region or the Crisis tab.";
+  if(pop==="crisis")return "No crisis resources match these filters — try another region or clear care-type filters.";
+  return "No resources match these filters — try another population tab, region, or care type.";
+ }
+ var pedsCount=list.filter(dirIsPedsResource).length;
+ var gerCount=list.filter(dirIsGeriatricResource).length;
+ if(pop==="child"&&pedsCount===0)return "No pediatric-specific entries for this region — showing all-ages crisis lines only. Try the Crisis tab or widen geography.";
+ if(pop==="geriatric"&&gerCount===0)return "No geriatric-specific entries for this region — showing general adult & all-ages resources.";
+ return "";
 }
 function dirFillDatalist(id,values){
  var dl=$("#"+id);if(!dl)return;
@@ -3552,9 +3550,12 @@ function renderDirectory(){
   return ((a.county||"")+"|"+(a.name||"")).localeCompare((b.county||"")+"|"+(b.name||""));
  });
  var localCount=list.filter(function(r){return r.county!=="National"&&!r.national;}).length;
+ var popNote=dirPopulationNote(opts.pop,list);
  if($("#dirCount")){
   var msg;
-  if(localCount===0&&list.length===0){
+  if(popNote){
+   msg=popNote;
+  }else if(localCount===0&&list.length===0){
    msg="No resources match these filters — try another population tab, region, or care type.";
   }else{
    msg=localCount+" resource"+(localCount===1?"":"s");
@@ -3565,7 +3566,7 @@ function renderDirectory(){
  }
  if(!$("#dirBody"))return;
  if(!list.length){
-  $("#dirBody").innerHTML='<tr><td colspan="5" class="dir-empty">No matching resources. Adjust filters or select the Crisis tab for national lines.</td></tr>';
+  $("#dirBody").innerHTML='<tr><td colspan="5" class="dir-empty">'+esc(dirPopulationNote(opts.pop,list)||"No matching resources. Adjust filters or select the Crisis tab for national lines.")+'</td></tr>';
   return;
  }
  $("#dirBody").innerHTML=list.slice(0,200).map(function(r){
@@ -3969,15 +3970,37 @@ function isGeriatricOnly(r){
  if((r.cat||"").indexOf("Seniors & aging")>=0)return true;
  return false;}
 function isPedsOnly(r){return !!r.peds;}
+function isPedsExplicit(r){return !!r.peds||r.flag==="pediatric"||r.spec==="pediatric";}
+function lifeStageOK(r){
+ if(isUniversalResource(r))return true;
+ var stage=S.lifeStage||"adult";
+ var pedsEx=isPedsExplicit(r);
+ var gerEx=isGeriatricOnly(r);
+ if(stage==="child"){
+  if(gerEx&&!pedsEx)return false;
+  if(pedsEx)return true;
+  if(r.panel==="D"||r.panel==="I")return true;
+  return false;
+ }
+ if(stage==="geriatric"){
+  if(pedsEx&&!gerEx)return false;
+  if(gerEx)return true;
+  return !pedsEx;
+ }
+ if(pedsEx)return false;
+ if(gerEx)return false;
+ return true;
+}
 function geriatricOK(r){
  if(!isGeriatricOnly(r))return true;
  if(isUniversalResource(r))return true;
  return S.lifeStage==="geriatric";}
 function adultOK(r){
  if(S.lifeStage==="child"&&isGeriatricOnly(r))return false;
+ if(S.lifeStage==="adult"&&(isPedsOnly(r)||isGeriatricOnly(r)))return false;
  return true;}
 function pedsOK(r){return !r.peds||S.lifeStage==="child";}
-function pick(filterFn){return ALL.filter(function(r){return countyOK(r)&&pedsOK(r)&&geriatricOK(r)&&adultOK(r)&&filterFn(r);});}
+function pick(filterFn){return ALL.filter(function(r){return countyOK(r)&&lifeStageOK(r)&&filterFn(r);});}
 function topMatchOK(r){
  if(S.lifeStage==="adult"&&(isPedsOnly(r)||isGeriatricOnly(r)))return false;
  return true;}
@@ -4471,6 +4494,13 @@ function renderStatus(){
  $$(".slide-nav-cont").forEach(syncContBtn);
  $$(".card-back").forEach(syncBackBtn);
  $$(".card-continue").forEach(syncContBtn);
+ $$(".card-foot").forEach(function(foot){
+  var chip=foot.querySelector(".foot-save-chip");
+  if(lastSaveLabel){
+   if(!chip){chip=document.createElement("span");chip.className="foot-save-chip save-chip";var cont=foot.querySelector(".card-continue");if(cont)foot.insertBefore(chip,cont);else foot.appendChild(chip);}
+   chip.textContent=lastSaveLabel;
+  }else if(chip){chip.remove();}
+ });
 }
 function renderL6status(){
  renderTransitionOfCare();
