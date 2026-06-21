@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ToolFrame } from "@/components/tool-frame";
+import { socialrefEmbedSrc } from "@/lib/ref-embed";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/social-ref")({
@@ -14,5 +15,5 @@ export const Route = createFileRoute("/social-ref")({
 });
 
 function SocialRefPage() {
-  return <ToolFrame src="/socialref.html?embed=1" title="Social Reference" />;
+  return <ToolFrame src={socialrefEmbedSrc()} title="Social Reference" />;
 }

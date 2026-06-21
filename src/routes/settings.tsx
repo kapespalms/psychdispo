@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { EditorialFooterLinks } from "@/components/editorial-footer-links";
 import { EditorialPage } from "@/components/editorial-page";
 import { useAuth } from "@/lib/auth";
 import { getDefaults, saveDefaults, type UserDefaults } from "@/lib/user-defaults";
@@ -90,6 +91,7 @@ function SettingsPage() {
           my plans
         </Link>
       }
+      footer={<EditorialFooterLinks />}
     >
       <form onSubmit={handleSubmit} className="space-y-5 max-w-md">
         <div>

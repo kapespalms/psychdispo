@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ToolFrame } from "@/components/tool-frame";
+import { psychrefEmbedSrc } from "@/lib/ref-embed";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/reference")({
@@ -14,5 +15,5 @@ export const Route = createFileRoute("/reference")({
 });
 
 function ReferencePage() {
-  return <ToolFrame src="/psychref.html?embed=1" title="Psych Reference" />;
+  return <ToolFrame src={psychrefEmbedSrc()} title="Psych Reference" />;
 }

@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { AuthShell } from "@/components/auth-shell";
+import { EditorialFooterLinks } from "@/components/editorial-footer-links";
 import { useAuth } from "@/lib/auth";
 import { pageHead } from "@/lib/seo";
 
@@ -60,6 +61,9 @@ function SignUpPage() {
           <Link to="/sign-in" className="text-link-accent">
             Sign in
           </Link>
+          <span className="block mt-2">
+            <EditorialFooterLinks />
+          </span>
         </>
       }
     >

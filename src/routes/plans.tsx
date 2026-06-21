@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
+import { EditorialFooterLinks } from "@/components/editorial-footer-links";
 import { EditorialPage } from "@/components/editorial-page";
 import { useAuth } from "@/lib/auth";
 import { deleteCloudTemplate, fetchCloudTemplates } from "@/lib/cloud-library";
@@ -108,6 +109,7 @@ function PlansPage() {
           new plan →
         </Link>
       }
+      footer={<EditorialFooterLinks />}
     >
       {cloudError && (
         <p className="form-error mb-6" role="alert">

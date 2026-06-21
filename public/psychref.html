@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Psych Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#0f1720; --panel:#16212e; --panel2:#1d2b3a; --ink:#eaf1f7; --muted:#aebfcf;
@@ -173,9 +175,10 @@
   @media print{.sidebar,.backtop{display:none}.content{max-width:100%}body{background:#fff;color:#000}}
   @media(max-width:760px){.sidebar{display:none}.content{padding:20px 16px 60px}}
   /* ============ EDITORIAL "OPERATIONAL PROTOCOLS" THEME ============ */
-  :root{--ink2:#1b1f24;--mut:#8b9199;--hair:#e4e6ea;--ground:#f5f6f8;
-    --serif:Georgia,"Iowan Old Style","Times New Roman",serif}
-  body{background:var(--ground);color:var(--ink2)}
+  :root{--ink2:#1a1a1a;--mut:#5c5c58;--hair:#d4d4d0;--ground:#fafaf8;
+    --serif:"EB Garamond",Georgia,"Iowan Old Style","Times New Roman",serif;
+    --sans:"Instrument Sans",system-ui,sans-serif}
+  body{background:var(--ground);color:var(--ink2);font-family:var(--sans)}
   a{color:#1b1f24;font-weight:600;text-decoration:underline;text-underline-offset:2px;text-decoration-color:#c8ccd2}
 
   /* Sidebar: light, hairline-separated, tracked uppercase labels */
@@ -256,10 +259,10 @@
   .fc-side{background:#f6f7f9;border-left-color:#1b1f24;color:var(--ink2)}
   span.d,.d{color:#2f6f4f}
 
-  /* ============ PSYCHREF VIBE — royal blue + cream ============ */
-  :root{--blue:#2731c4;--blue2:#3b46e6;--bar:#222dbf;--cream:#f4f3ec;--mh-h:47px}
-  body{background:var(--cream)}
-  a{color:var(--blue);text-decoration-color:#bcc0ef}
+  /* ============ PSYCHREF VIBE — clinical blue + cream paper (NORI shell) ============ */
+  :root{--blue:#2a43c0;--blue2:#3b54d4;--bar:#2a43c0;--cream:#fafaf8;--mh-h:47px}
+  body{background:var(--cream);font-family:var(--sans)}
+  a{color:var(--blue);text-decoration-color:#bcc4e8}
 
   /* Top white brand bar (scrolls away) */
   .mh-top{display:flex;align-items:center;justify-content:space-between;gap:24px;
@@ -338,6 +341,24 @@
   .nav .subgroup:hover{color:var(--blue)}
   .nav a.sub-collapsed{display:none}
 
+  /* Mobile chapter chrome: sticky tabs + section jump (sidebar hidden ≤760px) */
+  .ref-chrome{position:sticky;top:0;z-index:50}
+  .mobile-section{display:none}
+  @media(max-width:760px){
+    .mobile-section{display:flex;align-items:center;gap:10px;padding:8px 12px;
+      background:var(--cream);border-bottom:1px solid var(--hair)}
+    .mobile-section label{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;
+      color:var(--mut);font-weight:600;white-space:nowrap;flex:0 0 auto}
+    .mobile-section select{flex:1;min-width:0;font-family:var(--sans);font-size:14px;
+      padding:8px 10px;border:1px solid var(--hair);background:#fff;color:var(--ink2);
+      border-radius:0}
+    .mh-tabs{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
+      scrollbar-width:none;scroll-snap-type:x proximity}
+    .mh-tabs::-webkit-scrollbar{display:none}
+    .mh-tab{flex:0 0 auto;scroll-snap-align:start}
+  }
+  body.embed .ref-chrome{top:0}
+
 </style>
 </head>
 <body>
@@ -350,6 +371,7 @@
   </a>
   <span class="mh-tagline">A personal clinical reference</span>
 </header>
+<div class="ref-chrome">
 <nav class="mh-tabs" id="mhtabs">
   <button type="button" class="mh-tab" data-ch="1">Assessment</button>
   <button type="button" class="mh-tab" data-ch="2">Algorithms</button>
@@ -361,6 +383,11 @@
   <button type="button" class="mh-tab" data-ch="8">Populations</button>
   <button type="button" class="mh-tab" data-ch="9">Step 3</button>
 </nav>
+<div class="mobile-section">
+  <label for="mobileSection">Section</label>
+  <select id="mobileSection" aria-label="Jump to section in this chapter"></select>
+</div>
+</div>
 <div class="app">
   <aside class="sidebar">
     <div class="brand">
@@ -5794,6 +5821,7 @@
   const navLinks=[...document.querySelectorAll('.chap-body a')];
   const byId={}; navLinks.forEach(a=>byId[a.getAttribute('href').slice(1)]=a);
   const mhTabs=[...document.querySelectorAll('.mh-tab')];
+  const mobileSection=document.getElementById('mobileSection');
   const subgroups=[...document.querySelectorAll('.nav .subgroup')];
   const groups=[...document.querySelectorAll('.chap-group')];
   const search=document.getElementById('search');
@@ -5826,6 +5854,22 @@
     if(g.classList.contains('open')) g.querySelectorAll('.subgroup').forEach(s=>s.classList.add('open'));
     refresh();
   }));
+  function refreshMobileSection(){
+    if(!mobileSection)return;
+    const activePage=document.querySelector('.page.active');
+    const tabs=activePage?[...activePage.querySelectorAll('.tab')]:[];
+    const activeSec=activePage?activePage.querySelector('.panels>section.active'):null;
+    const curId=activeSec?activeSec.id:'';
+    mobileSection.innerHTML='';
+    tabs.forEach(t=>{
+      const o=document.createElement('option');
+      o.value=t.dataset.t; o.textContent=t.textContent.trim();
+      if(t.dataset.t===curId)o.selected=true;
+      mobileSection.appendChild(o);
+    });
+    mobileSection.disabled=!tabs.length;
+  }
+  if(mobileSection)mobileSection.addEventListener('change',()=>{if(mobileSection.value)nav(mobileSection.value);});
   function nav(id){
     const sec=document.getElementById(id); if(!sec) return;
     const page=sec.closest('.page'); if(!page) return;
@@ -5837,6 +5881,7 @@
     const a=byId[id]; if(a){const s=subOf(a); if(s)s.classList.add('open');}
     const ch=page.getAttribute('data-ch'); mhTabs.forEach(t=>t.classList.toggle('active',t.dataset.ch===ch));
     refresh();
+    refreshMobileSection();
     window.scrollTo(0,0);
     history.replaceState(null,'','#'+id);
   }
