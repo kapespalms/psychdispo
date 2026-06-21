@@ -2,21 +2,31 @@ import { Link, useRouter } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth";
 
 const TABS = [
-  { to: "/dispo" as const, label: "Disposition", match: (p: string) => p === "/dispo" },
-  {
-    to: "/directory" as const,
-    label: "Directory",
-    match: (p: string) => p === "/directory",
-  },
+  { to: "/dispo" as const, label: "PsychDispo · Plan", match: (p: string) => p === "/dispo" },
   {
     to: "/social-care" as const,
-    label: "Social Care",
-    match: (p: string) => p === "/social-care" || p === "/social-ref",
+    label: "Social Care Plan",
+    match: (p: string) => p === "/social-care",
+  },
+  {
+    to: "/social-ref" as const,
+    label: "Social Ref",
+    match: (p: string) => p === "/social-ref",
   },
   {
     to: "/emerg" as const,
-    label: "Emergency",
+    label: "Psych Emerg · Review",
     match: (p: string) => p === "/emerg",
+  },
+  {
+    to: "/directory" as const,
+    label: "Resource Directory",
+    match: (p: string) => p === "/directory",
+  },
+  {
+    to: "/reference" as const,
+    label: "Psych Ref",
+    match: (p: string) => p === "/reference",
   },
 ] as const;
 
