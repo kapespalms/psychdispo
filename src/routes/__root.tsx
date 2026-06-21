@@ -151,7 +151,7 @@ function RootComponent() {
           className="flex flex-col flex-1 min-h-0 overflow-hidden"
           style={
             showPhiBanner
-              ? ({ "--shell-header": "148px" } as CSSProperties)
+              ? ({ "--shell-header": "124px" } as CSSProperties)
               : ({ "--shell-header": "112px" } as CSSProperties)
           }
         >

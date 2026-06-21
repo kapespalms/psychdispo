@@ -43,8 +43,11 @@ export function SiteHeader() {
         <div className="flex items-center gap-3 sm:gap-4 shrink-0 ml-auto">
           {user ? (
             <>
-              <Link to="/plans" className="nav-bar-link hidden sm:inline-block">
+              <Link to="/plans" className="nav-bar-link">
                 plans
+              </Link>
+              <Link to="/settings" className="nav-bar-link">
+                settings
               </Link>
               <button type="button" onClick={signOut} className="nav-bar-link">
                 sign out

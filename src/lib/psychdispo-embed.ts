@@ -1,5 +1,5 @@
 /** Bump when public/psychdispo.html changes so iframe embeds bypass stale browser cache. */
-export const PSYCHDISPO_HTML_BUILD = "embed-view-hidden-p0";
+export const PSYCHDISPO_HTML_BUILD = "embed-p1-cards-data";
 
 export function psychdispoEmbedSrc(
   hash: string,

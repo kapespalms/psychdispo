@@ -12,10 +12,13 @@ export type ToolFrameProps = {
 
 function PhiBanner() {
   return (
-    <div className="phi-banner" role="status">
-      Consult psychiatry when available. Clinical decisions remain with the treating team. Patient
-      data stays on your device.
-    </div>
+    <details className="phi-banner phi-banner-compact" role="status">
+      <summary>Patient data stays on this device</summary>
+      <p>
+        Consult psychiatry when available. Clinical decisions remain with the treating team. Nothing
+        you enter is transmitted to our servers.
+      </p>
+    </details>
   );
 }
 

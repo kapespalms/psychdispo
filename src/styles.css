@@ -443,7 +443,6 @@
 
   .phi-banner {
     flex-shrink: 0;
-    padding: 0.625rem 1.5rem;
     font-size: 0.8125rem;
     line-height: 1.45;
     color: var(--mut);
@@ -451,16 +450,52 @@
     background: var(--paper);
   }
 
+  .phi-banner-compact {
+    padding: 0;
+  }
+
+  .phi-banner-compact summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 0.375rem 1.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    color: var(--faint);
+    user-select: none;
+  }
+
+  .phi-banner-compact summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .phi-banner-compact summary::after {
+    content: " · details";
+    opacity: 0.7;
+  }
+
+  .phi-banner-compact[open] summary::after {
+    content: "";
+  }
+
+  .phi-banner-compact p {
+    margin: 0;
+    padding: 0 1.5rem 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--mut);
+  }
+
   @media (max-width: 639px) {
-    .phi-banner {
-      font-size: 0.75rem;
+    .phi-banner-compact summary,
+    .phi-banner-compact p {
       padding-left: 1.25rem;
       padding-right: 1.25rem;
     }
   }
 
   @media (min-width: 640px) {
-    .phi-banner {
+    .phi-banner-compact summary,
+    .phi-banner-compact p {
       padding-left: 2.5rem;
       padding-right: 2.5rem;
     }
