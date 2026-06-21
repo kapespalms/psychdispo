@@ -919,9 +919,27 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
      <button type="button" class="opt" data-val="none"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span><span class="gate-lbl">No concern</span></button>
     </div>
     <div class="reveal hidden" id="substancesHelpReveal">
-     <div class="q"><label class="qlabel">AUDIT-C screen</label>
+     <div class="q"><label class="qlabel">Screening tool</label>
+      <div class="opts chip-row" data-field="sudTool">
+       <button type="button" class="opt" data-val="auditc">AUDIT-C</button>
+       <button type="button" class="opt" data-val="crafft">CRAFFT</button>
+       <button type="button" class="opt" data-val="sbirt">SBIRT</button>
+       <button type="button" class="opt" data-val="emr">In EMR</button>
+      </div>
+     </div>
+     <div class="q"><label class="qlabel">Screen result</label>
       <div class="opts yesno" data-field="sudClinical"><button type="button" class="opt warnv" data-val="positive">Positive</button><button type="button" class="opt" data-val="negative">Negative</button></div>
      </div>
+     <div class="q"><label class="qlabel">Withdrawal concern?</label>
+      <div class="opts yesno" data-field="sudWithdrawal"><button type="button" class="opt warnv" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
+     </div>
+     <div class="sub2" style="margin-top:8px">ASAM snapshot <span class="note">(chart only)</span></div>
+     <div class="opts chip-row">
+      <button type="button" class="opt" data-store="sudAsam.intoxication">Intoxication / withdrawal</button>
+      <button type="button" class="opt" data-store="sudAsam.psych">Psych co-occurring</button>
+      <button type="button" class="opt" data-store="sudAsam.environment">Environment / recovery</button>
+     </div>
+     <div class="note" style="margin-top:6px">Document intoxication/withdrawal as an acute dynamic factor for suicide and violence risk.</div>
     </div>
    </div>
   </div>
@@ -1011,6 +1029,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
  <div class="step-head"><div class="ltitle">Handoff</div></div>
  <div class="slide-nav-top"><button type="button" class="nav-btn back slide-nav-back" disabled>← Back</button><button type="button" class="nav-btn cont slide-nav-cont" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <div class="slide-body">
+ <div id="transitionOfCareBlock" class="follow-up-block hidden"></div>
  <div id="deliverGate" class="deliver-gate hidden"></div>
  <div id="deliverPrimary" class="deliver-primary hidden"></div>
  <button type="button" class="deliver-more-link hidden" id="deliverMoreBtn">More options</button>
@@ -1719,7 +1738,7 @@ var S={pathway:null,workflowStep:0,cleared:null,setting:null,city:"",zip:"",insu
  lifeStage:"adult",flags:{perinatal:0,veteran:0,lgbtq:0,sud:0,tbi:0,idd:0,seriousMed:0,justice:0,unhoused:0},
  acuteConcern:null,safetyGate:{suicide:null,homicide:null,violence:null,substances:null},
  safetyOpen:{suicide:false,homicide:false,violence:false,substances:false},
- cssrsInEmr:null,cssrsDone:null,suicideRisk:null,homicideRisk:null,sudScreenDone:null,sudTool:null,sudScore:"",sudClinical:null,violence:null,
+ cssrsInEmr:null,cssrsDone:null,suicideRisk:null,homicideRisk:null,sudScreenDone:null,sudTool:null,sudScore:"",sudClinical:null,sudWithdrawal:null,sudAsam:{intoxication:0,psych:0,environment:0},violence:null,
  violenceFactors:{weapons:0,priorViolence:0,substance:0,command:0,identifiableTarget:0},
  riskFormulation:{driving:"",mitigating:"",protective:[]},
  tarasoff:{warned:0,notified:0,hold:0,na:0},
@@ -1731,6 +1750,8 @@ var S={pathway:null,workflowStep:0,cleared:null,setting:null,city:"",zip:"",insu
  otherMeansDone:null,otherMeans:{caustic:0,other:0},otherMeansOther:"",
  plan2:{fuDate:"",fuTime:""},
  apptScheduled:null,warm:null,callback:null,pcp:null,pharmacy:null,
+ tocChips:{bridging:0,callback72h:0,warmHandoff:0,supportPerson:0,meansEnacted:0},
+ bridgingApptWho:"",bridgingApptWhen:"",callback72hNote:"",warmHandoffNote:"",
  fuReferralId:null,refMethod:null,refSheet:null,packetVariant:"full",
  includePatientHandout:true,includeReferralCover:true,includeResourceHandoff:false,includeSensitiveOnPatientHandout:false,acknowledgeHighFkgl:false,
  erOverride:"",largePrint:false,
@@ -1850,6 +1871,8 @@ function syncStoreChips(){
   var p=el.dataset.store.split("."),on=false;
   if(p.length===2&&p[0]==="violenceFactors")on=!!S.violenceFactors[p[1]];
   else if(p.length===2&&p[0]==="tarasoff")on=!!S.tarasoff[p[1]];
+  else if(p.length===2&&p[0]==="tocChips")on=!!S.tocChips[p[1]];
+  else if(p.length===2&&p[0]==="sudAsam")on=!!S.sudAsam[p[1]];
   else if(p.length===2)on=!!S[p[0]][p[1]];
   el.classList.toggle("sel",on);
   el.setAttribute("aria-pressed",on?"true":"false");
@@ -1922,6 +1945,95 @@ function safetyDocumentationLines(){
   lines.push("");
  }
  return lines.join("\n");
+}
+function ensureTocChips(){if(!S.tocChips)S.tocChips={bridging:0,callback72h:0,warmHandoff:0,supportPerson:0,meansEnacted:0};}
+function ensureSudAsam(){if(!S.sudAsam)S.sudAsam={intoxication:0,psych:0,environment:0};}
+function suicideDomainEngaged(){
+ ensureSafetyGate();
+ var g=S.safetyGate.suicide;
+ return g==="help"||g==="emr";
+}
+function needsTransitionOfCareBlock(){
+ ensureSafetyGate();
+ if(S.pathway==="ed")return true;
+ if(hiRisk())return true;
+ return suicideDomainEngaged();
+}
+function transitionChipDetail(on,detail){return on?"Yes"+(detail?" — "+detail:""):"—";}
+function transitionOfCareChartLines(){
+ if(!needsTransitionOfCareBlock())return "";
+ ensureTocChips();
+ var tc=S.tocChips,fu=resById(S.fuReferralId),lines=["TRANSITION OF CARE"];
+ var bridgingDetail="";
+ if(tc.bridging){
+  bridgingDetail=[S.bridgingApptWho||(fu?fu.name:""),S.bridgingApptWhen||[S.plan2.fuDate,S.plan2.fuTime].filter(Boolean).join(" ")].filter(Boolean).join(" · ");
+ }
+ lines.push("Bridging appointment scheduled: "+transitionChipDetail(!!tc.bridging,bridgingDetail));
+ var cbDetail=S.callback72hNote||(S.callback==="72h"&&tc.callback72h?"72-hour structured callback":"")||"";
+ lines.push("72-hour callback plan: "+transitionChipDetail(!!tc.callback72h,cbDetail));
+ var whDetail=S.warmHandoffNote||(S.warm==="yes"&&!S.warmHandoffNote?"Completed":"")||"";
+ lines.push("Warm handoff completed: "+transitionChipDetail(!!tc.warmHandoff,whDetail));
+ lines.push("Support person engaged in plan/means: "+(tc.supportPerson?"Yes":"—"));
+ lines.push("Means counseling enacted (not just discussed): "+(tc.meansEnacted?"Yes":"—"));
+ lines.push("Crisis resources: 988 Suicide & Crisis Lifeline on patient handout");
+ lines.push("");
+ return lines.join("\n");
+}
+function substancesDocumentationLines(){
+ ensureSafetyGate();
+ ensureSudAsam();
+ if(S.safetyGate.substances!=="help")return "";
+ var tools={auditc:"AUDIT-C",crafft:"CRAFFT",sbirt:"SBIRT",emr:"In EMR"};
+ var lines=[];
+ if(S.sudTool)lines.push("SUBSTANCE USE DOCUMENTATION");
+ if(S.sudTool)lines.push("Screening tool: "+(tools[S.sudTool]||S.sudTool));
+ var asam=[];
+ if(S.sudAsam.intoxication)asam.push("intoxication/withdrawal");
+ if(S.sudAsam.psych)asam.push("co-occurring psychiatric");
+ if(S.sudAsam.environment)asam.push("environment/recovery support");
+ if(asam.length)lines.push("ASAM snapshot: "+asam.join("; "));
+ if(S.sudWithdrawal==="yes")lines.push("Withdrawal concern: Yes");
+ else if(S.sudWithdrawal==="no")lines.push("Withdrawal concern: No");
+ if(S.sudAsam.intoxication||S.sudWithdrawal==="yes"||sudPositive())lines.push("Integrated risk: Document intoxication/withdrawal as acute dynamic factor for suicide/violence risk.");
+ if(S.dispo==="residential"||S.intensity==="iop"||S.intensity==="php"){
+  var loc=S.dispo==="community"?({outpatient:"Outpatient",iop:"IOP",php:"PHP"}[S.intensity]||""):({psychres:"Psychiatric residential",sudres:"SUD residential",grouphome:"Group home",snf:"SNF/LTC"}[S.residType]||"");
+  if(loc)lines.push("ASAM LOC: See disposition ("+loc+") — formal 6-dimension assessment in EMR if indicated.");
+ }
+ if(lines.length)lines.push("");
+ return lines.join("\n");
+}
+function spiLifeStagePatientFooter(){
+ if(!suicideDomainEngaged())return "";
+ if(S.lifeStage==="child"){
+  return '<div class="note" style="margin-top:10px;font-size:12px;border-top:1px solid var(--line);padding-top:8px"><b>For families:</b> Share this plan with a parent or caregiver. Include them in your safety steps and who helps restrict means.</div>';
+ }
+ if(S.lifeStage==="geriatric"){
+  return '<div class="note" style="margin-top:10px;font-size:12px;border-top:1px solid var(--line);padding-top:8px"><b>For older adults:</b> Include someone you trust in your safety plan. Call <b>211</b> for meals, rides, and home help.</div>';
+ }
+ return "";
+}
+function renderTransitionOfCare(){
+ var el=$("#transitionOfCareBlock");if(!el)return;
+ if(!needsTransitionOfCareBlock()){el.classList.add("hidden");el.innerHTML="";return;}
+ ensureTocChips();
+ el.classList.remove("hidden");
+ var tc=S.tocChips;
+ function chipBtn(key,label){
+  return '<button type="button" class="opt'+(tc[key]?" sel":"")+'" data-store="tocChips.'+key+'" aria-pressed="'+(tc[key]?"true":"false")+'">'+label+'</button>';
+ }
+ el.innerHTML='<div class="ltag">Transition of care</div>'+
+  '<div class="note" style="margin-bottom:8px">Highest-risk window after discharge — document bridging appt, 72 h callback, warm handoff, and means actions.</div>'+
+  '<div class="opts chip-row" style="flex-wrap:wrap">'+chipBtn("bridging","Bridging appt scheduled")+chipBtn("callback72h","72h callback planned")+
+   chipBtn("warmHandoff","Warm handoff done")+chipBtn("supportPerson","Support person engaged")+chipBtn("meansEnacted","Means plan enacted")+'</div>'+
+  '<div class="grid2" style="margin-top:10px">'+
+   '<div><label class="qlabel">Appt with</label><input type="text" data-text="bridgingApptWho" placeholder="Clinician or program" value="'+esc(S.bridgingApptWho||"")+'"></div>'+
+   '<div><label class="qlabel">When</label><input type="text" data-text="bridgingApptWhen" placeholder="Date / time" value="'+esc(S.bridgingApptWhen||"")+'"></div>'+
+  '</div>'+
+  '<div class="q" style="margin-top:8px"><label class="qlabel">72h callback <span class="note">(who calls whom)</span></label>'+
+   '<input type="text" data-text="callback72hNote" placeholder="e.g. RN calls patient within 72 h" value="'+esc(S.callback72hNote||"")+'" style="max-width:100%"></div>'+
+  '<div class="q"><label class="qlabel">Warm handoff note <span class="note">(one line)</span></label>'+
+   '<input type="text" data-text="warmHandoffNote" placeholder="e.g. Spoke with IOP intake" value="'+esc(S.warmHandoffNote||"")+'" style="max-width:100%"></div>';
+ syncStoreChips();
 }
 function dispLocValue(){if(S.dispo==="community"&&S.intensity)return "community|"+S.intensity;if(S.dispo==="residential"&&S.residType)return "residential|"+S.residType;return "";}
 function dispLocShort(){
@@ -2101,10 +2213,10 @@ function syncLegacyFromSafetyGate(domain){
   else if(g!=="help")S.violence=null;
  }
  if(domain==="substances"){
-  if(g==="none"){S.sudScreenDone=null;S.sudTool=null;S.sudScore="";S.sudClinical=null;}
-  else if(g==="emr"){S.sudScreenDone="yes";S.sudTool="auditc";S.sudScore="";S.sudClinical=null;}
-  else if(g==="help"){S.sudScreenDone="yes";S.sudTool="auditc";S.sudScore="";S.sudClinical=null;}
-  else{S.sudScreenDone=null;S.sudTool=null;S.sudScore="";S.sudClinical=null;}
+  if(g==="none"){S.sudScreenDone=null;S.sudTool=null;S.sudScore="";S.sudClinical=null;S.sudWithdrawal=null;S.sudAsam={intoxication:0,psych:0,environment:0};}
+  else if(g==="emr"){S.sudScreenDone="yes";S.sudTool="emr";S.sudScore="";S.sudClinical=null;S.sudWithdrawal=null;S.sudAsam={intoxication:0,psych:0,environment:0};}
+  else if(g==="help"){S.sudScreenDone="yes";if(!S.sudTool)S.sudTool="auditc";S.sudScore="";S.sudClinical=null;}
+  else{S.sudScreenDone=null;S.sudTool=null;S.sudScore="";S.sudClinical=null;S.sudWithdrawal=null;S.sudAsam={intoxication:0,psych:0,environment:0};}
  }
 }
 function setSafetyGate(domain,val){
@@ -2173,7 +2285,11 @@ function substanceScreenNote(){
  if(g==null)return "Not screened in PsychDispo";
  if(g==="none")return "No concern";
  if(g==="emr")return "Documented in EMR";
- if(g==="help")return "AUDIT-C "+(S.sudClinical==="positive"?"POSITIVE":S.sudClinical==="negative"?"negative":"—");
+ if(g==="help"){
+  var tools={auditc:"AUDIT-C",crafft:"CRAFFT",sbirt:"SBIRT",emr:"In EMR"};
+  var tool=tools[S.sudTool]||"AUDIT-C";
+  return tool+" "+(S.sudClinical==="positive"?"POSITIVE":S.sudClinical==="negative"?"negative":"—");
+ }
  return "Not screened in PsychDispo";
 }
 function homicideScreenNote(){
@@ -3091,6 +3207,14 @@ function setPath(p,val){
   S.tarasoff[a[1]]=val?1:0;
   return;
  }
+ if(a.length===2&&a[0]==="tocChips"){
+  ensureTocChips();
+  S.tocChips[a[1]]=val?1:0;
+  if(a[1]==="warmHandoff")S.warm=val?"yes":(S.warm==="yes"?null:S.warm);
+  if(a[1]==="bridging"&&val&&!S.apptScheduled)S.apptScheduled="yes";
+  return;
+ }
+ if(a.length===2&&a[0]==="sudAsam"){ensureSudAsam();S.sudAsam[a[1]]=val?1:0;return;}
  S[a[0]][a[1]]=val?1:0;
 }
 $("#loc").addEventListener("input",function(e){
@@ -3817,6 +3941,8 @@ document.addEventListener("change",function(e){
    var st=e.target.dataset.store,sp=st.split("."),cur=0;
    if(sp.length===2&&sp[0]==="violenceFactors")cur=S.violenceFactors[sp[1]];
    else if(sp.length===2&&sp[0]==="tarasoff")cur=S.tarasoff[sp[1]];
+   else if(sp.length===2&&sp[0]==="tocChips")cur=S.tocChips[sp[1]];
+   else if(sp.length===2&&sp[0]==="sudAsam")cur=S.sudAsam[sp[1]];
    else if(sp.length===2)cur=S[sp[0]][sp[1]];
    setPath(st,!cur);
   }
@@ -3863,6 +3989,7 @@ function renderStatus(){
  $$(".card-continue").forEach(syncContBtn);
 }
 function renderL6status(){
+ renderTransitionOfCare();
  renderDeliverScreen();
  updateSavePlanBtn();
  updatePacketVariantHint();
@@ -4144,6 +4271,7 @@ function buildPatientOnePager(res,opts){
   '<div class="doc-sec"><div class="doc-sec-h er3">Go to the ER or call 911 if</div><ul style="margin:4px 0 0;padding-left:18px;font-size:13px">'+
    ["You might hurt yourself or someone else and cannot stay safe","You feel out of control or cannot tell what is real","You used drugs or alcohol and feel unsafe"].map(function(x){return '<li>'+esc(x)+'</li>';}).join("")+'</ul></div>'+
   '<div class="strength" style="margin-top:10px;font-size:12px">Asking for help is a sign of strength.</div>'+
+  spiLifeStagePatientFooter()+
   '</div>';
 }
 function covTableRow(bucket,cat,name,phone,fax,addr,notes){
@@ -4315,11 +4443,13 @@ function buildChartText(){
   collabNote?"Collaboration: "+collabNote:"",
   "",
   safetyDocumentationLines(),
+  substancesDocumentationLines(),
   "SAFETY INTERVENTIONS",
   "Stanley-Brown safety plan: "+(S.planDone==="yes"?"Completed":S.planDone==="no"?"Not completed":"—"),
   "Firearm access addressed: "+(S.firearm||"—"),
   "Medication stockpile addressed: "+(S.meds||"—"),
   "",
+  transitionOfCareChartLines(),
   "COORDINATION",
   "Post-discharge contact: "+(S.callback||"—"),
   "PCP notified: "+({yes:"Yes",no:"No",nopcp:"No PCP"}[S.pcp]||S.pcp||"—"),
@@ -4331,6 +4461,7 @@ function buildChartText(){
   "Main follow-up: "+(fu?fu.name:"—")+(fu&&fu.phone?" · "+fu.phone:""),
   "Warm handoff: "+(S.warm||"—"),
   "",
+  transitionOfCareChartLines(),
   (hasSocialNeed()||S.socialCare.completed?"SOCIAL CARE PLAN\n"+(S.socialCare.completed?"Completed":"Flags only")+" · DV print: "+(S.socialCare.dvSafeToPrint?"yes":"discreet")+"\n":"")+
   "NEAREST ED/PES: "+(ed?ed.name+" — "+ed.phone+(ed.address?" · "+ed.address:""):"— confirm with team"),
   "",
@@ -4425,6 +4556,8 @@ function scaffoldFromState(s){
  sc.plan2={fuDate:"",fuTime:""};
  sc.apptScheduled=null;sc.warm=null;sc.fuReferralId=null;sc.refMethod=null;sc.refSheet=null;
  sc.callback=null;sc.pcp=null;sc.pharmacy=null;
+ sc.tocChips={bridging:0,callback72h:0,warmHandoff:0,supportPerson:0,meansEnacted:0};
+ sc.bridgingApptWho="";sc.bridgingApptWhen="";sc.callback72hNote="";sc.warmHandoffNote="";
  sc.erOverride="";sc.clinicianAttested=false;sc.acknowledgeHighFkgl=false;
  sc.firearmOther="";sc.medsOther="";sc.otherMeansOther="";
  sc.socialCare=Object.assign({},sc.socialCare||{},{initials:"",completed:false,promptDismissed:false,contextLine:"Recently seen for a mental health visit, medically cleared."});
@@ -4582,6 +4715,8 @@ function restoreSavedPlan(p){
   if(!Array.isArray(S.riskFormulation.protective))S.riskFormulation.protective=[];
  }
  if(saved.tarasoff)S.tarasoff=Object.assign({warned:0,notified:0,hold:0,na:0},saved.tarasoff);
+ if(saved.tocChips)S.tocChips=Object.assign({bridging:0,callback72h:0,warmHandoff:0,supportPerson:0,meansEnacted:0},saved.tocChips);
+ if(saved.sudAsam)S.sudAsam=Object.assign({intoxication:0,psych:0,environment:0},saved.sudAsam);
  if(saved.safetyGate)S.safetyGate=Object.assign({suicide:null,homicide:null,violence:null,substances:null},saved.safetyGate);
  ensureSafetyGate();
  if(saved.clinicianAttested)S.clinicianAttested=saved.clinicianAttested;
