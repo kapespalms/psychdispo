@@ -12,11 +12,9 @@ export type ToolFrameProps = {
 
 function PhiBanner() {
   return (
-    <div
-      className="shrink-0 px-6 sm:px-10 py-2.5 text-[0.8125rem] leading-snug text-[var(--mut)] border-b border-[var(--line)] bg-[var(--paper)]"
-      role="status"
-    >
-      Consult psychiatry when available. Clinical decisions remain with the treating team.
+    <div className="phi-banner" role="status">
+      Consult psychiatry when available. Clinical decisions remain with the treating team. Patient
+      data stays on your device.
     </div>
   );
 }
@@ -57,8 +55,7 @@ export function ToolFrame({ src, title, showPhiBanner }: ToolFrameProps) {
         ref={iframeRef}
         src={src}
         title={title}
-        className="w-full flex-1 min-h-[80vh] border-0 bg-[var(--paper)]"
-        style={{ height: "calc(100dvh - var(--shell-header, 88px))" }}
+        className="w-full flex-1 min-h-0 border-0 bg-[var(--paper)]"
       />
     </div>
   );

@@ -2,15 +2,15 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>PsychDispo — Psychiatric Disposition</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Instrument+Sans:wght@400;500;600&display=swap');
-:root{--paper:#fafaf8;--t:#2A43C0;--t2:#1e3399;--bg:var(--paper);--ink:#1a1a1a;--mut:#5c5c58;--faint:#8a8a86;--line:#d4d4d0;--card:#ffffff;--red:#B23A2E;--redbg:#fdeceb;--amber:#9A6A1E;--amberbg:#f7efdc;--good:#3C7A66;--goodbg:#e7f0ec;--terra:#BC5B3A;--req:#C05A44;--sage:#3C7A66;--gold:#9A7320;--radius:0px;--mh-h:44px;--tabbar-h:42px;--statusbar-h:52px;--card-foot-h:58px;--workflow-chrome:calc(var(--mh-h) + var(--tabbar-h) + var(--statusbar-h));}
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Instrument+Sans:wght@400;500;600;700;800&display=swap');
+:root{--paper:#fafaf8;--t:#2A43C0;--t2:#1e3399;--bg:var(--paper);--ink:#1a1a1a;--mut:#5c5c58;--faint:#8a8a86;--line:#d4d4d0;--card:#ffffff;--red:#B23A2E;--redbg:#fdeceb;--amber:#9A6A1E;--amberbg:#f7efdc;--good:#3C7A66;--goodbg:#e7f0ec;--terra:#BC5B3A;--req:#C05A44;--sage:#3C7A66;--gold:#9A7320;--radius:0px;--sans:"Instrument Sans",system-ui,sans-serif;--serif:"EB Garamond",Georgia,serif;--frame-radius:12px;--mh-h:44px;--tabbar-h:42px;--statusbar-h:52px;--card-foot-h:58px;--workflow-chrome:calc(var(--mh-h) + var(--tabbar-h) + var(--statusbar-h));}
 *{box-sizing:border-box}
 html{height:100%}
 body{margin:0;font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;padding-bottom:calc(var(--statusbar-h) + env(safe-area-inset-bottom,0px))}
-header{background:#fff;border-bottom:1px solid var(--line)}
+header{background:var(--paper);border-bottom:1px solid var(--line)}
 .brandbar{max-width:980px;margin:0 auto;display:flex;align-items:center;gap:11px;padding:14px 16px}
-.brandbar .mark{width:27px;height:27px;flex:none}
-.brand{font-family:var(--serif);font-weight:600;font-size:21px;letter-spacing:.3px;color:var(--ink)}
+.brandbar .mark{width:27px;height:27px;flex:none;background:var(--ink);border:2px solid var(--ink)}
+.brand{font-family:var(--sans);font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
 .brand .b2{color:var(--t)}
 .tagi{font-family:var(--serif);font-style:italic;color:var(--mut);font-size:14px;margin-left:auto}
 .hero{display:none}
@@ -133,7 +133,7 @@ body.embed .progress-sticky{top:0}
 .legend,.gate-summary,#intakeLegend,#gateSummary,#pathwayContext,#l5ctx,#l6status,#gateAutoNote{display:none!important}
 #l5Fresh{display:none}
 .note.in-workflow{display:none}
-.pathway-card .pblurb{font-size:13px;color:var(--mut);line-height:1.45;margin:0}
+.pathway-card .pathway-card-blurb{font-size:13px;color:var(--mut);line-height:1.45;margin:0}
 .statusbar .nav-btn{min-height:44px;padding:8px 16px;font-size:14px;font-weight:600;border-radius:var(--radius);cursor:pointer;font-family:inherit}
 .statusbar .nav-btn.back{background:#fff;color:var(--t);border:1px solid var(--t);margin-left:0}
 .statusbar .nav-btn.cont{background:var(--ink);color:#fff;border:none;margin-left:auto}
@@ -408,20 +408,20 @@ body.embed .wrap{flex:1;min-height:0;display:flex;flex-direction:column;padding:
 body.embed #view-tool{flex:1;min-height:0;display:flex;flex-direction:column;min-width:0;height:100%}
 body.embed .statusbar{flex-shrink:0}
 #pathwayFork.hidden,#slideShell.hidden{display:none!important;pointer-events:none!important;visibility:hidden!important}
-.pathway-fork{padding:20px 24px 8px;min-height:0}
-.pathway-head{text-align:center;margin-bottom:20px;max-width:520px;margin-left:auto;margin-right:auto}
-.pathway-head .ptitle{font-family:var(--serif);font-weight:600;font-size:clamp(1.5rem,4vw,1.875rem);letter-spacing:-.02em;margin:0 0 8px;line-height:1.12;color:var(--ink)}
-.pathway-head .pdesc{font-size:15px;color:var(--mut);margin:0;line-height:1.55;display:block}
-.gate-auto-note{font-size:13px;color:var(--mut);background:#f7f8fc;border:1px solid var(--line);border-radius:9px;padding:10px 14px;margin:0 0 16px;line-height:1.45}
-.pathway-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:680px){.pathway-cards{grid-template-columns:1fr}.pathway-fork{padding:12px 14px 4px}}
-.pathway-card{text-align:left;border:1px solid var(--line);border-radius:0;padding:22px 24px;background:#fff;cursor:pointer;font-family:inherit;color:inherit;transition:border-color .15s,background .15s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;position:relative;z-index:1;box-shadow:none;min-height:140px;display:flex;flex-direction:column}
-.pathway-card:hover{border-color:var(--ink);background:#fafaf8}
+.pathway-fork{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;justify-content:center;padding:1rem 1.5rem 1.25rem;max-width:56rem;margin:0 auto;width:100%;box-sizing:border-box}
+.pathway-head{text-align:left;margin-bottom:1.25rem;max-width:34rem}
+.pathway-kicker{font-family:var(--serif);font-style:italic;font-weight:500;font-size:1.0625rem;color:var(--t);text-decoration:underline;text-decoration-style:wavy;text-decoration-color:var(--t);text-underline-offset:4px;margin:0 0 .35rem}
+.pathway-title{font-family:var(--sans);font-weight:800;font-size:clamp(1.375rem,2.8vw,2rem);line-height:.94;letter-spacing:-.03em;text-transform:uppercase;margin:0 0 .5rem;color:var(--ink)}
+.pathway-accent{color:var(--t)}
+.pathway-desc{font-size:.9375rem;color:var(--mut);margin:0;line-height:1.5}
+.pathway-cards{display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:stretch}
+@media(max-width:680px){.pathway-cards{grid-template-columns:1fr}.pathway-fork{padding:.75rem 1rem 1rem}}
+.pathway-card{text-align:left;border:1.5px solid color-mix(in srgb,var(--t) 55%,var(--paper));box-shadow:inset 0 0 0 1px var(--t);border-radius:var(--frame-radius);padding:1.125rem 1.25rem;background:var(--paper);cursor:pointer;font-family:inherit;color:inherit;transition:border-color .15s,background .15s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;position:relative;z-index:1;min-height:0;display:grid;grid-template-columns:2rem 1fr;grid-template-rows:auto auto;gap:.2rem .75rem;align-content:start}
+.pathway-card:hover{border-color:var(--t);background:#fff}
 .pathway-card:focus-visible{outline:1px solid var(--ink);outline-offset:2px}
-.pathway-card.ed{border-left:4px solid var(--t)}
-.pathway-card.op{border-left:4px solid var(--sage)}
-.pathway-card .pname{font-family:var(--serif);font-weight:600;font-size:1.35rem;margin:0 0 8px;letter-spacing:-.01em}
-.pathway-card .pblurb{font-size:14px;color:var(--mut);line-height:1.55;margin:0;flex:1}
+.pathway-card-num{grid-row:1/span 2;font-family:var(--serif);font-size:1.125rem;color:var(--mut);line-height:1.2;font-variant-numeric:tabular-nums}
+.pathway-card-title{font-family:var(--sans);font-weight:800;font-size:.875rem;letter-spacing:.04em;text-transform:uppercase;line-height:1.15;margin:0;color:var(--ink)}
+.pathway-card-blurb{grid-column:2;font-size:.8125rem;color:var(--mut);line-height:1.45;margin:0}
 .pathway-ctx{font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--t);padding:10px 34px 0;display:flex;align-items:center;gap:8px}
 .pathway-ctx .change-path{font-size:10px;color:var(--mut);cursor:pointer;border:none;background:none;padding:0;font-family:inherit;text-decoration:underline;margin-left:auto}
 .pathway-ctx .change-path:hover{color:var(--ink)}
@@ -515,7 +515,7 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
 #view-tool:has(#slideShell:not(.hidden)) .slide-nav-top{display:none!important}
 #view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .workflow-body,
 #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)) .workflow-body{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
-#view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)) #pathwayFork{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--statusbar-h) + 8px);pointer-events:auto}
+#view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)) #pathwayFork{flex:1;min-height:0;overflow:hidden;overscroll-behavior:none;padding-bottom:0;pointer-events:auto}
 #view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .slide-shell{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;position:relative;pointer-events:auto}
 #view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .slide-track{flex:1;min-height:0;align-items:stretch;display:flex;width:100%;touch-action:pan-y}
 .slide-panel{display:flex;flex-direction:column;flex:0 0 100%;width:100%;min-width:100%;align-self:stretch;height:100%;min-height:min(320px,calc(100dvh - var(--workflow-chrome) - 72px));max-height:calc(100dvh - var(--workflow-chrome) - 72px);overflow:hidden;padding:0 12px;box-sizing:border-box;pointer-events:none}
@@ -574,10 +574,7 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
 .card-foot .card-continue:not(:disabled):hover{background:#333}
 .card-foot .card-continue:disabled{background:#aebdbb;cursor:not-allowed;opacity:1}
 .card-foot .card-continue svg{width:18px;height:18px;stroke-width:2;flex:none}
-.pathway-card .pcard-ico{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;color:var(--t)}
-.pathway-card.ed .pcard-ico{background:#e8eaf8}
-.pathway-card.op .pcard-ico{background:#e7f0ec;color:var(--sage)}
-.pathway-card .pcard-ico svg{width:18px;height:18px;stroke-width:1.75}
+.pathway-card .pcard-ico,.pathway-card .pname,.pathway-card .pblurb{display:none}
 @media(max-width:680px){
  #view-tool .workflow-sheet:has(#slideShell:not(.hidden)),
  #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){height:calc(100dvh - var(--workflow-chrome) - 8px);min-height:min(320px,calc(100dvh - var(--workflow-chrome) - 8px));max-height:calc(100dvh - var(--workflow-chrome) - 8px)}
@@ -671,19 +668,20 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
 
 <div id="pathwayFork" class="pathway-fork">
  <div class="pathway-head">
-  <div class="ptitle">Select disposition setting</div>
-  <div class="pdesc">Inpatient/ED or outpatient clinic — same workflow, setting-appropriate screening.</div>
+  <p class="pathway-kicker">Setting</p>
+  <h2 class="pathway-title">Select <span class="pathway-accent">disposition</span> setting</h2>
+  <p class="pathway-desc">Inpatient/ED or outpatient clinic — same workflow, setting-appropriate screening.</p>
  </div>
  <div class="pathway-cards">
   <button type="button" class="pathway-card ed" data-pathway="ed">
-   <div class="pcard-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-   <div class="pname">Inpatient / ED discharge</div>
-   <div class="pblurb">Acute settings with full safety screening.</div>
+   <span class="pathway-card-num">01</span>
+   <div class="pathway-card-title">Inpatient / <span class="pathway-accent">ED</span> discharge</div>
+   <div class="pathway-card-blurb">Acute settings with full safety screening.</div>
   </button>
   <button type="button" class="pathway-card op" data-pathway="outpatient">
-   <div class="pcard-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 10.5L12 4l9 6.5V20a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1v-9.5z"/></svg></div>
-   <div class="pname">Outpatient discharge</div>
-   <div class="pblurb">Clinic discharge with express workflow by default.</div>
+   <span class="pathway-card-num">02</span>
+   <div class="pathway-card-title">Outpatient <span class="pathway-accent">clinic</span> discharge</div>
+   <div class="pathway-card-blurb">Clinic discharge with express workflow by default.</div>
   </button>
  </div>
 </div>

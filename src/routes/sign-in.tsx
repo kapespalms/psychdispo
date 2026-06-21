@@ -116,7 +116,7 @@ function SignInPage() {
           <button
             type="submit"
             disabled={loading || !supabaseEnabled}
-            className="btn-solid w-full text-center disabled:opacity-40 disabled:cursor-not-allowed"
+            className="btn-blue w-full text-center disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {loading ? "Sending…" : "Email sign-in link"}
           </button>

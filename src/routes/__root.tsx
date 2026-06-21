@@ -101,7 +101,7 @@ export const Route = createRootRouteWithContext<{ queryClient: typeof queryClien
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Instrument+Sans:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Instrument+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600&display=swap",
       },
       {
         rel: "stylesheet",
@@ -160,18 +160,20 @@ function RootComponent() {
   const showPhiBanner = path === "/dispo";
 
   return (
-    <div className="flex flex-col min-h-dvh">
-      {!hideShellHeader && <SiteHeader />}
-      <main
-        className="flex flex-col flex-1 min-h-0"
-        style={
-          showPhiBanner
-            ? ({ "--shell-header": "120px" } as CSSProperties)
-            : undefined
-        }
-      >
-        <Outlet />
-      </main>
+    <div className="frame-outer">
+      <div className="frame-inner">
+        {!hideShellHeader && <SiteHeader />}
+        <main
+          className="flex flex-col flex-1 min-h-0 overflow-hidden"
+          style={
+            showPhiBanner
+              ? ({ "--shell-header": "148px" } as CSSProperties)
+              : ({ "--shell-header": "112px" } as CSSProperties)
+          }
+        >
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }

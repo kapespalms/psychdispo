@@ -1,11 +1,12 @@
 import { Link, useRouter } from "@tanstack/react-router";
+import { PsychDispoLogo } from "@/components/psychdispo-logo";
 import { useAuth } from "@/lib/auth";
 
 const NAV = [
-  { to: "/dispo" as const, label: "Plan" },
-  { to: "/directory" as const, label: "Directory" },
-  { to: "/social-care" as const, label: "Social" },
-  { to: "/reference" as const, label: "Reference" },
+  { to: "/dispo" as const, label: "plan" },
+  { to: "/directory" as const, label: "directory" },
+  { to: "/social-care" as const, label: "social" },
+  { to: "/reference" as const, label: "reference" },
 ] as const;
 
 export function SiteHeader() {
@@ -19,66 +20,43 @@ export function SiteHeader() {
     (to === "/social-care" && path === "/social-ref");
 
   return (
-    <header className="shell-header">
-      <div className="max-w-[var(--page)] mx-auto px-6 sm:px-10 py-4 flex items-baseline justify-between gap-6">
-        <Link
-          to="/"
-          className="font-serif text-[1.5rem] tracking-tight text-[var(--ink)] shrink-0 no-underline"
-        >
-          PsychDispo
+    <header className="shell-header shrink-0">
+      <div className="site-logo-top">
+        <Link to="/" className="no-underline" aria-label="PsychDispo home">
+          <PsychDispoLogo />
         </Link>
+      </div>
 
-        <nav
-          className="hidden md:flex items-baseline gap-5 flex-wrap justify-end"
-          aria-label="Primary"
-        >
+      <div className="shell-header-inner">
+        <nav className="flex items-center gap-4 sm:gap-5 flex-wrap" aria-label="Primary">
           {NAV.map(({ to, label }) => (
             <Link
               key={to}
               to={to}
-              className={isActive(to) ? "nav-text nav-text-active" : "nav-text"}
+              className={isActive(to) ? "nav-bar-link nav-bar-link-active" : "nav-bar-link"}
             >
               {label}
             </Link>
           ))}
         </nav>
 
-        <div className="flex items-baseline gap-4 shrink-0 ml-auto md:ml-0">
+        <div className="flex items-center gap-3 sm:gap-4 shrink-0 ml-auto">
           {user ? (
             <>
-              <Link to="/plans" className="nav-text hidden sm:inline">
-                Plans
+              <Link to="/plans" className="nav-bar-link hidden sm:inline-block">
+                plans
               </Link>
-              <button
-                type="button"
-                onClick={signOut}
-                className="nav-text bg-transparent border-none cursor-pointer font-[inherit] p-0"
-              >
-                Sign out
+              <button type="button" onClick={signOut} className="nav-bar-link">
+                sign out
               </button>
             </>
           ) : (
-            <Link to="/sign-in" className="nav-text">
-              Sign in
+            <Link to="/sign-in" className="nav-bar-link">
+              sign in
             </Link>
           )}
         </div>
       </div>
-
-      <nav
-        className="md:hidden border-t border-[var(--line)] px-6 py-3 flex gap-5 overflow-x-auto"
-        aria-label="Primary mobile"
-      >
-        {NAV.map(({ to, label }) => (
-          <Link
-            key={to}
-            to={to}
-            className={isActive(to) ? "nav-text nav-text-active" : "nav-text"}
-          >
-            {label}
-          </Link>
-        ))}
-      </nav>
     </header>
   );
 }

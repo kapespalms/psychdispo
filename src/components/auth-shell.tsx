@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import { PsychDispoLogo } from "@/components/psychdispo-logo";
 
 export function AuthShell({
   kicker = "Account",
@@ -15,26 +16,29 @@ export function AuthShell({
   footer: ReactNode;
 }) {
   return (
-    <div className="min-h-dvh flex flex-col bg-[var(--paper)] text-[var(--ink)]">
-      <header className="shell-header">
-        <div className="max-w-[var(--page)] mx-auto px-6 sm:px-10 py-4 flex items-baseline justify-between">
-          <Link to="/" className="font-serif text-[1.5rem] tracking-tight no-underline">
-            PsychDispo
+    <div className="flex flex-col flex-1 min-h-0 overflow-hidden text-[var(--ink)]">
+      <header className="shell-header shrink-0">
+        <div className="site-logo-top">
+          <Link to="/" className="no-underline" aria-label="PsychDispo home">
+            <PsychDispoLogo />
           </Link>
-          <Link to="/" className="nav-text">
-            Back
+        </div>
+        <div className="shell-header-inner">
+          <span />
+          <Link to="/" className="nav-bar-link">
+            back
           </Link>
         </div>
       </header>
 
-      <main className="flex-1 px-6 py-16 sm:py-20">
-        <div className="max-w-[24rem] mx-auto">
-          <p className="kicker mb-4">{kicker}</p>
-          <h1 className="font-serif text-[2rem] leading-tight mb-3">{title}</h1>
-          <p className="text-[0.9375rem] leading-relaxed text-[var(--mut)] mb-10">{subtitle}</p>
-          <hr className="journal-rule-light mb-10" />
+      <main className="flex-1 min-h-0 overflow-hidden flex items-center justify-center px-6 py-6">
+        <div className="w-full max-w-[24rem]">
+          <p className="script-kicker script-kicker-compact">{kicker}</p>
+          <h1 className="headline-display headline-display-compact mb-3">{title}</h1>
+          <p className="text-[0.9375rem] leading-relaxed text-[var(--mut)] mb-6">{subtitle}</p>
+          <hr className="journal-rule-light mb-6" />
           {children}
-          <p className="mt-10 text-[0.75rem] leading-relaxed text-[var(--mut)]">{footer}</p>
+          <p className="mt-6 text-[0.75rem] leading-relaxed text-[var(--mut)]">{footer}</p>
         </div>
       </main>
     </div>

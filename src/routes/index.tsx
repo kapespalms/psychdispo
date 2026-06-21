@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { HeroIllustration } from "@/components/hero-illustration";
 import { LandingHeader } from "@/components/landing-header";
 import { pageHead } from "@/lib/seo";
 
@@ -18,79 +19,75 @@ const CONTENTS = [
     num: "01",
     to: "/dispo" as const,
     title: "Disposition plan",
-    desc: "Safety screen, resource match, chart note, patient packet. Inpatient, ED, or outpatient.",
+    desc: "Safety screen, resource match, chart note, patient packet.",
   },
   {
     num: "02",
     to: "/directory" as const,
     title: "Resource directory",
-    desc: "Verified psychiatric and community programs — all fifty states, searchable by metro.",
+    desc: "Verified programs — all fifty states.",
   },
   {
     num: "03",
     to: "/social-care" as const,
     title: "Social care plan",
-    desc: "Health-related social needs — tonight versus ongoing, handoff to community programs.",
+    desc: "Health-related social needs and handoff.",
   },
   {
     num: "04",
     to: "/reference" as const,
     title: "Psychiatric reference",
-    desc: "High-yield protocols for emergency and consult settings. Suicide, agitation, psychosis.",
+    desc: "High-yield emergency and consult protocols.",
   },
 ] as const;
 
 function Index() {
   return (
-    <div className="min-h-dvh flex flex-col bg-[var(--paper)] text-[var(--ink)]">
+    <div className="landing-screen flex flex-col flex-1 min-h-0 overflow-hidden text-[var(--ink)]">
       <LandingHeader />
 
-      <main className="flex-1">
-        <article className="max-w-[var(--page)] mx-auto px-6 sm:px-10 py-16 sm:py-24">
-          <header className="max-w-[var(--measure)] mb-16 sm:mb-20">
-            <p className="kicker mb-6">Psychiatric disposition</p>
-            <h1 className="font-serif text-[2.75rem] sm:text-[3.5rem] leading-[1.05] tracking-tight mb-8">
-              From risk screen to safe handoff.
+      <main className="flex flex-col flex-1 min-h-0 overflow-hidden px-5 sm:px-10">
+        <section className="landing-hero flex-1 min-h-0 grid lg:grid-cols-[minmax(0,1fr)_minmax(180px,36%)] gap-4 lg:gap-8 items-center py-3 sm:py-5 overflow-hidden">
+          <header className="min-w-0">
+            <p className="script-kicker script-kicker-compact">Disposition</p>
+            <h1 className="headline-display headline-display-compact mb-3 sm:mb-4">
+              From risk screen to <span className="headline-accent">safe</span> handoff.
             </h1>
-            <p className="text-[1.0625rem] leading-[1.65] text-[var(--mut)] mb-10 max-w-[34rem]">
+            <p className="text-[0.9375rem] sm:text-[1rem] leading-[1.55] text-[var(--mut)] mb-4 sm:mb-5 max-w-[32rem]">
               Structured safety documentation, verified referrals, and discharge materials for
               emergency and consult psychiatry. Patient details remain on your device.
             </p>
-            <p>
-              <Link to="/dispo" className="btn-solid">
+            <p className="flex flex-wrap items-center gap-3 sm:gap-4">
+              <Link to="/dispo" className="btn-blue">
                 Open plan
               </Link>
-              <span className="mx-4 text-[var(--line)]">|</span>
-              <Link to="/directory" className="text-link text-[0.9375rem]">
-                Directory
+              <Link to="/directory" className="nav-bar-link">
+                directory
               </Link>
             </p>
           </header>
 
-          <hr className="journal-rule mb-12" />
+          <HeroIllustration className="landing-hero-art w-full max-w-[360px] mx-auto lg:max-w-none lg:ml-auto hidden sm:block" />
+        </section>
 
-          <section>
-            <p className="kicker mb-8">Contents</p>
-            <div>
-              {CONTENTS.map(({ num, to, title, desc }) => (
-                <Link key={to} to={to} className="toc-row block">
-                  <span className="toc-num">{num}</span>
-                  <span className="toc-title">{title}</span>
-                  <span className="toc-desc sm:col-start-3">{desc}</span>
-                </Link>
-              ))}
-            </div>
-          </section>
+        <hr className="journal-rule shrink-0" />
 
-          <hr className="journal-rule-light mt-16 mb-8" />
+        <section className="landing-contents shrink-0 py-3 sm:py-4">
+          <p className="kicker mb-3 sm:mb-4">Contents</p>
+          <div className="landing-contents-grid">
+            {CONTENTS.map(({ num, to, title, desc }) => (
+              <Link key={to} to={to} className="landing-contents-item">
+                <span className="landing-contents-num">{num}</span>
+                <span className="landing-contents-title">{title}</span>
+                <span className="landing-contents-desc">{desc}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
 
-          <footer className="max-w-[var(--measure)] text-[0.8125rem] leading-relaxed text-[var(--mut)]">
-            <p>
-              Reference only — not a substitute for clinical judgment. Consult psychiatry when
-              available. Life-threatening emergency: 911.
-            </p>
-          </footer>
-        </article>
+        <footer className="landing-foot shrink-0 py-2 text-[0.6875rem] leading-snug text-[var(--mut)] border-t border-[var(--line)]">
+          Reference only — not a substitute for clinical judgment. Life-threatening emergency: 911.
+        </footer>
       </main>
     </div>
   );
