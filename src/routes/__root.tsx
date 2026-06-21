@@ -134,11 +134,7 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const router = useRouter();
   const path = router.state.location.pathname;
-  const hideShellHeader =
-    path === "/" ||
-    path === "/sign-in" ||
-    path === "/sign-up" ||
-    path === "/auth/callback";
+  const hideShellHeader = path === "/";
 
   useIframeTemplateSync();
 

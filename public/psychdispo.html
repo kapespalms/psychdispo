@@ -461,16 +461,20 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 
 .loc-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
 .loc-row .field{flex:1;min-width:140px;max-width:220px}
-.dir-toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
-.dir-toolbar input[type=search],.dir-toolbar select{max-width:100%;flex:1;min-width:160px}
+.dir-toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;align-items:center}
+.dir-toolbar input[type=search],.dir-toolbar select{max-width:100%;flex:1;min-width:140px}
+.dir-toolbar input#dirZip{max-width:110px;min-width:90px;flex:0 1 110px}
+.dir-hint{font-size:12px;color:var(--mut);margin:0 0 10px;min-height:1.2em}
 .dir-count{font-size:12px;color:var(--mut);margin:0 0 10px}
 .dir-table{width:100%;border-collapse:collapse;font-size:13px}
-.dir-table th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);padding:8px 10px;border-bottom:2px solid var(--line);background:#fafbfd}
+.dir-table th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);padding:8px 10px;border-bottom:2px solid var(--line);background:#fafbfd;white-space:nowrap}
 .dir-table td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
 .dir-table tr:hover td{background:#f8f9ff}
 .dir-table .dn{font-weight:600;color:var(--ink)}
+.dir-table .dtype{font-size:12px;font-weight:600;color:var(--t2);line-height:1.35;max-width:11rem}
 .dir-table .dm{font-size:11.5px;color:var(--mut);margin-top:2px}
 .dir-table .dp{font-weight:700;color:var(--t2);white-space:nowrap}
+.dir-table .dref{font-size:12px;color:var(--mut);line-height:1.35;max-width:10rem}
 .dir-table a{color:var(--t2);text-decoration:none}
 .pk .setting-banner{background:#eef1fb;border-left:4px solid var(--t);padding:12px 16px;border-radius:8px;margin:12px 0;font-size:13px;line-height:1.5}
 .pk .setting-banner b{color:var(--t2)}
@@ -1233,14 +1237,18 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
 <section class="layer">
  <div class="ltag">Resource directory</div>
  <div class="ltitle">Search verified community resources</div>
- <div class="ldesc">Browse all entries in the database — no disposition required. Filter by metro, category, or keyword. Use the Plan tab to build a discharge packet.</div>
+ <div class="ldesc">Filter by state, ZIP, region, and care type. National crisis lines appear with every search.</div>
  <div class="dir-toolbar">
-  <input type="search" id="dirQ" placeholder="Search name, service, phone…" aria-label="Search resources">
-  <select id="dirCounty" aria-label="Filter by metro"><option value="">All metros / regions</option></select>
-  <select id="dirCat" aria-label="Filter by category"><option value="">All categories</option></select>
+  <select id="dirState" aria-label="Filter by state"><option value="">All states</option></select>
+  <input type="text" id="dirZip" placeholder="ZIP" maxlength="5" inputmode="numeric" pattern="[0-9]*" aria-label="ZIP code">
+  <select id="dirCounty" aria-label="Filter by region"><option value="">All regions</option></select>
+  <select id="dirCareBucket" aria-label="Care type"><option value="">All care types</option><option value="clinical">Clinical treatment</option><option value="crisis">Crisis</option><option value="substance">Substance use</option><option value="social">Social care</option><option value="specialty">Specialty populations</option><option value="language">Language access</option></select>
+  <select id="dirCareSub" aria-label="Care subtype"><option value="">All subtypes</option></select>
+  <input type="search" id="dirQ" placeholder="Search organization…" aria-label="Search resources">
  </div>
+ <div class="dir-hint" id="dirZipHint"></div>
  <div class="dir-count" id="dirCount"></div>
- <div style="overflow-x:auto"><table class="dir-table"><thead><tr><th>Organization</th><th>Category</th><th>Metro / region</th><th>Contact</th></tr></thead><tbody id="dirBody"></tbody></table></div>
+ <div style="overflow-x:auto"><table class="dir-table"><thead><tr><th>Type</th><th>Organization</th><th>Region</th><th>Phone</th><th>Referral</th></tr></thead><tbody id="dirBody"></tbody></table></div>
 </section>
 </div>
 <div id="view-ref" class="hidden"><section class="layer" id="reference">
@@ -2755,33 +2763,6 @@ function buildPrintContent(mode){
 
 
 function renderGateSummary(){renderReqMarks();}
-var DIR_INIT=0;
-function initDirectory(){
- if(DIR_INIT)return;DIR_INIT=1;
- var counties=[...new Set(DATA.map(function(r){return r.county;}).filter(Boolean))].sort();
- var cats=[...new Set(DATA.map(function(r){return r.cat;}).filter(Boolean))].sort();
- var cs=$("#dirCounty");counties.forEach(function(c){var o=document.createElement("option");o.value=c;o.textContent=c;cs.appendChild(o);});
- var ct=$("#dirCat");cats.forEach(function(c){var o=document.createElement("option");o.value=c;o.textContent=c;ct.appendChild(o);});
- ["dirQ","dirCounty","dirCat"].forEach(function(id){var el=$("#"+id);if(el)el.addEventListener("input",renderDirectory);if(el&&el.tagName==="SELECT")el.addEventListener("change",renderDirectory);});
-}
-function renderDirectory(){
- initDirectory();
- var q=($("#dirQ")&&$("#dirQ").value||"").toLowerCase().trim();
- var fc=$("#dirCounty")?$("#dirCounty").value:"";
- var fcat=$("#dirCat")?$("#dirCat").value:"";
- var list=DATA.filter(function(r){
-  if(fc&&r.county!==fc)return false;
-  if(fcat&&r.cat!==fcat)return false;
-  if(!q)return true;
-  var blob=((r.name||"")+" "+(r.svc||"")+" "+(r.cat||"")+" "+(r.county||"")+" "+(r.phone||"")+" "+(r.address||"")).toLowerCase();
-  return blob.indexOf(q)>=0;
- });
- if($("#dirCount"))$("#dirCount").textContent=list.length+" resource"+(list.length===1?"":"s")+" · "+DATA.length+" total in directory";
- if(!$("#dirBody"))return;
- $("#dirBody").innerHTML=list.slice(0,200).map(function(r){
-  return '<tr><td><div class="dn">'+esc(r.name)+'</div>'+(r.svc?'<div class="dm">'+esc(r.svc)+'</div>':'')+(r.address?'<div class="dm">'+esc(r.address)+'</div>':'')+'</td><td>'+esc(r.cat||"—")+'</td><td>'+esc(r.county||"—")+'</td><td class="dp"><a href="tel:'+tel(r.phone)+'">'+esc(r.phone)+'</a></td></tr>';
- }).join("")+(list.length>200?'<tr><td colspan="4" class="dm">Showing first 200 — narrow your search.</td></tr>':"");
-}
 function settingPacketBanner(){
  var s=normalizeSetting(S.setting);
  if(s==="Acute")return '<div class="setting-banner"><b>After your hospital or ER visit:</b> Keep this page. Call the numbers below if you feel worse. Call <b>911</b> or go to the ER if you cannot stay safe.</div>';

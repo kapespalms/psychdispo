@@ -42,7 +42,7 @@
   --measure: 42rem;
   --page: 56rem;
   --shell-header: 112px;
-  --frame-pad: clamp(40px, 9vw, 88px);
+  --frame-pad: clamp(27px, 6vw, 59px);
   --frame-radius: 12px;
 }
 
@@ -119,6 +119,15 @@
   .site-wordmark i {
     font-style: italic;
     color: var(--t);
+  }
+
+  .auth-panel {
+    width: 100%;
+    max-width: 24rem;
+    min-height: min(32rem, 68vh);
+    padding: clamp(2.25rem, 6vh, 3.75rem) clamp(1.5rem, 4vw, 2rem);
+    background: var(--card);
+    border: 1.5px solid color-mix(in srgb, var(--t) 35%, var(--line));
   }
 
   .landing-screen {
