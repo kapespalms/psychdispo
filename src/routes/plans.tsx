@@ -10,11 +10,16 @@ import {
   listTemplates,
   type PlanTemplate,
 } from "@/lib/templates";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/plans")({
-  head: () => ({
-    meta: [{ title: "My plans · PsychDispo" }],
-  }),
+  head: () =>
+    pageHead({
+      path: "/plans",
+      title: "My plans · PsychDispo",
+      description: "Saved disposition plans and templates.",
+      noindex: true,
+    }),
   component: PlansPage,
 });
 

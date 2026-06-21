@@ -1,17 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ToolFrame } from "@/components/tool-frame";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/reference")({
-  head: () => ({
-    meta: [
-      { title: "Psych Ref · PsychDispo" },
-      {
-        name: "description",
-        content:
-          "Comprehensive psychiatry reference: psychopharmacology, algorithms, diagnosis, and assessments.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      path: "/reference",
+      title: "Psych Ref · PsychDispo",
+      description:
+        "Comprehensive psychiatry reference: psychopharmacology, algorithms, diagnosis, and assessments.",
+    }),
   component: ReferencePage,
 });
 

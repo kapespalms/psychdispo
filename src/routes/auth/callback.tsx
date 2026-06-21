@@ -1,11 +1,16 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/auth/callback")({
-  head: () => ({
-    meta: [{ title: "Signing in · PsychDispo" }],
-  }),
+  head: () =>
+    pageHead({
+      path: "/auth/callback",
+      title: "Signing in · PsychDispo",
+      description: "Completing sign in.",
+      noindex: true,
+    }),
   component: AuthCallbackPage,
 });
 

@@ -1,18 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ToolFrame } from "@/components/tool-frame";
 import { psychdispoEmbedSrc } from "@/lib/psychdispo-embed";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/directory")({
-  head: () => ({
-    meta: [
-      { title: "Resource Directory · PsychDispo" },
-      {
-        name: "description",
-        content:
-          "Search verified psychiatric and community resources by metro, category, or keyword.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      path: "/directory",
+      title: "Resource Directory · PsychDispo",
+      description:
+        "Search verified psychiatric and community resources by metro, category, or keyword.",
+    }),
   component: DirectoryPage,
 });
 

@@ -2,11 +2,16 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { getDefaults, saveDefaults, type UserDefaults } from "@/lib/user-defaults";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/settings")({
-  head: () => ({
-    meta: [{ title: "Settings · PsychDispo" }],
-  }),
+  head: () =>
+    pageHead({
+      path: "/settings",
+      title: "Settings · PsychDispo",
+      description: "PsychDispo account settings.",
+      noindex: true,
+    }),
   component: SettingsPage,
 });
 

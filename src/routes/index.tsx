@@ -1,17 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { LandingHeader } from "@/components/landing-header";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "PsychDispo · Psychiatric Disposition" },
-      {
-        name: "description",
-        content:
-          "Evidence-informed psychiatric disposition — verified community resources, structured safety review, and discharge documentation.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      path: "/",
+      title: "PsychDispo · Psychiatric Disposition",
+      description:
+        "Evidence-informed psychiatric disposition — verified community resources, structured safety review, and discharge documentation.",
+    }),
   component: Index,
 });
 

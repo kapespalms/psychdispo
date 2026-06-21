@@ -1,18 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { RepoLayout } from "@/components/repo-layout";
 import { getRepository } from "@/data/repositories";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/workflow")({
-  head: () => ({
-    meta: [
-      { title: "Psych Dispo · PsychDispo" },
-      {
-        name: "description",
-        content:
-          "Outpatient psychiatry resources in Ohio: medication management, acute crisis contacts, psychotherapy options, and social considerations.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      path: "/workflow",
+      title: "Psych Dispo · PsychDispo",
+      description:
+        "Outpatient psychiatry resources in Ohio: medication management, acute crisis contacts, psychotherapy options, and social considerations.",
+    }),
   component: WorkflowPage,
 });
 

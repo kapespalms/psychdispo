@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ToolFrame } from "@/components/tool-frame";
 import { psychdispoEmbedSrc } from "@/lib/psychdispo-embed";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/dispo")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -8,16 +9,14 @@ export const Route = createFileRoute("/dispo")({
     template: search.template === "1" ? ("1" as const) : undefined,
     fresh: search.fresh === "1" ? ("1" as const) : undefined,
   }),
-  head: () => ({
-    meta: [
-      { title: "Psych Dispo · Plan" },
-      {
-        name: "description",
-        content:
-          "Guided psychiatric disposition workflow with safety screening, level of care, verified referrals, and a printable discharge packet.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      path: "/dispo",
+      title: "Psych Dispo · Plan",
+      description:
+        "Guided psychiatric disposition workflow with safety screening, level of care, verified referrals, and a printable discharge packet.",
+      noindex: true,
+    }),
   component: DispoPage,
 });
 

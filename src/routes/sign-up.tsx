@@ -2,11 +2,16 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { AuthShell } from "@/components/auth-shell";
 import { useAuth } from "@/lib/auth";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/sign-up")({
-  head: () => ({
-    meta: [{ title: "Create account · PsychDispo" }],
-  }),
+  head: () =>
+    pageHead({
+      path: "/sign-up",
+      title: "Create account · PsychDispo",
+      description: "Create a PsychDispo account.",
+      noindex: true,
+    }),
   component: SignUpPage,
 });
 

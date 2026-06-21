@@ -1,15 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({
-    meta: [
-      { title: "About · PsychDispo" },
-      {
-        name: "description",
-        content: "About PsychDispo — psychiatric disposition and resource navigation.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead({
+      path: "/about",
+      title: "About · PsychDispo",
+      description: "About PsychDispo — psychiatric disposition and resource navigation.",
+    }),
   component: About,
 });
 
