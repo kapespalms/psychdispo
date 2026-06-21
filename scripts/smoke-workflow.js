@@ -16,6 +16,9 @@ const required = [
   "function renderPlanTopMatches(",
   "function renderDeliverScreen(",
   "function autoMatch(",
+  "function syncFlagsFromS(",
+  "function flagVisibleForStage(",
+  "var FLAG_LIFE_STAGE=",
 ];
 
 const missing = required.filter((sig) => !html.includes(sig));

@@ -2161,6 +2161,7 @@ function flagVisibleForStage(flag,stage){
  if(!row)return true;
  return !!row[stage];
 }
+function flagOn(fl){return !!S.flags[fl]&&flagVisibleForStage(fl);}
 function pruneHiddenFlags(){
  Object.keys(S.flags).forEach(function(fl){
   if(!flagVisibleForStage(fl))S.flags[fl]=0;
@@ -3939,13 +3940,13 @@ function renderPanels(){
  function gpush(title,fn){var list=pick(fn);if(list.length)gSubs.push({title:title,list:list});}
  if(S.lifeStage==="child")gpush("G1 · Pediatric",function(r){return r.spec==="pediatric"||r.flag==="pediatric"||r.peds;});
  if(S.lifeStage==="geriatric")gpush("G2 · Geriatric",function(r){return r.spec==="geriatric"||r.flag==="geriatric"||(r.cat||"").indexOf("Seniors & aging")>=0;});
- if(S.flags.perinatal)gpush("G3 · Perinatal",function(r){return r.spec==="perinatal"||r.flag==="perinatal";});
+ if(S.flags.perinatal&&flagVisibleForStage("perinatal"))gpush("G3 · Perinatal",function(r){return r.spec==="perinatal"||r.flag==="perinatal";});
  if(S.flags.veteran||S.insurance==="VA")gpush("G4 · Veteran",function(r){return r.spec==="veteran"||r.flag==="veteran";});
- if(S.flags.lgbtq)gpush("G5 · LGBTQ+",function(r){return r.flag==="lgbtq";});
- if(S.flags.tbi)gpush("G6 · TBI / neuropsychiatric",function(r){return r.flag==="tbi";});
- if(S.flags.idd)gpush("G7 · IDD",function(r){return r.flag==="idd";});
- if(S.flags.seriousMed)gpush("G8 · Serious medical illness (psycho-oncology, palliative)",function(r){return r.flag==="seriousMed"||r.spec==="cancer"||r.spec==="eating";});
- if(S.flags.justice||S.violence==="yes")gpush("G9 · Justice-involved / forensic",function(r){return r.flag==="justice";});
+ if(flagOn("lgbtq"))gpush("G5 · LGBTQ+",function(r){return r.flag==="lgbtq";});
+ if(flagOn("tbi"))gpush("G6 · TBI / neuropsychiatric",function(r){return r.flag==="tbi";});
+ if(flagOn("idd"))gpush("G7 · IDD",function(r){return r.flag==="idd";});
+ if(flagOn("seriousMed"))gpush("G8 · Serious medical illness (psycho-oncology, palliative)",function(r){return r.flag==="seriousMed"||r.spec==="cancer"||r.spec==="eating";});
+ if((flagOn("justice")||S.violence==="yes"))gpush("G9 · Justice-involved / forensic",function(r){return r.flag==="justice";});
  if(gSubs.length)P.push({key:"G",subs:gSubs});
  // compute auto-checks then apply to any resource the user hasn't manually toggled
  var auto={};
