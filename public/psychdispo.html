@@ -59,15 +59,14 @@ textarea{max-width:100%;min-height:54px;resize:vertical}
 .safety-domain-row.open .safety-domain-pill{display:none}
 .safety-chevron{width:16px;height:16px;flex:none;stroke:var(--mut);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s;margin-left:4px}
 .safety-domain-row.open .safety-chevron{transform:rotate(180deg)}
-.safety-domain-body{max-height:0;overflow:hidden;padding:0 10px;transition:max-height .28s ease}
-.safety-domain-row.open .safety-domain-body{max-height:min(520px,52vh);overflow-y:auto;overscroll-behavior:contain;padding:0 10px 10px;-webkit-overflow-scrolling:touch}
-.risk-doc-acc{margin-top:8px;border:1px solid var(--line);border-radius:8px;background:#fafbfd;padding:0 10px 8px}
-.risk-doc-acc>summary{cursor:pointer;font-size:12.5px;font-weight:600;color:var(--mut);padding:8px 2px;list-style:none;display:flex;align-items:center;gap:6px}
-.risk-doc-acc>summary::-webkit-details-marker{display:none}
-.risk-doc-acc>summary::before{content:"▸";font-size:11px;color:var(--faint);transition:transform .2s}
-.risk-doc-acc[open]>summary::before{transform:rotate(90deg)}
-.risk-doc-acc .risk-doc-body{padding-top:4px}
-.risk-doc-acc textarea{max-width:100%;min-height:48px;font-size:13px}
+.safety-domain-body{max-height:none;overflow:visible;padding:0 8px 8px}
+.safety-domain-row .safety-chevron{display:none}
+.safety-domain-toggle{cursor:default;pointer-events:none;padding:6px 8px 4px}
+.safety-domain-pill{display:none!important}
+.risk-doc-inline{margin-top:6px;padding-top:6px;border-top:1px dashed var(--line)}
+.risk-doc-inline .risk-doc-h{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:0 0 6px}
+.risk-doc-inline textarea{max-width:100%;min-height:44px;font-size:12.5px}
+#safetyChartDoc{display:none!important}
 .safety-gate-opts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
 .safety-gate-opts .opt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11px;padding:6px 4px;min-height:54px;white-space:normal;line-height:1.2;text-align:center}
 .safety-gate-opts .opt .gate-lbl{font-size:10.5px;font-weight:600;line-height:1.15}
@@ -107,26 +106,26 @@ body.embed .progress-sticky{top:0}
 .spine{display:flex;gap:5px;padding:6px 18px 4px}
 .spine .seg{flex:1;cursor:pointer}
 .spine .seg .bar{height:4px;border-radius:3px;background:#e2e5eb;transition:background .2s}
-.spine .seg.done .bar{background:var(--sage)}
 .spine .seg.now .bar{background:var(--t);box-shadow:0 0 0 1px rgba(42,67,192,.15)}
-.spine .seg.future .bar{background:#e2e5eb}
 .spine .seg .t{font-size:10px;letter-spacing:.02em;text-transform:none;color:var(--faint);font-weight:600;margin-top:6px;transition:color .2s;line-height:1.2}
 .spine .seg.now .t{color:var(--t)}
-.spine .seg.done .t{color:var(--sage)}
 .slide-shell{margin:0;padding:4px 0 0;min-height:0}
 .slide-track{display:flex;transition:transform .38s cubic-bezier(.4,0,.2,1);will-change:transform}
 .slide-track.slide-back{transition-timing-function:cubic-bezier(.4,0,.6,1)}
 .slide-panel{flex:0 0 100%;min-width:100%;padding:0 16px;box-sizing:border-box}
-.float-card{background:var(--card);border:none;border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0;padding:20px 22px;margin:0;box-shadow:none}
-.float-card+.float-card{margin-top:14px;border-top:none}
+.float-card{background:var(--card);border:none;border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0;padding:10px 12px;margin:0;box-shadow:none}
+.float-card+.float-card{margin-top:8px;border-top:none}
 .slide-panel .layer{border:none;border-radius:0;margin:0;padding:18px 20px;box-shadow:none;background:transparent}
 .slide-panel .layer+.layer{border-top:1px solid var(--line);padding-top:20px;margin-top:4px}
 .step-kicker{display:flex;align-items:center;gap:8px;margin-bottom:2px;padding:0 18px}
 .step-kicker .num{font-family:var(--serif);font-size:12px;color:var(--terra);font-weight:600}
 .step-kicker .lbl{font-size:10px;letter-spacing:.04em;text-transform:none;color:var(--faint);font-weight:600}
 .step-kicker .ln{flex:1;height:1px;background:var(--line)}
-.step-head{padding:0 18px 4px}
-.step-head .ltitle{font-family:var(--serif);font-weight:700;font-size:22px;letter-spacing:-.2px;margin:0 0 2px;line-height:1.08}
+.step-head{padding:0 18px 2px}
+.step-head .ltitle{font-family:var(--serif);font-weight:700;font-size:20px;letter-spacing:-.2px;margin:0;line-height:1.1}
+.slide-panel .step-kicker .lbl{display:none}
+.slide-panel .step-head{padding:0 0 2px}
+.slide-panel .req-legend{margin:0 0 6px;padding:0}
 .step-head .ldesc{display:none}
 .layer{border:none;border-radius:0;margin:0;padding:18px 34px 24px;box-shadow:none}
 .layer+.layer{border-top:1px solid var(--line)}
@@ -578,7 +577,9 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 body.embed #view-tool .workflow-sheet:has(#slideShell:not(.hidden)),
 body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-height:0;height:100%;max-height:none;margin:0;border-radius:0;border-left:none;border-right:none;border-top:none}
 #view-tool:has(#slideShell:not(.hidden)) .slide-nav-top{display:none!important}
-#view-tool:has(#slideShell:not(.hidden)) .statusbar{display:none!important}
+body:has(#view-tool #slideShell:not(.hidden)) .statusbar{display:none!important}
+body:has(#view-tool #slideShell:not(.hidden)){padding-bottom:env(safe-area-inset-bottom,0px)}
+body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;padding-bottom:0}
 #view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .workflow-body,
 #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)) .workflow-body{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
 #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)) #pathwayFork{flex:1;min-height:0;overflow:hidden;overscroll-behavior:none;padding-bottom:0;pointer-events:auto}
@@ -589,7 +590,7 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
 .slide-panel>.float-card,.slide-panel>.layer{flex:1 1 auto;display:flex;flex-direction:column;overflow:hidden;padding:6px 12px 0;margin:0;min-height:0;pointer-events:auto}
 @media(max-width:680px){.slide-panel>.float-card,.slide-panel>.layer{padding:4px 10px 0}}
 .slide-panel>.float-card{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);box-shadow:0 1px 3px rgba(26,29,38,.06)}
-.slide-panel .step-kicker,.slide-panel .step-head{flex-shrink:0}
+.slide-panel .step-kicker,.slide-panel .step-head,.slide-panel .card-nav,.slide-panel .req-legend{flex-shrink:0}
 .slide-panel .slide-body,.slide-panel .card-body{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;touch-action:pan-y;padding-bottom:8px}
 .slide-panel .plan-compact-head{flex-shrink:0}
 .step-kicker{margin-bottom:0;padding-top:2px}
@@ -636,9 +637,9 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
 .card-nav .foot-save-chip{font-size:10px;color:var(--good);white-space:nowrap;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;margin-right:auto}
 .card-nav .card-back{min-height:44px;min-width:44px;padding:0 10px;font-size:11px;font-weight:600;border-radius:var(--radius);background:#fff;color:var(--t);border:1px solid var(--t);cursor:pointer;font-family:inherit;touch-action:manipulation;flex:none;line-height:1}
 .card-nav .card-back:disabled{opacity:.45;cursor:not-allowed}
-.card-nav .card-continue{min-height:44px;padding:0 11px;font-size:11px;font-weight:600;letter-spacing:0;text-transform:none;border-radius:var(--radius);border:none;background:var(--ink);color:#fff;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:4px;touch-action:manipulation;box-shadow:none;transition:background .15s;flex:none;margin-left:0}
-.card-nav .card-continue:not(:disabled):hover{background:#333}
-.card-nav .card-continue:disabled{background:#aebdbb;cursor:not-allowed;opacity:1}
+.card-nav .card-continue{min-height:44px;min-width:44px;padding:0 11px;font-size:11px;font-weight:600;letter-spacing:0;text-transform:none;border-radius:var(--radius);border:1px solid var(--t);background:#fff;color:var(--t);cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:4px;touch-action:manipulation;box-shadow:none;transition:background .15s,color .15s;flex:none;margin-left:0}
+.card-nav .card-continue:not(:disabled):hover{background:#f8f9ff}
+.card-nav .card-continue:disabled{opacity:.45;cursor:not-allowed;background:#fff;color:var(--t)}
 .card-nav .card-continue svg{width:13px;height:13px;stroke-width:2;flex:none}
 .card-foot .card-back{margin-right:auto}
 .pathway-card .pcard-ico,.pathway-card .pname,.pathway-card .pblurb{display:none}
@@ -758,8 +759,8 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
 <section class="layer float-card" id="Lgate">
  <div class="step-kicker"><span class="num">01</span><span class="lbl">Case</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Case</div></div>
- <div class="card-nav card-nav-top"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue0" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <p class="req-legend"><span class="req-mark" aria-hidden="true">■</span> Required</p>
+ <div class="card-nav card-nav-top"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue0" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <div class="slide-body">
  <div id="gateAutoNote" class="gate-auto-note"></div>
  <div id="expressToggleWrap" class="express-toggle hidden"><span class="express-mode-label">Workflow</span><div class="express-mode-track" role="group" aria-label="Workflow mode"><button type="button" class="express-mode-opt sel" id="expressModeExpress" data-express="1">Express</button><button type="button" class="express-mode-opt" id="expressModeFull" data-express="0">Full workflow</button></div></div>
@@ -842,8 +843,8 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
 <section class="layer float-card" id="L0">
  <div class="step-kicker"><span class="num">02</span><span class="lbl">Dispo &amp; Coverage</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Dispo &amp; coverage</div></div>
- <div class="card-nav card-nav-top"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue1" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <p class="req-legend"><span class="req-mark" aria-hidden="true">■</span> Required</p>
+ <div class="card-nav card-nav-top"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue1" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <div class="slide-body card-body">
  <div class="gate-grid">
   <div class="q gate-wide ins-zip-row coverage-band" id="contextInsZipBlock">
@@ -2855,16 +2856,14 @@ function renderSpine(){
  var labels=stepLabels();
  var cur=spineIndex();
  el.innerHTML=labels.map(function(lbl,i){
-  var done=spineStepDone(i);
   var now=i===cur;
-  var future=!done&&!now;
-  var cls="seg"+(done?" done":"")+(now?" now":"")+(future?" future":"");
-  var canBack=i<cur&&done;
+  var cls="seg"+(now?" now":" future");
+  var canBack=i<cur;
   return '<div class="'+cls+'" data-spine="'+i+'"'+(canBack?' role="button" tabindex="0"':'')+'><div class="bar"></div><div class="t">'+lbl+'</div></div>';
  }).join("");
  el.querySelectorAll("[data-spine]").forEach(function(seg){
   var i=parseInt(seg.dataset.spine,10);
-  if(i>=cur||!spineStepDone(i))return;
+  if(i>=cur)return;
   seg.addEventListener("click",function(){goWorkflowStep(i,true);});
   seg.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();goWorkflowStep(i,true);}});
  });
@@ -4709,7 +4708,11 @@ document.addEventListener("change",function(e){
 /* ---- status bar ---- */
 function chk(ok,label){return '<span class="chk '+(ok?"ok":"")+'">'+(ok?"✓":"○")+' <b>'+label+'</b></span>';}
 function renderStatus(){
- if(!S.pathway){$("#statusInner").innerHTML="";return;}
+ var sb=$(".statusbar");
+ var shell=$("#slideShell");
+ var inSlides=S.pathway&&shell&&!shell.classList.contains("hidden");
+ if(sb)sb.style.display=inSlides?"none":(S.pathway?"":"none");
+ if(!S.pathway||inSlides){if($("#statusInner"))$("#statusInner").innerHTML="";syncCardNav();return;}
  var saveNote=lastSaveLabel?'<span class="save-chip">· '+lastSaveLabel+'</span>':"";
  var step=S.workflowStep||0;
  var canBack=step>0;
@@ -4721,9 +4724,16 @@ function renderStatus(){
  $("#statusInner").innerHTML=
   '<button type="button" class="nav-btn back" id="wfBack"'+backDis+'>← Back</button>'+
   saveNote+
-  '<button type="button" class="btn nav-btn cont" id="wfContinue"'+contDis+'>'+contLbl+contSvg+'</button>';
+  '<button type="button" class="nav-btn cont" id="wfContinue"'+contDis+'>'+contLbl+contSvg+'</button>';
  var b=$("#wfBack");if(b&&!b.disabled)b.onclick=workflowBack;
  var c=$("#wfContinue");if(c&&!c.disabled)c.onclick=workflowContinue;
+ syncCardNav();
+}
+function syncCardNav(){
+ var step=S.workflowStep||0;
+ var canBack=step>0;
+ var canCont=workflowStepDone(step)&&step<workflowStepCount()-1;
+ var contLbl=workflowContinueLabel(step);
  function syncContBtn(btn){
   btn.disabled=!canCont;
   var svg=btn.querySelector("svg");
@@ -4735,8 +4745,6 @@ function renderStatus(){
   btn.disabled=!canBack;
   btn.onclick=canBack?workflowBack:null;
  }
- $$(".slide-nav-back").forEach(syncBackBtn);
- $$(".slide-nav-cont").forEach(syncContBtn);
  $$(".card-back").forEach(syncBackBtn);
  $$(".card-continue").forEach(syncContBtn);
  $$(".card-foot").forEach(function(foot){
@@ -5494,7 +5502,10 @@ function activateView(v,fromHash){
  $("#view-social-care").classList.toggle("hidden",v!=="social-care");
  if(v==="directory")renderDirectory();
  if(v==="social-care")renderSocialCareView();
- var sb=$(".statusbar");if(sb)sb.style.display=v==="tool"?"":"none";
+ var sb=$(".statusbar");
+ var shell=$("#slideShell");
+ var inSlides=v==="tool"&&shell&&!shell.classList.contains("hidden");
+ if(sb)sb.style.display=(v==="tool"&&!inSlides)?"":"none";
  var anchor=refAnchorFromHash();
  var want="#"+(v==="ref"?"ref":v==="directory"?"directory":v==="social-care"?"social-care":"plan");
  if(anchor&&v==="ref")want="#suicide";
