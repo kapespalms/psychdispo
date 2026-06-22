@@ -60,7 +60,7 @@ function TrustPage() {
             content.
           </p>
           <p>
-            Sign-in today uses Supabase Auth: a one-time link to your work email or Google OAuth.
+            Sign-in today uses Supabase Auth: a one-time link to your work email.
             We do not store passwords. You can export or delete account data from{" "}
             <Link to="/settings" className="text-link-accent">
               Settings
@@ -97,7 +97,7 @@ function TrustPage() {
             security review, data-flow documentation, and BAA terms where PHI touches our systems.
           </p>
           <p>
-            Until then, use email sign-in link or Google as above. If your organization needs SSO
+            Until then, use the email sign-in link as above. If your organization needs SSO
             before Phase 2, contact us and we will note your interest.
           </p>
         </EditorialSection>

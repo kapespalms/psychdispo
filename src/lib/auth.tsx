@@ -16,6 +16,7 @@ import {
   type PlanTemplate,
 } from "@/lib/templates";
 import { saveCloudTemplate } from "@/lib/cloud-library";
+import { getAuthCallbackUrl } from "@/lib/auth-redirect";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 
 export type ClinicianUser = {
@@ -34,7 +35,6 @@ type AuthContextValue = {
   ready: boolean;
   supabaseEnabled: boolean;
   signInWithMagicLink: (email: string) => Promise<{ ok: true } | { ok: false; error: string }>;
-  signInWithGoogle: () => Promise<{ ok: true } | { ok: false; error: string }>;
   /** Demo localStorage sign-in when Supabase is not configured */
   signInDemo: (email: string) => { ok: true } | { ok: false; error: string };
   signOut: () => Promise<void>;
@@ -166,26 +166,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         error: "Cloud sign-in is not configured. Continue as guest or add Supabase keys.",
       };
     }
-    const redirectTo = `${window.location.origin}/auth/callback`;
     const { error } = await supabase.auth.signInWithOtp({
       email: normalized,
-      options: { emailRedirectTo: redirectTo },
-    });
-    if (error) return { ok: false as const, error: error.message };
-    return { ok: true as const };
-  }, []);
-
-  const signInWithGoogle = useCallback(async () => {
-    if (!supabase) {
-      return {
-        ok: false as const,
-        error: "Google sign-in requires Supabase. Use guest mode or configure env keys.",
-      };
-    }
-    const redirectTo = `${window.location.origin}/auth/callback`;
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo },
+      options: { emailRedirectTo: getAuthCallbackUrl() },
     });
     if (error) return { ok: false as const, error: error.message };
     return { ok: true as const };
@@ -222,7 +205,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       ready,
       supabaseEnabled,
       signInWithMagicLink,
-      signInWithGoogle,
       signInDemo,
       signOut,
     }),
@@ -232,7 +214,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       ready,
       supabaseEnabled,
       signInWithMagicLink,
-      signInWithGoogle,
       signInDemo,
       signOut,
     ],

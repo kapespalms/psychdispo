@@ -59,7 +59,7 @@ function TermsPage() {
         <EditorialSection title="Accounts">
           <p>
             You are responsible for activity under your account and for maintaining access to your
-            email. Sign-in uses passwordless links or Google OAuth through Supabase — we do not store
+            email. Sign-in uses passwordless email links through Supabase — we do not store
             passwords.
           </p>
           <p>
