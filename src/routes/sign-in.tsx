@@ -1,7 +1,11 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { AuthShell } from "@/components/auth-shell";
-import { EditorialFooterLinks } from "@/components/editorial-footer-links";
+import {
+  AuthEmailIcon,
+  AuthSendIcon,
+  AuthShieldIcon,
+  AuthShell,
+} from "@/components/auth-shell";
 import { useAuth } from "@/lib/auth";
 import { pageHead } from "@/lib/seo";
 
@@ -17,8 +21,7 @@ export const Route = createFileRoute("/sign-in")({
 });
 
 function SignInPage() {
-  const { signInWithMagicLink, signInWithGoogle, signInDemo, supabaseEnabled } = useAuth();
-  const navigate = useNavigate();
+  const { signInWithMagicLink, supabaseEnabled } = useAuth();
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
@@ -41,106 +44,82 @@ function SignInPage() {
     setSent(true);
   }
 
-  async function handleGoogle() {
-    setError("");
-    if (!supabaseEnabled) {
-      const result = signInDemo(email || "guest@psychdispo.local");
-      if (!result.ok) {
-        setError(result.error);
-        return;
-      }
-      navigate({ to: "/dispo" });
-      return;
-    }
-    setLoading(true);
-    const result = await signInWithGoogle();
-    setLoading(false);
-    if (!result.ok) setError(result.error);
-  }
-
   return (
     <AuthShell
       kicker="Account"
       title="Sign in"
-      subtitle="Sync plan templates and settings defaults across devices. Patient work stays on your device."
-      footer={
+      subtitle="Use your work email to receive a secure sign-in link."
+      belowForm={
         <>
-          No passwords. We never store patient information — only your account, templates, and
-          preferences.{" "}
-          <Link to="/dispo" className="text-link-accent">
-            Continue as guest
-          </Link>
-          <span className="block mt-2">
+          <p className="auth-shield-line">
+            <AuthShieldIcon />
+            <span>
+              No passwords. We never store patient information — only your account, templates, and
+              preferences.
+            </span>
+          </p>
+          <p className="auth-alt-link">
+            <Link to="/dispo" className="text-link-accent">
+              Continue as guest
+            </Link>
+          </p>
+          <p className="auth-alt-link auth-alt-link-muted">
             New here?{" "}
             <Link to="/sign-up" className="text-link-accent">
               Create account
             </Link>
-          </span>
-          <span className="block mt-2">
-            <EditorialFooterLinks />
-          </span>
+          </p>
         </>
       }
     >
       {sent ? (
-        <div className="space-y-4 text-center">
-          <p className="text-sm text-[var(--mut)] leading-relaxed">
-            Check <strong className="text-[var(--ink)]">{email}</strong> for your sign-in link. It
-            expires in 15 minutes.
+        <div className="auth-sent-panel">
+          <p>
+            Check <strong>{email}</strong> for your sign-in link. It expires in 15 minutes.
           </p>
-          <button
-            type="button"
-            onClick={() => setSent(false)}
-            className="text-link text-sm bg-transparent border-none cursor-pointer font-[inherit] p-0"
-          >
+          <button type="button" onClick={() => setSent(false)} className="auth-text-button">
             Use a different email
           </button>
         </div>
       ) : (
-        <form onSubmit={handleMagicLink} className="space-y-5" noValidate>
+        <form onSubmit={handleMagicLink} className="auth-form" noValidate>
           <div>
-            <label htmlFor="email" className="kicker block mb-2">
+            <label htmlFor="email" className="auth-label">
               Work email
             </label>
-            <input
-              id="email"
-              type="email"
-              autoComplete="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              aria-invalid={error ? "true" : undefined}
-              aria-describedby={error ? "sign-in-error" : undefined}
-              className="form-input"
-              placeholder="you@hospital.org"
-            />
+            <div className="auth-input-wrap">
+              <AuthEmailIcon />
+              <input
+                id="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                aria-invalid={error ? "true" : undefined}
+                aria-describedby={error ? "sign-in-error" : undefined}
+                className="auth-input"
+                placeholder="you@hospital.org"
+              />
+            </div>
           </div>
-          {error && (
+          {error ? (
             <p id="sign-in-error" className="form-error" role="alert">
               {error}
             </p>
-          )}
-          {!supabaseEnabled && (
-            <p className="text-xs text-[var(--mut)] leading-relaxed">
-              Cloud sign-in is not configured — magic link requires Supabase env keys. Google uses
-              demo mode on this device.
+          ) : null}
+          {!supabaseEnabled ? (
+            <p className="auth-hint">
+              Cloud sign-in is not configured — magic link requires Supabase env keys.
             </p>
-          )}
+          ) : null}
           <button
             type="submit"
             disabled={loading || !supabaseEnabled}
-            className="btn-blue w-full text-center disabled:opacity-40 disabled:cursor-not-allowed"
+            className="btn-auth-primary"
           >
-            {loading ? "Sending…" : "Email sign-in link"}
-          </button>
-          <div className="text-center text-xs text-[var(--mut)]">or</div>
-          <button
-            type="button"
-            onClick={handleGoogle}
-            disabled={loading}
-            className="btn-secondary"
-          >
-            {supabaseEnabled ? "Continue with Google" : "Continue with Google (demo)"}
+            <span>{loading ? "Sending…" : "Email sign-in link"}</span>
+            <AuthSendIcon />
           </button>
         </form>
       )}
