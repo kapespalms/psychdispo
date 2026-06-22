@@ -223,6 +223,26 @@ body.embed .progress-sticky{top:0}
 #expressLocExpand.expand-block.is-open{--expand-max:300px;margin-top:2px}
 #deliverAdvancedWrap.expand-block.is-open{--expand-max:min(520px,52vh)}
 .express-safety-gate{margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.safety-evidence{background:#f4f6fc;border-left:3px solid var(--t);padding:10px 12px;margin:0 0 10px;font-size:12px;line-height:1.5;color:var(--mut)}
+.safety-evidence .ev-kicker{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t);margin:0 0 6px}
+.safety-evidence .ev-lead{margin:0 0 8px;font-size:12px;color:var(--ink)}
+.safety-evidence ul{margin:0;padding:0 0 0 1em;font-size:11.5px}
+.safety-evidence li{margin:0 0 5px}
+.safety-evidence li b{color:var(--ink);font-weight:600}
+.safety-evidence .ev-link{color:var(--t);font-weight:600;text-decoration:none;font-size:11.5px;display:inline-block;margin-top:6px}
+.safety-evidence .ev-link:hover{text-decoration:underline}
+.safety-domain-ev{font-size:11px;color:var(--mut);margin:0 0 8px;line-height:1.45;border-left:2px solid var(--line);padding-left:8px}
+.safety-chart-doc{border:1px solid var(--t);background:#fafbfd;margin:12px 0 0;padding:0;border-radius:var(--radius)}
+.safety-chart-doc .scd-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;background:#eef1fb;border-bottom:1px solid var(--line)}
+.safety-chart-doc .scd-kicker{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t)}
+.safety-chart-doc .scd-copy{font:inherit;font-size:11px;font-weight:600;padding:5px 10px;background:var(--t);color:#fff;border:none;border-radius:var(--radius);cursor:pointer;touch-action:manipulation;white-space:nowrap;min-height:36px}
+.safety-chart-doc .scd-copy.copied{background:var(--good)}
+.safety-chart-doc .scd-sections{padding:8px 12px 10px;display:flex;flex-direction:column;gap:8px}
+.safety-chart-doc .scd-sec{border-bottom:1px solid var(--line);padding-bottom:8px}
+.safety-chart-doc .scd-sec:last-child{border-bottom:none;padding-bottom:0}
+.safety-chart-doc .scd-sec-h{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:0 0 4px}
+.safety-chart-doc .scd-sec-body{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;line-height:1.45;color:var(--ink);white-space:pre-wrap;word-break:break-word;margin:0}
+@media(max-width:680px){.safety-chart-doc .scd-head{flex-wrap:wrap}.safety-chart-doc .scd-copy{flex:1;min-width:100%;min-height:44px}}
 .plan-top-matches{display:flex;flex-direction:column;gap:10px;margin:0 0 12px}
 .plan-match-card{display:block;border:2px solid var(--line);border-radius:12px;padding:14px 16px;background:#fff;cursor:pointer;position:relative;touch-action:manipulation;text-align:left;width:100%;font:inherit;color:inherit}
 .plan-match-card.sel{border-color:var(--t);background:#f8f9ff;box-shadow:0 0 0 1px var(--t) inset}
@@ -867,6 +887,17 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
  <div class="card-nav card-nav-top"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue2" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <div class="slide-body">
  <div id="safetyCollabBanner" class="alert amber collab-banner hidden"><b>Clinician review required</b> — moderate/high C-SSRS or violence concern. Complete safety plan &amp; means with a trained clinician, then attest before Plan or Deliver.</div>
+ <div id="safetyEvidenceBlock" class="safety-evidence hidden">
+  <div class="ev-kicker">Evidence basis</div>
+  <p class="ev-lead">Validated screens stratify <b>acute, modifiable risk</b> for disposition — they do not predict who will die by suicide or commit violence. Document a structured assessment; obtain psychiatry evaluation when risk is moderate/high or unclear.</p>
+  <ul>
+   <li><b>Suicide</b> — <span class="kw" tabindex="0" role="term" data-def="Columbia-Suicide Severity Rating Scale. Brief validated screener assigning low, moderate, or high suicide risk based on recent ideation and behavior.">C-SSRS</span> screener (Columbia protocol): ideation → intent → plan → recent behavior. Moderate/high → safety plan + lethal-means restriction before discharge.</li>
+   <li><b>Homicide / violence</b> — Structured threat assessment; no single tool reliably predicts ED violence. Document specific factors, protective elements, and Tarasoff actions when an identifiable victim faces credible threat.</li>
+   <li><b>Substances</b> — <span class="kw" tabindex="0" role="term" data-def="Three-question alcohol screen. Scores of 3+ (women) or 4+ (men) suggest hazardous drinking worth follow-up.">AUDIT-C</span> / <span class="kw" tabindex="0" role="term" data-def="Six-item adolescent substance screen. Two or more positive answers suggest problematic use.">CRAFFT</span> / <span class="kw" tabindex="0" role="term" data-def="Screening, Brief Intervention, and Referral to Treatment — structured approach for substance use in medical settings.">SBIRT</span>; intoxication and withdrawal are acute dynamic factors for suicide and violence risk.</li>
+   <li><b>Protective factors &amp; means</b> — Stanley-Brown safety planning and lethal-means counseling reduce suicidal behavior; means restriction is recommended by VA/DoD and Joint Commission.</li>
+  </ul>
+  <a href="/emerg#suicide" class="ev-link" id="safetyEmergLink">Psych Emerg · full suicide-risk reference →</a>
+ </div>
  <div id="expressSafetyGate" class="express-safety-gate hidden">
   <div class="q"><label class="qlabel">Anything to document for safety?</label>
    <div class="opts" data-field="expressSafetyDoc"><button type="button" class="opt" data-val="no">No concern</button><button type="button" class="opt" data-val="emr">In EMR</button><button type="button" class="opt" data-val="screen">Help me document</button></div>
@@ -885,6 +916,7 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
     <svg class="safety-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
    </button>
    <div class="safety-domain-body" id="bodySuicide">
+    <p class="safety-domain-ev">Screen with <span class="kw" tabindex="0" role="term" data-def="Columbia-Suicide Severity Rating Scale. Brief validated screener assigning low, moderate, or high suicide risk based on recent ideation and behavior.">C-SSRS</span> screener — ideation, intent, plan, preparatory behavior (Posner et al.; VA/DoD 2024 CPG). Positive screen → structured assessment before final disposition.</p>
     <div class="opts safety-gate-opts" data-safety-gate="suicide">
      <button type="button" class="opt" data-val="emr"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span class="gate-lbl">In EMR</span></button>
      <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Help me document</span></button>
@@ -923,6 +955,7 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
     <svg class="safety-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
    </button>
    <div class="safety-domain-body" id="bodyHomicide">
+    <p class="safety-domain-ev">Assess acute threat to others; document plan, intent, and identifiable target. Duty-to-warn (Tarasoff) when credible threat to identifiable victim — laws vary by state.</p>
     <div class="opts safety-gate-opts" data-safety-gate="homicide">
      <button type="button" class="opt" data-val="emr"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span class="gate-lbl">In EMR</span></button>
      <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Help me document</span></button>
@@ -952,6 +985,7 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
     <svg class="safety-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
    </button>
    <div class="safety-domain-body" id="bodyViolence">
+    <p class="safety-domain-ev">No validated tool reliably predicts ED violence — document behavioral factors (weapons access, prior violence, command symptoms, intoxication) and protective elements.</p>
     <div class="opts safety-gate-opts" data-safety-gate="violence">
      <button type="button" class="opt" data-val="emr"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span class="gate-lbl">In EMR</span></button>
      <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Help me document</span></button>
@@ -1008,6 +1042,7 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
     <svg class="safety-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
    </button>
    <div class="safety-domain-body" id="bodySubstances">
+    <p class="safety-domain-ev">Validated screens (AUDIT-C, CRAFFT, SBIRT) identify hazardous use; document withdrawal concern and co-occurring psych needs as acute dynamic risk factors.</p>
     <div class="opts safety-gate-opts" data-safety-gate="substances">
      <button type="button" class="opt" data-val="emr"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span class="gate-lbl">In EMR</span></button>
      <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Help me document</span></button>
@@ -1038,6 +1073,13 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
     </div>
    </div>
   </div>
+ </div>
+ <div id="safetyChartDoc" class="safety-chart-doc hidden">
+  <div class="scd-head">
+   <div class="scd-kicker">Help me document — chart note</div>
+   <button type="button" class="scd-copy" id="safetyChartCopy">Copy all</button>
+  </div>
+  <div class="scd-sections" id="safetyChartSections"></div>
  </div>
  <div id="safetyInterventions" class="interventions-compact hidden">
   <div class="safety-grid" id="interventionsGrid">
@@ -1904,7 +1946,7 @@ var KEYWORDS={
  express:"Streamlined workflow for low-risk outpatient discharges — fewer required fields when there is no acute safety concern.",
  fullWorkflow:"Complete multi-step path with full safety screening and documentation gates.",
  inEmr:"Already documented in the electronic medical record — no duplicate entry needed here.",
- helpDocument:"PsychDispo walks through screening questions and builds chart-ready documentation.",
+ helpDocument:"Structured prompts build a sectioned chart note — risk summary, formulation, safety plan, disposition rationale, follow-up. Copy into your EMR.",
  sud:"Substance Use Disorder — problematic alcohol or drug use active in the clinical picture.",
  tbi:"Traumatic brain injury or related neuropsychiatric condition affecting cognition or behavior.",
  stanleyBrown:"Evidence-based six-step safety plan (warning signs through means restriction) done with the patient.",
@@ -2177,6 +2219,64 @@ function substancesDocumentationLines(){
  }
  if(lines.length)lines.push("");
  return lines.join("\n");
+}
+function meansActionNote(plan,other){
+ if(!plan)return "";
+ var parts=[];
+ if(plan.safe)parts.push("locked in safe");
+ if(plan.noaccess)parts.push("no patient access");
+ if(plan.removed)parts.push("removed from home");
+ if(plan.other&&other)parts.push(other);
+ return parts.length?parts.join("; "):"action documented";
+}
+function needsSafetyChartDoc(){
+ if(isExpressOp()&&S.expressSafetyDoc==="screen")return true;
+ ensureSafetyGate();
+ var sg=S.safetyGate;
+ return sg.suicide==="help"||sg.homicide==="help"||sg.violence==="help"||sg.substances==="help";
+}
+function buildSafetyChartSections(){
+ var sections=[];
+ sections.push({title:"Risk summary",body:["Suicide: "+suicideScreenNote(),"Homicide: "+homicideScreenNote(),"Violence: "+violenceScreenNote(),"Substances: "+substanceScreenNote()].join("\n")});
+ var doc=safetyDocumentationLines().trim();
+ if(doc)sections.push({title:"Risk formulation",body:doc});
+ var sudDoc=substancesDocumentationLines().trim();
+ if(sudDoc)sections.push({title:"Substance use",body:sudDoc});
+ if(needsInterventionQuestions()||S.safetyPlanInEmr||S.planDone||S.firearm||S.meds||S.otherMeansDone){
+  var planLines=[];
+  planLines.push("Stanley-Brown safety plan: "+(S.planDone==="yes"?"Completed with patient":S.planDone==="no"?"Not completed — pending":S.safetyPlanInEmr==="yes"?"Documented in EMR":"Not addressed"));
+  if(S.firearm)planLines.push("Firearm access: "+S.firearm+(S.firearm==="yes"?" — "+meansActionNote(S.firearmPlan,S.firearmOther):""));
+  if(S.meds)planLines.push("Medication stockpile: "+S.meds+(S.meds==="yes"?" — "+meansActionNote(S.medsPlan,S.medsOther):""));
+  if(S.otherMeansDone)planLines.push("Other means counseling: "+S.otherMeansDone);
+  sections.push({title:"Safety plan & means",body:planLines.join("\n")});
+ }
+ var loc=S.dispo==="community"?({outpatient:"Outpatient",iop:"IOP",php:"PHP"}[S.intensity]||"Community"):("Residential · "+({psychres:"Psychiatric residential",sudres:"SUD residential",grouphome:"Group home",snf:"SNF/LTC"}[S.residType]||""));
+ var dispLines=["Level of care: "+(loc||"—"),"Setting: "+(settingLabel(S.setting)||"—")];
+ if(S.suicideRisk==="moderate")dispLines.push("Moderate C-SSRS — safety plan and lethal-means restriction required; psychiatry evaluation before discharge unless formally trained assessor documents safe disposition.");
+ else if(S.suicideRisk==="high")dispLines.push("High C-SSRS — psychiatric evaluation required; do not discharge without trained assessor sign-off per institutional protocol.");
+ if(needsCollaborationAttestation())dispLines.push("Collaboration: "+(S.clinicianAttested?"Reviewed with trained clinician":"Pending attestation"));
+ sections.push({title:"Disposition rationale",body:dispLines.join("\n")});
+ sections.push({title:"Follow-up",body:["Complete referral and follow-up on Resources step.","Bridge appointment and 72-hour callback when indicated for elevated suicide risk.","Crisis resources: 988 · local crisis line on patient handout."].join("\n")});
+ return sections;
+}
+function buildSafetyChartText(){
+ var sections=buildSafetyChartSections();
+ return sections.map(function(s){return s.title.toUpperCase()+"\n"+s.body;}).join("\n\n");
+}
+function renderSafetyChartDoc(){
+ var wrap=$("#safetyChartDoc"),box=$("#safetyChartSections");
+ if(!wrap||!box)return;
+ if(!needsSafetyChartDoc()){wrap.classList.add("hidden");box.innerHTML="";return;}
+ wrap.classList.remove("hidden");
+ box.innerHTML=buildSafetyChartSections().map(function(s){
+  return '<div class="scd-sec"><div class="scd-sec-h">'+esc(s.title)+'</div><pre class="scd-sec-body">'+esc(s.body)+'</pre></div>';
+ }).join("");
+}
+function copySafetyChartText(btn){
+ var text=buildSafetyChartText();
+ function ok(){showCopyToast("Chart note copied");if(btn){btn.classList.add("copied");btn.textContent="Copied";setTimeout(function(){btn.classList.remove("copied");btn.textContent="Copy all";},2200);}}
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(ok).catch(function(){showCopyToast("Copy failed — select text manually");});}
+ else{showCopyToast("Copy not supported in this browser");}
 }
 function spiLifeStagePatientFooter(){
  if(!suicideDomainEngaged())return "";
@@ -2693,15 +2793,7 @@ function pathwayContextLabel(){
  if(S.pathway==="outpatient")return "Outpatient";
  return "";
 }
-function workflowContinueLabel(step){
- if(step>=workflowStepCount()-1)return "Continue";
- if(step===0)return "Continue";
- var next=stepLabels()[step+1]||"";
- if(next==="Safety Review")return "Review safety";
- if(next==="Resources")return "Choose resources";
- if(next==="Handoff")return "Finish";
- return "Continue";
-}
+function workflowContinueLabel(step){return "Continue";}
 function syncPathwaySetting(){
  if(S.pathway==="ed"){S.setting="Acute";return;}
  if(S.pathway==="outpatient"&&S.cleared==="yes"){
@@ -4000,6 +4092,7 @@ function render(){
  rev("#quickSafetyOk",isOutpatient()&&!isExpressOp()&&S.acuteConcern==="no");
  show("#expressSafetyGate",isExpressOp());
  show("#fullScreen",isExpressOp()?(S.expressSafetyDoc==="screen"):(!isOutpatient()||S.acuteConcern==="yes"));
+ show("#safetyEvidenceBlock",isExpressOp()?(S.expressSafetyDoc==="screen"):(!isOutpatient()||S.acuteConcern==="yes"));
  var hom=$("#domainHomicide");if(hom)hom.classList.toggle("express-hide-domain",isExpressOp());
  ensureSafetyGate();
  var gateDone=L0ok()&&L2ok();
@@ -4013,6 +4106,7 @@ function render(){
  var l2Att=$("#l2ClinicianAttested");if(l2Att)l2Att.checked=S.clinicianAttested;
  var l6Att=$("#l6ClinicianAttested");if(l6Att)l6Att.checked=S.clinicianAttested;
  renderSafetyDomains();
+ renderSafetyChartDoc();
  rev("#suicideRiskReveal",sg.suicide==="help");
  rev("#suicideRiskDocWrap",sg.suicide==="help");
  rev("#homicideHelpReveal",sg.homicide==="help");
@@ -5421,6 +5515,8 @@ $("#saveTemplateConfirm").addEventListener("click",confirmSaveTemplateDialog);
 $("#saveTemplateOverlay").addEventListener("click",function(e){if(e.target===e.currentTarget)hideSaveTemplateDialog();});
 $("#saveTemplateName").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();confirmSaveTemplateDialog();}if(e.key==="Escape")hideSaveTemplateDialog();});
 var suicideLink=$("#suicideGuidanceLink");if(suicideLink)suicideLink.addEventListener("click",openSuicideGuidance);
+var safetyEmergLink=$("#safetyEmergLink");if(safetyEmergLink)safetyEmergLink.addEventListener("click",openSuicideGuidance);
+var safetyChartCopy=$("#safetyChartCopy");if(safetyChartCopy)safetyChartCopy.addEventListener("click",function(){copySafetyChartText(safetyChartCopy);});
 $("#warmHandoffBtnL6").addEventListener("click",showWarmHandoff);
 $("#warmHandoffClose").addEventListener("click",hideWarmHandoff);
 $("#warmHandoff").addEventListener("click",function(e){if(e.target===e.currentTarget)hideWarmHandoff();});
