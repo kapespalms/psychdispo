@@ -109,8 +109,16 @@ function Index() {
           <HeroIllustration className="landing-hero-art w-full max-w-[360px] mx-auto lg:max-w-none lg:ml-auto hidden sm:block" />
         </section>
 
-        {resume && (
+        {showResumePanel && (
           <section className="landing-resume shrink-0 mb-2 sm:mb-3" aria-labelledby="landing-resume-heading">
+            <button
+              type="button"
+              className="landing-resume-close"
+              onClick={dismissLandingResume}
+              aria-label="Dismiss"
+            >
+              ×
+            </button>
             <div className="landing-resume-inner">
               <div className="landing-resume-copy min-w-0">
                 <p id="landing-resume-heading" className="landing-resume-title">

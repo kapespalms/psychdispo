@@ -362,11 +362,14 @@ body.embed .progress-sticky{top:0}
 .save-modal .row{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
 .save-modal .btn{margin-left:0}
 .resume-plan-overlay{background:rgba(22,24,43,.22);padding:10px}
-.resume-plan-modal{background:#fff;border-radius:10px;border:1px solid var(--line);max-width:248px;width:100%;padding:10px 12px;box-shadow:0 4px 14px rgba(0,0,0,.1)}
-.resume-plan-modal h3{font-family:var(--serif);font-size:14px;font-weight:600;margin:0 0 3px;line-height:1.25}
+.resume-plan-modal{position:relative;background:#fff;border-radius:10px;border:1px solid var(--line);max-width:340px;width:100%;padding:12px 14px 10px;box-shadow:0 4px 14px rgba(0,0,0,.1)}
+.resume-plan-modal h3{font-family:var(--serif);font-size:14px;font-weight:600;margin:0 20px 3px 0;line-height:1.25}
 .resume-plan-modal p{font-size:11px;color:var(--mut);margin:0 0 8px;line-height:1.35}
 .resume-plan-modal .row{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
 .resume-plan-modal .btn{padding:5px 10px;font-size:11px;font-weight:600;min-height:30px;border-radius:8px;margin-left:0}
+.resume-plan-close{position:absolute;top:8px;right:8px;border:none;background:none;color:var(--mut);cursor:pointer;font-size:16px;line-height:1;padding:3px 5px;border-radius:5px;min-width:26px;min-height:26px;touch-action:manipulation}
+.resume-plan-close:hover{color:var(--ink);background:rgba(22,24,43,.06)}
+.resume-plan-close:focus-visible{outline:2px solid var(--t);outline-offset:2px}
 .post-banner{border-radius:10px;padding:12px 14px;font-size:13px;margin:12px 0 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#eef1fb;border:1px solid #cdd5f5;color:var(--ink)}
 .post-banner.hidden{display:none}
 .post-banner.guest{background:#f8f9fd;border-color:var(--line);color:var(--mut)}
@@ -1317,6 +1320,7 @@ body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;paddin
 </div>
 <div id="resumePlanOverlay" class="save-overlay resume-plan-overlay hidden" role="dialog" aria-labelledby="resumePlanTitle" aria-modal="true">
  <div class="resume-plan-modal">
+  <button type="button" class="resume-plan-close" id="resumePlanClose" aria-label="Dismiss">×</button>
   <h3 id="resumePlanTitle">Resume saved plan?</h3>
   <p id="resumePlanDesc">A disposition plan from this device can be restored.</p>
   <div class="row">
@@ -2379,7 +2383,7 @@ function renderWorkflowDocument(){
   ["Cleared",S.cleared==="yes"?"Yes":S.cleared==="no"?"No — hold disposition":"—"],
   ["Life stage",lifeStageDisplay()],
   ["Language",S.lang?(esc(S.lang)+(S.interpreter==="yes"?" (interpreter)":"")):"—"],
-  ["Population flags",activeFlagsList().length?esc(activeFlagsList().join(" · ")):"None"]
+  ["Relevant considerations",activeFlagsList().length?esc(activeFlagsList().join(" · ")):"None"]
  ])));
  var loc=dispLocShort()||"—";
  var county=patientCounty();
