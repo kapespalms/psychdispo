@@ -1,5 +1,5 @@
 /** Bump when public/psychdispo.html changes so iframe embeds bypass stale browser cache. */
-export const PSYCHDISPO_HTML_BUILD = "dir-pop-labels";
+export const PSYCHDISPO_HTML_BUILD = "dir-mece-labels";
 
 export function psychdispoEmbedSrc(
   hash: string,

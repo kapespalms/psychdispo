@@ -1324,7 +1324,7 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
   <div class="dir-head-text">
    <div class="ltag">Resource directory</div>
    <div class="ltitle">Search verified community resources</div>
-   <div class="ldesc">Filter by population, location, and care type. National crisis lines appear on the Crisis Resources tab.</div>
+   <div class="ldesc" id="dirDesc">Filter by population, location, and care category. National crisis lines appear on the Crisis Resources tab.</div>
   </div>
   <div class="dir-search-wrap">
    <input type="search" id="dirQ" placeholder="Search organization…" aria-label="Search resources">
@@ -1345,15 +1345,15 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
    <datalist id="dirStateList"></datalist>
   </div>
   <div class="dir-filter-row">
-   <input type="text" id="dirCareSub" list="dirSubList" placeholder="Subtype" aria-label="Care subtype" autocomplete="off">
+   <input type="text" id="dirCareSub" list="dirSubList" placeholder="Service" aria-label="Filter by service" autocomplete="off">
    <datalist id="dirSubList"></datalist>
-   <select id="dirCareBucket" aria-label="Care type"><option value="">All care types</option><option value="clinical">Clinical treatment</option><option value="crisis">Crisis</option><option value="substance">Substance use</option><option value="social">Social care</option><option value="specialty">Specialty populations</option><option value="language">Language access</option></select>
+   <select id="dirCareBucket" aria-label="Care category"><option value="">All care categories</option></select>
   </div>
  </div>
  <div class="dir-hint" id="dirZipHint"></div>
  <div class="dir-count" id="dirCount"></div>
  <div class="dir-results-wrap">
-  <div class="dir-table-wrap" style="overflow-x:auto"><table class="dir-table"><thead><tr><th>Type</th><th>Organization</th><th>Region</th><th>Phone</th><th>Referral</th></tr></thead><tbody id="dirBody"></tbody></table></div>
+  <div class="dir-table-wrap" style="overflow-x:auto"><table class="dir-table"><thead><tr><th data-dir-col="service">Service</th><th data-dir-col="organization">Organization</th><th data-dir-col="region">Region</th><th data-dir-col="phone">Phone</th><th data-dir-col="referral">Referral</th></tr></thead><tbody id="dirBody"></tbody></table></div>
   <div class="dir-cards" id="dirCards" aria-live="polite"></div>
  </div>
  <p class="dir-foot">Reference only — verify contact and eligibility before referral. Life-threatening emergency: 911 · Crisis: 988.</p>
@@ -3426,7 +3426,48 @@ function countyOK(r){var c=patientCounty();
  var catcl=catalogCluster(c);if(catcl)return catcl.indexOf(r.county)>=0;
  return r.county===c;}
 
-/* ---- Resource directory (P0) ---- */
+/* ---- Resource directory (P0) — canonical display labels (MECE) ---- */
+var DIR_POP_LABELS={child:"Child/Adolescent",adult:"Adult",geriatric:"Geriatric",crisis:"Crisis Resources"};
+var DIR_CARE_BUCKET_LABELS={"":"All care categories",clinical:"Clinical treatment",crisis:"Crisis services",substance:"Substance use",social:"Social care",specialty:"Specialty populations",language:"Language access"};
+var DIR_CARE_BUCKET_ORDER=["","clinical","crisis","substance","social","specialty","language"];
+var DIR_PANEL_TO_BUCKET={A:"clinical",B:"clinical",C:"substance",D:"crisis",F:"social",G:"specialty",I:"language"};
+var DIR_SPEC_LABELS={fep:"First episode psychosis",perinatal:"Perinatal",geriatric:"Geriatric",pediatric:"Child/Adolescent",veteran:"Veteran",eating:"Eating disorder",cancer:"Oncology",trauma:"Trauma",other:"Specialty"};
+var DIR_NEED_LABELS={housing:"Housing",food:"Food",dv:"Domestic violence",financial:"Benefits",legal:"Legal",employment:"Employment",catchall:"211 / navigation",other:"Social care"};
+var DIR_CAT_LABELS={"Crisis & psych urgent care":"Crisis & urgent care","Substance use & recovery":"Substance use","Domestic violence & assault":"Domestic violence","Benefits & financial":"Benefits & financial","Employment & re-entry":"Employment & re-entry","Legal, ID & records":"Legal & records","Interpreter / language access":"Language access","Seniors & aging":"Geriatric services","Developmental disabilities":"Developmental disabilities","Specialty psychiatry":"Specialty psychiatry","Health & medical":"Primary care & medical","Outpatient psychiatry":"Outpatient psychiatry","Therapy & counseling":"Therapy & counseling","IOP / PHP":"IOP / PHP","Shelter & housing":"Shelter & housing","Food":"Food","Veterans":"Veteran services","Emergency":"Emergency","Crisis line":"Crisis line","Substance use":"Substance use","Referral":"Referral"};
+var DIR_COL_LABELS={service:"Service",organization:"Organization",region:"Region",phone:"Phone",referral:"Referral"};
+var DIR_FILTER_LABELS={zip:"ZIP code",region:"Region",state:"State",service:"Service",careCategory:"Care category",search:"Search resources"};
+var DIR_COPY={
+ desc:"Filter by population, location, and care category. National crisis lines appear on the Crisis Resources tab.",
+ emptyDefault:"No matching resources. Adjust filters or select the Crisis Resources tab for national lines.",
+ emptyFilters:"No resources match these filters — try another population tab, region, or care category.",
+ emptyCrisisFilters:"No crisis resources match these filters — try another region or clear care category filters.",
+ childEmpty:"No Child/Adolescent entries for this region — try the Crisis Resources tab for all-ages crisis lines, or widen geography.",
+ gerEmpty:"No Geriatric entries for this region — try another region or the Crisis Resources tab.",
+ childPartial:"No Child/Adolescent entries for this region — showing all-ages crisis lines only. Try the Crisis Resources tab or widen geography.",
+ gerPartial:"No Geriatric entries for this region — showing general adult & all-ages resources."
+};
+function dirPopLabel(pop){return DIR_POP_LABELS[pop]||pop;}
+function dirSpecLabel(spec){return(spec&&DIR_SPEC_LABELS[spec])||"";}
+function dirNeedLabel(need){return(need&&DIR_NEED_LABELS[need])||"";}
+function dirCatDisplay(cat){return(cat&&DIR_CAT_LABELS[cat])||cat||"";}
+function dirCareBucketLabel(key){return DIR_CARE_BUCKET_LABELS.hasOwnProperty(key)?DIR_CARE_BUCKET_LABELS[key]:key;}
+function dirBucketForRecord(r){var p=metaOf(r).panel;return DIR_PANEL_TO_BUCKET[p]||"";}
+function dirApplyLabels(){
+ $$(".dir-pop-tab").forEach(function(btn){var p=btn.dataset.pop;if(p&&DIR_POP_LABELS[p])btn.textContent=DIR_POP_LABELS[p];});
+ var desc=$("#dirDesc");if(desc)desc.textContent=DIR_COPY.desc;
+ var zip=$("#dirZip");if(zip){zip.placeholder="ZIP";zip.setAttribute("aria-label",DIR_FILTER_LABELS.zip);}
+ var reg=$("#dirRegion");if(reg){reg.placeholder=DIR_FILTER_LABELS.region;reg.setAttribute("aria-label","Filter by "+DIR_FILTER_LABELS.region.toLowerCase());}
+ var st=$("#dirState");if(st){st.placeholder=DIR_FILTER_LABELS.state;st.setAttribute("aria-label","Filter by "+DIR_FILTER_LABELS.state.toLowerCase());}
+ var sub=$("#dirCareSub");if(sub){sub.placeholder=DIR_FILTER_LABELS.service;sub.setAttribute("aria-label","Filter by "+DIR_FILTER_LABELS.service.toLowerCase());}
+ var bucket=$("#dirCareBucket");if(bucket){
+  var cur=bucket.value;
+  bucket.setAttribute("aria-label",DIR_FILTER_LABELS.careCategory);
+  bucket.innerHTML=DIR_CARE_BUCKET_ORDER.map(function(k){return '<option value="'+esc(k)+'">'+esc(dirCareBucketLabel(k))+'</option>';}).join("");
+  if(DIR_CARE_BUCKET_LABELS.hasOwnProperty(cur))bucket.value=cur;
+ }
+ var q=$("#dirQ");if(q)q.setAttribute("aria-label",DIR_FILTER_LABELS.search);
+ $$(".dir-table thead th[data-dir-col]").forEach(function(th){var k=th.dataset.dirCol;if(k&&DIR_COL_LABELS[k])th.textContent=DIR_COL_LABELS[k];});
+}
 var DIR_INIT=0;
 var DIR_POP="adult";
 var DIR_OH_COUNTIES=null;
@@ -3481,14 +3522,14 @@ function dirTypeLabel(r){
  var m=metaOf(r);
  if(m.sub)return m.sub.replace(/ \(.+\)$/,"").split(" — ")[0];
  if(m.need&&m.need!=="other"){
-  var needs={housing:"Housing",food:"Food",dv:"Domestic violence",financial:"Benefits",legal:"Legal",employment:"Employment",catchall:"211 / navigation",other:"Social care"};
-  if(needs[m.need])return needs[m.need];
+  var nl=dirNeedLabel(m.need);
+  if(nl)return nl;
  }
  if(m.spec&&m.spec!=="other"){
-  var specs={fep:"First episode",perinatal:"Perinatal",geriatric:"Geriatric",pediatric:"Pediatric",veteran:"Veteran",eating:"Eating disorder",cancer:"Oncology",trauma:"Trauma",other:"Specialty"};
-  if(specs[m.spec])return specs[m.spec];
+  var sl=dirSpecLabel(m.spec);
+  if(sl)return sl;
  }
- return r.cat||"—";
+ return dirCatDisplay(r.cat)||"—";
 }
 function dirAllStates(){
  var s={"National":1};
@@ -3560,15 +3601,15 @@ function dirMatchPopulation(r,pop){
 }
 function dirPopulationNote(pop,list){
  if(!list.length){
-  if(pop==="child")return "No pediatric-specific entries for this region — try the Crisis Resources tab for all-ages crisis lines, or widen geography.";
-  if(pop==="geriatric")return "No geriatric-specific entries for this region — try another region or the Crisis Resources tab.";
-  if(pop==="crisis")return "No crisis resources match these filters — try another region or clear care-type filters.";
-  return "No resources match these filters — try another population tab, region, or care type.";
+  if(pop==="child")return DIR_COPY.childEmpty;
+  if(pop==="geriatric")return DIR_COPY.gerEmpty;
+  if(pop==="crisis")return DIR_COPY.emptyCrisisFilters;
+  return DIR_COPY.emptyFilters;
  }
  var pedsCount=list.filter(dirIsPedsResource).length;
  var gerCount=list.filter(dirIsGeriatricResource).length;
- if(pop==="child"&&pedsCount===0)return "No pediatric-specific entries for this region — showing all-ages crisis lines only. Try the Crisis Resources tab or widen geography.";
- if(pop==="geriatric"&&gerCount===0)return "No geriatric-specific entries for this region — showing general adult & all-ages resources.";
+ if(pop==="child"&&pedsCount===0)return DIR_COPY.childPartial;
+ if(pop==="geriatric"&&gerCount===0)return DIR_COPY.gerPartial;
  return "";
 }
 function dirFillDatalist(id,values){
@@ -3587,15 +3628,15 @@ function dirSubsForBucket(bucket){
    var panels=DIR_PANEL_BUCKETS[bucket];
    if(!panels||panels.indexOf(m.panel)<0)return;
   }
-  if(r.cat)out.add(r.cat);
+  if(r.cat)out.add(dirCatDisplay(r.cat));
   if(m.sub)out.add(m.sub);
   if(m.need&&m.need!=="other"){
-   var needs={housing:"Housing",food:"Food",dv:"Domestic violence",financial:"Benefits",legal:"Legal",employment:"Employment",catchall:"211 / navigation"};
-   if(needs[m.need])out.add(needs[m.need]);
+   var nl=dirNeedLabel(m.need);
+   if(nl)out.add(nl);
   }
   if(m.spec&&m.spec!=="other"){
-   var specs={fep:"First episode",perinatal:"Perinatal",geriatric:"Geriatric",pediatric:"Pediatric",veteran:"Veteran",eating:"Eating disorder",cancer:"Oncology",trauma:"Trauma"};
-   if(specs[m.spec])out.add(specs[m.spec]);
+   var sl=dirSpecLabel(m.spec);
+   if(sl)out.add(sl);
   }
  });
  return [...out].sort();
@@ -3681,6 +3722,7 @@ function dirUpdateZipHint(){
 }
 function initDirectory(){
  if(DIR_INIT)return;DIR_INIT=1;
+ dirApplyLabels();
  dirRefreshStateList();
  dirRefreshRegionList();
  dirRefreshSubList();
@@ -3742,7 +3784,7 @@ function renderDirectory(){
   if(popNote){
    msg=popNote;
   }else if(localCount===0&&list.length===0){
-   msg="No resources match these filters — try another population tab, region, or care type.";
+   msg=DIR_COPY.emptyFilters;
   }else{
    msg=localCount+" resource"+(localCount===1?"":"s");
    if(list.length>localCount)msg+=" · includes "+(list.length-localCount)+" national";
@@ -3751,7 +3793,7 @@ function renderDirectory(){
   $("#dirCount").textContent=msg;
  }
  if(!$("#dirBody"))return;
- var emptyMsg=dirPopulationNote(opts.pop,list)||"No matching resources. Adjust filters or select the Crisis Resources tab for national lines.";
+ var emptyMsg=dirPopulationNote(opts.pop,list)||DIR_COPY.emptyDefault;
  if(!list.length){
   $("#dirBody").innerHTML='<tr><td colspan="5" class="dir-empty">'+esc(emptyMsg)+'</td></tr>';
   if($("#dirCards"))$("#dirCards").innerHTML='<div class="dir-card-empty">'+esc(emptyMsg)+'</div>';
@@ -3763,7 +3805,7 @@ function renderDirectory(){
  }).join("")+(list.length>200?'<tr><td colspan="5" class="dm">Showing first 200 — narrow your search.</td></tr>':"");
  if($("#dirCards")){
   $("#dirCards").innerHTML=slice.map(function(r){
-   return '<article class="dir-card"><div class="dir-card-type">'+esc(dirTypeLabel(r))+'</div><h3 class="dir-card-name">'+esc(r.name)+'</h3><div class="dir-card-row"><span class="dir-card-lbl">Region</span><span class="dir-card-val">'+esc(r.county||"—")+'</span></div><div class="dir-card-row"><span class="dir-card-lbl">Phone</span><span class="dir-card-val"><a href="tel:'+tel(r.phone)+'">'+esc(r.phone||"—")+'</a></span></div><div class="dir-card-row"><span class="dir-card-lbl">Referral</span><span class="dir-card-val">'+esc(referralMethod(r))+'</span></div></article>';
+   return '<article class="dir-card"><div class="dir-card-type">'+esc(dirTypeLabel(r))+'</div><h3 class="dir-card-name">'+esc(r.name)+'</h3><div class="dir-card-row"><span class="dir-card-lbl">'+esc(DIR_COL_LABELS.region)+'</span><span class="dir-card-val">'+esc(r.county||"—")+'</span></div><div class="dir-card-row"><span class="dir-card-lbl">'+esc(DIR_COL_LABELS.phone)+'</span><span class="dir-card-val"><a href="tel:'+tel(r.phone)+'">'+esc(r.phone||"—")+'</a></span></div><div class="dir-card-row"><span class="dir-card-lbl">'+esc(DIR_COL_LABELS.referral)+'</span><span class="dir-card-val">'+esc(referralMethod(r))+'</span></div></article>';
   }).join("")+(list.length>200?'<div class="dir-card-more">Showing first 200 — narrow your search.</div>':"");
  }
 }
