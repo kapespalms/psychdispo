@@ -3,10 +3,10 @@ import { PsychDispoLogo } from "@/components/psychdispo-logo";
 import { useAuth } from "@/lib/auth";
 
 const NAV = [
-  { to: "/dispo" as const, label: "plan" },
-  { to: "/directory" as const, label: "directory" },
-  { to: "/social-care" as const, label: "social" },
-  { to: "/reference" as const, label: "reference" },
+  { to: "/dispo" as const, label: "Plan", landingActive: true },
+  { to: "/directory" as const, label: "Directory" },
+  { to: "/social-care" as const, label: "Social" },
+  { to: "/reference" as const, label: "Reference" },
 ] as const;
 
 export function LandingHeader() {
@@ -14,10 +14,14 @@ export function LandingHeader() {
   const path = router.state.location.pathname;
   const { user, signOut } = useAuth();
 
-  const isActive = (to: string) =>
-    path === to ||
-    (to === "/reference" && (path === "/emerg" || path === "/social-ref")) ||
-    (to === "/social-care" && path === "/social-ref");
+  const isActive = (to: string, landingActive?: boolean) => {
+    if (landingActive && path === "/") return true;
+    return (
+      path === to ||
+      (to === "/reference" && (path === "/emerg" || path === "/social-ref")) ||
+      (to === "/social-care" && path === "/social-ref")
+    );
+  };
 
   return (
     <header className="shell-header shrink-0">
@@ -29,15 +33,19 @@ export function LandingHeader() {
 
       <div className="shell-header-inner">
         <nav className="nav-pill-group" aria-label="Primary">
-          {NAV.map(({ to, label }) => (
-            <Link
-              key={to}
-              to={to}
-              className={isActive(to) ? "nav-pill nav-pill-active" : "nav-pill"}
-            >
-              {label}
-            </Link>
-          ))}
+          {NAV.map(({ to, label, ...rest }) => {
+            const active = isActive(to, "landingActive" in rest ? rest.landingActive : false);
+            return (
+              <Link
+                key={to}
+                to={to}
+                className={active ? "nav-pill nav-pill-active-dot" : "nav-pill"}
+              >
+                {active && <span className="nav-pill-dot" aria-hidden="true" />}
+                {label}
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="flex items-center gap-3 sm:gap-4 shrink-0 ml-auto">
@@ -54,8 +62,8 @@ export function LandingHeader() {
               </button>
             </>
           ) : (
-            <Link to="/sign-in" className="nav-bar-link">
-              sign in
+            <Link to="/sign-in" className="nav-bar-link nav-bar-link-accent">
+              Sign in
             </Link>
           )}
         </div>

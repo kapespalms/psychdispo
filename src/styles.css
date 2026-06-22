@@ -7,9 +7,9 @@
 /* Editorial system — medicine journal × Japanese grid. Not SaaS. */
 
 @theme inline {
-  --font-serif: "EB Garamond", Georgia, serif;
-  --font-sans: "Instrument Sans", system-ui, sans-serif;
-  --font-mono: "Poppins", ui-monospace, monospace;
+  --font-serif: Georgia, "Times New Roman", serif;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -422,6 +422,42 @@
   }
 
   .btn-auth-primary:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .auth-or-divider {
+    margin: 1rem 0;
+    text-align: center;
+    font-size: 0.75rem;
+    color: color-mix(in srgb, var(--mut) 70%, var(--line));
+    text-transform: lowercase;
+  }
+
+  .btn-auth-secondary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 46px;
+    padding: 0 1.25rem;
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--ink);
+    background: #fff;
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+
+  .btn-auth-secondary:hover:not(:disabled) {
+    border-color: color-mix(in srgb, var(--t) 35%, var(--line));
+    background: color-mix(in srgb, var(--t) 4%, #fff);
+  }
+
+  .btn-auth-secondary:disabled {
     opacity: 0.45;
     cursor: not-allowed;
   }
