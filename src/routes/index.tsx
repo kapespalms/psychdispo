@@ -20,30 +20,27 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const CONTENTS = [
+/** Four clinical tools — merged into hero house (replaces separate Contents section). */
+const HERO_TOOLS = [
   {
-    num: "01",
     to: "/dispo" as const,
-    title: "Disposition plan",
-    desc: "Safety screen, resource match, chart note, patient packet.",
+    label: "Dispo plan",
+    desc: "Disposition planning — chart note and patient handoff.",
   },
   {
-    num: "02",
     to: "/directory" as const,
-    title: "Resource directory",
-    desc: "Verified programs — all fifty states.",
+    label: "Resource directory",
+    desc: "Verified programs across all fifty states.",
   },
   {
-    num: "03",
     to: "/social-care" as const,
-    title: "Social care plan",
+    label: "Social care",
     desc: "Health-related social needs and handoff.",
   },
   {
-    num: "04",
     to: "/reference" as const,
-    title: "Psychiatric reference",
-    desc: "High-yield emergency protocols — includes Psych Emerg Review.",
+    label: "Psych reference",
+    desc: "High-yield emergency psychiatry protocols.",
   },
 ] as const;
 
@@ -95,30 +92,42 @@ function Index() {
         )}
 
         <section className="landing-hero flex-1 min-h-0 flex flex-col justify-center py-4 sm:py-6">
-          <header className="min-w-0 max-w-[36rem]">
-            <h1 className="headline-display headline-display-compact mb-3">
-              Disposition to <span className="headline-accent">documented</span> handoff.
-            </h1>
-            <p className="text-[0.9375rem] leading-[1.5] text-[var(--mut)] mb-5 max-w-[28rem]">
-              Safety documentation, verified referrals, and discharge materials for emergency and
-              consult psychiatry.
-            </p>
-            <Link to="/dispo" className="btn-blue">
-              Open plan
-            </Link>
-          </header>
-        </section>
-
-        <section className="landing-contents shrink-0 py-3 sm:py-4">
-          <p className="kicker mb-2 sm:mb-3">Contents</p>
-          <div className="landing-contents-grid">
-            {CONTENTS.map(({ num, to, title, desc }) => (
-              <Link key={to} to={to} className="landing-contents-item">
-                <span className="landing-contents-num">{num}</span>
-                <span className="landing-contents-title">{title}</span>
-                <span className="landing-contents-desc">{desc}</span>
+          <div className="landing-hero-inner">
+            <header className="landing-hero-copy min-w-0">
+              <h1 className="headline-display headline-display-compact mb-3">
+                A clinical disposition planner — safer handoff for your{" "}
+                <span className="headline-accent">patient</span> and team.
+              </h1>
+              <p className="text-[0.9375rem] leading-[1.5] text-[var(--mut)] mb-5 max-w-[26rem]">
+                Tools to plan disposition smoothly, with less broken communication between visits.
+              </p>
+              <Link to="/dispo" className="btn-blue">
+                Open plan
               </Link>
-            ))}
+            </header>
+
+            <div className="hero-house" aria-label="Clinical tools">
+              <div className="hero-house-roof" aria-hidden="true" />
+              <div className="hero-house-body">
+                <div className="hero-house-grid">
+                  {HERO_TOOLS.map(({ to, label, desc }) => (
+                    <Link key={to} to={to} className="hero-house-cell">
+                      <span className="hero-house-cell-label">{label}</span>
+                      <span className="hero-house-cell-desc">{desc}</span>
+                    </Link>
+                  ))}
+                </div>
+                {/*
+                  Door metaphor: disposition as safe home / handoff.
+                  Patient handoff paper goes to psychiatric patients who must follow it
+                  for their next appointment and ongoing communication.
+                */}
+                <div className="hero-house-door" aria-hidden="true">
+                  <span className="hero-house-door-frame" />
+                  <span className="hero-house-door-knob" />
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
