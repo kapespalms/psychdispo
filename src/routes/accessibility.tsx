@@ -45,8 +45,9 @@ function AccessibilityPage() {
           <ul className="list-disc pl-5 space-y-2">
             <li>
               <strong className="text-[var(--ink)] font-medium">Embedded workflow iframes</strong>{" "}
-              — disposition and reference tools load legacy HTML inside iframes. Full keyboard and
-              screen-reader parity inside those surfaces is not complete.
+              — disposition and reference tools load legacy HTML inside iframes. Phase 1 added
+              keyboard Space/Enter on option buttons, step focus management, and inline print-gate
+              errors; full screen-reader parity and PDF accessibility remain in progress.
             </li>
             <li>
               <strong className="text-[var(--ink)] font-medium">Third-party maps and links</strong>{" "}

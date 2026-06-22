@@ -21,6 +21,8 @@ const required = [
   "var FLAG_LIFE_STAGE=",
   "function applicablePops(",
   "function syncDirPopTabs(",
+  "cssrs-screener.js",
+  "Screen now",
 ];
 
 const missing = required.filter((sig) => !html.includes(sig));

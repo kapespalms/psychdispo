@@ -23,6 +23,7 @@ import { Route as PlansRouteImport } from './routes/plans'
 import { Route as EmergRouteImport } from './routes/emerg'
 import { Route as DispoRouteImport } from './routes/dispo'
 import { Route as DirectoryRouteImport } from './routes/directory'
+import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as AccessibilityRouteImport } from './routes/accessibility'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -99,6 +100,11 @@ const DirectoryRoute = DirectoryRouteImport.update({
   path: '/directory',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChangelogRoute = ChangelogRouteImport.update({
+  id: '/changelog',
+  path: '/changelog',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AccessibilityRoute = AccessibilityRouteImport.update({
   id: '/accessibility',
   path: '/accessibility',
@@ -129,6 +135,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/accessibility': typeof AccessibilityRoute
+  '/changelog': typeof ChangelogRoute
   '/directory': typeof DirectoryRoute
   '/dispo': typeof DispoRoute
   '/emerg': typeof EmergRoute
@@ -150,6 +157,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/accessibility': typeof AccessibilityRoute
+  '/changelog': typeof ChangelogRoute
   '/directory': typeof DirectoryRoute
   '/dispo': typeof DispoRoute
   '/emerg': typeof EmergRoute
@@ -172,6 +180,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/accessibility': typeof AccessibilityRoute
+  '/changelog': typeof ChangelogRoute
   '/directory': typeof DirectoryRoute
   '/dispo': typeof DispoRoute
   '/emerg': typeof EmergRoute
@@ -195,6 +204,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/accessibility'
+    | '/changelog'
     | '/directory'
     | '/dispo'
     | '/emerg'
@@ -216,6 +226,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/accessibility'
+    | '/changelog'
     | '/directory'
     | '/dispo'
     | '/emerg'
@@ -237,6 +248,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/accessibility'
+    | '/changelog'
     | '/directory'
     | '/dispo'
     | '/emerg'
@@ -259,6 +271,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AccessibilityRoute: typeof AccessibilityRoute
+  ChangelogRoute: typeof ChangelogRoute
   DirectoryRoute: typeof DirectoryRoute
   DispoRoute: typeof DispoRoute
   EmergRoute: typeof EmergRoute
@@ -377,6 +390,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DirectoryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/changelog': {
+      id: '/changelog'
+      path: '/changelog'
+      fullPath: '/changelog'
+      preLoaderRoute: typeof ChangelogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/accessibility': {
       id: '/accessibility'
       path: '/accessibility'
@@ -419,6 +439,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AccessibilityRoute: AccessibilityRoute,
+  ChangelogRoute: ChangelogRoute,
   DirectoryRoute: DirectoryRoute,
   DispoRoute: DispoRoute,
   EmergRoute: EmergRoute,

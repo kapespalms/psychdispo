@@ -92,6 +92,17 @@ function About() {
           </div>
         </div>
 
+        <EditorialSection title="Resource updates">
+          <p>
+            Directory verification dates and release notes are published on the{" "}
+            <Link to="/changelog" className="text-link-accent">
+              resource changelog
+            </Link>
+            . Coverage is deepest in Ohio, Washington, and NY/NJ metros; other states use scaffold
+            catalog rows until locally verified.
+          </p>
+        </EditorialSection>
+
         <EditorialSection title="Clinical support, not a substitute">
           <p>
             PsychDispo is a clinical support and resource navigation tool. It does not replace

@@ -67,7 +67,26 @@ textarea{max-width:100%;min-height:54px;resize:vertical}
 .risk-doc-inline .risk-doc-h{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:0 0 6px}
 .risk-doc-inline textarea{max-width:100%;min-height:44px;font-size:12.5px}
 #safetyChartDoc{display:none!important}
-.safety-gate-opts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.safety-gate-opts{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+@media(min-width:720px){.safety-gate-opts{grid-template-columns:repeat(4,1fr)}}
+.cssrs-guided{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
+.cssrs-progress{font-size:11px;color:var(--mut);margin:0 0 8px;letter-spacing:.04em}
+.cssrs-step-h{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t);margin:0 0 4px}
+.cssrs-step-q{font-size:13px;line-height:1.45;margin:0 0 8px;color:var(--ink)}
+.cssrs-step-period{font-size:11px;color:var(--mut);margin:0 0 8px}
+.cssrs-nav{display:flex;gap:8px;margin-top:10px}
+.cssrs-nav .btn.sec{background:#fff;color:var(--t);border:1px solid var(--t);font:inherit;font-size:12px;font-weight:600;padding:7px 12px;min-height:40px;cursor:pointer;border-radius:var(--radius)}
+.cssrs-nav .btn{background:var(--ink);color:#fff;border:none;font:inherit;font-size:12px;font-weight:600;padding:7px 14px;min-height:40px;cursor:pointer;border-radius:var(--radius)}
+.cssrs-nav .btn:disabled{opacity:.45;cursor:not-allowed}
+.cssrs-result{margin-top:10px;padding:10px 12px;background:#f4f6fc;border-left:3px solid var(--t);font-size:12.5px;line-height:1.5}
+.cssrs-result.high{border-left-color:var(--red);background:var(--redbg)}
+.cssrs-result.moderate{border-left-color:var(--amber);background:var(--amberbg)}
+.cssrs-result.low{border-left-color:var(--good);background:var(--goodbg)}
+.dir-coverage{font-size:11.5px;color:var(--mut);margin:4px 0 0;line-height:1.45}
+.dir-coverage b{color:var(--ink);font-weight:600}
+.dir-card-verified{font-size:10.5px;color:var(--sage);margin-top:4px}
+.publish-gate-err{font-size:12.5px;color:var(--red);margin:8px 0 0;display:none}
+.publish-gate-err.show{display:block}
 .safety-gate-opts .opt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11px;padding:6px 4px;min-height:54px;white-space:normal;line-height:1.2;text-align:center}
 .safety-gate-opts .opt .gate-lbl{font-size:10.5px;font-weight:600;line-height:1.15}
 .safety-domain-row .reveal{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
@@ -794,12 +813,12 @@ body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;paddin
  <div id="gateAutoNote" class="gate-auto-note"></div>
  <div id="expressToggleWrap" class="express-toggle hidden"><span class="express-mode-label">Workflow</span><div class="express-mode-track" role="group" aria-label="Workflow mode"><button type="button" class="express-mode-opt sel" id="expressModeExpress" data-express="1">Express</button><button type="button" class="express-mode-opt" id="expressModeFull" data-express="0">Full workflow</button></div></div>
  <div class="q"><div class="field-label" id="lblCleared"><span class="req-mark" aria-hidden="true">■</span>Medically cleared?</div>
-  <div class="opts yesno" data-field="cleared" role="group" aria-labelledby="lblCleared"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
+  <div class="opts yesno" data-field="cleared" role="group" aria-labelledby="lblCleared" aria-required="true"><button type="button" class="opt" data-val="yes">Yes</button><button type="button" class="opt" data-val="no">No</button></div>
  </div>
  <div class="reveal hidden alert red" id="notCleared">Not medically cleared — complete medical workup / stabilization before psychiatric disposition. This tool is for medically-cleared patients only.</div>
  <div class="q gate-life-stage" id="lifeStageWrap">
   <div class="field-label" id="lblLifeStage"><span class="req-mark" aria-hidden="true">■</span><span class="kw" tabindex="0" role="term" data-def="Age band (child, adult, geriatric) used for resource matching and safety-plan language.">Life stage</span></div>
-  <div class="opts" data-field="lifeStage" role="group" aria-labelledby="lblLifeStage"><button type="button" class="opt" data-val="child">Child / Adolescent (&lt;18)</button><button type="button" class="opt" data-val="adult">Adult (18–64)</button><button type="button" class="opt" data-val="geriatric">Geriatric (≥65)</button></div>
+  <div class="opts" data-field="lifeStage" role="group" aria-labelledby="lblLifeStage" aria-required="true"><button type="button" class="opt" data-val="child">Child / Adolescent (&lt;18)</button><button type="button" class="opt" data-val="adult">Adult (18–64)</button><button type="button" class="opt" data-val="geriatric">Geriatric (≥65)</button></div>
  </div>
  <div id="expressEssentials" class="hidden">
   <div class="q gate-wide ins-zip-row coverage-band">
@@ -943,11 +962,15 @@ body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;paddin
    </button>
    <div class="safety-domain-body" id="bodySuicide">
     <p class="safety-domain-ev">Screen with <span class="kw" tabindex="0" role="term" data-def="Columbia-Suicide Severity Rating Scale. Brief validated screener assigning low, moderate, or high suicide risk based on recent ideation and behavior.">C-SSRS</span> screener — ideation, intent, plan, preparatory behavior (Posner et al.; VA/DoD 2024 CPG). Positive screen → structured assessment before final disposition.</p>
-    <div class="opts safety-gate-opts" data-safety-gate="suicide">
+    <div class="opts safety-gate-opts" data-safety-gate="suicide" role="group" aria-label="Suicide screening path">
      <button type="button" class="opt" data-val="emr"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span><span class="gate-lbl">In EMR</span></button>
+     <button type="button" class="opt" data-val="screen"><span class="ico-sf"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><span class="gate-lbl">Screen now</span></button>
      <button type="button" class="opt" data-val="help"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></span><span class="gate-lbl">Help me document</span></button>
      <button type="button" class="opt" data-val="none"><span class="ico-sf"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span><span class="gate-lbl">No concern</span></button>
     </div>
+     <div class="reveal hidden" id="cssrsGuidedPanel">
+      <div class="cssrs-guided" id="cssrsGuidedHost" aria-live="polite"></div>
+     </div>
      <div class="reveal hidden" id="suicideRiskReveal">
      <div class="q"><label class="qlabel"><span class="kw" tabindex="0" role="term" data-def="Columbia-Suicide Severity Rating Scale. Brief validated screener assigning low, moderate, or high suicide risk based on recent ideation and behavior.">C-SSRS</span> risk level</label>
       <div class="opts" data-field="suicideRisk"><button type="button" class="opt" data-val="low">Low</button><button type="button" class="opt warnv" data-val="moderate">Moderate</button><button type="button" class="opt dangerv" data-val="high">High</button></div>
@@ -1279,9 +1302,20 @@ body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;paddin
   <p id="publishGateDesc"></p>
   <label class="mini" id="publishGateFkglRow" style="display:block;margin:10px 0"><input type="checkbox" id="publishGateFkglAck"> I reviewed the reading level — OK to print these blurbs for the patient</label>
   <label class="mini" id="publishGateSensRow" style="display:block;margin:10px 0"><input type="checkbox" id="publishGateSensAck"> Include sensitive resource names &amp; addresses on the patient sheet</label>
+  <p class="publish-gate-err" id="publishGateErr" role="alert"></p>
   <div class="row">
    <button type="button" class="btn sec" id="publishGateCancel">Cancel</button>
    <button type="button" class="btn" id="publishGateConfirm">Print</button>
+  </div>
+ </div>
+</div>
+<div id="resumePlanOverlay" class="save-overlay hidden" role="dialog" aria-labelledby="resumePlanTitle" aria-modal="true">
+ <div class="save-modal">
+  <h3 id="resumePlanTitle">Resume saved plan?</h3>
+  <p id="resumePlanDesc">A disposition plan from this device can be restored.</p>
+  <div class="row">
+   <button type="button" class="btn sec" id="resumePlanDiscard">Start fresh</button>
+   <button type="button" class="btn" id="resumePlanConfirm">Resume</button>
   </div>
  </div>
 </div>
@@ -1392,7 +1426,8 @@ body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;paddin
   <div class="dir-table-wrap" style="overflow-x:auto"><table class="dir-table"><thead><tr><th data-dir-col="service">Service</th><th data-dir-col="organization">Organization</th><th data-dir-col="region">Region</th><th data-dir-col="phone">Phone</th><th data-dir-col="referral">Referral</th></tr></thead><tbody id="dirBody"></tbody></table></div>
   <div class="dir-cards" id="dirCards" aria-live="polite"></div>
  </div>
- <p class="dir-foot">Reference only — verify contact and eligibility before referral. Life-threatening emergency: 911 · Crisis: 988.</p>
+ <p class="dir-coverage" id="dirCoverageNote"></p>
+ <p class="dir-foot">Reference only — verify contact and eligibility before referral. Life-threatening emergency: 911 · Crisis: 988. <a href="/changelog" target="_parent">Resource changelog</a></p>
 </section>
 </div>
 <div id="view-ref" class="hidden"><section class="layer" id="reference">
@@ -1928,8 +1963,10 @@ body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;paddin
 <div class="statusbar"><div class="inner" id="statusInner"></div></div>
 <div class="copy-toast" id="copyToast" role="status" aria-live="polite">Copied to clipboard</div>
 
-<script src="/psychdispo-data.js?v=embed-p1-cards-data"></script>
+<script src="/psychdispo-data.js?v=embed-p1-phase1"></script>
+<script src="/cssrs-screener.js?v=phase1"></script>
 <script>
+/* Phase 1 a11y gaps remaining: full screen-reader audit of 5K-line embed; PDF/print outputs. */
 var NATIONAL=[{"county":"National","cat":"Emergency","name":"911 — Emergency","phone":"911","svc":"Police, fire & medical emergency — or go to the nearest ER","access":"All ages","panel":"D"},{"county":"National","cat":"Crisis line","name":"988 Suicide & Crisis Lifeline","phone":"988","svc":"Call or text 988 — 24/7 crisis & suicide prevention","access":"All ages","panel":"D"},{"county":"National","cat":"Crisis line","name":"Crisis Text Line","phone":"741741","svc":"Text HOME to 741741 — 24/7 text crisis support","access":"All ages","panel":"D"},{"county":"National","cat":"Crisis line","name":"Veterans Crisis Line","phone":"988","svc":"Dial 988 then press 1 — 24/7 veteran crisis support","access":"Veterans","panel":"D","flag":"veteran"},{"county":"National","cat":"Crisis line","name":"Trans Lifeline","phone":"877-565-8860","svc":"Peer crisis support for transgender people","access":"All ages","panel":"D","flag":"lgbtq"},{"county":"National","cat":"Substance use","name":"SAMHSA National Helpline","phone":"1-800-662-4357","svc":"24/7 free, confidential treatment referral (alcohol & drugs)","access":"All · multilingual","panel":"C"},{"county":"National","cat":"Substance use","name":"Narcotics Anonymous (NA)","phone":"1-818-773-9999","svc":"Mutual-aid recovery meetings & info","access":"All","panel":"C"},{"county":"National","cat":"Substance use","name":"SMART Recovery","phone":"1-440-951-5357","svc":"Science-based mutual-aid recovery groups","access":"All","panel":"C"},{"county":"National","cat":"Substance use","name":"Never Use Alone","phone":"1-800-484-3731","svc":"24/7 overdose-prevention hotline for people using alone","access":"All","panel":"C"},{"county":"National","cat":"Referral","name":"211 — United Way","phone":"211","svc":"24/7 referral to housing, food, transport, benefits & more","access":"All","panel":"F","need":"catchall"},{"county":"National","cat":"Benefits","name":"Ohio Medicaid Consumer Hotline","phone":"1-800-324-8680","svc":"Enroll in / manage Medicaid & managed-care plans","access":"Medicaid","panel":"F","need":"financial"},{"county":"National","cat":"Benefits","name":"Ohio Benefits (SNAP / cash / childcare)","phone":"1-844-640-6446","svc":"Apply for SNAP food, cash assistance & Medicaid","access":"Income-based","panel":"F","need":"financial"},{"county":"National","cat":"Benefits","name":"Social Security (SSI / SSDI)","phone":"1-800-772-1213","svc":"Disability & retirement benefits","access":"All","panel":"F","need":"financial"},{"county":"National","cat":"Transportation","name":"Medicaid Non-Emergency Transportation (NEMT)","phone":"1-800-324-8680","svc":"Free rides to covered appointments — call your managed-care plan or the Medicaid hotline","access":"Medicaid","panel":"F","need":"transport"},{"county":"National","cat":"Domestic violence","name":"National Domestic Violence Hotline","phone":"1-800-799-7233","svc":"24/7 confidential DV support & safety planning (text START to 88788)","access":"All","panel":"F","need":"dv"},{"county":"National","cat":"Childcare","name":"Head Start / Early Head Start Locator","phone":"1-866-763-6481","svc":"Free early-childhood education & childcare","access":"Income-based","panel":"F","need":"childcare"},{"county":"National","cat":"Pediatric","name":"Boys Town National Hotline","phone":"1-800-448-3000","svc":"24/7 counseling for kids, teens & families","access":"Youth & families","panel":"G","flag":"pediatric"},{"county":"National","cat":"Pediatric","name":"National Parent & Youth Helpline","phone":"1-855-427-2736","svc":"Support for parents & caregivers in crisis","access":"Families","panel":"G","flag":"pediatric"},{"county":"National","cat":"Perinatal","name":"Postpartum Support International (PSI)","phone":"1-800-944-4773","svc":"Perinatal mood & anxiety support (call or text)","access":"Perinatal","panel":"G","flag":"perinatal"},{"county":"National","cat":"Perinatal","name":"National Maternal Mental Health Hotline","phone":"1-833-852-6262","svc":"24/7 free support for pregnant & postpartum people","access":"Perinatal","panel":"G","flag":"perinatal"},{"county":"National","cat":"Veteran","name":"Vet Center Combat Call Center","phone":"1-877-927-8387","svc":"24/7 readjustment-counseling line staffed by combat veterans","access":"Veterans & families","panel":"G","flag":"veteran"},{"county":"National","cat":"Veteran","name":"VA Caregiver Support Line","phone":"1-855-260-3274","svc":"Support for those caring for veterans","access":"Veteran caregivers","panel":"G","flag":"veteran"},{"county":"National","cat":"LGBTQ+","name":"The Trevor Project","phone":"1-866-488-7386","svc":"24/7 crisis support for LGBTQ+ youth (<25); text START to 678-678","access":"LGBTQ+ youth","panel":"G","flag":"lgbtq"},{"county":"National","cat":"LGBTQ+","name":"PFLAG (find a local chapter)","phone":"1-202-467-8180","svc":"Peer support for LGBTQ+ people & families","access":"All","panel":"G","flag":"lgbtq"},{"county":"National","cat":"TBI / neuro","name":"Brain Injury Association of Ohio","phone":"1-855-444-6443","svc":"Information, resources & support for brain injury","access":"All","panel":"G","flag":"tbi"},{"county":"National","cat":"IDD","name":"Ohio Dept. of Developmental Disabilities","phone":"1-866-313-6733","svc":"Statewide DD services & MUI/abuse reporting","access":"All","panel":"G","flag":"idd"},{"county":"National","cat":"IDD","name":"The Arc of Ohio","phone":"1-800-875-2723","svc":"Advocacy & support for people with IDD & families","access":"All","panel":"G","flag":"idd"},{"county":"National","cat":"Serious illness","name":"CancerCare","phone":"1-800-813-4673","svc":"Free counseling, support groups & financial help","access":"Serious illness","panel":"G","flag":"seriousMed"},{"county":"National","cat":"Caregiver","name":"NAMI HelpLine","phone":"1-800-950-6264","svc":"Information & support for mental illness (M-F); text 62640","access":"All","panel":"G","flag":"seriousMed"},{"county":"Columbus (Franklin)","cat":"Geriatric","name":"Central Ohio Area Agency on Aging","phone":"1-800-589-7277","svc":"In-home care, benefits & caregiver support for older adults","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"Cleveland (Cuyahoga)","cat":"Geriatric","name":"Western Reserve Area Agency on Aging","phone":"1-216-621-0303","svc":"In-home care, benefits & caregiver support for older adults","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"National","cat":"Geriatric","name":"Eldercare Locator","phone":"1-800-677-1116","svc":"National referral to local aging services","access":"Age 60+","panel":"G","flag":"geriatric"},{"county":"National","cat":"Geriatric","name":"Ohio Adult Protective Services (elder abuse)","phone":"1-855-644-6277","svc":"Report suspected abuse/neglect of older adults","access":"Age 60+","panel":"G","flag":"geriatric"},{"county":"Columbus (Franklin)","cat":"IDD","name":"Franklin County Board of Developmental Disabilities","phone":"1-614-475-6440","svc":"Eligibility, service coordination & supports","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Cleveland (Cuyahoga)","cat":"IDD","name":"Cuyahoga County Board of Developmental Disabilities","phone":"1-216-241-8230","svc":"Eligibility, service coordination & supports","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Columbus (Franklin)","cat":"Justice","name":"Reeb Avenue Center — reentry & workforce","phone":"1-614-525-2112","svc":"Job training & social services (reentry-friendly)","access":"All","national":1,"panel":"G","flag":"justice"},{"county":"Cleveland (Cuyahoga)","cat":"Justice","name":"Cuyahoga County Reentry — via 211","phone":"211","svc":"Reentry case management, ID, housing & job linkage","access":"Justice-involved","national":1,"panel":"G","flag":"justice"},{"county":"National","cat":"Justice","name":"Ohio Justice & Policy Center","phone":"1-513-421-1108","svc":"Legal help & reentry advocacy","access":"Justice-involved","panel":"G","flag":"justice"},{"county":"National","cat":"Interpreter","name":"Patient's Medicaid plan member line / Ohio Medicaid Consumer Hotline","phone":"1-800-324-8680","svc":"Free spoken + ASL interpreters — call the number on the patient's insurance card (TTY 711)","access":"Free to Medicaid members","panel":"I","auto":1},{"county":"National","cat":"Interpreter","name":"988 — language & ASL access","phone":"988","svc":"Press 2 for Spanish; ASL via videophone / 'ASL Now'; 240+ languages","access":"Free · 24/7","panel":"I","auto":1},{"county":"National","cat":"Interpreter","name":"211 — phone interpretation","phone":"211","svc":"Built-in telephone interpretation for resource referrals","access":"Free · 24/7","panel":"I","auto":1},{"county":"National","cat":"Interpreter","name":"Ohio Relay (Deaf / HoH telephone access)","phone":"711","svc":"Relay for Deaf, DeafBlind, hard-of-hearing & speech-disabled (English 800-750-0750 · Spanish 888-269-0678)","access":"Free · 24/7","panel":"I","auto":1},{"county":"Columbus (Franklin)","cat":"Interpreter","name":"US Together — Interpreter Services","phone":"1-614-581-4357","svc":"74 languages; phone & in-person for medical, legal & social settings","access":"Requesting agency billed (free to patient)","national":1,"panel":"I"},{"county":"Columbus (Franklin)","cat":"Interpreter","name":"Asian American Community Services","phone":"1-614-220-4023","svc":"30+ Asian languages incl. Nepali; 24/7 phone & in-person","access":"Requesting agency billed","national":1,"panel":"I"},{"county":"Columbus (Franklin)","cat":"Interpreter","name":"CRIS — Community Refugee & Immigration Services","phone":"1-614-235-5747","svc":"Interpretation & case management in dozens of languages","access":"Free / low-cost","national":1,"panel":"I"},{"county":"Columbus (Franklin)","cat":"Interpreter","name":"Ethiopian Tewahedo Social Services (ETSS)","phone":"1-614-252-5362","svc":"Translation & navigators (Kiswahili, Lingala, Kirundi, French, etc.)","access":"Free / low-cost","national":1,"panel":"I"},{"county":"Columbus (Franklin)","cat":"Interpreter","name":"Somali Community Association of Ohio","phone":"1-614-262-4068","svc":"Somali interpretation & translation","access":"Free / low-cost","national":1,"panel":"I"},{"county":"Columbus (Franklin)","cat":"Interpreter","name":"Bhutanese Community of Central Ohio","phone":"1-614-396-8965","svc":"Nepali / Bhutanese interpretation & health navigation","access":"Free","national":1,"panel":"I"},{"county":"Columbus (Franklin)","cat":"Interpreter","name":"Deaf Services Center — ASL interpreting","phone":"1-614-841-1991","svc":"ASL interpreting (in-person & scheduled); videophone 614-515-6065","access":"Agency billed (free to patient)","national":1,"panel":"I"},{"county":"Cleveland (Cuyahoga)","cat":"Interpreter","name":"US Together — Cleveland (Interpreter Services)","phone":"1-216-456-9630","svc":"270+ interpreters, ~74 languages; in-person, phone & virtual","access":"Requesting agency billed (free to patient)","national":1,"panel":"I"},{"county":"Cleveland (Cuyahoga)","cat":"Interpreter","name":"Asian Services in Action (ASIA, Inc.)","phone":"1-216-881-0330","svc":"Face-to-face, phone & virtual interpreting + document translation","access":"Requesting agency billed","national":1,"panel":"I"},{"county":"Cleveland (Cuyahoga)","cat":"Interpreter","name":"Catholic Charities — Migration & Refugee Services","phone":"1-216-939-3737","svc":"Resettlement/immigration services in many languages","access":"Refugee/immigrant services","national":1,"panel":"I"},{"county":"Cleveland (Cuyahoga)","cat":"Interpreter","name":"Building Hope in the City — Hope Center","phone":"1-216-241-9400","svc":"Walk-in refugee/immigrant center with staff language support","access":"Free center services","national":1,"panel":"I"},{"county":"Cleveland (Cuyahoga)","cat":"Interpreter","name":"Cleveland Hearing & Speech Center — ASL interpreting","phone":"1-216-231-0787","svc":"In-person/video ASL + spoken-language interpreting; after-hours 216-258-3520","access":"Agency billed (free to patient)","national":1,"panel":"I"},{"county":"Toledo (Lucas)","cat":"Geriatric","name":"Area Office on Aging of Northwestern Ohio","phone":"1-419-382-0624","svc":"Area Agency on Aging: care management, in-home services, caregiver support","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"Toledo (Lucas)","cat":"IDD","name":"Lucas County Board of Developmental Disabilities","phone":"1-419-380-4000","svc":"Eligibility, service coordination, early intervention & supports","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Toledo (Lucas)","cat":"Interpreter","name":"US Together — Toledo","phone":"1-419-469-2529","svc":"Refugee resettlement, interpretation & case management","access":"Requesting agency billed","national":1,"panel":"I"},{"county":"Toledo (Lucas)","cat":"Interpreter","name":"DSC of NW Ohio (Interlink Deaf Services) — ASL","phone":"1-419-720-3935","svc":"ASL/Spanish interpreting, speech-to-text, advocacy","access":"Agency billed (free to patient)","national":1,"panel":"I"},{"county":"Cincinnati (Hamilton)","cat":"Geriatric","name":"Council on Aging of Southwestern Ohio","phone":"1-513-721-1025","svc":"Area Agency on Aging: in-home care, Elderly Services Program","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"Cincinnati (Hamilton)","cat":"IDD","name":"Hamilton County Developmental Disabilities Services","phone":"1-513-794-3300","svc":"Service coordination, early intervention, waivers, employment support","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Cincinnati (Hamilton)","cat":"Interpreter","name":"Catholic Charities Southwestern Ohio","phone":"1-513-241-7745","svc":"Refugee resettlement, immigration legal & interpretation","access":"Sliding scale","national":1,"panel":"I"},{"county":"Cincinnati (Hamilton)","cat":"Interpreter","name":"Su Casa Hispanic Center (Catholic Charities)","phone":"1-513-761-1588","svc":"Spanish-language navigation, interpretation & immigrant services","access":"Many services free","national":1,"panel":"I"},{"county":"Cincinnati (Hamilton)","cat":"Interpreter","name":"RefugeeConnect","phone":"1-513-304-1994","svc":"Refugee navigation, education & community integration","access":"Free · refugee families","national":1,"panel":"I"},{"county":"Dayton (Montgomery)","cat":"Geriatric","name":"Area Agency on Aging, PSA 2","phone":"1-937-223-4357","svc":"In-home support, caregiver support & case management (9-county)","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"Dayton (Montgomery)","cat":"IDD","name":"Montgomery County Board of Developmental Disabilities Services","phone":"1-937-890-0730","svc":"Service coordination, early intervention, employment/day support","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Dayton (Montgomery)","cat":"Interpreter","name":"Welcome Dayton (City of Dayton)","phone":"1-937-333-3679","svc":"Immigrant integration hub; referrals to legal/health/language access","access":"Free · all immigrants/refugees","national":1,"panel":"I"},{"county":"Dayton (Montgomery)","cat":"Interpreter","name":"Catholic Social Services of the Miami Valley","phone":"1-937-223-7217","svc":"Refugee resettlement w/ interpreter services & counseling","access":"Refugees & low-income","national":1,"panel":"I"},{"county":"Akron (Summit)","cat":"Geriatric","name":"Direction Home Akron Canton (Area Agency on Aging 10B)","phone":"1-330-896-9172","svc":"In-home care coordination, PASSPORT & caregiver support","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"Akron (Summit)","cat":"IDD","name":"Summit County Developmental Disabilities Board (Summit DD)","phone":"1-330-634-8000","svc":"Service coordination, early intervention & supports","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Akron (Summit)","cat":"Interpreter","name":"International Institute of Akron","phone":"1-330-376-5106","svc":"On-site/phone/video interpreting, translation & refugee services","access":"Immigrants/refugees","national":1,"panel":"I"},{"county":"Canton (Stark)","cat":"Geriatric","name":"Direction Home Akron Canton (Area Agency on Aging)","phone":"1-800-421-7277","svc":"Home-care waivers, meals & long-term-care navigation","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"Canton (Stark)","cat":"IDD","name":"Stark County Board of Developmental Disabilities (StarkDD)","phone":"1-330-477-5200","svc":"Service coordination, early intervention & waivers","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Canton (Stark)","cat":"Interpreter","name":"Greenleaf Center — Deaf / Interpreting Services (ASL)","phone":"1-330-376-3665","svc":"ASL, DeafBlind & hard-of-hearing interpreting","access":"Agency billed","national":1,"panel":"I"},{"county":"Youngstown (Mahoning)","cat":"Geriatric","name":"Direction Home of Eastern Ohio (Area Agency on Aging 11)","phone":"1-330-505-2300","svc":"PASSPORT, in-home care & caregiver support","access":"Age 60+","national":1,"panel":"G","flag":"geriatric"},{"county":"Youngstown (Mahoning)","cat":"IDD","name":"Mahoning County Board of Developmental Disabilities (MCBDD)","phone":"1-330-799-2763","svc":"Service & support administration, early intervention","access":"All","national":1,"panel":"G","flag":"idd"},{"county":"Youngstown (Mahoning)","cat":"Interpreter","name":"OCCHA — Hispanic Services (Spanish interpretation)","phone":"1-330-781-1808","svc":"Certified medical/legal Spanish interpretation & social services","access":"All","national":1,"panel":"I"}]
 "use strict";
 if(/[?&]embed/.test(location.search))document.body.classList.add("embed");
@@ -1937,7 +1974,7 @@ var S={pathway:null,workflowStep:0,cleared:null,setting:null,city:"",zip:"",insu
  lifeStage:"adult",flags:{perinatal:0,veteran:0,lgbtq:0,sud:0,tbi:0,idd:0,seriousMed:0,justice:0,unhoused:0},
  acuteConcern:null,safetyGate:{suicide:null,homicide:null,violence:null,substances:null},
  safetyOpen:{suicide:false,homicide:false,violence:false,substances:false},
- cssrsInEmr:null,cssrsDone:null,suicideRisk:null,homicideRisk:null,sudScreenDone:null,sudTool:null,sudScore:"",sudClinical:null,sudWithdrawal:null,sudAsam:{intoxication:0,psych:0,environment:0},violence:null,
+ cssrsInEmr:null,cssrsDone:null,cssrsGuided:null,cssrsStep:0,suicideRisk:null,homicideRisk:null,sudScreenDone:null,sudTool:null,sudScore:"",sudClinical:null,sudWithdrawal:null,sudAsam:{intoxication:0,psych:0,environment:0},violence:null,
  violenceFactors:{weapons:0,priorViolence:0,substance:0,command:0,identifiableTarget:0},
  riskFormulation:{driving:"",mitigating:"",protective:[]},
  tarasoff:{warned:0,notified:0,hold:0,na:0},
@@ -2177,15 +2214,19 @@ function safetyDocumentationLines(){
   lines.push("RISK STRATIFICATION");
   lines.push("Suicide (C-SSRS): "+S.suicideRisk.toUpperCase()+(S.suicideRisk==="moderate"?" (intermediate)":""));
   lines.push("");
+ }else if(sg.suicide==="screen"&&S.suicideRisk&&typeof CSSRS!=="undefined"){
+  lines.push("RISK STRATIFICATION");
+  lines.push(CSSRS.cssrsChartBlock(S.cssrsGuided,S.suicideRisk));
+  lines.push("");
  }
  var prot=protectiveFactorsNote();
  var rf=S.riskFormulation||{};
- if((sg.suicide==="help"||sg.violence==="help")&&prot){
+ if((sg.suicide==="help"||sg.suicide==="screen"||sg.violence==="help")&&prot){
   lines.push("PROTECTIVE FACTORS");
   lines.push(prot);
   lines.push("");
  }
- if((sg.suicide==="help"||sg.violence==="help")&&(rf.driving||rf.mitigating)){
+ if((sg.suicide==="help"||sg.suicide==="screen"||sg.violence==="help")&&(rf.driving||rf.mitigating)){
   lines.push("CLINICAL FORMULATION");
   if(rf.driving)lines.push("Driving: "+rf.driving);
   if(rf.mitigating)lines.push("Mitigating: "+rf.mitigating);
@@ -2205,7 +2246,7 @@ function ensureSudAsam(){if(!S.sudAsam)S.sudAsam={intoxication:0,psych:0,environ
 function suicideDomainEngaged(){
  ensureSafetyGate();
  var g=S.safetyGate.suicide;
- return g==="help"||g==="emr";
+ return g==="help"||g==="emr"||g==="screen";
 }
 function needsTransitionOfCareBlock(){
  ensureSafetyGate();
@@ -2269,7 +2310,7 @@ function needsSafetyChartDoc(){
  if(isExpressOp()&&S.expressSafetyDoc==="screen")return true;
  ensureSafetyGate();
  var sg=S.safetyGate;
- return sg.suicide==="help"||sg.homicide==="help"||sg.violence==="help"||sg.substances==="help";
+ return sg.suicide==="help"||sg.suicide==="screen"||sg.homicide==="help"||sg.violence==="help"||sg.substances==="help";
 }
 function buildSafetyChartSections(){
  var sections=[];
@@ -2627,9 +2668,98 @@ function ensureSafetyOpen(){
 }
 function safetyGatePillLabel(g){
  if(g==="emr")return "In EMR";
+ if(g==="screen")return "Screen now";
  if(g==="help")return "Help me document";
  if(g==="none")return "No concern";
  return "";
+}
+function ensureCssrsGuided(){
+ if(!S.cssrsGuided)S.cssrsGuided=typeof CSSRS!=="undefined"?CSSRS.emptyCssrsGuided():{q1:null,q2:null,q3:null,q4:null,q5:null,q6:null,behaviorRecent:null};
+ if(S.cssrsStep==null)S.cssrsStep=0;
+}
+function resetCssrsGuided(){
+ S.cssrsGuided=typeof CSSRS!=="undefined"?CSSRS.emptyCssrsGuided():{q1:null,q2:null,q3:null,q4:null,q5:null,q6:null,behaviorRecent:null};
+ S.cssrsStep=0;
+ S.suicideRisk=null;
+}
+function cssrsApplyRiskFromGuided(){
+ ensureCssrsGuided();
+ if(typeof CSSRS==="undefined")return;
+ var level=CSSRS.computeCssrsRisk(S.cssrsGuided);
+ S.suicideRisk=level||null;
+}
+function renderCssrsGuided(){
+ var host=$("#cssrsGuidedHost");
+ if(!host)return;
+ ensureCssrsGuided();
+ if(typeof CSSRS==="undefined"){host.innerHTML='<div class="note">C-SSRS module failed to load — refresh or use Help me document.</div>';return;}
+ var total=CSSRS.cssrsStepCount(S.cssrsGuided);
+ var step=Math.min(S.cssrsStep||0,Math.max(0,total));
+ var risk=CSSRS.computeCssrsRisk(S.cssrsGuided);
+ if(risk){
+  cssrsApplyRiskFromGuided();
+  host.innerHTML='<div class="cssrs-progress">Screen complete · '+total+' items</div>'+
+   '<div class="cssrs-result '+esc(risk)+'"><b>C-SSRS risk: '+esc(CSSRS.cssrsRiskLabel(risk))+'</b><br><span style="font-size:11.5px">'+esc(CSSRS.cssrsResponseSummary(S.cssrsGuided).replace(/\n/g," · "))+'</span></div>'+
+   '<div class="cssrs-nav"><button type="button" class="btn sec" data-cssrs-action="restart">Restart screen</button></div>';
+  return;
+ }
+ var def=CSSRS.cssrsStepDef(step,S.cssrsGuided);
+ if(!def){S.cssrsStep=0;def=CSSRS.cssrsStepDef(0,S.cssrsGuided);}
+ if(!def)return;
+ var item=def.item;
+ var field=def.type==="followUp"?item.followUp.key:item.key;
+ var qText=def.type==="followUp"?item.followUp.text:item.text;
+ var label=def.type==="followUp"?"Behavior timing":item.label;
+ var cur=S.cssrsGuided[field];
+ host.innerHTML='<div class="cssrs-progress">Item '+(step+1)+' of '+total+' · Columbia C-SSRS screener</div>'+
+  '<div class="cssrs-step-h">'+esc(label)+'</div>'+
+  (def.type==="item"&&item.period?'<div class="cssrs-step-period">'+esc(item.period)+'</div>':"")+
+  '<div class="cssrs-step-q">'+esc(qText)+'</div>'+
+  '<div class="opts yesno" data-cssrs-field="'+esc(field)+'" role="group" aria-label="'+esc(label)+'">'+
+  '<button type="button" class="opt'+(cur==="yes"?" sel":"")+'" data-val="yes" aria-pressed="'+(cur==="yes"?"true":"false")+'">Yes</button>'+
+  '<button type="button" class="opt'+(cur==="no"?" sel":"")+'" data-val="no" aria-pressed="'+(cur==="no"?"true":"false")+'">No</button></div>'+
+  '<div class="cssrs-nav">'+
+  (step>0?'<button type="button" class="btn sec" data-cssrs-action="back">Back</button>':"")+
+  '<button type="button" class="btn" data-cssrs-action="next"'+(cur==null?' disabled aria-disabled="true"':"")+'>Next</button></div>';
+}
+function dirCoverageTier(region,state,zip){
+ var c=region||(zip&&zip.length===5?countyFromZip(zip):"");
+ if(c){
+  if(typeof dirOhioCounties!=="undefined"&&dirOhioCounties().indexOf(c)>=0)return {tier:"deep",label:"Deep local coverage — individually verified entries for this Ohio metro."};
+  if(typeof waCluster!=="undefined"&&waCluster(c))return {tier:"deep",label:"Deep local coverage — verified Washington metro entries."};
+  if(typeof nyCluster!=="undefined"&&nyCluster(c))return {tier:"deep",label:"Deep local coverage — verified New York metro entries."};
+  if(typeof upstateCluster!=="undefined"&&upstateCluster(c))return {tier:"deep",label:"Deep local coverage — verified upstate New York entries."};
+  if(typeof wvCluster!=="undefined"&&wvCluster(c))return {tier:"deep",label:"Deep local coverage — verified West Virginia entries."};
+  if(typeof isCatalogMetroCounty!=="undefined"&&isCatalogMetroCounty(c))return {tier:"scaffold",label:"Scaffold coverage — curated catalog rows for this metro; confirm hours and eligibility locally."};
+  if(/\(statewide\)/i.test(c))return {tier:"scaffold",label:"Scaffold coverage — statewide catalog entries; verify before referral."};
+ }
+ if(state&&typeof CATALOG_STATE_METROS!=="undefined"&&CATALOG_STATE_METROS[state])return {tier:"scaffold",label:"Scaffold coverage — "+state+" catalog metros; deep local lists not yet complete."};
+ return {tier:"national",label:"National crisis lines primary — limited verified local entries for this search."};
+}
+function dirFormatVerified(r){
+ if(r.unverified)return "";
+ var lv=(r.patient&&r.patient.lastVerified)||r.lastVerified||"";
+ if(!lv)return "";
+ var d=String(lv).match(/\d{4}-\d{2}/)?new Date(lv+"T12:00:00").toLocaleDateString("en-US",{month:"short",year:"numeric"}):lv;
+ return "Verified "+d;
+}
+function dirRenderCoverageNote(opts){
+ var note=$("#dirCoverageNote");
+ if(!note)return;
+ var tier=dirCoverageTier(opts.region,opts.state,opts.zip);
+ if(!tier){note.textContent="";return;}
+ note.innerHTML="<b>Coverage:</b> "+esc(tier.label);
+}
+function focusWorkflowStep(logicalStep){
+ setTimeout(function(){
+  var track=$("#slideTrack");if(!track)return;
+  var panels=$$(".slide-panel",track);
+  var p=panels[physicalStep(logicalStep)];
+  if(!p)return;
+  var sel='button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [href], [tabindex]:not([tabindex="-1"])';
+  var el=p.querySelector(sel);
+  if(el)try{el.focus({preventScroll:true});}catch(e){el.focus();}
+ },50);
 }
 function toggleSafetyDomain(domain){
  ensureSafetyOpen();
@@ -2652,10 +2782,11 @@ function syncLegacyFromSafetyGate(domain){
  ensureSafetyGate();
  var g=S.safetyGate[domain];
  if(domain==="suicide"){
-  if(g==="none"){S.cssrsInEmr=null;S.cssrsDone=null;S.suicideRisk=null;}
-  else if(g==="emr"){S.cssrsInEmr="yes";S.cssrsDone="yes";S.suicideRisk=null;}
-  else if(g==="help"){S.cssrsInEmr=null;S.cssrsDone="yes";S.suicideRisk=null;}
-  else{S.cssrsInEmr=null;S.cssrsDone=null;S.suicideRisk=null;}
+  if(g==="none"){S.cssrsInEmr=null;S.cssrsDone=null;S.suicideRisk=null;S.cssrsGuided=null;S.cssrsStep=0;}
+  else if(g==="emr"){S.cssrsInEmr="yes";S.cssrsDone="yes";S.suicideRisk=null;S.cssrsGuided=null;S.cssrsStep=0;}
+  else if(g==="help"){S.cssrsInEmr=null;S.cssrsDone="yes";S.suicideRisk=null;S.cssrsGuided=null;S.cssrsStep=0;}
+  else if(g==="screen"){S.cssrsInEmr=null;S.cssrsDone="yes";resetCssrsGuided();}
+  else{S.cssrsInEmr=null;S.cssrsDone=null;S.suicideRisk=null;S.cssrsGuided=null;S.cssrsStep=0;}
  }
  if(domain==="homicide"){
   if(g==="none"||g==="emr")S.homicideRisk=null;
@@ -2686,6 +2817,7 @@ function safetyGateComplete(domain){
  if(domain==="suicide"){
   if(g==="none"||g==="emr")return true;
   if(g==="help")return !!S.suicideRisk;
+  if(g==="screen"){ensureCssrsGuided();return typeof CSSRS!=="undefined"&&!!CSSRS.computeCssrsRisk(S.cssrsGuided);}
   return false;
  }
  if(domain==="homicide"){
@@ -2729,6 +2861,7 @@ function suicideScreenNote(){
  if(g==null)return "Not screened in PsychDispo";
  if(g==="none")return "No concern";
  if(g==="emr")return "Documented in EMR"+(S.suicideRisk?"; risk = "+S.suicideRisk.toUpperCase():"");
+ if(g==="screen")return "C-SSRS "+(S.suicideRisk?S.suicideRisk.toUpperCase():"—")+" (guided screen)";
  if(g==="help")return "C-SSRS "+(S.suicideRisk?S.suicideRisk.toUpperCase():"—");
  return "Not screened in PsychDispo";
 }
@@ -2812,6 +2945,7 @@ function planStepOk(){applyPlanDefaults();return L4ok()&&selectedCount()>=1&&L5F
 function needsInterventionQuestions(){
  ensureSafetyGate();
  if(S.safetyGate.suicide==="help"&&hiRisk())return true;
+ if(S.safetyGate.suicide==="screen"&&hiRisk())return true;
  if(S.safetyGate.violence==="help"&&S.violence==="yes")return true;
  return false;
 }
@@ -2872,6 +3006,7 @@ function goWorkflowStep(n,back){
  S._slideBack=back&&n<(S.workflowStep||0);
  S.workflowStep=n;
  render();
+ focusWorkflowStep(n);
  try{window.scrollTo({top:0,behavior:"smooth"});}catch(e){}
 }
 function workflowContinue(){
@@ -3813,10 +3948,11 @@ function dirUpdateZipHint(){
  var hint=$("#dirZipHint"),zipEl=$("#dirZip"),stEl=$("#dirState"),regEl=$("#dirRegion");
  if(!hint)return;
  var zip=zipEl?zipEl.value.replace(/\D/g,""):"";
- if(zip.length!==5){hint.textContent="";return;}
+ if(zip.length!==5){hint.textContent="";dirRenderCoverageNote({region:"",state:"",zip:""});return;}
  var region=countyFromZip(zip);
  var st=region?countyToState(region):"";
  hint.textContent=region?(st?(st+" · "+region):region):"ZIP not mapped — select state and region manually.";
+ dirRenderCoverageNote({region:region||"",state:stEl&&stEl.value.trim()?stEl.value.trim():st||"",zip:zip});
  if(stEl&&st&&st!=="National"&&!stEl.value.trim())stEl.value=st;
  if(regEl&&region&&!regEl.value.trim())regEl.value=region;
  dirRefreshRegionList();
@@ -3893,6 +4029,7 @@ function renderDirectory(){
   }
   $("#dirCount").textContent=msg;
  }
+ dirRenderCoverageNote(opts);
  if(!$("#dirBody"))return;
  var emptyMsg=dirPopulationNote(opts.pop,list)||DIR_COPY.emptyDefault;
  if(!list.length){
@@ -3902,18 +4039,32 @@ function renderDirectory(){
  }
  var slice=list.slice(0,200);
  $("#dirBody").innerHTML=slice.map(function(r){
-  return '<tr><td class="dtype">'+esc(dirTypeLabel(r))+'</td><td><div class="dn">'+esc(r.name)+'</div></td><td>'+esc(r.county||"—")+'</td><td class="dp"><a href="tel:'+tel(r.phone)+'">'+esc(r.phone||"—")+'</a></td><td class="dref">'+esc(referralMethod(r))+'</td></tr>';
+  var ver=dirFormatVerified(r);
+  return '<tr><td class="dtype">'+esc(dirTypeLabel(r))+'</td><td><div class="dn">'+esc(r.name)+'</div>'+(ver?'<div class="dir-card-verified">'+esc(ver)+'</div>':"")+'</td><td>'+esc(r.county||"—")+'</td><td class="dp"><a href="tel:'+tel(r.phone)+'">'+esc(r.phone||"—")+'</a></td><td class="dref">'+esc(referralMethod(r))+'</td></tr>';
  }).join("")+(list.length>200?'<tr><td colspan="5" class="dm">Showing first 200 — narrow your search.</td></tr>':"");
  if($("#dirCards")){
   $("#dirCards").innerHTML=slice.map(function(r){
-   return '<article class="dir-card"><div class="dir-card-type">'+esc(dirTypeLabel(r))+'</div><h3 class="dir-card-name">'+esc(r.name)+'</h3><div class="dir-card-row"><span class="dir-card-lbl">'+esc(DIR_COL_LABELS.region)+'</span><span class="dir-card-val">'+esc(r.county||"—")+'</span></div><div class="dir-card-row"><span class="dir-card-lbl">'+esc(DIR_COL_LABELS.phone)+'</span><span class="dir-card-val"><a href="tel:'+tel(r.phone)+'">'+esc(r.phone||"—")+'</a></span></div><div class="dir-card-row"><span class="dir-card-lbl">'+esc(DIR_COL_LABELS.referral)+'</span><span class="dir-card-val">'+esc(referralMethod(r))+'</span></div></article>';
+   var ver=dirFormatVerified(r);
+   return '<article class="dir-card"><div class="dir-card-type">'+esc(dirTypeLabel(r))+'</div><h3 class="dir-card-name">'+esc(r.name)+'</h3>'+(ver?'<div class="dir-card-verified">'+esc(ver)+'</div>':"")+'<div class="dir-card-row"><span class="dir-card-lbl">'+esc(DIR_COL_LABELS.region)+'</span><span class="dir-card-val">'+esc(r.county||"—")+'</span></div><div class="dir-card-row"><span class="dir-card-lbl">'+esc(DIR_COL_LABELS.phone)+'</span><span class="dir-card-val"><a href="tel:'+tel(r.phone)+'">'+esc(r.phone||"—")+'</a></span></div><div class="dir-card-row"><span class="dir-card-lbl">'+esc(DIR_COL_LABELS.referral)+'</span><span class="dir-card-val">'+esc(referralMethod(r))+'</span></div></article>';
   }).join("")+(list.length>200?'<div class="dir-card-more">Showing first 200 — narrow your search.</div>':"");
  }
 }
 
 /* ---- generic option/flag wiring ---- */
 function applyOpt(opt){
- if(opt.dataset.val!==undefined && opt.parentElement && opt.parentElement.dataset.safetyGate){
+ if(opt.dataset.val!==undefined && opt.parentElement && opt.parentElement.dataset.cssrsField){
+  var field=opt.parentElement.dataset.cssrsField,v=opt.dataset.val;
+  ensureCssrsGuided();
+  S.cssrsGuided[field]=v;
+  $$(".opt",opt.parentElement).forEach(function(o){
+   var on=o===opt;
+   o.classList.toggle("sel",on);
+   o.setAttribute("aria-pressed",on?"true":"false");
+  });
+  cssrsApplyRiskFromGuided();
+  render();
+  return;
+ }else if(opt.dataset.val!==undefined && opt.parentElement && opt.parentElement.dataset.safetyGate){
   var d=opt.parentElement.dataset.safetyGate,v=opt.dataset.val;
   setSafetyGate(d,v);
   $$(".opt",opt.parentElement).forEach(function(o){
@@ -3956,11 +4107,19 @@ function onOptClick(e){
  applyOpt(opt);
 }
 document.addEventListener("keydown",function(e){
- if(e.key!=="Enter"||e.defaultPrevented)return;
+ if(e.key!=="Enter"&&e.key!==" "&&e.key!=="Spacebar")return;
+ if(e.key==="Enter"&&e.defaultPrevented)return;
  if(e.target.closest(".save-overlay"))return;
  var tag=(e.target.tagName||"").toLowerCase();
  if(tag==="textarea")return;
  if(tag==="input"&&(e.target.type==="text"||e.target.type==="number"||e.target.type==="search"||e.target.type==="email"))return;
+ var opt=e.target.closest(".opt");
+ if((e.key===" "||e.key==="Spacebar")&&opt&&!e.target.closest("textarea")&&!e.target.closest("input[type=text]")){
+  e.preventDefault();
+  applyOpt(opt);
+  return;
+ }
+ if(e.key!=="Enter")return;
  if(!S.pathway)return;
  var step=S.workflowStep||0;
  if(step>=workflowStepCount()-1||!workflowStepDone(step))return;
@@ -3991,7 +4150,7 @@ function setField(f,v){
   if(v==="no"){
    S.safetyGate={suicide:null,homicide:null,violence:null,substances:null};
    S.safetyOpen={suicide:false,homicide:false,violence:false,substances:false};
-   S.cssrsDone=null;S.suicideRisk=null;S.homicideRisk=null;S.sudScreenDone=null;S.sudTool=null;S.sudScore="";S.sudClinical=null;S.violence=null;S.cssrsInEmr=null;
+   S.cssrsDone=null;S.suicideRisk=null;S.homicideRisk=null;S.sudScreenDone=null;S.sudTool=null;S.sudScore="";S.sudClinical=null;S.violence=null;S.cssrsInEmr=null;S.cssrsGuided=null;S.cssrsStep=0;
    S.riskFormulation={driving:"",mitigating:"",protective:[]};S.tarasoff={warned:0,notified:0,hold:0,na:0};
   }else if(v==="emr"){
    S.safetyGate={suicide:"emr",homicide:"emr",violence:"emr",substances:"emr"};
@@ -4004,7 +4163,7 @@ function setField(f,v){
  if(f==="acuteConcern"&&v==="no"){
   S.safetyGate={suicide:null,homicide:null,violence:null,substances:null};
   S.safetyOpen={suicide:false,homicide:false,violence:false,substances:false};
-  S.cssrsDone=null;S.suicideRisk=null;S.homicideRisk=null;S.sudScreenDone=null;S.sudTool=null;S.sudScore="";S.sudClinical=null;S.violence=null;S.cssrsInEmr=null;
+  S.cssrsDone=null;S.suicideRisk=null;S.homicideRisk=null;S.sudScreenDone=null;S.sudTool=null;S.sudScore="";S.sudClinical=null;S.violence=null;S.cssrsInEmr=null;S.cssrsGuided=null;S.cssrsStep=0;
   S.riskFormulation={driving:"",mitigating:"",protective:[]};S.tarasoff={warned:0,notified:0,hold:0,na:0};
  }
  if(f==="lifeStage"){
@@ -4072,6 +4231,25 @@ var deliverMoreBtn=$("#deliverMoreBtn");if(deliverMoreBtn)deliverMoreBtn.addEven
  });
 });
 document.addEventListener("click",function(e){
+ var cssrsAct=e.target.closest("[data-cssrs-action]");
+ if(cssrsAct){
+  ensureCssrsGuided();
+  var a=cssrsAct.dataset.cssrsAction;
+  if(a==="back"){S.cssrsStep=Math.max(0,(S.cssrsStep||0)-1);render();return;}
+  if(a==="next"){
+   var total=CSSRS.cssrsStepCount(S.cssrsGuided);
+   var step=S.cssrsStep||0;
+   var def=CSSRS.cssrsStepDef(step,S.cssrsGuided);
+   if(!def)return;
+   var field=def.type==="followUp"?def.item.followUp.key:def.item.key;
+   if(S.cssrsGuided[field]==null)return;
+   S.cssrsStep=step+1;
+   cssrsApplyRiskFromGuided();
+   render();
+   return;
+  }
+  if(a==="restart"){resetCssrsGuided();render();return;}
+ }
  var toggle=e.target.closest("[data-safety-toggle]");
  if(toggle){toggleSafetyDomain(toggle.dataset.safetyToggle);render();return;}
  var ins=e.target.closest("[data-ins]");if(ins){
@@ -4107,6 +4285,7 @@ function L1ok(){return !!S.lifeStage;}
 function needsCollaborationAttestation(){
  ensureSafetyGate();
  if(S.safetyGate.suicide==="help"&&hiRisk())return true;
+ if(S.safetyGate.suicide==="screen"&&hiRisk())return true;
  if(S.safetyGate.violence==="help"&&S.violence==="yes")return true;
  return false;
 }
@@ -4245,7 +4424,9 @@ function render(){
  renderSafetyChartDoc();
  renderWorkflowDocument();
  rev("#suicideRiskReveal",sg.suicide==="help");
- rev("#suicideRiskDocWrap",sg.suicide==="help");
+ rev("#cssrsGuidedPanel",sg.suicide==="screen");
+ rev("#suicideRiskDocWrap",(sg.suicide==="help"||sg.suicide==="screen")&&!!S.suicideRisk);
+ if(sg.suicide==="screen")renderCssrsGuided();
  rev("#homicideHelpReveal",sg.homicide==="help");
  rev("#violenceHelpReveal",sg.violence==="help");
  rev("#violenceRiskDocWrap",sg.violence==="help");
@@ -5493,6 +5674,31 @@ function hideSavePlanDialog(){
  var overlay=$("#savePlanOverlay");
  if(overlay)overlay.classList.add("hidden");
 }
+var pendingResumePlan=null;
+function showResumePlanDialog(plan,when){
+ pendingResumePlan=plan;
+ var overlay=$("#resumePlanOverlay");
+ var desc=$("#resumePlanDesc");
+ if(desc)desc.textContent="Resume your last disposition plan from "+when+"?";
+ if(overlay){
+  overlay.classList.remove("hidden");
+  var btn=$("#resumePlanConfirm");
+  if(btn)btn.focus();
+ }
+}
+function hideResumePlanDialog(){
+ pendingResumePlan=null;
+ var overlay=$("#resumePlanOverlay");
+ if(overlay)overlay.classList.add("hidden");
+}
+function confirmResumePlanDialog(){
+ if(pendingResumePlan)restoreSavedPlan(pendingResumePlan);
+ hideResumePlanDialog();
+}
+function discardResumePlanDialog(){
+ try{localStorage.removeItem(SAVE_KEY);}catch(e){}
+ hideResumePlanDialog();
+}
 function confirmSavePlanDialog(){
  var user=readSessionUser();
  if(!user||!user.email)return;
@@ -5636,11 +5842,7 @@ window.addEventListener("hashchange",function(){var v=viewFromHash();if(v)activa
    restoreSavedPlan(p);
   }else{
    var when=p.savedAt?new Date(p.savedAt).toLocaleString():"earlier";
-   if(window.confirm("Resume your last disposition plan from "+when+"?")){
-    restoreSavedPlan(p);
-   }else{
-    try{localStorage.removeItem(SAVE_KEY);}catch(e){}
-   }
+   showResumePlanDialog(p,when);
   }
  }else{
   applyUserDefaults();
@@ -5657,6 +5859,9 @@ $("#savePlanBtn").addEventListener("click",function(){
 $("#savePlanCancel").addEventListener("click",hideSavePlanDialog);
 $("#savePlanConfirm").addEventListener("click",confirmSavePlanDialog);
 $("#savePlanOverlay").addEventListener("click",function(e){if(e.target===e.currentTarget)hideSavePlanDialog();});
+var resumeConfirm=$("#resumePlanConfirm");if(resumeConfirm)resumeConfirm.addEventListener("click",confirmResumePlanDialog);
+var resumeDiscard=$("#resumePlanDiscard");if(resumeDiscard)resumeDiscard.addEventListener("click",discardResumePlanDialog);
+var resumeOverlay=$("#resumePlanOverlay");if(resumeOverlay)resumeOverlay.addEventListener("click",function(e){if(e.target===e.currentTarget)discardResumePlanDialog();});
 $("#savePlanName").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();confirmSavePlanDialog();}if(e.key==="Escape")hideSavePlanDialog();});
 var saveTplBtn=$("#saveTemplateBtn");if(saveTplBtn)saveTplBtn.addEventListener("click",showSaveTemplateDialog);
 $("#saveTemplateCancel").addEventListener("click",hideSaveTemplateDialog);
@@ -5704,15 +5909,23 @@ function showPublishGate(opts){
  if(sensRow)sensRow.style.display=needSens?"block":"none";
  if(fkglAck)fkglAck.checked=!!S.acknowledgeHighFkgl;
  if(sensAck)sensAck.checked=!!S.includeSensitiveOnPatientHandout;
+ showPublishGateErr("");
  o.classList.remove("hidden");
  o._pending=opts;
+}
+function showPublishGateErr(msg){
+ var el=$("#publishGateErr");
+ if(!el){if(msg)showCopyToast(msg);return;}
+ if(msg){el.textContent=msg;el.classList.add("show");}
+ else{el.textContent="";el.classList.remove("show");}
 }
 function confirmPublishGate(){
  var o=$("#publishGateOverlay");if(!o)return;
  var fkglAck=$("#publishGateFkglAck"),sensAck=$("#publishGateSensAck");
  var pending=o._pending||{};
- if(pending.needFkgl&&(!fkglAck||!fkglAck.checked)){alert("Acknowledge the reading-level review to print.");return;}
- if(pending.needSens&&(!sensAck||!sensAck.checked)){alert("Check the box to include sensitive resources, or uncheck on L6 before printing.");return;}
+ showPublishGateErr("");
+ if(pending.needFkgl&&(!fkglAck||!fkglAck.checked)){showPublishGateErr("Acknowledge the reading-level review to print.");return;}
+ if(pending.needSens&&(!sensAck||!sensAck.checked)){showPublishGateErr("Check the box to include sensitive resources, or uncheck on L6 before printing.");return;}
  if(fkglAck&&fkglAck.checked)S.acknowledgeHighFkgl=true;
  if(sensAck&&sensAck.checked)S.includeSensitiveOnPatientHandout=true;
  hidePublishGate();
@@ -5779,15 +5992,15 @@ document.addEventListener("click",function(e){
  if(act==="print-patient"){S._printMode="patient";runPrintWithGates();return;}
  if(act==="copy-chart"){
   var text=buildChartText();
-  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){showCopyToast("Copied for chart");}).catch(function(){alert("Copy failed");});}
-  else{alert(text);}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){showCopyToast("Copied for chart");}).catch(function(){showCopyToast("Copy failed — select text manually");});}
+  else{showCopyToast("Copy not supported — use Print chart");}
   return;
  }
  if(act==="print-chart"){S._printMode="chart";executePrint();return;}
  if(act==="print-ref"){printReferralOnly(btn.dataset.ref);return;}
  if(act==="email"||act==="fax"){
   var ref=resById(btn.dataset.ref);
-  if(!ref){alert("Referral not found.");return;}
+  if(!ref){showCopyToast("Referral not found.");return;}
   var subj="Referral from "+(S.setting||"clinic")+" — attach face sheet";
   if(act==="email"&&ref.email){
    window.location.href="mailto:"+encodeURIComponent(ref.email)+"?subject="+encodeURIComponent(subj);
@@ -5795,10 +6008,10 @@ document.addEventListener("click",function(e){
   }
   if(act==="fax"&&ref.fax){
    window.open("tel:"+tel(ref.fax));
-   alert("Attach face sheet, then fax to "+ref.fax);
+   showCopyToast("Attach face sheet, then fax to "+ref.fax);
    return;
   }
-  alert("No "+act+" on file for this program — use Print.");
+  showCopyToast("No "+act+" on file for this program — use Print.");
  }
 });
 

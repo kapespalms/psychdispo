@@ -1,5 +1,5 @@
 /** Bump when public/psychdispo.html changes so iframe embeds bypass stale browser cache. */
-export const PSYCHDISPO_HTML_BUILD = "split-doc-panel";
+export const PSYCHDISPO_HTML_BUILD = "phase1-cssrs-pwa";
 
 export function psychdispoEmbedSrc(
   hash: string,

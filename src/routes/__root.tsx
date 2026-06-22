@@ -92,6 +92,7 @@ export const Route = createRootRouteWithContext<{ queryClient: typeof queryClien
     links: [
       { rel: "icon", type: "image/png", href: "/favicon.png" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -132,6 +133,13 @@ function RootComponent() {
   const hideShellHeader = path === "/";
 
   useIframeTemplateSync();
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !("serviceWorker" in navigator)) return;
+    navigator.serviceWorker.register("/sw.js").catch(() => {
+      /* SW optional — app works without offline cache */
+    });
+  }, []);
 
   useEffect(() => {
     const onMessage = (event: MessageEvent) => {

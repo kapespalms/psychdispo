@@ -20,6 +20,10 @@ export function EditorialFooterLinks() {
         about
       </Link>
       <span aria-hidden="true"> · </span>
+      <Link to="/changelog" className="text-link">
+        changelog
+      </Link>
+      <span aria-hidden="true"> · </span>
       <Link to="/accessibility" className="text-link">
         accessibility
       </Link>
