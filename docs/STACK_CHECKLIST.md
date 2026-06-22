@@ -58,7 +58,7 @@ flowchart LR
 | Item | Notes |
 |------|-------|
 | Guest mode | Full workflow without Supabase |
-| Magic link + Google (code) | `signInWithOtp` / `signInWithOAuth` with `redirectTo: …/auth/callback` |
+| Magic link (code) | `signInWithOtp` with `emailRedirectTo: …/auth/callback` via `getAuthCallbackUrl()` |
 | PHI boundary | Templates strip patient fields before cloud save (see PHASE4_SETUP) |
 | Partial SEO on prod | Homepage has canonical + meta description; `/sign-in` has `noindex` |
 
@@ -70,10 +70,9 @@ flowchart LR
 
 | Item | Action | Dashboard |
 |------|--------|-----------|
-| **Site URL** | Set to `https://psychdispo.com` | [Auth → URL Configuration](https://supabase.com/dashboard/project/kqvpptcmnaeqvmlxlvba/auth/url-configuration) |
-| **Redirect URLs** | Add `http://localhost:5173/auth/callback` and `https://psychdispo.com/auth/callback` | Same page |
-| **Preview deploys** | Add `https://*.vercel.app/auth/callback` (or each preview URL) if you test auth on PR previews | Same page |
-| **Google OAuth** (optional) | Enable provider + Google Cloud OAuth client; redirect URI `https://kqvpptcmnaeqvmlxlvba.supabase.co/auth/v1/callback` | [Auth → Providers → Google](https://supabase.com/dashboard/project/kqvpptcmnaeqvmlxlvba/auth/providers) |
+| **Site URL** | Set to `https://psychdispo.com` — **not** `https://kapespalms.github.io/psychdispo/` or another product domain | [Auth → URL Configuration](https://supabase.com/dashboard/project/kqvpptcmnaeqvmlxlvba/auth/url-configuration) |
+| **Redirect URLs** | Add `http://localhost:5173/auth/callback`, `https://psychdispo.com/auth/callback`, `https://psychdispo.com/**` | Same page |
+| **Google OAuth** | **Removed from app** — disable provider in Supabase if still enabled (shared project risk) | [Auth → Providers → Google](https://supabase.com/dashboard/project/kqvpptcmnaeqvmlxlvba/auth/providers) |
 
 > Supabase MCP cannot set auth URL config; this must be done in the dashboard (or Management API).
 
@@ -150,6 +149,7 @@ Suggested minimum CI: `npm ci` → `npm run lint` → `npm run build` on pull re
 |----------|-------|-------------------|----------------|----------|
 | `VITE_SUPABASE_URL` | `.env.local` | ✅ Set | ⚠️ Add if previews need auth | Optional (guest works without) |
 | `VITE_SUPABASE_ANON_KEY` | `.env.local` | ✅ Set | ⚠️ Add if previews need auth | Optional |
+| `VITE_SITE_URL` | `.env.local` / `.env.example` | ⚠️ Set `https://psychdispo.com` | ⚠️ Add if previews need auth | Recommended for auth redirects |
 
 No server-only secrets in repo — anon key is public by design; never add service role key to Vercel client env.
 
@@ -172,8 +172,7 @@ No server-only secrets in repo — anon key is public by design; never add servi
 
 6. **Vercel** — add Preview env vars; confirm Git repo = `kapespalms/psychdispo`
 7. **GitHub** — add CI workflow (lint + build); enable branch protection on `main`
-8. **GitHub** — disable GitHub Pages if Vercel is canonical
-9. **Google OAuth** (optional) — Supabase + Google Cloud Console
+8. **GitHub** — disable GitHub Pages if Vercel is canonical (wrong Site URL sends auth to `kapespalms.github.io/psychdispo/`)
 
 ### P3 — Production maturity (when ready)
 

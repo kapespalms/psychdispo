@@ -1,6 +1,6 @@
 # Phase 4 setup — Supabase auth + scaffold library
 
-PsychDispo works fully in **guest mode** without Supabase. Add these steps when you want cloud-synced plan templates and OAuth sign-in.
+PsychDispo works fully in **guest mode** without Supabase. Add these steps when you want cloud-synced plan templates and magic-link sign-in.
 
 ## Wired project (2026-06-20)
 
@@ -69,7 +69,7 @@ supabase link --project-ref your-project-ref
 supabase db push
 ```
 
-## 3. Auth configuration (Supabase Dashboard — required for magic link/OAuth)
+## 3. Auth configuration (Supabase Dashboard — required for magic link)
 
 Supabase MCP has no tool for auth URL configuration (only database, logs, keys, etc.). Set redirects in the Supabase Dashboard for project `kqvpptcmnaeqvmlxlvba` (or use the [Management API](https://supabase.com/docs/reference/api/update-auth-config) with a personal access token):
 
@@ -79,28 +79,26 @@ Supabase MCP has no tool for auth URL configuration (only database, logs, keys, 
 
 | Setting | Value |
 |---------|-------|
-| **Site URL** | `https://psychdispo.com` (production) or `http://localhost:5173` (local dev) |
+| **Site URL** | `https://psychdispo.com` — **not** GitHub Pages (`https://kapespalms.github.io/psychdispo/`) or another project domain |
 | **Redirect URLs** | `http://localhost:5173/auth/callback` |
 | | `https://psychdispo.com/auth/callback` |
+| | `https://psychdispo.com/**` (wildcard) |
+
+Set `VITE_SITE_URL=https://psychdispo.com` in Vercel Production (and `.env.local` for local dev) so magic-link `emailRedirectTo` matches the dashboard whitelist.
 
 ### Magic link (email OTP)
 
 Enabled by default. Customize email templates under **Authentication → Email Templates** if needed (subject line, confirmation link text).
 
-### Google OAuth (optional)
+### Google OAuth — disabled in app
 
-1. **Authentication → Providers → Google** → enable.
-2. Create OAuth credentials in [Google Cloud Console](https://console.cloud.google.com/apis/credentials):
-   - Application type: Web application
-   - Authorized JavaScript origins: `http://localhost:5173`, `https://psychdispo.com`
-   - Authorized redirect URI: `https://kqvpptcmnaeqvmlxlvba.supabase.co/auth/v1/callback`
-3. Paste Client ID and Client Secret into Supabase Google provider settings.
+Google sign-in was removed from the PsychDispo UI (magic link only). In Supabase **Authentication → Providers → Google**, leave the provider **disabled** so stale OAuth sessions cannot redirect to another site. If Google was previously enabled for a shared Supabase project, also verify Google Cloud OAuth redirect URIs point only at this project's Supabase callback (`https://kqvpptcmnaeqvmlxlvba.supabase.co/auth/v1/callback`), not another product.
 
 ## 4. Verify
 
 1. `npm run build` — should succeed with `.env.local` present.
 2. `npm run dev` with `.env.local` populated.
-3. Sign in at `/sign-in` via magic link or Google.
+3. Sign in at `/sign-in` via magic link.
 4. Complete a disposition plan → **Save as template** on Deliver.
 5. Open **My plans** — template should appear (loaded from Supabase when signed in).
 
@@ -115,9 +113,10 @@ Enabled by default. Customize email templates under **Authentication → Email T
 | Vercel Production `VITE_SUPABASE_ANON_KEY` | Done | CLI 2026-06-20 |
 | Production redeploy | Done | `vercel deploy --prod` |
 | `https://psychdispo.com/sign-in` returns 200 | Done | Magic link button enabled when env present |
-| Supabase **Site URL** = `https://psychdispo.com` | **Manual** | Authentication → URL Configuration |
+| Supabase **Site URL** = `https://psychdispo.com` | **Manual** | Authentication → URL Configuration — remove GitHub Pages URL if present |
 | Redirect URLs (localhost + production callback) | **Manual** | See table in §3 |
-| Google OAuth (optional) | Optional | §3 |
+| Vercel `VITE_SITE_URL` = `https://psychdispo.com` | **Manual** | Project → Environment Variables |
+| Google OAuth | **Removed** | Disabled in app; disable provider in Supabase if still on |
 
 ## Guest vs signed-in
 
@@ -126,7 +125,7 @@ Enabled by default. Customize email templates under **Authentication → Email T
 | Full disposition workflow | ✓ | ✓ | ✓ |
 | Save plan (full state) | localStorage | localStorage | localStorage |
 | Save as template | localStorage guest key | localStorage per email | Supabase `plan_templates` |
-| Magic link / Google | — | demo localStorage only | Supabase Auth |
+| Magic link | — | demo localStorage only | Supabase Auth |
 | PHI on server | Never | Never | Never |
 
 Patient details never leave the device. Templates strip ZIP, names, notes, and follow-up specifics before save.
