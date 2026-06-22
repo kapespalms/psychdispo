@@ -50,4 +50,4 @@ create policy "favorite_resources_insert_own"
 
 create policy "favorite_resources_delete_own"
   on public.favorite_resources for delete
-  using (auth.uid() = user_id);
+  using (auth.uid() = user_id);;

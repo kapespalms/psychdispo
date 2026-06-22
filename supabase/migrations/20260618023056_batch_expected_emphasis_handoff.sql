@@ -1,0 +1,1 @@
+-- Migration applied via chunked execute_sql on 2026-06-17. Full SQL in supabase/migrations/20260617120000_batch_expected_emphasis_handoff.sql;
