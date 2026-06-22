@@ -1324,17 +1324,17 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
   <div class="dir-head-text">
    <div class="ltag">Resource directory</div>
    <div class="ltitle">Search verified community resources</div>
-   <div class="ldesc">Filter by population, location, and care type. National crisis lines appear on the Crisis tab.</div>
+   <div class="ldesc">Filter by population, location, and care type. National crisis lines appear on the Crisis Resources tab.</div>
   </div>
   <div class="dir-search-wrap">
    <input type="search" id="dirQ" placeholder="Search organization…" aria-label="Search resources">
   </div>
  </div>
  <div class="dir-pop-tabs" role="tablist" aria-label="Population">
-  <button type="button" class="dir-pop-tab" data-pop="child" role="tab" aria-selected="false">Child</button>
+  <button type="button" class="dir-pop-tab" data-pop="child" role="tab" aria-selected="false">Child/Adolescent</button>
   <button type="button" class="dir-pop-tab sel" data-pop="adult" role="tab" aria-selected="true">Adult</button>
   <button type="button" class="dir-pop-tab" data-pop="geriatric" role="tab" aria-selected="false">Geriatric</button>
-  <button type="button" class="dir-pop-tab" data-pop="crisis" role="tab" aria-selected="false">Crisis</button>
+  <button type="button" class="dir-pop-tab" data-pop="crisis" role="tab" aria-selected="false">Crisis Resources</button>
  </div>
  <div class="dir-filters">
   <div class="dir-filter-row">
@@ -3560,14 +3560,14 @@ function dirMatchPopulation(r,pop){
 }
 function dirPopulationNote(pop,list){
  if(!list.length){
-  if(pop==="child")return "No pediatric-specific entries for this region — try the Crisis tab for all-ages crisis lines, or widen geography.";
-  if(pop==="geriatric")return "No geriatric-specific entries for this region — try another region or the Crisis tab.";
+  if(pop==="child")return "No pediatric-specific entries for this region — try the Crisis Resources tab for all-ages crisis lines, or widen geography.";
+  if(pop==="geriatric")return "No geriatric-specific entries for this region — try another region or the Crisis Resources tab.";
   if(pop==="crisis")return "No crisis resources match these filters — try another region or clear care-type filters.";
   return "No resources match these filters — try another population tab, region, or care type.";
  }
  var pedsCount=list.filter(dirIsPedsResource).length;
  var gerCount=list.filter(dirIsGeriatricResource).length;
- if(pop==="child"&&pedsCount===0)return "No pediatric-specific entries for this region — showing all-ages crisis lines only. Try the Crisis tab or widen geography.";
+ if(pop==="child"&&pedsCount===0)return "No pediatric-specific entries for this region — showing all-ages crisis lines only. Try the Crisis Resources tab or widen geography.";
  if(pop==="geriatric"&&gerCount===0)return "No geriatric-specific entries for this region — showing general adult & all-ages resources.";
  return "";
 }
@@ -3751,7 +3751,7 @@ function renderDirectory(){
   $("#dirCount").textContent=msg;
  }
  if(!$("#dirBody"))return;
- var emptyMsg=dirPopulationNote(opts.pop,list)||"No matching resources. Adjust filters or select the Crisis tab for national lines.";
+ var emptyMsg=dirPopulationNote(opts.pop,list)||"No matching resources. Adjust filters or select the Crisis Resources tab for national lines.";
  if(!list.length){
   $("#dirBody").innerHTML='<tr><td colspan="5" class="dir-empty">'+esc(emptyMsg)+'</td></tr>';
   if($("#dirCards"))$("#dirCards").innerHTML='<div class="dir-card-empty">'+esc(emptyMsg)+'</div>';
