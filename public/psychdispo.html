@@ -610,14 +610,17 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
 .loc-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,108px),1fr));gap:5px}
 .loc-opts .opt{width:auto;text-align:center;justify-content:center}
 .chip-row .opt{font-size:12px;padding:6px 10px;min-height:38px}
-.card-foot{flex:none;margin:0 -12px;padding:4px 12px calc(4px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:1px solid var(--line);z-index:4;display:flex;gap:8px;align-items:center;min-height:var(--card-foot-h);box-sizing:border-box}
-.card-foot .foot-save-chip{font-size:11px;color:var(--good);white-space:nowrap;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
-.card-foot .card-back{min-height:44px;padding:0 14px;font-size:13px;font-weight:600;border-radius:var(--radius);background:#fff;color:var(--t);border:1px solid var(--t);cursor:pointer;font-family:inherit;touch-action:manipulation;flex:none}
-.card-foot .card-back:disabled{opacity:.45;cursor:not-allowed}
-.card-foot .card-continue{width:auto;flex:1;margin-left:auto;min-height:44px;padding:0 14px;font-size:13px;font-weight:600;letter-spacing:.02em;text-transform:uppercase;border-radius:0;border:none;background:var(--ink);color:#fff;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:6px;touch-action:manipulation;box-shadow:none;transition:background .15s}
-.card-foot .card-continue:not(:disabled):hover{background:#333}
-.card-foot .card-continue:disabled{background:#aebdbb;cursor:not-allowed;opacity:1}
-.card-foot .card-continue svg{width:16px;height:16px;stroke-width:2;flex:none}
+.card-nav{flex:none;margin:0 -12px;padding:5px 12px;display:flex;gap:6px;align-items:center;justify-content:flex-end;box-sizing:border-box;background:var(--card);z-index:4}
+.card-nav-top{border-bottom:1px solid var(--line);margin-bottom:4px}
+.card-foot.card-nav{border-top:1px solid var(--line);padding-bottom:calc(5px + env(safe-area-inset-bottom,0px))}
+.card-nav .foot-save-chip{font-size:10px;color:var(--good);white-space:nowrap;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;margin-right:auto}
+.card-nav .card-back{min-height:44px;min-width:44px;padding:0 10px;font-size:11px;font-weight:600;border-radius:var(--radius);background:#fff;color:var(--t);border:1px solid var(--t);cursor:pointer;font-family:inherit;touch-action:manipulation;flex:none;line-height:1}
+.card-nav .card-back:disabled{opacity:.45;cursor:not-allowed}
+.card-nav .card-continue{min-height:44px;padding:0 11px;font-size:11px;font-weight:600;letter-spacing:0;text-transform:none;border-radius:var(--radius);border:none;background:var(--ink);color:#fff;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:4px;touch-action:manipulation;box-shadow:none;transition:background .15s;flex:none;margin-left:0}
+.card-nav .card-continue:not(:disabled):hover{background:#333}
+.card-nav .card-continue:disabled{background:#aebdbb;cursor:not-allowed;opacity:1}
+.card-nav .card-continue svg{width:13px;height:13px;stroke-width:2;flex:none}
+.card-foot .card-back{margin-right:auto}
 .pathway-card .pcard-ico,.pathway-card .pname,.pathway-card .pblurb{display:none}
 @media(max-width:680px){
  #view-tool .workflow-sheet:has(#slideShell:not(.hidden)),
@@ -733,8 +736,9 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
 
 <div class="slide-panel" data-step="0">
 <section class="layer float-card" id="Lgate">
- <div class="step-kicker"><span class="num">01</span><span class="lbl">Case Setup</span><span class="ln"></span></div>
- <div class="step-head"><div class="ltitle">Case setup</div></div>
+ <div class="step-kicker"><span class="num">01</span><span class="lbl">Case</span><span class="ln"></span></div>
+ <div class="step-head"><div class="ltitle">Case</div></div>
+ <div class="card-nav card-nav-top"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue0" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <p class="req-legend"><span class="req-mark" aria-hidden="true">■</span> Required</p>
  <div class="slide-body">
  <div id="gateAutoNote" class="gate-auto-note"></div>
@@ -759,49 +763,6 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
   </div>
   <div class="express-loc-line" id="expressLocLine"><span>Suggested level:</span><span class="loc-suggest" id="expressLocSuggest">Outpatient</span><button type="button" class="express-change-loc" id="expressChangeLoc">Change level</button></div>
   <div class="expand-block" id="expressLocExpand"><div class="loc-cols"><div class="loc-col community-col"><div class="loc-col-h">Community</div><div class="opts loc-opts" id="expressLocCommunityOpts"></div></div></div></div>
- </div>
- </div>
- <div class="card-foot"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue0" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
-</section>
-</div>
-
-<div class="slide-panel" data-step="1">
-<section class="layer float-card" id="L0">
- <div class="step-kicker"><span class="num">02</span><span class="lbl">Patient &amp; Coverage</span><span class="ln"></span></div>
- <div class="step-head"><div class="ltitle">Patient &amp; coverage</div></div>
- <p class="req-legend"><span class="req-mark" aria-hidden="true">■</span> Required</p>
- <div class="slide-body card-body">
- <div class="gate-grid">
-  <div class="q gate-wide ins-zip-row coverage-band" id="contextInsZipBlock">
-   <div class="ins-zip-line">
-    <div class="ins-zip-ins" id="contextInsBlock">
-     <div class="field-label"><span class="req-mark" data-req="insurance" aria-hidden="true">■</span>Insurance</div>
-     <div class="opts ins-row" id="insuranceOpts" role="group" aria-label="Insurance"></div>
-    </div>
-    <div class="ins-zip-loc" id="contextZipBlock">
-     <div class="field-label"><span class="req-mark" data-req="zip" aria-hidden="true">■</span>Home city / ZIP</div>
-     <input type="text" id="loc" placeholder="e.g. Bellingham or 98225" autocomplete="address-level2">
-     <span class="note" id="zipMeta"></span>
-    </div>
-   </div>
-  </div>
-  <div class="q gate-wide" id="settingWrap"><div class="field-label"><span class="req-mark" data-req="setting" aria-hidden="true">■</span>Discharging from</div>
-   <select id="selSetting"><option value="">— Select setting —</option><option value="Acute">Acute / Inpatient (ED, hospital, urgent care)</option><option value="Outpatient">Outpatient clinic / office</option></select>
-   <div class="note" style="margin-top:4px">Acute/inpatient uses full safety screening. Outpatient can skip it when there is no acute concern.</div>
-  </div>
-  <div class="q gate-wide" id="contextDispBlock"><div class="field-label"><span class="req-mark" aria-hidden="true">■</span>Disposition / level of care</div>
-   <div class="loc-cols" id="dispLocCols">
-    <div class="loc-col community-col">
-     <div class="loc-col-h">Community</div>
-     <div class="opts loc-opts" id="locCommunityOpts"></div>
-    </div>
-    <div class="loc-col residential-col" id="residentialLocCol">
-     <div class="loc-col-h">Residential</div>
-     <div class="opts loc-opts" id="locResidentialOpts"></div>
-    </div>
-   </div>
-   <div class="note" id="opOnlyNote" style="display:none;margin-top:5px">Outpatient — community only (OP, <span class="kw" tabindex="0" role="term" data-def="Intensive Outpatient Program — about 9–19 hours of structured treatment per week while living at home.">IOP</span>, <span class="kw" tabindex="0" role="term" data-def="Partial Hospitalization — daily structured treatment (~20+ hours/week); step-down from inpatient or step-up from outpatient.">PHP</span>).</div>
-  </div>
  </div>
  <div id="ctxAccordion" class="ctx-accordion">
   <button type="button" class="ctx-accordion-toggle" id="ctxAccordionBtn" aria-expanded="false">Patient details<svg class="ctx-accordion-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
@@ -851,7 +812,51 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
  </div>
  </div>
  </div>
- <div class="card-foot"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue1" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
+ <div class="card-foot card-nav"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
+</section>
+</div>
+
+<div class="slide-panel" data-step="1">
+<section class="layer float-card" id="L0">
+ <div class="step-kicker"><span class="num">02</span><span class="lbl">Dispo &amp; Coverage</span><span class="ln"></span></div>
+ <div class="step-head"><div class="ltitle">Dispo &amp; coverage</div></div>
+ <div class="card-nav card-nav-top"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue1" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
+ <p class="req-legend"><span class="req-mark" aria-hidden="true">■</span> Required</p>
+ <div class="slide-body card-body">
+ <div class="gate-grid">
+  <div class="q gate-wide ins-zip-row coverage-band" id="contextInsZipBlock">
+   <div class="ins-zip-line">
+    <div class="ins-zip-ins" id="contextInsBlock">
+     <div class="field-label"><span class="req-mark" data-req="insurance" aria-hidden="true">■</span>Insurance</div>
+     <div class="opts ins-row" id="insuranceOpts" role="group" aria-label="Insurance"></div>
+    </div>
+    <div class="ins-zip-loc" id="contextZipBlock">
+     <div class="field-label"><span class="req-mark" data-req="zip" aria-hidden="true">■</span>Home city / ZIP</div>
+     <input type="text" id="loc" placeholder="e.g. Bellingham or 98225" autocomplete="address-level2">
+     <span class="note" id="zipMeta"></span>
+    </div>
+   </div>
+  </div>
+  <div class="q gate-wide" id="settingWrap"><div class="field-label"><span class="req-mark" data-req="setting" aria-hidden="true">■</span>Discharging from</div>
+   <select id="selSetting"><option value="">— Select setting —</option><option value="Acute">Acute / Inpatient (ED, hospital, urgent care)</option><option value="Outpatient">Outpatient clinic / office</option></select>
+   <div class="note" style="margin-top:4px">Acute/inpatient uses full safety screening. Outpatient can skip it when there is no acute concern.</div>
+  </div>
+  <div class="q gate-wide" id="contextDispBlock"><div class="field-label"><span class="req-mark" aria-hidden="true">■</span>Disposition / level of care</div>
+   <div class="loc-cols" id="dispLocCols">
+    <div class="loc-col community-col">
+     <div class="loc-col-h">Community</div>
+     <div class="opts loc-opts" id="locCommunityOpts"></div>
+    </div>
+    <div class="loc-col residential-col" id="residentialLocCol">
+     <div class="loc-col-h">Residential</div>
+     <div class="opts loc-opts" id="locResidentialOpts"></div>
+    </div>
+   </div>
+   <div class="note" id="opOnlyNote" style="display:none;margin-top:5px">Outpatient — community only (OP, <span class="kw" tabindex="0" role="term" data-def="Intensive Outpatient Program — about 9–19 hours of structured treatment per week while living at home.">IOP</span>, <span class="kw" tabindex="0" role="term" data-def="Partial Hospitalization — daily structured treatment (~20+ hours/week); step-down from inpatient or step-up from outpatient.">PHP</span>).</div>
+  </div>
+ </div>
+ </div>
+ <div class="card-foot card-nav"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </section>
 </div>
 
@@ -859,6 +864,7 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
 <section class="layer float-card" id="L2">
  <div class="step-kicker"><span class="num">03</span><span class="lbl">Safety Review</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Safety review</div></div>
+ <div class="card-nav card-nav-top"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue2" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <div class="slide-body">
  <div id="safetyCollabBanner" class="alert amber collab-banner hidden"><b>Clinician review required</b> — moderate/high C-SSRS or violence concern. Complete safety plan &amp; means with a trained clinician, then attest before Plan or Deliver.</div>
  <div id="expressSafetyGate" class="express-safety-gate hidden">
@@ -1082,7 +1088,7 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
  </div>
  </div>
  </div>
- <div class="card-foot"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue2" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
+ <div class="card-foot card-nav"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </section>
 </div>
 
@@ -1090,6 +1096,7 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
 <section class="layer float-card" id="L5">
  <div class="step-kicker"><span class="num">04</span><span class="lbl">Resources</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Resources</div></div>
+ <div class="card-nav card-nav-top"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue3" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <div class="plan-compact-head">
  <div id="planTopMatches" class="plan-top-matches hidden"></div>
  <button type="button" class="plan-expand-link hidden" id="planShowAllBtn">Show all</button>
@@ -1107,7 +1114,7 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
  <div id="followUpBlock" class="follow-up-block hidden"></div>
  <div id="l5FkglGate" class="l6-gate l6-gate-warn hidden"></div>
  </div>
- <div class="card-foot"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue3" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
+ <div class="card-foot card-nav"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </section>
 </div>
 
@@ -1115,6 +1122,7 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
 <section class="layer float-card" id="L6">
  <div class="step-kicker"><span class="num">05</span><span class="lbl">Handoff</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Handoff</div></div>
+ <div class="card-nav card-nav-top"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue4" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <div class="slide-body">
  <div id="transitionOfCareBlock" class="follow-up-block hidden"></div>
  <div id="deliverGate" class="deliver-gate hidden"></div>
@@ -1168,7 +1176,7 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
   <div id="postPacketBanner" class="post-banner hidden" role="status"></div>
  </div>
  </div>
- <div class="card-foot"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" id="cardContinue4" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
+ <div class="card-foot card-nav"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
  <button type="button" class="hidden" id="copyChartBtn"></button>
  <button type="button" class="hidden" id="printBtn" disabled></button>
 </section>
@@ -1949,7 +1957,7 @@ function isOutpatient(){return S.setting==="Outpatient";}
 function isExpressOp(){return S.pathway==="outpatient"&&S.expressOp!==false;}
 function workflowStepCount(){return isExpressOp()?4:5;}
 function physicalStep(logical){return isExpressOp()?([0,2,3,4][logical]||0):logical;}
-function stepLabels(){return isExpressOp()?["Case Setup","Safety Review","Resources","Handoff"]:["Case Setup","Patient & Coverage","Safety Review","Resources","Handoff"];}
+function stepLabels(){return isExpressOp()?["Case","Safety Review","Resources","Handoff"]:["Case","Dispo & Coverage","Safety Review","Resources","Handoff"];}
 function expressEssentialsOk(){
  if(!gateOk())return false;
  if(!locOk())return false;
@@ -2573,9 +2581,11 @@ function renderReqMarks(){
 }
 var STEP_LABELS=["Gate","Context","Safety","Plan","Deliver"];
 function gateOk(){return S.pathway&&S.cleared==="yes";}
+function dispoCoverageOk(){return !!(S.insurance&&locOk()&&L3ok());}
+function caseStepOk(){return gateOk()&&L1ok();}
 function contextOk(){
  if(isExpressOp())return expressEssentialsOk();
- return S.insurance&&locOk()&&L3ok()&&L1ok();
+ return dispoCoverageOk()&&L1ok();
 }
 function interventionsOk(){
  if(!needsInterventionQuestions())return true;
@@ -2609,8 +2619,8 @@ function workflowStepDone(i){
   if(i===3)return L6ok();
   return false;
  }
- if(i===0)return gateOk();
- if(i===1)return contextOk();
+ if(i===0)return caseStepOk();
+ if(i===1)return dispoCoverageOk();
  if(i===2)return safetyStepOk();
  if(i===3)return planStepOk();
  if(i===4)return L6ok();
@@ -2625,8 +2635,8 @@ function syncWorkflowStepFromProgress(){
   S.workflowStep=3;
   return;
  }
- if(!gateOk()){S.workflowStep=0;return;}
- if(!contextOk()){S.workflowStep=1;return;}
+ if(!caseStepOk()){S.workflowStep=0;return;}
+ if(!dispoCoverageOk()){S.workflowStep=1;return;}
  if(!safetyStepOk()){S.workflowStep=2;return;}
  if(!planStepOk()){S.workflowStep=3;return;}
  S.workflowStep=4;
@@ -3920,9 +3930,9 @@ function L6ok(){return L2ok()&&L4ok()&&L5FollowUpOk()&&selectedCount()>=1&&attes
 function show(id,on){$(id).classList.toggle("hidden",!on);}
 function rev(id,on){$(id).classList.toggle("hidden",!on);}
 function renderContextLayout(){
- var acc=$("#ctxAccordion"),ess=$("#expressEssentials"),l0body=$("#L0 .card-body");
+ var acc=$("#ctxAccordion"),ess=$("#expressEssentials"),gateBody=$("#Lgate .slide-body");
  if(!acc)return;
- var anchor=isExpressOp()?ess:l0body;
+ var anchor=isExpressOp()?ess:gateBody;
  if(anchor&&acc.parentElement!==anchor)anchor.appendChild(acc);
  acc.classList.toggle("open",!!S.contextAccordionOpen);
  var btn=$("#ctxAccordionBtn");if(btn)btn.setAttribute("aria-expanded",S.contextAccordionOpen?"true":"false");
