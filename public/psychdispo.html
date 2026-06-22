@@ -106,9 +106,11 @@ body.embed .progress-sticky{top:0}
 .spine{display:flex;gap:5px;padding:6px 18px 4px}
 .spine .seg{flex:1;cursor:pointer}
 .spine .seg .bar{height:4px;border-radius:3px;background:#e2e5eb;transition:background .2s}
+.spine .seg.done .bar{background:#d8dae0}
 .spine .seg.now .bar{background:var(--t);box-shadow:0 0 0 1px rgba(42,67,192,.15)}
-.spine .seg .t{font-size:10px;letter-spacing:.02em;text-transform:none;color:var(--faint);font-weight:600;margin-top:6px;transition:color .2s;line-height:1.2}
-.spine .seg.now .t{color:var(--t)}
+.spine .seg .t{font-size:10px;letter-spacing:.02em;text-transform:none;color:var(--faint);font-weight:600;margin-top:4px;transition:color .2s;line-height:1.2}
+.spine .seg.now .t{color:var(--t);font-weight:700}
+.spine .seg.done .t{color:var(--faint)}
 .slide-shell{margin:0;padding:4px 0 0;min-height:0}
 .slide-track{display:flex;transition:transform .38s cubic-bezier(.4,0,.2,1);will-change:transform}
 .slide-track.slide-back{transition-timing-function:cubic-bezier(.4,0,.6,1)}
@@ -583,13 +585,36 @@ body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;paddin
 #view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .workflow-body,
 #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)) .workflow-body{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
 #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)) #pathwayFork{flex:1;min-height:0;overflow:hidden;overscroll-behavior:none;padding-bottom:0;pointer-events:auto}
-#view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .slide-shell{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;position:relative;pointer-events:auto}
-#view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .slide-track{flex:1;min-height:0;align-items:stretch;display:flex;width:100%;touch-action:pan-y}
-.slide-panel{display:flex;flex-direction:column;flex:0 0 100%;width:100%;min-width:100%;align-self:stretch;height:100%;min-height:min(320px,calc(100dvh - var(--workflow-chrome) - 72px));max-height:calc(100dvh - var(--workflow-chrome) - 72px);overflow:hidden;padding:0 12px;box-sizing:border-box;pointer-events:none}
+#view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .slide-shell{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;position:relative;pointer-events:auto;padding:0}
+.workflow-split{flex:1;min-height:0;display:flex;overflow:hidden}
+.workflow-questions{flex:1 1 50%;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden;border-right:1px solid var(--line)}
+.workflow-document{flex:1 1 50%;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden;background:#f7f7f4}
+.wf-doc-head{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:5px 10px;border-bottom:1px solid var(--line);background:#eef1fb}
+.wf-doc-title{font-family:var(--serif);font-size:13px;font-weight:700;color:var(--t);letter-spacing:.02em}
+.wf-doc-copy{font:inherit;font-size:10px;font-weight:600;padding:4px 9px;background:var(--t);color:#fff;border:none;border-radius:var(--radius);cursor:pointer;touch-action:manipulation;white-space:nowrap;min-height:32px}
+.wf-doc-copy.copied{background:var(--good)}
+.wf-doc-body{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:8px 10px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.wf-doc-sec{margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.wf-doc-sec:last-child{border-bottom:none;margin-bottom:0}
+.wf-doc-sec-h{font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin:0 0 4px}
+.wf-doc-sec-body{font-size:11.5px;line-height:1.42;color:var(--ink)}
+.wf-doc-kv{display:grid;grid-template-columns:minmax(72px,34%) 1fr;gap:2px 8px;font-size:11.5px;line-height:1.35}
+.wf-doc-k{font-weight:600;color:var(--mut)}
+.wf-doc-pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;line-height:1.4;white-space:pre-wrap;word-break:break-word;margin:0}
+.wf-doc-list{margin:0;padding:0 0 0 14px}
+.wf-doc-list li{margin:2px 0}
+.wf-doc-empty{color:var(--faint);font-style:italic;font-size:11px}
+.patient-details-inline{margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}
+.patient-details-inline .sub2{margin:0 0 4px;padding:0;border:none;font-size:10px;letter-spacing:.14em;color:var(--mut)}
+.patient-details-inline .pd-section{margin-bottom:2px}
+.patient-details-inline .pd-section+.pd-section{margin-top:8px;padding-top:6px;border-top:1px solid var(--line)}
+.patient-details-inline .grid2{grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:6px 10px}
+#view-tool .workflow-sheet:has(#slideShell:not(.hidden)) .workflow-questions .slide-track{flex:1;min-height:0;align-items:stretch;display:flex;width:100%;touch-action:pan-y}
+.slide-panel{display:flex;flex-direction:column;flex:0 0 100%;width:100%;min-width:100%;align-self:stretch;height:100%;min-height:0;max-height:none;overflow:hidden;padding:0 8px;box-sizing:border-box;pointer-events:none}
 .slide-panel.is-active{pointer-events:auto}
-.slide-panel>.float-card,.slide-panel>.layer{flex:1 1 auto;display:flex;flex-direction:column;overflow:hidden;padding:6px 12px 0;margin:0;min-height:0;pointer-events:auto}
-@media(max-width:680px){.slide-panel>.float-card,.slide-panel>.layer{padding:4px 10px 0}}
-.slide-panel>.float-card{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);box-shadow:0 1px 3px rgba(26,29,38,.06)}
+.slide-panel>.float-card,.slide-panel>.layer{flex:1 1 auto;display:flex;flex-direction:column;overflow:hidden;padding:4px 0 0;margin:0;min-height:0;pointer-events:auto}
+@media(max-width:680px){.slide-panel>.float-card,.slide-panel>.layer{padding:2px 0 0}}
+.slide-panel>.float-card{border:none;border-radius:0;background:transparent;box-shadow:none}
 .slide-panel .step-kicker,.slide-panel .step-head,.slide-panel .card-nav,.slide-panel .req-legend{flex-shrink:0}
 .slide-panel .slide-body,.slide-panel .card-body{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable;touch-action:pan-y;padding-bottom:8px}
 .slide-panel .plan-compact-head{flex-shrink:0}
@@ -631,18 +656,22 @@ body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;paddin
 .loc-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,108px),1fr));gap:5px}
 .loc-opts .opt{width:auto;text-align:center;justify-content:center}
 .chip-row .opt{font-size:12px;padding:6px 10px;min-height:38px}
-.card-nav{flex:none;margin:0 -12px;padding:5px 12px;display:flex;gap:6px;align-items:center;justify-content:flex-end;box-sizing:border-box;background:var(--card);z-index:4}
-.card-nav-top{border-bottom:1px solid var(--line);margin-bottom:4px}
-.card-foot.card-nav{border-top:1px solid var(--line);padding-bottom:calc(5px + env(safe-area-inset-bottom,0px))}
-.card-nav .foot-save-chip{font-size:10px;color:var(--good);white-space:nowrap;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;margin-right:auto}
-.card-nav .card-back{min-height:44px;min-width:44px;padding:0 10px;font-size:11px;font-weight:600;border-radius:var(--radius);background:#fff;color:var(--t);border:1px solid var(--t);cursor:pointer;font-family:inherit;touch-action:manipulation;flex:none;line-height:1}
+.card-nav{flex:none;margin:0;padding:4px 0;display:flex;gap:6px;align-items:center;justify-content:flex-end;box-sizing:border-box;background:transparent;z-index:4}
+.card-nav-top{border-bottom:1px solid var(--line);margin-bottom:2px;padding-bottom:4px}
+.card-foot.card-nav{border-top:1px solid var(--line);padding-top:4px;padding-bottom:calc(4px + env(safe-area-inset-bottom,0px))}
+.card-nav .card-back{min-height:36px;min-width:36px;padding:0 9px;font-size:11px;font-weight:600;border-radius:var(--radius);background:#fff;color:var(--t);border:1px solid var(--t);cursor:pointer;font-family:inherit;touch-action:manipulation;flex:none;line-height:1}
 .card-nav .card-back:disabled{opacity:.45;cursor:not-allowed}
-.card-nav .card-continue{min-height:44px;min-width:44px;padding:0 11px;font-size:11px;font-weight:600;letter-spacing:0;text-transform:none;border-radius:var(--radius);border:1px solid var(--t);background:#fff;color:var(--t);cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:4px;touch-action:manipulation;box-shadow:none;transition:background .15s,color .15s;flex:none;margin-left:0}
+.card-nav .card-continue{min-height:36px;min-width:36px;padding:0 10px;font-size:11px;font-weight:600;letter-spacing:0;text-transform:none;border-radius:var(--radius);border:1px solid var(--t);background:#fff;color:var(--t);cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:4px;touch-action:manipulation;box-shadow:none;transition:background .15s,color .15s;flex:none;margin-left:0}
 .card-nav .card-continue:not(:disabled):hover{background:#f8f9ff}
 .card-nav .card-continue:disabled{opacity:.45;cursor:not-allowed;background:#fff;color:var(--t)}
 .card-nav .card-continue svg{width:13px;height:13px;stroke-width:2;flex:none}
 .card-foot .card-back{margin-right:auto}
 .pathway-card .pcard-ico,.pathway-card .pname,.pathway-card .pblurb{display:none}
+@media(max-width:900px){
+ .workflow-split{flex-direction:column;overflow-y:auto}
+ .workflow-questions{flex:0 0 auto;max-height:52vh;border-right:none;border-bottom:1px solid var(--line)}
+ .workflow-document{flex:0 0 auto;min-height:180px;max-height:48vh}
+}
 @media(max-width:680px){
  #view-tool .workflow-sheet:has(#slideShell:not(.hidden)),
  #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){height:calc(100dvh - var(--workflow-chrome) - 8px);min-height:min(320px,calc(100dvh - var(--workflow-chrome) - 8px));max-height:calc(100dvh - var(--workflow-chrome) - 8px)}
@@ -660,13 +689,11 @@ body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;paddin
  .progress-sticky .spine{padding:4px 10px 2px}
  .slide-panel .step-kicker{padding-top:0;margin-bottom:0}
  .slide-panel .step-head{padding-bottom:0}
- .ctx-accordion.open .ctx-accordion-body{max-height:2400px}
- .step-head .ltitle{font-size:19px}
- .gate-auto-note,.intake-divider:not(.ctx-accordion-details) .sub2,#zipMeta,.pop-col .sub2,.ref-deeplink{display:none!important}
+ .gate-auto-note,#zipMeta,.ref-deeplink{display:none!important}
  .collab-banner{font-size:11px;line-height:1.35;padding:8px 10px;margin:0 0 10px}
  .collab-banner b{display:block;font-size:11px;margin-bottom:2px}
  .pathway-ctx{padding:6px 10px 0;font-size:9px;letter-spacing:.12em}
- .ctx-accordion-details .sub2,.ctx-accordion-details .pop-col .sub2{display:block!important}
+ .patient-details-inline .sub2,.patient-details-inline .pop-col .sub2{display:block!important}
  .pop-flags-grid{grid-template-columns:1fr 1fr}
  .loc-cols{grid-template-columns:1fr;max-width:100%}
  .slide-panel .gate-grid select,.slide-panel .gate-grid input[type=text]{max-width:100%}
@@ -753,6 +780,8 @@ body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;paddin
 </div>
 
 <div id="slideShell" class="slide-shell hidden">
+<div class="workflow-split">
+<div class="workflow-questions">
 <div id="slideTrack" class="slide-track">
 
 <div class="slide-panel" data-step="0">
@@ -789,10 +818,7 @@ body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;paddin
   <div class="express-loc-line" id="expressLocLine"><span>Suggested level:</span><span class="loc-suggest" id="expressLocSuggest">Outpatient</span><button type="button" class="express-change-loc" id="expressChangeLoc">Change level</button></div>
   <div class="expand-block" id="expressLocExpand"><div class="loc-cols"><div class="loc-col community-col"><div class="loc-col-h">Community</div><div class="opts loc-opts" id="expressLocCommunityOpts"></div></div></div></div>
  </div>
- <div id="ctxAccordion" class="ctx-accordion">
-  <button type="button" class="ctx-accordion-toggle" id="ctxAccordionBtn" aria-expanded="false">Patient details<svg class="ctx-accordion-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
-  <div class="ctx-accordion-body" id="ctxAccordionBody">
-   <div class="intake-divider ctx-accordion-details">
+ <div id="ctxAccordion" class="intake-divider patient-details-inline">
    <div class="pd-section">
     <div class="sub2">Demographics</div>
     <div class="grid2">
@@ -831,9 +857,6 @@ body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;paddin
   </div>
     </div>
    </div>
-  </div>
- </div>
- </div>
  </div>
  <div class="card-foot card-nav"><button type="button" class="nav-btn back card-back" disabled>← Back</button><button type="button" class="card-continue" disabled>Continue<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></button></div>
 </section>
@@ -932,8 +955,8 @@ body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;paddin
      </div>
     </div>
     <div class="reveal hidden" id="suicideRiskDocWrap">
-     <details class="risk-doc-acc">
-      <summary>Document risk</summary>
+     <div class="risk-doc-inline">
+      <div class="risk-doc-h">Document risk</div>
       <div class="risk-doc-body">
        <div class="sub2" style="margin:4px 0 6px;border:none;padding:0;font-size:10px">Protective factors</div>
        <div class="opts chip-row">
@@ -947,7 +970,7 @@ body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;paddin
        <div class="q"><label class="qlabel">Driving factors <span class="note">(1–2 sentences)</span></label><textarea data-formulation="driving" placeholder="What increases risk today?" rows="2"></textarea></div>
        <div class="q"><label class="qlabel">Mitigating factors <span class="note">(1–2 sentences)</span></label><textarea data-formulation="mitigating" placeholder="What lowers risk or supports safety?" rows="2"></textarea></div>
       </div>
-     </details>
+     </div>
     </div>
    </div>
   </div>
@@ -1008,8 +1031,8 @@ body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;paddin
       </div>
      </div>
      <div class="reveal hidden" id="violenceRiskDocWrap">
-      <details class="risk-doc-acc">
-       <summary>Document risk</summary>
+      <div class="risk-doc-inline">
+       <div class="risk-doc-h">Document risk</div>
        <div class="risk-doc-body">
         <div class="sub2" style="margin:4px 0 6px;border:none;padding:0;font-size:10px">Protective factors</div>
         <div class="opts chip-row">
@@ -1023,7 +1046,7 @@ body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;paddin
         <div class="q"><label class="qlabel">Driving factors <span class="note">(1–2 sentences)</span></label><textarea data-formulation="driving" placeholder="What increases violence risk today?" rows="2"></textarea></div>
         <div class="q"><label class="qlabel">Mitigating factors <span class="note">(1–2 sentences)</span></label><textarea data-formulation="mitigating" placeholder="What lowers risk or supports safety?" rows="2"></textarea></div>
        </div>
-      </details>
+      </div>
      </div>
      <div class="reveal hidden" id="tarasoffViolenceWrap">
       <div class="q"><label class="qlabel"><span class="kw" tabindex="0" role="term" data-def="Legal duty to protect an identifiable victim when a patient makes a credible threat of serious violence. Laws vary by state.">Tarasoff</span> / duty to protect</label>
@@ -1227,7 +1250,17 @@ body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;paddin
 </section>
 </div>
 
-</div></div>
+</div>
+</div>
+<aside class="workflow-document" id="workflowDocument" aria-label="Live document preview">
+ <div class="wf-doc-head">
+  <span class="wf-doc-title">Document</span>
+  <button type="button" class="wf-doc-copy" id="workflowDocCopy">Copy</button>
+ </div>
+ <div class="wf-doc-body" id="workflowDocBody"></div>
+</aside>
+</div>
+</div>
 
 <section id="packet"></section>
 <div id="warmHandoff" class="warm-overlay hidden" role="dialog" aria-labelledby="warmHandoffTitle" aria-modal="true">
@@ -1924,7 +1957,7 @@ var S={pathway:null,workflowStep:0,cleared:null,setting:null,city:"",zip:"",insu
  social:{housing:0,food:0,transport:0,dv:0,financial:0,childcare:0,legal:0,employment:0,utilities:0},
  socialCare:{completed:false,promptDismissed:false,screener:{housing:null,foodWorry:null,foodLast:null,transport:null,utilities:null,safety:null,benefits:null},tonight:{housingSafe:null,dvSafe:null,transportHome:null},dvSafeToPrint:false,contextLine:"Recently seen for a mental health visit, medically cleared.",initials:""},
  selected:{},touched:{},
- expressOp:true,expressSafetyDoc:null,expressLocExpanded:false,planShowAll:false,deliverMoreOpen:false,contextAccordionOpen:false};
+ expressOp:true,expressSafetyDoc:null,expressLocExpanded:false,planShowAll:false,deliverMoreOpen:false};
 function $(s,c){return (c||document).querySelector(s);}
 function $$(s,c){return [].slice.call((c||document).querySelectorAll(s));}
 function esc(x){return (x==null?"":(""+x)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
@@ -2269,11 +2302,86 @@ function buildSafetyChartText(){
 function renderSafetyChartDoc(){
  var wrap=$("#safetyChartDoc"),box=$("#safetyChartSections");
  if(!wrap||!box)return;
- if(!needsSafetyChartDoc()){wrap.classList.add("hidden");box.innerHTML="";return;}
- wrap.classList.remove("hidden");
- box.innerHTML=buildSafetyChartSections().map(function(s){
-  return '<div class="scd-sec"><div class="scd-sec-h">'+esc(s.title)+'</div><pre class="scd-sec-body">'+esc(s.body)+'</pre></div>';
- }).join("");
+ wrap.classList.add("hidden");
+ box.innerHTML="";
+}
+function lifeStageDisplay(){
+ return ({child:"Child / Adolescent (<18)",adult:"Adult (18–64)",geriatric:"Geriatric (≥65)"}[S.lifeStage]||"—");
+}
+function activeFlagsList(){
+ var labels={perinatal:"Perinatal",veteran:"Veteran / Military",lgbtq:"LGBTQ+",justice:"Justice involved",unhoused:"Housing unstable",sud:"SUD",tbi:"TBI / Neuro",idd:"IDD",seriousMed:"Serious medical illness"};
+ return Object.keys(S.flags).filter(function(f){return flagOn(f);}).map(function(f){return labels[f]||f;});
+}
+function wfDocKv(label,val){
+ var v=val==null||val===""?'<span class="wf-doc-empty">—</span>':val;
+ return '<div class="wf-doc-k">'+esc(label)+'</div><div>'+v+'</div>';
+}
+function wfDocSec(title,inner){
+ return '<div class="wf-doc-sec"><div class="wf-doc-sec-h">'+esc(title)+'</div><div class="wf-doc-sec-body">'+inner+'</div></div>';
+}
+function wfDocKvBlock(rows){
+ if(!rows.length)return '<div class="wf-doc-empty">—</div>';
+ return '<div class="wf-doc-kv">'+rows.map(function(r){return wfDocKv(r[0],r[1]);}).join("")+'</div>';
+}
+function renderWorkflowDocument(){
+ var box=$("#workflowDocBody");
+ if(!box)return;
+ if(!S.pathway){box.innerHTML='<div class="wf-doc-empty">Select a disposition setting to begin.</div>';return;}
+ var secs=[];
+ secs.push(wfDocSec("Case",wfDocKvBlock([
+  ["Cleared",S.cleared==="yes"?"Yes":S.cleared==="no"?"No — hold disposition":"—"],
+  ["Life stage",lifeStageDisplay()],
+  ["Language",S.lang?(esc(S.lang)+(S.interpreter==="yes"?" (interpreter)":"")):"—"],
+  ["Population flags",activeFlagsList().length?esc(activeFlagsList().join(" · ")):"None"]
+ ])));
+ var loc=dispLocShort()||"—";
+ var county=patientCounty();
+ secs.push(wfDocSec("Dispo & coverage",wfDocKvBlock([
+  ["Setting",esc(settingLabel(S.setting)||pathwayLabel()||"—")],
+  ["Level of care",esc(loc)],
+  ["Insurance",esc(S.insurance||"—")],
+  ["Home",esc(locDisplay()||"—")+(county?" · "+esc(county):"")]
+ ])));
+ var safetyInner="";
+ if(needsSafetyChartDoc()||S.expressSafetyDoc==="screen"||!isExpressOp()){
+  safetyInner=buildSafetyChartSections().map(function(s){
+   return '<div style="margin-bottom:6px"><div class="wf-doc-sec-h" style="margin-bottom:2px">'+esc(s.title)+'</div><pre class="wf-doc-pre">'+esc(s.body)+'</pre></div>';
+  }).join("");
+ }else{
+  safetyInner=wfDocKvBlock([
+   ["Suicide",esc(suicideScreenNote())],
+   ["Homicide",esc(homicideScreenNote())],
+   ["Violence",esc(violenceScreenNote())],
+   ["Substances",esc(substanceScreenNote())]
+  ]);
+ }
+ secs.push(wfDocSec("Safety",safetyInner||'<div class="wf-doc-empty">—</div>'));
+ var res=selectedRes();
+ var resList=res.length?'<ul class="wf-doc-list">'+res.slice(0,8).map(function(r,i){
+  return '<li><b>'+(i+1)+'.</b> '+esc(r.name)+(r.phone?' — '+esc(r.phone):"")+'</li>';
+ }).join("")+(res.length>8?'<li class="wf-doc-empty">+'+(res.length-8)+' more</li>':"")+'</ul>':'<div class="wf-doc-empty">None selected yet</div>';
+ var fu=resById(S.fuReferralId);
+ if(fu)resList+='<div style="margin-top:4px;font-size:11px"><b>Follow-up:</b> '+esc(fu.name)+(fu.phone?' · '+esc(fu.phone):"")+'</div>';
+ secs.push(wfDocSec("Resources",resList));
+ var handoffRows=[
+  ["Packet",esc(packetVariantLabel(S.packetVariant||"full"))],
+  ["Patient handout",S.includePatientHandout?"Yes":"No"],
+  ["Referral cover",S.includeReferralCover?"Yes":"No"],
+  ["Resource handoff",S.includeResourceHandoff?"Yes":"No"]
+ ];
+ if(S.apptScheduled)handoffRows.push(["Appointment",S.apptScheduled==="yes"?"Scheduled":"Not yet"]);
+ if(S.warm)handoffRows.push(["Warm handoff",esc(S.warm)]);
+ var handoffInner=wfDocKvBlock(handoffRows);
+ var toc=transitionOfCareChartLines().trim();
+ if(toc)handoffInner+='<pre class="wf-doc-pre" style="margin-top:6px">'+esc(toc)+'</pre>';
+ secs.push(wfDocSec("Handoff",handoffInner));
+ box.innerHTML=secs.join("");
+}
+function copyWorkflowDocText(btn){
+ var text=buildChartText();
+ function ok(){showCopyToast("Document copied");if(btn){btn.classList.add("copied");btn.textContent="Copied";setTimeout(function(){btn.classList.remove("copied");btn.textContent="Copy";},2200);}}
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(ok).catch(function(){showCopyToast("Copy failed — select text manually");});}
+ else{showCopyToast("Copy not supported in this browser");}
 }
 function copySafetyChartText(btn){
  var text=buildSafetyChartText();
@@ -2530,19 +2638,12 @@ function toggleSafetyDomain(domain){
 function renderSafetyDomains(){
  ensureSafetyGate();
  ensureSafetyOpen();
- var labels={suicide:"Suicide",homicide:"Homicide",violence:"Violence",substances:"Substances"};
  ["suicide","homicide","violence","substances"].forEach(function(d){
+  S.safetyOpen[d]=true;
   var row=$("#domain"+d.charAt(0).toUpperCase()+d.slice(1));
-  var pill=$("#pill"+d.charAt(0).toUpperCase()+d.slice(1));
   var toggle=row?$$("[data-safety-toggle='"+d+"']",row)[0]:null;
-  var g=S.safetyGate[d],open=!!S.safetyOpen[d];
-  if(row)row.classList.toggle("open",open);
-  if(toggle)toggle.setAttribute("aria-expanded",open?"true":"false");
-  if(pill){
-   var lbl=safetyGatePillLabel(g);
-   pill.textContent=lbl;
-   pill.style.display=(!open&&lbl)?"":"none";
-  }
+  if(row)row.classList.add("open");
+  if(toggle)toggle.setAttribute("aria-expanded","true");
  });
 }
 function safetyDomainsRequired(){return [];}
@@ -2811,7 +2912,6 @@ function choosePathway(p){
  S.expressSafetyDoc=null;
  S.planShowAll=false;
  S.deliverMoreOpen=false;
- S.contextAccordionOpen=false;
  S.expressLocExpanded=false;
  if(p==="ed"){S.setting="Acute";S.expressOp=false;}
  else{S.expressOp=true;S.setting=null;S.dispo=null;S.intensity=null;S.residType=null;}
@@ -3960,7 +4060,6 @@ document.querySelectorAll(".express-mode-opt").forEach(function(btn){
   render();
  });
 });
-var ctxAccordionBtn=$("#ctxAccordionBtn");if(ctxAccordionBtn)ctxAccordionBtn.addEventListener("click",function(){S.contextAccordionOpen=!S.contextAccordionOpen;render();});
 var planShowAllBtn=$("#planShowAllBtn");if(planShowAllBtn)planShowAllBtn.addEventListener("click",function(){S.planShowAll=true;render();});
 var deliverMoreBtn=$("#deliverMoreBtn");if(deliverMoreBtn)deliverMoreBtn.addEventListener("click",function(){S.deliverMoreOpen=!S.deliverMoreOpen;render();});
 
@@ -4065,12 +4164,6 @@ function L6ok(){return L2ok()&&L4ok()&&L5FollowUpOk()&&selectedCount()>=1&&attes
 function show(id,on){$(id).classList.toggle("hidden",!on);}
 function rev(id,on){$(id).classList.toggle("hidden",!on);}
 function renderContextLayout(){
- var acc=$("#ctxAccordion"),ess=$("#expressEssentials"),gateBody=$("#Lgate .slide-body");
- if(!acc)return;
- var anchor=isExpressOp()?ess:gateBody;
- if(anchor&&acc.parentElement!==anchor)anchor.appendChild(acc);
- acc.classList.toggle("open",!!S.contextAccordionOpen);
- var btn=$("#ctxAccordionBtn");if(btn)btn.setAttribute("aria-expanded",S.contextAccordionOpen?"true":"false");
  show("#contextInsZipBlock",!isExpressOp());
  show("#contextDispBlock",!isExpressOp());
 }
@@ -4150,6 +4243,7 @@ function render(){
  var l6Att=$("#l6ClinicianAttested");if(l6Att)l6Att.checked=S.clinicianAttested;
  renderSafetyDomains();
  renderSafetyChartDoc();
+ renderWorkflowDocument();
  rev("#suicideRiskReveal",sg.suicide==="help");
  rev("#suicideRiskDocWrap",sg.suicide==="help");
  rev("#homicideHelpReveal",sg.homicide==="help");
@@ -5572,6 +5666,7 @@ $("#saveTemplateName").addEventListener("keydown",function(e){if(e.key==="Enter"
 var suicideLink=$("#suicideGuidanceLink");if(suicideLink)suicideLink.addEventListener("click",openSuicideGuidance);
 var safetyEmergLink=$("#safetyEmergLink");if(safetyEmergLink)safetyEmergLink.addEventListener("click",openSuicideGuidance);
 var safetyChartCopy=$("#safetyChartCopy");if(safetyChartCopy)safetyChartCopy.addEventListener("click",function(){copySafetyChartText(safetyChartCopy);});
+var workflowDocCopy=$("#workflowDocCopy");if(workflowDocCopy)workflowDocCopy.addEventListener("click",function(){copyWorkflowDocText(workflowDocCopy);});
 $("#warmHandoffBtnL6").addEventListener("click",showWarmHandoff);
 $("#warmHandoffClose").addEventListener("click",hideWarmHandoff);
 $("#warmHandoff").addEventListener("click",function(e){if(e.target===e.currentTarget)hideWarmHandoff();});

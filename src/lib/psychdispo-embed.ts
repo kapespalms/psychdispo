@@ -1,5 +1,5 @@
 /** Bump when public/psychdispo.html changes so iframe embeds bypass stale browser cache. */
-export const PSYCHDISPO_HTML_BUILD = "case-card-nav-polish";
+export const PSYCHDISPO_HTML_BUILD = "split-doc-panel";
 
 export function psychdispoEmbedSrc(
   hash: string,
