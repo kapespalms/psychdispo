@@ -62,7 +62,7 @@ function SignInPage() {
     <AuthShell
       kicker="Account"
       title="Sign in"
-      subtitle="Save templates, favorite resources, and custom blurbs. Patient work stays on your device."
+      subtitle="Sync plan templates and settings defaults across devices. Patient work stays on your device."
       footer={
         <>
           No passwords. We never store patient information — only your account, templates, and
@@ -70,6 +70,12 @@ function SignInPage() {
           <Link to="/dispo" className="text-link-accent">
             Continue as guest
           </Link>
+          <span className="block mt-2">
+            New here?{" "}
+            <Link to="/sign-up" className="text-link-accent">
+              Create account
+            </Link>
+          </span>
           <span className="block mt-2">
             <EditorialFooterLinks />
           </span>

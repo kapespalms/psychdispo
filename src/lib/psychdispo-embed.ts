@@ -1,5 +1,5 @@
 /** Bump when public/psychdispo.html changes so iframe embeds bypass stale browser cache. */
-export const PSYCHDISPO_HTML_BUILD = "embed-pop-applicable";
+export const PSYCHDISPO_HTML_BUILD = "ux-p0-collab-pathway";
 
 export function psychdispoEmbedSrc(
   hash: string,

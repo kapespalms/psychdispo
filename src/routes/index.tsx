@@ -44,7 +44,7 @@ const CONTENTS = [
     num: "04",
     to: "/reference" as const,
     title: "Psychiatric reference",
-    desc: "High-yield emergency and consult protocols.",
+    desc: "High-yield emergency protocols — includes Psych Emerg Review.",
   },
 ] as const;
 

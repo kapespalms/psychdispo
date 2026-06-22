@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { saveCloudTemplate } from "@/lib/cloud-library";
 import { isSupabaseConfigured } from "@/lib/supabase";
@@ -25,6 +25,11 @@ function PhiBanner() {
 export function ToolFrame({ src, title, showPhiBanner }: ToolFrameProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const { user, supabaseEnabled } = useAuth();
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    setLoaded(false);
+  }, [src]);
 
   useEffect(() => {
     const iframe = iframeRef.current;
@@ -44,7 +49,10 @@ export function ToolFrame({ src, title, showPhiBanner }: ToolFrameProps) {
       );
     };
 
-    const onLoad = () => postAuth();
+    const onLoad = () => {
+      setLoaded(true);
+      postAuth();
+    };
     iframe.addEventListener("load", onLoad);
     postAuth();
 
@@ -54,13 +62,23 @@ export function ToolFrame({ src, title, showPhiBanner }: ToolFrameProps) {
   return (
     <div className="flex flex-col flex-1 min-h-0 bg-[var(--paper)]">
       {showPhiBanner && <PhiBanner />}
-      <iframe
-        ref={iframeRef}
-        key={src}
-        src={src}
-        title={title}
-        className="w-full flex-1 min-h-0 border-0 bg-[var(--paper)]"
-      />
+      <div className="relative flex flex-col flex-1 min-h-0">
+        {!loaded && (
+          <div
+            className="absolute inset-0 z-10 flex items-center justify-center bg-[var(--paper)]"
+            aria-live="polite"
+          >
+            <p className="kicker text-[var(--mut)]">Loading tool…</p>
+          </div>
+        )}
+        <iframe
+          ref={iframeRef}
+          key={src}
+          src={src}
+          title={title}
+          className="w-full flex-1 min-h-0 border-0 bg-[var(--paper)]"
+        />
+      </div>
     </div>
   );
 }

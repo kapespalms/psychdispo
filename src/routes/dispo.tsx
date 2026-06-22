@@ -12,7 +12,7 @@ export const Route = createFileRoute("/dispo")({
   head: () =>
     pageHead({
       path: "/dispo",
-      title: "Psych Dispo · Plan",
+      title: "Disposition Plan · PsychDispo",
       description:
         "Guided psychiatric disposition workflow with safety screening, level of care, verified referrals, and a printable discharge packet.",
       noindex: true,

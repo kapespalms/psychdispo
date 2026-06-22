@@ -8,7 +8,7 @@ export const Route = createFileRoute("/emerg")({
   head: () =>
     pageHead({
       path: "/emerg",
-      title: "Psych Emerg · Review",
+      title: "Psych Emerg Review · PsychDispo",
       description:
         "Evidence-based psychiatric emergency reference — suicide, agitation, psychosis, delirium, and disposition logic.",
     }),
@@ -30,7 +30,7 @@ function EmergPage() {
   return (
     <ToolFrame
       src={psychdispoEmbedSrc(iframeHash)}
-      title="Psych Emerg · Review"
+      title="Psych Emerg Review"
     />
   );
 }

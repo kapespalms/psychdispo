@@ -130,7 +130,7 @@ body.embed .progress-sticky{top:0}
 .step-head .ldesc{display:none}
 .layer{border:none;border-radius:0;margin:0;padding:18px 34px 24px;box-shadow:none}
 .layer+.layer{border-top:1px solid var(--line)}
-.legend,.gate-summary,#intakeLegend,#gateSummary,#pathwayContext,#l5ctx,#l6status,#gateAutoNote{display:none!important}
+.legend,.gate-summary,#intakeLegend,#gateSummary,#l5ctx,#l6status,#gateAutoNote{display:none!important}
 #l5Fresh{display:none}
 .note.in-workflow{display:none}
 .pathway-card .pathway-card-blurb{font-size:13px;color:var(--mut);line-height:1.45;margin:0}
@@ -148,6 +148,7 @@ body.embed .progress-sticky{top:0}
 .legend .cnt{margin-left:auto;font-size:12px;color:var(--mut)}
 .field-label{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);font-weight:600;margin-bottom:9px}
 .req-mark{color:var(--req);font-size:10px;line-height:1;flex:none;font-weight:700}
+.req-legend{font-size:11px;color:var(--mut);margin:0 0 10px;padding:0 18px;display:flex;align-items:center;gap:6px}
 .req-dot{width:9px;height:9px;border-radius:2px;flex:none}
 .req-dot.need{background:var(--req)}.req-dot.done{background:var(--sage)}
 .field-help{display:none}
@@ -637,7 +638,10 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
  .slide-panel .step-head{padding-bottom:0}
  .ctx-accordion.open .ctx-accordion-body{max-height:2400px}
  .step-head .ltitle{font-size:19px}
- .gate-auto-note,.intake-divider:not(.ctx-accordion-details) .sub2,#zipMeta,.pop-col .sub2,.ref-deeplink,.collab-banner{display:none!important}
+ .gate-auto-note,.intake-divider:not(.ctx-accordion-details) .sub2,#zipMeta,.pop-col .sub2,.ref-deeplink{display:none!important}
+ .collab-banner{font-size:11px;line-height:1.35;padding:8px 10px;margin:0 0 10px}
+ .collab-banner b{display:block;font-size:11px;margin-bottom:2px}
+ .pathway-ctx{padding:6px 10px 0;font-size:9px;letter-spacing:.12em}
  .ctx-accordion-details .sub2,.ctx-accordion-details .pop-col .sub2{display:block!important}
  .pop-flags-grid{grid-template-columns:1fr 1fr}
  .loc-cols{grid-template-columns:1fr;max-width:100%}
@@ -731,6 +735,7 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
 <section class="layer float-card" id="Lgate">
  <div class="step-kicker"><span class="num">01</span><span class="lbl">Case Setup</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Case setup</div></div>
+ <p class="req-legend"><span class="req-mark" aria-hidden="true">■</span> Required</p>
  <div class="slide-body">
  <div id="gateAutoNote" class="gate-auto-note"></div>
  <div id="expressToggleWrap" class="express-toggle hidden"><span class="express-mode-label">Workflow</span><div class="express-mode-track" role="group" aria-label="Workflow mode"><button type="button" class="express-mode-opt sel" id="expressModeExpress" data-express="1">Express</button><button type="button" class="express-mode-opt" id="expressModeFull" data-express="0">Full workflow</button></div></div>
@@ -764,6 +769,7 @@ body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-
 <section class="layer float-card" id="L0">
  <div class="step-kicker"><span class="num">02</span><span class="lbl">Patient &amp; Coverage</span><span class="ln"></span></div>
  <div class="step-head"><div class="ltitle">Patient &amp; coverage</div></div>
+ <p class="req-legend"><span class="req-mark" aria-hidden="true">■</span> Required</p>
  <div class="slide-body card-body">
  <div class="gate-grid">
   <div class="q gate-wide ins-zip-row coverage-band" id="contextInsZipBlock">
@@ -2671,6 +2677,12 @@ function pathwayLabel(){
  if(S.setting==="Outpatient")return "Outpatient";
  return "";
 }
+function pathwayContextLabel(){
+ if(S.pathway==="ed")return "Inpatient / ED";
+ if(S.pathway==="outpatient"&&isExpressOp())return "Outpatient express";
+ if(S.pathway==="outpatient")return "Outpatient";
+ return "";
+}
 function workflowContinueLabel(step){
  if(step>=workflowStepCount()-1)return "Continue";
  if(step===0)return "Continue";
@@ -2727,7 +2739,15 @@ function renderSpine(){
   return;
  }
  if(sticky)sticky.classList.remove("hidden");
- if(ctx){ctx.classList.add("hidden");ctx.innerHTML="";}
+ if(ctx){
+  var plbl=pathwayContextLabel();
+  if(plbl){
+   ctx.classList.remove("hidden");
+   ctx.innerHTML='<span>'+esc(plbl)+'</span> · <button type="button" class="change-path">Change setting</button>';
+   var cp=ctx.querySelector(".change-path");
+   if(cp)cp.onclick=function(e){e.preventDefault();clearPathway();};
+  }else{ctx.classList.add("hidden");ctx.innerHTML="";}
+ }
  var labels=stepLabels();
  var cur=spineIndex();
  el.innerHTML=labels.map(function(lbl,i){
