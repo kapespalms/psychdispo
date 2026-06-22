@@ -178,14 +178,15 @@ body.embed .progress-sticky{top:0}
 .clip.crisis{border-left-color:var(--red)}.clip.clinical{border-left-color:var(--t)}.clip.sud{border-left-color:var(--sage)}.clip.social{border-left-color:var(--gold)}
 .clip .top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
 .clip .nm{font-weight:600;font-size:15px}
-.cat{font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;padding:2px 8px;border-radius:999px}
-.cat.crisis{background:#f6e3e0;color:var(--red)}.cat.clinical{background:#e8eaf8;color:var(--t)}.cat.sud{background:#e7f0ec;color:var(--sage)}.cat.social{background:#f5edda;color:var(--gold)}
+.cat{font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;padding:3px 10px;border-radius:3px;line-height:1.3}
+.cat.crisis{background:#fdeceb;color:#8f2a22;border:1px solid #f0b8b2}.cat.clinical{background:#e8eaf8;color:#1e3399;border:1px solid #c5ccf0}.cat.sud{background:#e7f0ec;color:#1f5c47;border:1px solid #b8d9cb}.cat.social{background:#f5edda;color:#6b4b00;border:1px solid #e8d4a8}
 .clip .blurb{font-size:12.5px;color:var(--mut);line-height:1.5;margin:3px 0 8px}
 .clip .meta{display:flex;align-items:center;gap:10px;font-size:12.5px;flex-wrap:wrap}
 .clip .ph{color:var(--t);font-weight:600;text-decoration:none}
 .vchip{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--sage);background:#e7f0ec;border-radius:999px;padding:2px 8px;font-weight:500}
 .tray{border:1px solid var(--line);background:#f8f9fc;border-radius:10px;padding:12px 16px;margin-bottom:16px}
-.tray .h{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--mut);font-weight:600;margin-bottom:8px}
+.tray .h{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);font-weight:700;margin-bottom:8px}
+.tray-sec+.tray-sec{margin-top:12px;padding-top:10px;border-top:1px solid #e4e6ec}
 .trow{display:flex;align-items:center;gap:10px;font-size:13.5px;padding:5px 0;border-bottom:1px solid #efe7d8}
 .trow:last-child{border-bottom:none}
 .tnum{width:20px;height:20px;border-radius:50%;background:var(--t);color:#fff;font-size:11px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;flex:none}
@@ -264,7 +265,8 @@ body.embed .progress-sticky{top:0}
 .safety-chart-doc .scd-sec-body{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;line-height:1.45;color:var(--ink);white-space:pre-wrap;word-break:break-word;margin:0}
 @media(max-width:680px){.safety-chart-doc .scd-head{flex-wrap:wrap}.safety-chart-doc .scd-copy{flex:1;min-width:100%;min-height:44px}}
 .plan-top-matches{display:flex;flex-direction:column;gap:10px;margin:0 0 12px}
-.plan-match-card{display:block;border:2px solid var(--line);border-radius:12px;padding:14px 16px;background:#fff;cursor:pointer;position:relative;touch-action:manipulation;text-align:left;width:100%;font:inherit;color:inherit}
+.plan-match-card{display:block;border:1px solid var(--line);border-left-width:3px;border-radius:12px;padding:14px 16px;background:#fff;cursor:pointer;position:relative;touch-action:manipulation;text-align:left;width:100%;font:inherit;color:inherit}
+.plan-match-card.crisis{border-left-color:var(--red)}.plan-match-card.clinical{border-left-color:var(--t)}.plan-match-card.sud{border-left-color:var(--sage)}.plan-match-card.social{border-left-color:var(--gold)}
 .plan-match-card.sel{border-color:var(--t);background:#f8f9ff;box-shadow:0 0 0 1px var(--t) inset}
 .plan-match-card .nm{font-size:17px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;gap:8px}
 .plan-match-card .blurb{font-size:13px;color:var(--mut);line-height:1.45}
@@ -307,7 +309,7 @@ body.embed .progress-sticky{top:0}
 .patient-onepager h2{font-family:var(--serif);font-weight:700}
 .patient-onepager .doc-sec-h{font-family:var(--serif)}
 @media print{
- .workflow-sheet,.spine,.step-kicker,.step-head,.deliver-gate,.act,.deliver-foot,.deliver-advanced{display:none!important}
+ .workflow-sheet,.spine,.step-kicker,.step-head,.deliver-gate,.act,.deliver-foot,.deliver-advanced,.workflow-split,.workflow-document,.save-overlay,.warm-overlay,.copy-toast,.post-banner{display:none!important}
 }
 
 /* resource panels */
@@ -603,7 +605,7 @@ details.ref[open]>summary{border-bottom:1px solid var(--line);background:#f3f7f6
 .ico-sf svg{width:1.15em;height:1.15em;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
 .slide-shell{padding:2px 0 0;margin-bottom:0;min-height:0}
 #view-tool .workflow-sheet:has(#slideShell:not(.hidden)),
-#view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){display:flex;flex-direction:column;height:calc(100dvh - var(--workflow-chrome) - 12px);min-height:min(360px,calc(100dvh - var(--workflow-chrome) - 12px));max-height:calc(100dvh - var(--workflow-chrome) - 12px);overflow:hidden;margin-bottom:4px}
+#view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){display:flex;flex-direction:column;height:calc(100dvh - var(--workflow-chrome) - 4px);min-height:min(420px,calc(100dvh - var(--workflow-chrome) - 4px));max-height:calc(100dvh - var(--workflow-chrome) - 4px);overflow:hidden;margin-bottom:2px}
 body.embed #view-tool .workflow-sheet:has(#slideShell:not(.hidden)),
 body.embed #view-tool .workflow-sheet:has(#pathwayFork:not(.hidden)){flex:1;min-height:0;height:100%;max-height:none;margin:0;border-radius:0;border-left:none;border-right:none;border-top:none}
 #view-tool:has(#slideShell:not(.hidden)) .slide-nav-top{display:none!important}
@@ -750,8 +752,10 @@ body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;paddin
 .doc-handoff .handoff-foot{font-size:10px;color:var(--mut);margin-top:12px;border-top:1px solid var(--line);padding-top:8px}
 .social-prompt-overlay{z-index:70}
 @media print{
- .mh-top,.hero,.tabbar,.statusbar,.layer,.note,.toolnote,#view-directory,#view-social-care{display:none!important}
- body{background:#fff}#packet.show{display:block}.pk{border:none;padding:0;margin:0;max-width:none}
+ .mh-top,.hero,.tabbar,.statusbar,.layer,.note,.toolnote,#view-directory,#view-social-care,#view-tool,.wrap>.tabbar{display:none!important}
+ body{background:#fff;overflow:visible!important}html{overflow:visible!important}
+ #packet.show{display:block!important;position:relative;z-index:9999}
+ .pk{border:none;padding:0;margin:0;max-width:none}
  .wrap{padding:0;max-width:none}
  .patient-onepager{max-height:10in;overflow:hidden;page-break-after:always;break-inside:avoid}
  .patient-onepager .doc-sec{margin-top:8px;break-inside:avoid}
@@ -1270,7 +1274,6 @@ body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;paddin
   <div class="l6-actions">
    <button class="btn sec hidden" id="genBtn">Build full packet preview</button>
    <button class="btn sec hidden" id="warmHandoffBtnL6" type="button"><span class="kw" tabindex="0" role="term" data-def="Live phone introduction connecting the patient to the next provider or program before they leave.">Warm handoff</span> mode</button>
-   <button class="btn sec" id="savePlanBtn">Save plan</button>
    <button class="btn sec" id="saveTemplateBtn">Save as template</button>
   </div>
   <div id="postPacketBanner" class="post-banner hidden" role="status"></div>
@@ -2408,12 +2411,20 @@ function renderWorkflowDocument(){
  }
  secs.push(wfDocSec("Safety",safetyInner||'<div class="wf-doc-empty">—</div>'));
  var res=selectedRes();
- var resList=res.length?'<ul class="wf-doc-list">'+res.slice(0,8).map(function(r,i){
-  return '<li><b>'+(i+1)+'.</b> '+esc(r.name)+(r.phone?' — '+esc(r.phone):"")+'</li>';
- }).join("")+(res.length>8?'<li class="wf-doc-empty">+'+(res.length-8)+' more</li>':"")+'</ul>':'<div class="wf-doc-empty">None selected yet</div>';
+ var split=splitSelectedResources(res);
+ function wfResList(list,empty){
+  if(!list.length)return '<div class="wf-doc-empty">'+empty+'</div>';
+  return '<ul class="wf-doc-list">'+list.slice(0,6).map(function(r,i){
+   return '<li><b>'+(i+1)+'.</b> '+esc(r.name)+(r.phone?' — '+esc(r.phone):"")+'</li>';
+  }).join("")+(list.length>6?'<li class="wf-doc-empty">+'+(list.length-6)+' more</li>':"")+'</ul>';
+ }
+ var resInner="";
+ if(split.crisis.length)resInner+='<div style="margin-bottom:6px"><div class="wf-doc-sec-h" style="margin-bottom:2px">Crisis resources</div>'+wfResList(split.crisis,"None")+'</div>';
+ if(split.plan.length)resInner+='<div><div class="wf-doc-sec-h" style="margin-bottom:2px">Your next steps</div>'+wfResList(split.plan,"None")+'</div>';
+ if(!split.crisis.length&&!split.plan.length)resInner='<div class="wf-doc-empty">None selected yet</div>';
  var fu=resById(S.fuReferralId);
- if(fu)resList+='<div style="margin-top:4px;font-size:11px"><b>Follow-up:</b> '+esc(fu.name)+(fu.phone?' · '+esc(fu.phone):"")+'</div>';
- secs.push(wfDocSec("Resources",resList));
+ if(fu)resInner+='<div style="margin-top:4px;font-size:11px"><b>Main follow-up:</b> '+esc(fu.name)+(fu.phone?' · '+esc(fu.phone):"")+'</div>';
+ secs.push(wfDocSec("Resources",resInner));
  var handoffRows=[
   ["Packet",esc(packetVariantLabel(S.packetVariant||"full"))],
   ["Patient handout",S.includePatientHandout?"Yes":"No"],
@@ -2523,20 +2534,14 @@ function openSuicideGuidance(e){
  scrollRefAnchor("suicide");
 }
 function warmHandoffContacts(){
- var res=selectedRes();
- var crisis=res.filter(function(r){return r.panel==="D";});
- var regional=crisis.filter(isRegionalCrisisLine)[0];
  var fu=resById(S.fuReferralId);
- var out=[];
- out.push({label:"988 Suicide & Crisis Lifeline",phone:"988",kind:"crisis"});
- if(regional)out.push({label:regional.name,phone:regional.phone,kind:"crisis"});
- if(fu&&fu.phone)out.push({label:fu.name,phone:fu.phone,kind:"follow"});
- return out;
+ if(!needsWarmHandoff()||!fu||!fu.phone)return [];
+ return [{label:fu.name,phone:fu.phone,kind:"follow"}];
 }
 function renderWarmHandoffCalls(){
  var box=$("#warmHandoffCalls");if(!box)return;
  var contacts=warmHandoffContacts();
- if(!contacts.length){box.innerHTML='<div class="note">Select a follow-up referral and crisis resources first.</div>';return;}
+ if(!contacts.length){box.innerHTML='<div class="note">Schedule the follow-up referral first — warm handoff is for calling the program before discharge.</div>';return;}
  box.innerHTML=contacts.map(function(c){
   var cls="wh-call"+(c.kind==="crisis"?" crisis":c.kind==="follow"?" follow":"");
   return '<a class="'+cls+'" href="tel:'+tel(c.phone)+'">'+esc(c.label)+'<span class="wh-num">'+esc(c.phone)+'</span></a>';
@@ -2549,8 +2554,12 @@ function showWarmHandoff(){
 function hideWarmHandoff(){
  var overlay=$("#warmHandoff");if(overlay)overlay.classList.add("hidden");
 }
+function needsWarmHandoff(fu){
+ fu=fu||resById(S.fuReferralId);
+ return S.apptScheduled==="no"&&!!fu;
+}
 function updateWarmHandoffBtns(){
- var show=!!(S.fuReferralId&&resById(S.fuReferralId));
+ var show=needsWarmHandoff();
  var l6=$("#warmHandoffBtnL6");if(l6)l6.classList.toggle("hidden",!show);
 }
 function renderL5Fresh(){
@@ -2950,7 +2959,7 @@ function applyPlanDefaults(){
  if(S.pcp==null)S.pcp="nopcp";
  if(S.pharmacy==null)S.pharmacy="no";
 }
-function fkglPlanOk(){var high=highFkglResources();return !high.length||S.acknowledgeHighFkgl;}
+function fkglPlanOk(){return true;}
 function planStepOk(){applyPlanDefaults();return L4ok()&&selectedCount()>=1&&L5FollowUpOk()&&fkglPlanOk();}
 function needsInterventionQuestions(){
  ensureSafetyGate();
@@ -3129,14 +3138,7 @@ function referralDeliverTargets(){
 }
 function renderDeliverScreen(){
  var gate=$("#deliverGate");
- var sens=sensitiveSelected();
- if(gate){
-  if(sens.length&&S.includePatientHandout&&!S.includeSensitiveOnPatientHandout){
-   gate.classList.remove("hidden");
-   gate.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 9v4M12 17h.01M10.3 3.9l-8 14A2 2 0 004 21h16a2 2 0 001.7-3l-8-14a2 2 0 00-3.4 0z"/></svg>'+
-    sens.length+' sensitive resource'+(sens.length>1?"s are":" is")+' hidden from the printed patient sheet — confirm it\'s safe to print, or leave off.';
-  }else{gate.classList.add("hidden");gate.innerHTML="";}
- }
+ if(gate){gate.classList.add("hidden");gate.innerHTML="";}
  var primary=$("#deliverPrimary"),moreBtn=$("#deliverMoreBtn"),advWrap=$("#deliverAdvancedWrap"),cards=$("#deliverCards");
  if(!primary)return;
  if(!L6ok()){
@@ -3145,6 +3147,7 @@ function renderDeliverScreen(){
   if(cards)cards.innerHTML="";
   if(moreBtn)moreBtn.classList.add("hidden");
   if(advWrap){advWrap.classList.remove("is-open");advWrap.classList.add("hidden");}
+  var tplBtn0=$("#saveTemplateBtn");if(tplBtn0)tplBtn0.classList.add("hidden");
   return;
  }
  var ok=L6ok(),dis=!ok?' disabled':'';
@@ -3160,6 +3163,7 @@ function renderDeliverScreen(){
   advWrap.classList.remove("hidden");
   advWrap.classList.toggle("is-open",!!S.deliverMoreOpen);
  }
+ var tplBtn=$("#saveTemplateBtn");if(tplBtn)tplBtn.classList.toggle("hidden",!S.deliverMoreOpen);
  if(!cards)return;
  var html="";
  referralDeliverTargets().forEach(function(r){
@@ -4374,8 +4378,8 @@ function renderExpressEssentials(){
 function planMatchBlurb(r){return truncateText(patientBlurbFor(r),58);}
 function planMatchCard(r){
  var id=rid(r),sel=!!S.selected[id],c=clipCategory(r);
- return '<label class="plan-match-card'+(sel?" sel":"")+'"><input type="checkbox" data-res="'+esc(id)+'" '+(sel?"checked":"")+' style="position:absolute;opacity:0;width:1px;height:1px">'+
-  '<div class="nm">'+esc(r.name)+'<span class="cat '+c.cls+'">'+esc(c.cat)+'</span></div>'+
+ return '<label class="plan-match-card'+(sel?" sel":"")+' '+c.cls+'"><input type="checkbox" data-res="'+esc(id)+'" '+(sel?"checked":"")+' style="position:absolute;opacity:0;width:1px;height:1px">'+
+  '<div class="nm">'+esc(r.name)+'</div>'+
   '<div class="blurb">'+esc(planMatchBlurb(r))+'</div>'+
   '<div class="meta">'+esc(r.phone||"")+'</div></label>';
 }
@@ -4478,12 +4482,9 @@ function resCard(r){
  var id=rid(r),ck=S.selected[id]?"checked":"";
  var c=clipCategory(r);
  var blurb=patientBlurbFor(r);
- var curated=r.patientBlurb||(r.patient&&r.patient.blurb);
- var gradeChip=curated?fkglChip(blurb):"";
- var autoFlag=!curated?'<span class="badge un">auto</span>':"";
  return '<label class="clip '+c.cls+(S.selected[id]?" sel":"")+'"><input type="checkbox" data-res="'+esc(id)+'" '+ck+' style="position:absolute;opacity:0;width:1px;height:1px">'+
-  '<div class="top"><span class="nm">'+esc(r.name)+'</span><span class="cat '+c.cls+'">'+esc(c.cat)+'</span></div>'+
-  '<div class="blurb">'+esc(blurb)+gradeChip+autoFlag+'</div>'+
+  '<div class="top"><span class="nm">'+esc(r.name)+'</span></div>'+
+  '<div class="blurb">'+esc(blurb)+'</div>'+
   '<div class="meta"><a class="ph" href="tel:'+tel(r.phone)+'">'+esc(r.phone)+'</a>'+verifiedChip(r)+
   ((r.fax||r.email)?'<span style="font-size:11px;color:var(--mut)">'+(r.fax?"fax "+esc(r.fax):"")+(r.email?" · "+esc(r.email):"")+'</span>':'')+
   '</div></label>';
@@ -4874,7 +4875,7 @@ function renderFollowUp(){
     '<div class="note" style="margin-top:6px">Use call or fax when no appointment is scheduled yet.</div>':'<div class="note alert amber">No phone, fax, or email on file for this resource — verify contact info or pick another referral.</div>')+
    sheetBlock+
   '</div>'+
-  (fu?'<div style="margin-top:12px"><button type="button" class="btn sec" id="warmHandoffBtn" style="margin:0;min-height:44px">'+kw("Warm handoff","warmHandoff")+' mode — tap to call</button></div>':'');
+  (needsWarmHandoff(fu)?'<div style="margin-top:12px"><button type="button" class="btn sec" id="warmHandoffBtn" style="margin:0;min-height:44px">'+kw("Warm handoff","warmHandoff")+' mode — tap to call</button></div>':'');
  syncOptsFromS();
  var wh=$("#warmHandoffBtn");if(wh)wh.onclick=showWarmHandoff;
  updateWarmHandoffBtns();
@@ -4946,14 +4947,34 @@ function renderPanels(){
 function panelHTML(k,body){var m=PMETA[k]||["","Resources","#5b726f","#f3f7f6"];
  if(!body||!body.trim())body='<div class="note" style="padding:8px 2px">No verified local match — use 211, your insurer\'s provider directory, or a warm referral.</div>';
  return '<div class="panel" style="border-left:4px solid '+m[2]+'"><div class="ph" style="background:'+m[3]+';color:'+m[2]+'">'+m[0]+' '+esc(m[1])+'</div><div class="pbody">'+body+'</div></div>';}
+function isCrisisSelectedResource(r){
+ if(!r)return false;
+ if(dirIsCrisisResource(r))return true;
+ if(isEmergencyDept(r))return true;
+ return false;
+}
+function splitSelectedResources(items){
+ var crisis=[],plan=[];
+ items.forEach(function(r){
+  if(isCrisisSelectedResource(r))crisis.push(r);
+  else plan.push(r);
+ });
+ return {crisis:crisis,plan:plan};
+}
+function renderSelectedTrayRows(items,fuId){
+ if(!items.length)return "";
+ return items.map(function(r,i){
+  var id=rid(r),isMain=id===fuId;
+  return '<div class="trow"><span class="tnum">'+(i+1)+'</span><span class="nm">'+esc(r.name)+(isMain?" (main follow-up)":"")+'</span><span class="ph">'+esc(r.phone)+'</span><button class="selx" data-unsel="'+esc(id)+'" title="Remove" style="border:none;background:none;cursor:pointer;color:var(--mut)">✕</button></div>';
+ }).join("");
+}
 function renderSelected(){var tray=$("#selectedTray");if(!tray)return;
  var items=Object.keys(S.selected).filter(function(k){return S.selected[k];}).map(function(k){return ALL.filter(function(r){return rid(r)===k;})[0];}).filter(Boolean);
  if(!items.length){tray.innerHTML="";return;}
- var fuId=S.fuReferralId;
- tray.innerHTML='<div class="tray"><div class="h">Selected for this patient</div>'+items.map(function(r,i){
-  var id=rid(r),isMain=id===fuId;
-  return '<div class="trow"><span class="tnum">'+(i+1)+'</span><span class="nm">'+esc(r.name)+(isMain?" (main follow-up)":"")+'</span><span class="ph">'+esc(r.phone)+'</span><button class="selx" data-unsel="'+esc(id)+'" title="Remove" style="border:none;background:none;cursor:pointer;color:var(--mut)">✕</button></div>';
- }).join("")+'</div>';}
+ var fuId=S.fuReferralId,split=splitSelectedResources(items),parts=[];
+ if(split.crisis.length)parts.push('<div class="tray-sec"><div class="h">Crisis resources</div>'+renderSelectedTrayRows(split.crisis,null)+'</div>');
+ if(split.plan.length)parts.push('<div class="tray-sec"><div class="h">Your next steps</div>'+renderSelectedTrayRows(split.plan,fuId)+'</div>');
+ tray.innerHTML='<div class="tray">'+parts.join("")+'</div>';}
 document.addEventListener("click",function(e){var b=e.target.closest("[data-unsel]");if(!b)return;var id=b.dataset.unsel;S.selected[id]=false;S.touched[id]=1;renderPanels();renderFollowUp();renderL6status();renderStatus();});
 
 /* resource + social checkbox handlers */
@@ -5051,13 +5072,7 @@ function renderL6status(){
 }
 function renderL5FkglGate(){
  var el=$("#l5FkglGate");if(!el)return;
- var high=highFkglResources();
- if(high.length){
-  el.classList.remove("hidden");
-  el.innerHTML='<b>Reading level:</b> '+high.length+' selected blurb(s) above grade 6. Simplify blurbs or acknowledge to continue to Deliver.'+
-   high.map(function(r){return '<div class="l6-preview-row"><b>'+esc(r.name)+'</b>'+fkglChip(patientBlurbFor(r))+'</div>';}).join("")+
-   '<label style="display:block;margin-top:8px"><input type="checkbox" id="acknowledgeHighFkglPlan" '+(S.acknowledgeHighFkgl?"checked":"")+'> I reviewed — OK to use these blurbs on the patient sheet</label>';
- }else{el.classList.add("hidden");el.innerHTML="";}
+ el.classList.add("hidden");el.innerHTML="";
 }
 function renderL6PublishGates(){
  var sensEl=$("#l6SafePrintGate"),fkglEl=$("#l6FkglGate");
@@ -5071,27 +5086,11 @@ function renderL6PublishGates(){
     '<label><input type="checkbox" id="includeSensitiveOnHandout" '+(S.includeSensitiveOnPatientHandout?"checked":"")+'> Include sensitive resources on patient handout (names &amp; addresses)</label>';
   }else{sensEl.classList.add("hidden");sensEl.innerHTML="";}
  }
- var high=highFkglResources();
- if(fkglEl){
-  if(high.length&&S.includePatientHandout){
-   fkglEl.classList.remove("hidden");
-   fkglEl.innerHTML='<b>Hard stop — reading level:</b> '+high.length+' blurb(s) above grade 6. Simplify or acknowledge before printing.'+high.map(function(r){
-    return '<div class="l6-preview-row"><b>'+esc(r.name)+'</b>'+fkglChip(patientBlurbFor(r))+'</div>';
-   }).join("");
-  }else{fkglEl.classList.add("hidden");fkglEl.innerHTML="";}
- }
+ if(fkglEl){fkglEl.classList.add("hidden");fkglEl.innerHTML="";}
 }
 function renderL6ResourcePreview(){
  var el=$("#l6ResourcePreview");if(!el)return;
- var res=selectedRes().filter(function(r){return r.patientBlurb||(r.patient&&r.patient.blurb);});
- if(!res.length){el.classList.add("hidden");el.innerHTML="";return;}
- el.classList.remove("hidden");
- el.innerHTML='<div class="note" style="margin-bottom:6px">Patient blurbs · reading level (FKGL)</div>'+
-  res.map(function(r){
-   var blurb=r.patientBlurb||(r.patient&&r.patient.blurb)||"";
-   return '<div class="l6-preview-row"><b>'+esc(r.name)+'</b>'+fkglChip(blurb)+
-    '<div class="l6-preview-blurb">'+esc(blurb)+'</div></div>';
-  }).join("");
+ el.classList.add("hidden");el.innerHTML="";
 }
 
 /* ---- packet helpers ---- */
@@ -5114,9 +5113,28 @@ function truncateText(s,max){
  return t+"…";
 }
 function patientBlurbFor(r){
- if(r.patientBlurb)return r.patientBlurb;
- if(r.patient&&r.patient.blurb)return r.patient.blurb;
- return truncateText(plain(r.svc||r.name||""),80);
+ var raw;
+ if(r.patientBlurb)raw=r.patientBlurb;
+ else if(r.patient&&r.patient.blurb)raw=r.patient.blurb;
+ else raw=truncateText(plain(r.svc||r.name||""),80);
+ return simplifyForPatientReading(raw);
+}
+var FKGL_TARGET=6;
+function simplifyForPatientReading(text){
+ text=plain(text||"");
+ if(!text)return "";
+ if(gradeOf(text)<=FKGL_TARGET)return text;
+ var cuts=[
+  function(s){return s.replace(/\s*[,;:\-–—]\s*.+$/,"").trim();},
+  function(s){var p=s.split(/[.!?]+/).filter(Boolean);return p.length>1?p.slice(0,2).join(". ").trim()+".":s;},
+  function(s){var w=s.split(/\s+/);return w.slice(0,Math.max(8,Math.floor(w.length*0.65))).join(" ").replace(/[,;:\-–—]\s*[^,;:\-–—]+$/,"").trim();},
+  function(s){return truncateText(s,48);}
+ ];
+ for(var i=0;i<cuts.length;i++){
+  var t=cuts[i](text);
+  if(t&&gradeOf(t)<=FKGL_TARGET)return t;
+ }
+ return truncateText(text,40);
 }
 var ICON_SVG={
  phone:'<svg class="res-icon" viewBox="0 0 16 16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.4" d="M3.5 2.5h2.5l1 2.5-1.8 1.2a6.5 6.5 0 003.6 3.6l1.2-1.8 2.5 1v2.5l-1.8 1C6.8 12.8 3.2 9.2 2.5 5.3l1-2.8z"/></svg>',
@@ -5209,12 +5227,7 @@ function discreetResourceLabel(r){
  if(r.flag==="lgbtq")return "Affirming care line";
  return "Support line";
 }
-function highFkglResources(){
- return selectedRes().filter(function(r){
-  var b=patientBlurbFor(r);
-  return gradeOf(b)>6;
- });
-}
+function highFkglResources(){return [];}
 function patientHandoutIncludeSensitive(){return !!S.includeSensitiveOnPatientHandout;}
 function patientResRow(r,includeSensitive){
  includeSensitive=includeSensitive!==undefined?includeSensitive:patientHandoutIncludeSensitive();
@@ -5646,14 +5659,8 @@ function confirmSaveTemplateDialog(){
 }
 function updateSavePlanBtn(){
  var btn=$("#savePlanBtn");
- var user=readSessionUser();
  if(!btn)return;
- btn.classList.remove("hidden");
- if(user&&user.email){
-  btn.textContent=currentSavedPlanId?"Update saved plan":"Save plan";
- }else{
-  btn.textContent="Sign up to save plans";
- }
+ btn.classList.add("hidden");
 }
 function showSavePlanDialog(opts){
  opts=opts||{};
@@ -5865,7 +5872,7 @@ window.addEventListener("hashchange",function(){var v=viewFromHash();if(v)activa
  var pm=location.search.match(/[?&]pathway=(ed|outpatient)/i);
  if(pm&&!S.pathway)choosePathway(pm[1].toLowerCase()==="ed"?"ed":"outpatient");
 })();
-$("#savePlanBtn").addEventListener("click",function(){
+$("#savePlanBtn")&&$("#savePlanBtn").addEventListener("click",function(){
  if(readSessionUser())showSavePlanDialog();
  else window.open("/sign-up","_parent");
 });
@@ -5890,7 +5897,7 @@ var workflowDocCopy=$("#workflowDocCopy");if(workflowDocCopy)workflowDocCopy.add
 $("#warmHandoffBtnL6").addEventListener("click",showWarmHandoff);
 $("#warmHandoffClose").addEventListener("click",hideWarmHandoff);
 $("#warmHandoff").addEventListener("click",function(e){if(e.target===e.currentTarget)hideWarmHandoff();});
-$("#genBtn").addEventListener("click",function(){$("#packet").innerHTML=buildPacket();$("#packet").classList.add("show");$("#packet").scrollIntoView({behavior:"smooth"});onPacketGenerated();});
+var genBtn=$("#genBtn");if(genBtn)genBtn.addEventListener("click",function(){$("#packet").innerHTML=buildPacket();$("#packet").classList.add("show");$("#packet").scrollIntoView({behavior:"smooth"});onPacketGenerated();});
 $("#copyChartBtn").addEventListener("click",function(){
  var text=buildChartText();
  if(navigator.clipboard&&navigator.clipboard.writeText){
@@ -5904,13 +5911,33 @@ $("#copyChartBtn").addEventListener("click",function(){
   document.body.removeChild(ta);
  }
 });
+function cleanupAfterPrint(){
+ hidePublishGate();
+ hideWarmHandoff();
+ var pkt=$("#packet");
+ if(pkt){pkt.classList.remove("show");}
+ syncCardNav();
+ renderStatus();
+}
 function executePrint(){
  var mode=S._printMode;
+ hidePublishGate();
+ hideWarmHandoff();
  $("#packet").innerHTML=mode?buildPrintContent(mode):buildPacket();
  S._printMode=null;S._printRefId=null;
  $("#packet").classList.add("show");
- onPacketGenerated();
- setTimeout(function(){window.print();},120);
+ var finished=false;
+ function finish(){
+  if(finished)return;
+  finished=true;
+  cleanupAfterPrint();
+  onPacketGenerated();
+ }
+ window.addEventListener("afterprint",finish,{once:true});
+ setTimeout(function(){
+  try{window.print();}catch(e){finish();}
+  setTimeout(finish,2500);
+ },120);
 }
 function hidePublishGate(){var o=$("#publishGateOverlay");if(o)o.classList.add("hidden");}
 function showPublishGate(opts){
@@ -5920,7 +5947,7 @@ function showPublishGate(opts){
  var fkglAck=$("#publishGateFkglAck"),sensAck=$("#publishGateSensAck");
  var needFkgl=!!opts.needFkgl,needSens=!!opts.needSens;
  if(desc)desc.textContent=opts.message||"Confirm before printing the patient handout.";
- if(fkglRow)fkglRow.style.display=needFkgl?"block":"none";
+ if(fkglRow)fkglRow.style.display="none";
  if(sensRow)sensRow.style.display=needSens?"block":"none";
  if(fkglAck)fkglAck.checked=!!S.acknowledgeHighFkgl;
  if(sensAck)sensAck.checked=!!S.includeSensitiveOnPatientHandout;
@@ -5936,28 +5963,20 @@ function showPublishGateErr(msg){
 }
 function confirmPublishGate(){
  var o=$("#publishGateOverlay");if(!o)return;
- var fkglAck=$("#publishGateFkglAck"),sensAck=$("#publishGateSensAck");
+ var sensAck=$("#publishGateSensAck");
  var pending=o._pending||{};
  showPublishGateErr("");
- if(pending.needFkgl&&(!fkglAck||!fkglAck.checked)){showPublishGateErr("Acknowledge the reading-level review to print.");return;}
  if(pending.needSens&&(!sensAck||!sensAck.checked)){showPublishGateErr("Check the box to include sensitive resources, or uncheck on L6 before printing.");return;}
- if(fkglAck&&fkglAck.checked)S.acknowledgeHighFkgl=true;
  if(sensAck&&sensAck.checked)S.includeSensitiveOnPatientHandout=true;
  hidePublishGate();
  executePrint();
 }
 function runPrintWithGates(){
- if($("#printBtn").disabled)return;
  if(!S.includePatientHandout){executePrint();return;}
- var high=highFkglResources();
  var sens=sensitiveSelected();
- var needFkgl=high.length>0&&!S.acknowledgeHighFkgl;
  var needSens=sens.length>0&&S.includeSensitiveOnPatientHandout;
- if(!needFkgl&&!needSens){executePrint();return;}
- var parts=[];
- if(needFkgl)parts.push(high.length+" patient blurb(s) are above grade 6.");
- if(needSens)parts.push("You opted to print "+sens.length+" sensitive resource(s) with names/addresses.");
- showPublishGate({needFkgl:needFkgl,needSens:needSens,message:parts.join(" ")});
+ if(!needSens){executePrint();return;}
+ showPublishGate({needFkgl:false,needSens:true,message:"You opted to print "+sens.length+" sensitive resource(s) with names/addresses."});
 }
 $("#publishGateCancel").addEventListener("click",hidePublishGate);
 $("#publishGateConfirm").addEventListener("click",confirmPublishGate);

@@ -42,7 +42,7 @@
   --measure: 42rem;
   --page: 56rem;
   --shell-header: 112px;
-  --frame-pad: clamp(27px, 6vw, 59px);
+  --frame-pad: clamp(14px, 3vw, 30px);
   --frame-radius: 12px;
 }
 
@@ -94,8 +94,8 @@
     flex-direction: column;
     background: var(--paper);
     border-radius: var(--frame-radius);
-    border: 1.5px solid color-mix(in srgb, var(--t) 55%, var(--paper));
-    box-shadow: inset 0 0 0 1px var(--t);
+    border: 0.75px solid color-mix(in srgb, var(--t) 55%, var(--paper));
+    box-shadow: inset 0 0 0 0.5px var(--t);
     overflow: hidden;
   }
 
