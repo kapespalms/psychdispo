@@ -29,9 +29,6 @@ export function ToolFrame({ src, title, showPhiBanner }: ToolFrameProps) {
 
   useEffect(() => {
     setLoaded(false);
-  }, [src]);
-
-  useEffect(() => {
     const iframe = iframeRef.current;
     if (!iframe) return;
 
@@ -54,7 +51,15 @@ export function ToolFrame({ src, title, showPhiBanner }: ToolFrameProps) {
       postAuth();
     };
     iframe.addEventListener("load", onLoad);
-    postAuth();
+    try {
+      if (iframe.contentDocument?.readyState === "complete") {
+        onLoad();
+      } else {
+        postAuth();
+      }
+    } catch {
+      postAuth();
+    }
 
     return () => iframe.removeEventListener("load", onLoad);
   }, [user, src, supabaseEnabled]);
