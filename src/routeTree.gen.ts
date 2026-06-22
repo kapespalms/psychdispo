@@ -11,16 +11,19 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkflowRouteImport } from './routes/workflow'
 import { Route as TrustRouteImport } from './routes/trust'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SocialRefRouteImport } from './routes/social-ref'
 import { Route as SocialCareRouteImport } from './routes/social-care'
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ReferenceRouteImport } from './routes/reference'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PlansRouteImport } from './routes/plans'
 import { Route as EmergRouteImport } from './routes/emerg'
 import { Route as DispoRouteImport } from './routes/dispo'
 import { Route as DirectoryRouteImport } from './routes/directory'
+import { Route as AccessibilityRouteImport } from './routes/accessibility'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
@@ -34,6 +37,11 @@ const WorkflowRoute = WorkflowRouteImport.update({
 const TrustRoute = TrustRouteImport.update({
   id: '/trust',
   path: '/trust',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SocialRefRoute = SocialRefRouteImport.update({
@@ -66,6 +74,11 @@ const ReferenceRoute = ReferenceRouteImport.update({
   path: '/reference',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PlansRoute = PlansRouteImport.update({
   id: '/plans',
   path: '/plans',
@@ -84,6 +97,11 @@ const DispoRoute = DispoRouteImport.update({
 const DirectoryRoute = DirectoryRouteImport.update({
   id: '/directory',
   path: '/directory',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccessibilityRoute = AccessibilityRouteImport.update({
+  id: '/accessibility',
+  path: '/accessibility',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -110,16 +128,19 @@ const AppIntakePsychiatryRoute = AppIntakePsychiatryRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/accessibility': typeof AccessibilityRoute
   '/directory': typeof DirectoryRoute
   '/dispo': typeof DispoRoute
   '/emerg': typeof EmergRoute
   '/plans': typeof PlansRoute
+  '/privacy': typeof PrivacyRoute
   '/reference': typeof ReferenceRoute
   '/settings': typeof SettingsRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/social-care': typeof SocialCareRoute
   '/social-ref': typeof SocialRefRoute
+  '/terms': typeof TermsRoute
   '/trust': typeof TrustRoute
   '/workflow': typeof WorkflowRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -128,16 +149,19 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/accessibility': typeof AccessibilityRoute
   '/directory': typeof DirectoryRoute
   '/dispo': typeof DispoRoute
   '/emerg': typeof EmergRoute
   '/plans': typeof PlansRoute
+  '/privacy': typeof PrivacyRoute
   '/reference': typeof ReferenceRoute
   '/settings': typeof SettingsRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/social-care': typeof SocialCareRoute
   '/social-ref': typeof SocialRefRoute
+  '/terms': typeof TermsRoute
   '/trust': typeof TrustRoute
   '/workflow': typeof WorkflowRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -147,16 +171,19 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/accessibility': typeof AccessibilityRoute
   '/directory': typeof DirectoryRoute
   '/dispo': typeof DispoRoute
   '/emerg': typeof EmergRoute
   '/plans': typeof PlansRoute
+  '/privacy': typeof PrivacyRoute
   '/reference': typeof ReferenceRoute
   '/settings': typeof SettingsRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/social-care': typeof SocialCareRoute
   '/social-ref': typeof SocialRefRoute
+  '/terms': typeof TermsRoute
   '/trust': typeof TrustRoute
   '/workflow': typeof WorkflowRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -167,16 +194,19 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/accessibility'
     | '/directory'
     | '/dispo'
     | '/emerg'
     | '/plans'
+    | '/privacy'
     | '/reference'
     | '/settings'
     | '/sign-in'
     | '/sign-up'
     | '/social-care'
     | '/social-ref'
+    | '/terms'
     | '/trust'
     | '/workflow'
     | '/auth/callback'
@@ -185,16 +215,19 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/accessibility'
     | '/directory'
     | '/dispo'
     | '/emerg'
     | '/plans'
+    | '/privacy'
     | '/reference'
     | '/settings'
     | '/sign-in'
     | '/sign-up'
     | '/social-care'
     | '/social-ref'
+    | '/terms'
     | '/trust'
     | '/workflow'
     | '/auth/callback'
@@ -203,16 +236,19 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/accessibility'
     | '/directory'
     | '/dispo'
     | '/emerg'
     | '/plans'
+    | '/privacy'
     | '/reference'
     | '/settings'
     | '/sign-in'
     | '/sign-up'
     | '/social-care'
     | '/social-ref'
+    | '/terms'
     | '/trust'
     | '/workflow'
     | '/auth/callback'
@@ -222,16 +258,19 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AccessibilityRoute: typeof AccessibilityRoute
   DirectoryRoute: typeof DirectoryRoute
   DispoRoute: typeof DispoRoute
   EmergRoute: typeof EmergRoute
   PlansRoute: typeof PlansRoute
+  PrivacyRoute: typeof PrivacyRoute
   ReferenceRoute: typeof ReferenceRoute
   SettingsRoute: typeof SettingsRoute
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
   SocialCareRoute: typeof SocialCareRoute
   SocialRefRoute: typeof SocialRefRoute
+  TermsRoute: typeof TermsRoute
   TrustRoute: typeof TrustRoute
   WorkflowRoute: typeof WorkflowRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
@@ -252,6 +291,13 @@ declare module '@tanstack/react-router' {
       path: '/trust'
       fullPath: '/trust'
       preLoaderRoute: typeof TrustRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/social-ref': {
@@ -296,6 +342,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReferenceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/plans': {
       id: '/plans'
       path: '/plans'
@@ -322,6 +375,13 @@ declare module '@tanstack/react-router' {
       path: '/directory'
       fullPath: '/directory'
       preLoaderRoute: typeof DirectoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/accessibility': {
+      id: '/accessibility'
+      path: '/accessibility'
+      fullPath: '/accessibility'
+      preLoaderRoute: typeof AccessibilityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -358,16 +418,19 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AccessibilityRoute: AccessibilityRoute,
   DirectoryRoute: DirectoryRoute,
   DispoRoute: DispoRoute,
   EmergRoute: EmergRoute,
   PlansRoute: PlansRoute,
+  PrivacyRoute: PrivacyRoute,
   ReferenceRoute: ReferenceRoute,
   SettingsRoute: SettingsRoute,
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
   SocialCareRoute: SocialCareRoute,
   SocialRefRoute: SocialRefRoute,
+  TermsRoute: TermsRoute,
   TrustRoute: TrustRoute,
   WorkflowRoute: WorkflowRoute,
   AuthCallbackRoute: AuthCallbackRoute,

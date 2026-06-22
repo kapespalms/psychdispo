@@ -1,0 +1,9 @@
+Contact: mailto:KristenPalmerMD@gmail.com
+Expires: 2027-06-21T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://psychdispo.com/.well-known/security.txt
+Policy: https://psychdispo.com/trust
+
+# Security contact
+# We use a clinician-operated mailbox while a dedicated security@ alias is set up.
+# Please report suspected vulnerabilities responsibly; see /trust for our disclosure process.

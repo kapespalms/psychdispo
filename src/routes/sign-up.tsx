@@ -122,8 +122,16 @@ function SignUpPage() {
                 : "Create demo account"}
           </button>
           <p className="text-xs text-[var(--mut)] text-center leading-relaxed">
-            By creating an account you agree this tool is for clinical reference only and does not store
-            patient identifiers.
+            By creating an account you agree to our{" "}
+            <Link to="/terms" className="text-link-accent">
+              Terms of Use
+            </Link>{" "}
+            and{" "}
+            <Link to="/privacy" className="text-link-accent">
+              Privacy Policy
+            </Link>
+            . This tool is for clinical reference only and does not store patient identifiers in the
+            cloud.
           </p>
           <p className="text-xs text-[var(--mut)] text-center">
             <Link to="/dispo" className="text-link-accent">

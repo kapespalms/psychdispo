@@ -14,6 +14,7 @@ import { useIframeTemplateSync } from "@/components/tool-frame";
 import { AuthProvider } from "@/lib/auth";
 
 import appCss from "../styles.css?url";
+import { OG_IMAGE_URL } from "@/lib/seo";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -82,9 +83,15 @@ export const Route = createRootRouteWithContext<{ queryClient: typeof queryClien
           "From safety screen to patient packet — disposition workflow and psychiatry reference for clinicians.",
       },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
+      { property: "og:image", content: OG_IMAGE_URL },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: OG_IMAGE_URL },
     ],
     links: [
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
