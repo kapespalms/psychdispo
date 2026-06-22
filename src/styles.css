@@ -203,6 +203,12 @@
     height: 100%;
   }
 
+  .landing-main {
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .headline-display-compact {
     font-size: clamp(1.5rem, 2.8vw, 2.375rem);
     line-height: 0.96;
@@ -212,7 +218,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2rem;
+    gap: clamp(1rem, 3vh, 2rem);
     width: 100%;
   }
 

@@ -1,11 +1,11 @@
 /* PsychDispo service worker — Phase 1: shell + static assets + crisis resource data.
- * Bump CACHE_VERSION when psychdispo.html, psychdispo-data.js, or cssrs-screener.js change. */
-var CACHE_VERSION = "psychdispo-p1-2026-06-landing-resume";
+ * Bump CACHE_VERSION when psychdispo.html, psychdispo-data.js, or cssrs-screener.js change.
+ * App HTML (/) is network-first only — never cache-first (stale landing hero). */
+var CACHE_VERSION = "psychdispo-p1-2026-06-hero-house";
 var STATIC_CACHE = CACHE_VERSION + "-static";
 var DATA_CACHE = CACHE_VERSION + "-data";
 
 var SHELL_URLS = [
-  "/",
   "/manifest.webmanifest",
   "/psychdispo.html",
   "/psychdispo-data.js",
@@ -82,6 +82,12 @@ self.addEventListener("fetch", function (event) {
     return;
   }
 
+  /* SSR app routes — always network-first so landing hero updates ship immediately */
+  if (req.mode === "navigate" || url.pathname === "/") {
+    event.respondWith(networkFirst(req));
+    return;
+  }
+
   if (
     url.pathname === "/psychdispo.html" ||
     url.pathname === "/cssrs-screener.js" ||
@@ -89,11 +95,6 @@ self.addEventListener("fetch", function (event) {
     SHELL_URLS.indexOf(url.pathname) >= 0
   ) {
     event.respondWith(cacheFirst(req, STATIC_CACHE));
-    return;
-  }
-
-  if (req.mode === "navigate") {
-    event.respondWith(networkFirst(req, STATIC_CACHE));
     return;
   }
 });

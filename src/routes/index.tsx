@@ -70,7 +70,7 @@ function Index() {
     <div className="landing-screen flex flex-col flex-1 min-h-0 overflow-hidden text-[var(--ink)]">
       <LandingHeader />
 
-      <main className="flex flex-col flex-1 min-h-0 overflow-hidden px-5 sm:px-10">
+      <main className="landing-main flex flex-col flex-1 min-h-0 px-5 sm:px-10">
         {showResumeChip && (
           <div className="landing-resume-chip shrink-0 mt-2 sm:mt-3" role="status">
             <span className="landing-resume-chip-text">
