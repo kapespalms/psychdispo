@@ -53,6 +53,13 @@ export function hasMeaningfulPlan(p: PlanPayload | null): boolean {
   return !!(s.cleared || s.setting || s.zip || s.city || s.insurance || s.lifeStage);
 }
 
+/** In-progress auto-save — only prompt signed-in users to resume. */
+export function meaningfulDraftForSignedInUser(user: ClinicianUser | null): PlanPayload | null {
+  if (!user?.email) return null;
+  const draft = loadGuestDraft();
+  return hasMeaningfulPlan(draft) ? draft : null;
+}
+
 export function guestDraftSummary(p: PlanPayload) {
   const s = p.S as {
     zip?: string;

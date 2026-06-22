@@ -363,13 +363,13 @@ body.embed .progress-sticky{top:0}
 .save-modal input[type=text]{max-width:100%;margin-bottom:14px}
 .save-modal .row{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
 .save-modal .btn{margin-left:0}
-.resume-plan-overlay{background:rgba(22,24,43,.22);padding:10px}
-.resume-plan-modal{position:relative;background:#fff;border-radius:10px;border:1px solid var(--line);max-width:340px;width:100%;padding:12px 14px 10px;box-shadow:0 4px 14px rgba(0,0,0,.1)}
-.resume-plan-modal h3{font-family:var(--serif);font-size:14px;font-weight:600;margin:0 20px 3px 0;line-height:1.25}
-.resume-plan-modal p{font-size:11px;color:var(--mut);margin:0 0 8px;line-height:1.35}
-.resume-plan-modal .row{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
-.resume-plan-modal .btn{padding:5px 10px;font-size:11px;font-weight:600;min-height:30px;border-radius:8px;margin-left:0}
-.resume-plan-close{position:absolute;top:8px;right:8px;border:none;background:none;color:var(--mut);cursor:pointer;font-size:16px;line-height:1;padding:3px 5px;border-radius:5px;min-width:26px;min-height:26px;touch-action:manipulation}
+.resume-plan-overlay{background:rgba(22,24,43,.18);padding:8px}
+.resume-plan-modal{position:relative;background:var(--paper);border-radius:8px;border:1px solid color-mix(in srgb,var(--t) 35%,var(--line));max-width:220px;width:100%;padding:8px 10px 7px;box-shadow:none}
+.resume-plan-modal h3{font-family:var(--serif);font-size:12px;font-weight:600;margin:0 16px 2px 0;line-height:1.2}
+.resume-plan-modal p{font-size:10px;color:var(--mut);margin:0 0 6px;line-height:1.3}
+.resume-plan-modal .row{display:flex;gap:4px;justify-content:flex-end;flex-wrap:wrap}
+.resume-plan-modal .btn{padding:3px 8px;font-size:10px;font-weight:600;min-height:26px;border-radius:6px;margin-left:0}
+.resume-plan-close{position:absolute;top:5px;right:5px;border:none;background:none;color:var(--mut);cursor:pointer;font-size:14px;line-height:1;padding:2px 4px;border-radius:4px;min-width:22px;min-height:22px;touch-action:manipulation}
 .resume-plan-close:hover{color:var(--ink);background:rgba(22,24,43,.06)}
 .resume-plan-close:focus-visible{outline:2px solid var(--t);outline-offset:2px}
 .post-banner{border-radius:10px;padding:12px 14px;font-size:13px;margin:12px 0 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#eef1fb;border:1px solid #cdd5f5;color:var(--ink)}
@@ -1325,7 +1325,7 @@ body.embed:has(#view-tool #slideShell:not(.hidden)){--workflow-chrome:0px;paddin
  <div class="resume-plan-modal">
   <button type="button" class="resume-plan-close" id="resumePlanClose" aria-label="Dismiss">×</button>
   <h3 id="resumePlanTitle">Resume saved plan?</h3>
-  <p id="resumePlanDesc">A disposition plan from this device can be restored.</p>
+  <p id="resumePlanDesc">Your saved disposition plan can be restored.</p>
   <div class="row">
    <button type="button" class="btn sec" id="resumePlanDiscard">Start fresh</button>
    <button type="button" class="btn" id="resumePlanConfirm">Resume</button>
@@ -5850,6 +5850,10 @@ window.addEventListener("hashchange",function(){var v=viewFromHash();if(v)activa
  var freshVisit=/[?&]fresh=1/.test(location.search);
  var templateApply=/[?&]template=1/.test(location.search);
  var p=loadSavedPlan();
+ var user=readSessionUser();
+ var signedIn=!!(user&&user.email);
+ var currentView=viewFromHash()||"tool";
+ var onPlanView=currentView==="tool";
  if(freshVisit){
   try{localStorage.removeItem(SAVE_KEY);}catch(e){}
   applyUserDefaults();
@@ -5860,9 +5864,11 @@ window.addEventListener("hashchange",function(){var v=viewFromHash();if(v)activa
  }else if(p&&hasMeaningfulPlan(p)){
   if(skipConfirm){
    restoreSavedPlan(p);
-  }else{
+  }else if(signedIn&&onPlanView){
    var when=p.savedAt?new Date(p.savedAt).toLocaleString():"earlier";
    showResumePlanDialog(p,when);
+  }else if(onPlanView){
+   restoreSavedPlan(p);
   }
  }else{
   applyUserDefaults();

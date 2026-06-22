@@ -28,12 +28,12 @@ export function LandingHeader() {
       </div>
 
       <div className="shell-header-inner">
-        <nav className="flex items-center gap-4 sm:gap-5 flex-wrap" aria-label="Primary">
+        <nav className="nav-pill-group" aria-label="Primary">
           {NAV.map(({ to, label }) => (
             <Link
               key={to}
               to={to}
-              className={isActive(to) ? "nav-bar-link nav-bar-link-active" : "nav-bar-link"}
+              className={isActive(to) ? "nav-pill nav-pill-active" : "nav-pill"}
             >
               {label}
             </Link>
@@ -49,22 +49,14 @@ export function LandingHeader() {
               <Link to="/settings" className="nav-bar-link">
                 settings
               </Link>
-              <Link to="/dispo" className="btn-blue hidden sm:inline-block">
-                open plan
-              </Link>
               <button type="button" onClick={signOut} className="nav-bar-link">
                 sign out
               </button>
             </>
           ) : (
-            <>
-              <Link to="/sign-in" className="nav-bar-link">
-                sign in
-              </Link>
-              <Link to="/dispo" className="btn-blue hidden sm:inline-block">
-                open plan
-              </Link>
-            </>
+            <Link to="/sign-in" className="nav-bar-link">
+              sign in
+            </Link>
           )}
         </div>
       </div>

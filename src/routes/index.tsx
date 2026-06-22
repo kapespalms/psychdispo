@@ -1,11 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { HeroIllustration } from "@/components/hero-illustration";
 import { LandingHeader } from "@/components/landing-header";
+import { useAuth } from "@/lib/auth";
 import {
   guestDraftSummary,
-  hasMeaningfulPlan,
-  loadGuestDraft,
+  meaningfulDraftForSignedInUser,
   type PlanPayload,
 } from "@/lib/plans";
 import { pageHead } from "@/lib/seo";
@@ -51,17 +50,19 @@ const CONTENTS = [
 const LANDING_RESUME_DISMISS_KEY = "psychdispo.landingResumeDismissed";
 
 function Index() {
+  const { user, ready } = useAuth();
   const [draft, setDraft] = useState<PlanPayload | null>(null);
   const [resumeDismissed, setResumeDismissed] = useState(false);
 
   useEffect(() => {
-    const p = loadGuestDraft();
-    setDraft(hasMeaningfulPlan(p) ? p : null);
+    if (!ready) return;
+    const p = meaningfulDraftForSignedInUser(user);
+    setDraft(p);
     setResumeDismissed(sessionStorage.getItem(LANDING_RESUME_DISMISS_KEY) === "1");
-  }, []);
+  }, [user, ready]);
 
   const resume = draft ? guestDraftSummary(draft) : null;
-  const showResumePanel = resume && !resumeDismissed;
+  const showResumeChip = resume && !resumeDismissed;
 
   function dismissLandingResume() {
     sessionStorage.setItem(LANDING_RESUME_DISMISS_KEY, "1");
@@ -73,83 +74,43 @@ function Index() {
       <LandingHeader />
 
       <main className="flex flex-col flex-1 min-h-0 overflow-hidden px-5 sm:px-10">
-        <section className="landing-hero flex-1 min-h-0 grid lg:grid-cols-[minmax(0,1fr)_minmax(180px,36%)] gap-4 lg:gap-8 items-center py-3 sm:py-5 overflow-hidden">
-          <header className="min-w-0">
-            <p className="script-kicker script-kicker-compact">Disposition</p>
-            <h1 className="headline-display headline-display-compact mb-3 sm:mb-4">
-              From risk screen to <span className="headline-accent">safe</span> handoff.
-            </h1>
-            <p className="text-[0.9375rem] sm:text-[1rem] leading-[1.55] text-[var(--mut)] mb-4 sm:mb-5 max-w-[32rem]">
-              Structured safety documentation, verified referrals, and discharge materials for
-              emergency and consult psychiatry. Patient details remain on your device.
-            </p>
-            <p className="flex flex-wrap items-center gap-3 sm:gap-4">
-              {resume ? (
-                <>
-                  <Link to="/dispo" search={{ fresh: "1" }} className="nav-bar-link">
-                    start fresh
-                  </Link>
-                  <Link to="/directory" className="nav-bar-link">
-                    directory
-                  </Link>
-                </>
-              ) : (
-                <>
-                  <Link to="/dispo" className="btn-blue">
-                    Open plan
-                  </Link>
-                  <Link to="/directory" className="nav-bar-link">
-                    directory
-                  </Link>
-                </>
-              )}
-            </p>
-          </header>
-
-          <HeroIllustration className="landing-hero-art w-full max-w-[360px] mx-auto lg:max-w-none lg:ml-auto hidden sm:block" />
-        </section>
-
-        {showResumePanel && (
-          <section className="landing-resume shrink-0 mb-2 sm:mb-3" aria-labelledby="landing-resume-heading">
+        {showResumeChip && (
+          <div className="landing-resume-chip shrink-0 mt-2 sm:mt-3" role="status">
+            <span className="landing-resume-chip-text">
+              Saved plan · {resume.savedLabel}
+              {resume.detail !== "Disposition plan" && <> · {resume.detail}</>}
+            </span>
+            <Link to="/dispo" search={{ resume: "1" }} className="landing-resume-chip-link">
+              Resume
+            </Link>
             <button
               type="button"
-              className="landing-resume-close"
+              className="landing-resume-chip-close"
               onClick={dismissLandingResume}
               aria-label="Dismiss"
             >
               ×
             </button>
-            <div className="landing-resume-inner">
-              <div className="landing-resume-copy min-w-0">
-                <p id="landing-resume-heading" className="landing-resume-title">
-                  Resume saved plan
-                </p>
-                <p className="landing-resume-meta">
-                  Saved {resume.savedLabel}
-                  {resume.detail !== "Disposition plan" && (
-                    <>
-                      {" "}
-                      · <span className="text-[var(--ink)]">{resume.detail}</span>
-                    </>
-                  )}
-                </p>
-              </div>
-              <div className="landing-resume-actions">
-                <Link to="/dispo" search={{ fresh: "1" }} className="landing-resume-btn landing-resume-btn-sec">
-                  Start fresh
-                </Link>
-                <Link to="/dispo" search={{ resume: "1" }} className="landing-resume-btn">
-                  Resume
-                </Link>
-              </div>
-            </div>
-          </section>
+          </div>
         )}
 
-        <hr className="journal-rule shrink-0" />
+        <section className="landing-hero flex-1 min-h-0 flex flex-col justify-center py-4 sm:py-6">
+          <header className="min-w-0 max-w-[36rem]">
+            <h1 className="headline-display headline-display-compact mb-3">
+              Disposition to <span className="headline-accent">documented</span> handoff.
+            </h1>
+            <p className="text-[0.9375rem] leading-[1.5] text-[var(--mut)] mb-5 max-w-[28rem]">
+              Safety documentation, verified referrals, and discharge materials for emergency and
+              consult psychiatry.
+            </p>
+            <Link to="/dispo" className="btn-blue">
+              Open plan
+            </Link>
+          </header>
+        </section>
 
         <section className="landing-contents shrink-0 py-3 sm:py-4">
-          <p className="kicker mb-3 sm:mb-4">Contents</p>
+          <p className="kicker mb-2 sm:mb-3">Contents</p>
           <div className="landing-contents-grid">
             {CONTENTS.map(({ num, to, title, desc }) => (
               <Link key={to} to={to} className="landing-contents-item">
@@ -162,7 +123,7 @@ function Index() {
         </section>
 
         <footer className="landing-foot shrink-0 py-2 text-[0.6875rem] leading-snug text-[var(--mut)] border-t border-[var(--line)]">
-          <p className="mb-1">
+          <p>
             <Link to="/privacy" className="text-link">
               privacy
             </Link>
@@ -178,12 +139,7 @@ function Index() {
             <Link to="/about" className="text-link">
               about
             </Link>
-            <span aria-hidden="true"> · </span>
-            <Link to="/accessibility" className="text-link">
-              accessibility
-            </Link>
           </p>
-          Reference only — not a substitute for clinical judgment. Life-threatening emergency: 911.
         </footer>
       </main>
     </div>

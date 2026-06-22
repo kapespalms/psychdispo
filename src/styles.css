@@ -208,20 +208,15 @@
     width: auto;
   }
 
-  .script-kicker-compact {
-    font-size: 1.0625rem;
-    margin-bottom: 0.35rem;
-  }
-
   .headline-display-compact {
-    font-size: clamp(1.625rem, 3.2vw, 2.625rem);
-    line-height: 0.94;
+    font-size: clamp(1.5rem, 2.8vw, 2.375rem);
+    line-height: 0.96;
   }
 
   .landing-contents-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0.5rem 1rem;
+    gap: 0.625rem;
   }
 
   @media (max-width: 900px) {
@@ -236,11 +231,17 @@
     grid-template-rows: auto auto;
     gap: 0.125rem 0.5rem;
     align-content: start;
-    padding: 0.5rem 0;
+    padding: 0.625rem 0.75rem;
     text-decoration: none;
     color: inherit;
-    border-bottom: 1px solid var(--line);
-    transition: color 0.15s;
+    background: var(--paper);
+    border: 1px solid color-mix(in srgb, var(--t) 35%, var(--line));
+    border-radius: 0;
+    transition: border-color 0.15s, color 0.15s;
+  }
+
+  .landing-contents-item:hover {
+    border-color: var(--t);
   }
 
   .landing-contents-item:hover .landing-contents-title {
@@ -250,14 +251,14 @@
   .landing-contents-num {
     grid-row: 1 / span 2;
     font-family: var(--font-serif);
-    font-size: 1rem;
+    font-size: 0.9375rem;
     color: var(--mut);
     line-height: 1.2;
   }
 
   .landing-contents-title {
     font-family: var(--font-serif);
-    font-size: 1rem;
+    font-size: 0.9375rem;
     font-weight: 500;
     line-height: 1.15;
     transition: color 0.15s;
@@ -265,8 +266,8 @@
 
   .landing-contents-desc {
     grid-column: 2;
-    font-size: 0.75rem;
-    line-height: 1.4;
+    font-size: 0.6875rem;
+    line-height: 1.35;
     color: var(--mut);
   }
 
@@ -274,104 +275,61 @@
     margin-top: auto;
   }
 
-  .landing-resume {
-    position: relative;
-    padding: 0.5rem 0.75rem;
-    padding-right: 1.75rem;
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--t) 8%, var(--paper));
-  }
-
-  .landing-resume-close {
-    position: absolute;
-    top: 0.375rem;
-    right: 0.375rem;
-    border: none;
-    background: none;
-    color: var(--mut);
-    cursor: pointer;
-    font-size: 1rem;
-    line-height: 1;
-    padding: 0.2rem 0.35rem;
-    border-radius: 0.3125rem;
-    min-width: 1.5rem;
-    min-height: 1.5rem;
-  }
-
-  .landing-resume-close:hover {
-    color: var(--ink);
-    background: color-mix(in srgb, var(--ink) 6%, transparent);
-  }
-
-  .landing-resume-close:focus-visible {
-    outline: 2px solid var(--t);
-    outline-offset: 2px;
-  }
-  .landing-resume-inner {
+  .landing-resume-chip {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 0.625rem 0.75rem;
+    gap: 0.5rem 0.625rem;
     flex-wrap: wrap;
+    padding: 0.375rem 0.625rem;
+    background: color-mix(in srgb, var(--t) 6%, var(--paper));
+    border: 1px solid color-mix(in srgb, var(--t) 28%, var(--line));
+    border-radius: 999px;
+    max-width: 100%;
   }
 
-  .landing-resume-title {
-    font-family: var(--font-sans);
-    font-size: 0.625rem;
-    font-weight: 700;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    color: var(--ink);
-    margin: 0 0 0.125rem;
-    line-height: 1.2;
-  }
-
-  .landing-resume-meta {
+  .landing-resume-chip-text {
     font-size: 0.6875rem;
-    line-height: 1.35;
+    line-height: 1.3;
     color: var(--mut);
-    margin: 0;
+    min-width: 0;
+    flex: 1 1 auto;
   }
 
-  .landing-resume-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
+  .landing-resume-chip-link {
     flex-shrink: 0;
-  }
-
-  .landing-resume-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 28px;
-    padding: 0.2rem 0.625rem;
-    font-family: var(--font-sans);
     font-size: 0.625rem;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     text-decoration: none;
-    background: var(--t);
-    color: #ffffff;
-    border: 1px solid var(--t);
-    border-radius: 6px;
-    transition: background 0.15s, color 0.15s;
-  }
-
-  .landing-resume-btn:hover {
-    background: color-mix(in srgb, var(--t) 88%, #000);
-  }
-
-  .landing-resume-btn-sec {
-    background: transparent;
     color: var(--t);
   }
 
-  .landing-resume-btn-sec:hover {
-    background: color-mix(in srgb, var(--t) 8%, var(--paper));
+  .landing-resume-chip-link:hover {
+    text-decoration: underline;
+  }
+
+  .landing-resume-chip-close {
+    flex-shrink: 0;
+    border: none;
+    background: none;
+    color: var(--mut);
+    cursor: pointer;
+    font-size: 0.875rem;
+    line-height: 1;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    min-width: 1.25rem;
+    min-height: 1.25rem;
+  }
+
+  .landing-resume-chip-close:hover {
+    color: var(--ink);
+  }
+
+  .landing-resume-chip-close:focus-visible {
+    outline: 2px solid var(--t);
+    outline-offset: 2px;
   }
 
   .script-kicker {
@@ -456,6 +414,49 @@
     bottom: 0;
     height: 3px;
     background: var(--t);
+  }
+
+  .nav-pill-group {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    flex-wrap: wrap;
+  }
+
+  .nav-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.45rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: lowercase;
+    color: var(--mut);
+    text-decoration: none;
+    white-space: nowrap;
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+
+  .nav-pill:hover {
+    color: var(--ink);
+    border-color: color-mix(in srgb, var(--t) 45%, var(--line));
+  }
+
+  .nav-pill-active {
+    color: #ffffff;
+    background: var(--t);
+    border-color: var(--t);
+  }
+
+  .nav-pill-active:hover {
+    color: #ffffff;
+    background: color-mix(in srgb, var(--t) 90%, #000);
+    border-color: color-mix(in srgb, var(--t) 90%, #000);
   }
 
   .kicker {

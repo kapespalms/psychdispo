@@ -1,6 +1,6 @@
 /* PsychDispo service worker — Phase 1: shell + static assets + crisis resource data.
  * Bump CACHE_VERSION when psychdispo.html, psychdispo-data.js, or cssrs-screener.js change. */
-var CACHE_VERSION = "psychdispo-p1-2026-06-handoff-fix";
+var CACHE_VERSION = "psychdispo-p1-2026-06-landing-resume";
 var STATIC_CACHE = CACHE_VERSION + "-static";
 var DATA_CACHE = CACHE_VERSION + "-data";
 

@@ -28,12 +28,12 @@ export function SiteHeader() {
       </div>
 
       <div className="shell-header-inner">
-        <nav className="flex items-center gap-4 sm:gap-5 flex-wrap" aria-label="Primary">
+        <nav className="nav-pill-group" aria-label="Primary">
           {NAV.map(({ to, label }) => (
             <Link
               key={to}
               to={to}
-              className={isActive(to) ? "nav-bar-link nav-bar-link-active" : "nav-bar-link"}
+              className={isActive(to) ? "nav-pill nav-pill-active" : "nav-pill"}
             >
               {label}
             </Link>

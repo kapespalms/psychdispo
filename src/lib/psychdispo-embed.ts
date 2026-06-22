@@ -1,5 +1,5 @@
 /** Bump when public/psychdispo.html changes so iframe embeds bypass stale browser cache. */
-export const PSYCHDISPO_HTML_BUILD = "resources-handoff-fkgl-v1";
+export const PSYCHDISPO_HTML_BUILD = "landing-resume-pills-v1";
 
 export function psychdispoEmbedSrc(
   hash: string,
