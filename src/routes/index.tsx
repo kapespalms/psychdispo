@@ -48,15 +48,25 @@ const CONTENTS = [
   },
 ] as const;
 
+const LANDING_RESUME_DISMISS_KEY = "psychdispo.landingResumeDismissed";
+
 function Index() {
   const [draft, setDraft] = useState<PlanPayload | null>(null);
+  const [resumeDismissed, setResumeDismissed] = useState(false);
 
   useEffect(() => {
     const p = loadGuestDraft();
     setDraft(hasMeaningfulPlan(p) ? p : null);
+    setResumeDismissed(sessionStorage.getItem(LANDING_RESUME_DISMISS_KEY) === "1");
   }, []);
 
   const resume = draft ? guestDraftSummary(draft) : null;
+  const showResumePanel = resume && !resumeDismissed;
+
+  function dismissLandingResume() {
+    sessionStorage.setItem(LANDING_RESUME_DISMISS_KEY, "1");
+    setResumeDismissed(true);
+  }
 
   return (
     <div className="landing-screen flex flex-col flex-1 min-h-0 overflow-hidden text-[var(--ink)]">
@@ -100,23 +110,31 @@ function Index() {
         </section>
 
         {resume && (
-          <section className="landing-resume shrink-0 mb-3 sm:mb-4" aria-labelledby="landing-resume-heading">
-            <p className="kicker mb-2">In progress</p>
-            <h2 id="landing-resume-heading" className="headline-display headline-display-compact mb-2">
-              Resume your plan
-            </h2>
-            <p className="text-[0.875rem] leading-relaxed text-[var(--mut)] mb-3 max-w-[32rem]">
-              Saved {resume.savedLabel}
-              {resume.detail !== "Disposition plan" && (
-                <>
-                  {" "}
-                  · <span className="text-[var(--ink)]">{resume.detail}</span>
-                </>
-              )}
-            </p>
-            <Link to="/dispo" search={{ resume: "1" }} className="btn-blue inline-block">
-              Resume plan
-            </Link>
+          <section className="landing-resume shrink-0 mb-2 sm:mb-3" aria-labelledby="landing-resume-heading">
+            <div className="landing-resume-inner">
+              <div className="landing-resume-copy min-w-0">
+                <p id="landing-resume-heading" className="landing-resume-title">
+                  Resume saved plan
+                </p>
+                <p className="landing-resume-meta">
+                  Saved {resume.savedLabel}
+                  {resume.detail !== "Disposition plan" && (
+                    <>
+                      {" "}
+                      · <span className="text-[var(--ink)]">{resume.detail}</span>
+                    </>
+                  )}
+                </p>
+              </div>
+              <div className="landing-resume-actions">
+                <Link to="/dispo" search={{ fresh: "1" }} className="landing-resume-btn landing-resume-btn-sec">
+                  Start fresh
+                </Link>
+                <Link to="/dispo" search={{ resume: "1" }} className="landing-resume-btn">
+                  Resume
+                </Link>
+              </div>
+            </div>
           </section>
         )}
 
